@@ -1,25 +1,31 @@
 
 import EditPageComp from "./editpage";
 
-export default async function EditPage({ params }) {
+export default async function EditPage({ params, searchParams }) {
 
 
 
+  // const { edit } = await params;
   const { edit } = await params;
-  console.log(edit, "edit");
-  let pageslug = edit;
+  const pageid = edit;
+  //get query params
+
+  const pagetype = searchParams.pagetype; // query param ?
+  console.log(pagetype, "pagetype");
+  // console.log(edit, "edit");
+  //let pageslug = edit;
   /*  let multilingalBool;
    let multilingualLangs = []; */
 
   /* WE NEED TO CHEKC IF THIS WEBSITE IS TO MULTILINGUAL */
 
-  const url = `http://localhost:3000/schema/${pageslug}`;
+  const url = `http://localhost:3000/schema/${pageid}?pagetype=${pagetype}`;
   console.log(url, "url");
   const response = await fetch(url, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      //'Authorization': `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
+      //'Authorization': `Bearer ${ process.env.NEXT_PUBLIC_API_KEY } `,
     },
   });
 

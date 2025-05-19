@@ -166,7 +166,6 @@ export default function EditPageComp(props) {
       const data = await response.json();
       setIsSaving(false);
       setErrorSave(false);
-      alert("Saved");
     }
     else if (!response.ok) {
       setIsSaving(false);

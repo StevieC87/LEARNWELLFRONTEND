@@ -24,8 +24,8 @@ export default function SlideMenu() {
         <Link href="/dash/analytics" className="py-2 sidebartext">
           Analytics
         </Link>
-        <Link href="/dash/pages" className="py-2 sidebartext">
-          Pages
+        <Link href="/dash/posts" className="py-2 sidebartext">
+          Posts
         </Link>
         <Link href="/dash/pages2" className="py-2 sidebartext">
           Pages2

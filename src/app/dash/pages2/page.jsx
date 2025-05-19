@@ -43,13 +43,13 @@ export default async function Pages() {
             </tr>
           </thead>
           <tbody>
-            {pageslist.map((page) => (
+            {pageslist.length > 0 && pageslist.map((page) => (
               <tr key={page._id} className="pageitem ">
                 <td className="">
-                  <Link href={`/dash/pages2/${page.slug}`} className="">{page.title}</Link>
+                  <Link href={`/dash/pages2/${page._id}?pagetype=page`} className="">{page.title}</Link>
                 </td>
                 <td className="">
-                  <Link href={`/dash/pages2/editseo/${page.slug}`} className="">Page SEO settings</Link>
+                  <Link href={`/dash/pages2/editseo/${page._id}?pagetype=page`} className="">Page SEO settings</Link>
                 </td>
 
               </tr>
