@@ -10,7 +10,7 @@ const FieldRenderer = ({ type, name, value, label, onChange }) => {
       return (
         //! add custom class maybe after? 
         <div className="fielddivblock">
-          <label htmlFor={name} className="block text-sm font-medium text-gray-700">{label}123</label>
+          <label htmlFor={name} className="block text-sm font-medium text-gray-700">{label}</label>
           <input
             key={name}
             name={name}
