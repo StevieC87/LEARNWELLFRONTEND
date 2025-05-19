@@ -54,7 +54,7 @@ export default function EditPageComp(props) {
         locale: match ? match.locale : selectedLang,
         type: fieldObj.type,
         name: fieldObj.name || match?.field || null,
-        pagename: match ? match.pagename : null,
+        schema: match ? match.schema : null,
         //  pagename: match.pagename,
       };
     }
@@ -85,7 +85,7 @@ export default function EditPageComp(props) {
           content: currentVersion?.content || '',
           type: field.type,
           name: field.name || field.field,
-          pagename: field.pagename,
+          schema: field.schema,
         };
 
       });
@@ -101,7 +101,7 @@ export default function EditPageComp(props) {
     console.log("filteredFieldsS", filteredFieldsS);
     filteredFieldsS.forEach((item) => {
 
-      dispatch(updateField({ name: item.name, content: item.content, id: item._id, locale: item.locale, type: item.type, pagename: item.pagename }));
+      dispatch(updateField({ name: item.name, content: item.content, id: item._id, locale: item.locale, type: item.type, schema: item.schema }));
 
 
     }
@@ -156,7 +156,7 @@ export default function EditPageComp(props) {
         fields: fieldData,
         pageid: pageid,
         locale: selectedLang,
-        pagename: pagedataS.pagename,
+        schema: pagedataS.schema,
       }),
 
       //}
@@ -250,7 +250,7 @@ export default function EditPageComp(props) {
 
                 onChange={(e) => {
                   const newValue = e.target.value;
-                  dispatch(updateField({ name: field.name, content: newValue, id: fieldData1.id, locale: fieldData1.locale, pagename: fieldData1.pagename, type: field.type }));
+                  dispatch(updateField({ name: field.name, content: newValue, id: fieldData1.id, locale: fieldData1.locale, schema: fieldData1.schema, type: field.type }));
                 }}
               />
 
