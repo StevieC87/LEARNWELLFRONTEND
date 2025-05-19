@@ -36,6 +36,9 @@ export default function EditPageComp(props) {
   const [mergedfields, setMergedFields] = useState([]);
   const [initialmerge, setInitialMerge] = useState(false);
 
+  const [issaving, setIsSaving] = useState(false);
+  const [errorsave, setErrorSave] = useState(false);
+
   useEffect(() => {
     console.log("pagefields", pagefields);
     console.log("pagefieldsdata", pagefieldsdata);
@@ -55,9 +58,11 @@ export default function EditPageComp(props) {
         //  pagename: match.pagename,
       };
     }
+
       // let createID = new ObjectId().toString();
       // id: match ? match._id : createID,
     );
+    console.log(mergedinitial, "mergedinitial");
     setInitialMerge(mergedinitial);
 
   }, [pagefields, pagefieldsdata])
@@ -84,6 +89,7 @@ export default function EditPageComp(props) {
         };
 
       });
+      console.log("filteredFields", filteredFields);
       setFilteredFieldsS(filteredFields);
 
     }
@@ -102,8 +108,8 @@ export default function EditPageComp(props) {
     );
 
     /* console.log("filteredFieldsS", filteredFieldsS);
-
-
+  
+  
     const merged = pagefields.map((fieldObj) => {
       const match = filteredFieldsS.find((item) => item.field === fieldObj.name);
       return {
@@ -112,9 +118,9 @@ export default function EditPageComp(props) {
         _id: match ? match._id : null,
         locale: match ? match.locale : null,
         type: match ? match.type : null,
-
+  
       };
-
+  
     });
     setMergedFields(merged); */
 
@@ -130,6 +136,7 @@ export default function EditPageComp(props) {
 
 
   const onSave = async () => {
+    setIsSaving(true);
     //we do fetch post to backend
 
 
@@ -138,7 +145,7 @@ export default function EditPageComp(props) {
     const url = `${process.env.NEXT_PUBLIC_API_URL}/schema`;
     console.log(url, "url");
 
-    const response = fetch(url, {
+    const response = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -154,6 +161,17 @@ export default function EditPageComp(props) {
 
       //}
     })
+    console.log(response, "response55555555");
+    if (response.ok) {
+      const data = await response.json();
+      setIsSaving(false);
+      setErrorSave(false);
+      alert("Saved");
+    }
+    else if (!response.ok) {
+      setIsSaving(false);
+      setErrorSave(true);
+    }
   }
 
   //MAYE NO WNEED TO MERGE THE TWO 
@@ -185,7 +203,19 @@ export default function EditPageComp(props) {
             </div>
           )} */}
 
-          <button onClick={onSave} className="button button-primary">Save</button>
+          <button onClick={onSave} className="button button-primary">
+            {issaving && (
+              <span>Saving</span>
+            )}
+
+            {!issaving && (
+              <span>Save</span>
+            )}
+            {errorsave && (
+              <span className="text-red-500">Error</span>
+            )}
+
+          </button>
         </div>
 
 
@@ -209,17 +239,19 @@ export default function EditPageComp(props) {
             console.log(field.name, "field.name111");
             let fieldData1 = fieldData[field.name] || {};
             console.log(fieldData1, "fieldData1");
+            console.log(fieldData1.id, "fieldData1.content");
             return (
               /*   <span>hello</span> */
               <FieldRenderer
                 key={field.name}
-                field={field.type}
+                type={field.type}
                 name={field.name}
+                label={field.name}
                 value={fieldData1.content || ""}
 
                 onChange={(e) => {
                   const newValue = e.target.value;
-                  dispatch(updateField({ name: field.name, content: newValue, id: fieldData1._id, locale: fieldData1.locale, pagename: fieldData1.pagename, type: field.type }));
+                  dispatch(updateField({ name: field.name, content: newValue, id: fieldData1.id, locale: fieldData1.locale, pagename: fieldData1.pagename, type: field.type }));
                 }}
               />
 

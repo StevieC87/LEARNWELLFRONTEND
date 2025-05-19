@@ -1,17 +1,18 @@
 
 //! ADD ID OF THE FIELD  - PASS TO REDUX 
 
-const FieldRenderer = ({ field, name, value, onChange }) => {
-  ; console.log(field, name, value, 'field555554444');
-  switch (field) {
+const FieldRenderer = ({ type, name, value, label, onChange }) => {
+  ; console.log(type, name, value, 'field555554444');
+  console.log(label, 'label11111111');
+  switch (type) {
     case "text":
 
       return (
         //! add custom class maybe after? 
         <div className="fielddivblock">
-          <label htmlFor={field.name} className="block text-sm font-medium text-gray-700">{field.name}</label>
+          <label htmlFor={name} className="block text-sm font-medium text-gray-700">{label}123</label>
           <input
-            key={field.name}
+            key={name}
             name={name}
             type="text"
             value={value}
@@ -22,10 +23,10 @@ const FieldRenderer = ({ field, name, value, onChange }) => {
     case "textarea":
       return (
         <div className="fielddivblock">
-          <label htmlFor={field.name} className="block text-sm font-medium text-gray-700">{field.name}</label>
+          <label htmlFor={name} className="block text-sm font-medium text-gray-700">{label}</label>
           <textarea
-            key={field.name}
-            name={field.name}
+            key={name}
+            name={name}
             value={value}
             onChange={onChange}
           />
@@ -34,10 +35,10 @@ const FieldRenderer = ({ field, name, value, onChange }) => {
     case "number":
       return (
         <div className="fielddivblock">
-          <label htmlFor={field.name} className="block text-sm font-medium text-gray-700">{field.name}</label>
+          <label htmlFor={name} className="block text-sm font-medium text-gray-700">{label}</label>
           <input
-            key={field.name}
-            name={field.name}
+            key={name}
+            name={name}
             type="number"
             value={value}
             onChange={onChange}
@@ -47,14 +48,14 @@ const FieldRenderer = ({ field, name, value, onChange }) => {
     case "checkbox":
       return (
         <div className="fielddivblock">
-          <label htmlFor={field.name} className="block text-sm font-medium text-gray-700">{field.name}</label>
+          <label htmlFor={name} className="block text-sm font-medium text-gray-700">{label}</label>
           <input
-            key={field.name}
-            name={field.name}
+            key={name}
+            name={name}
             type="checkbox"
             checked={value}
             onChange={(e) =>
-              onChange({ target: { name: field.name, value: e.target.checked } })
+              onChange({ target: { name: name, value: e.target.checked } })
             }
           />
         </div>
@@ -62,10 +63,10 @@ const FieldRenderer = ({ field, name, value, onChange }) => {
     case "date":
       return (
         <div className="fielddivblock">
-          <label htmlFor={field.name} className="block text-sm font-medium text-gray-700">{field.name}</label>
+          <label htmlFor={name} className="block text-sm font-medium text-gray-700">{label}</label>
           <input
-            key={field.name}
-            name={field.name}
+            key={name}
+            name={name}
             type="date"
             value={value}
             onChange={onChange}
