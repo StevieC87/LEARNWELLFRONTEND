@@ -1,0 +1,33 @@
+.slidemenuouterdiv {
+  background-color: #ebebeb;
+}
+
+.slidemenu {
+  z-index: 9998;
+  position: fixed;
+  padding-top: 40px;
+  top: 0;
+  left: 0;
+  /* Set a fixed width for the slide-in menu */
+  /* width: 100%; */
+  width: 150px;
+  height: 100%;
+  background-color: rgb(143, 140, 140);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateX(-100%); /* Start off-screen */
+  transition: transform 0.3s ease-in-out;
+}
+
+.slidemenu.closed {
+  transform: translateX(-150px); /* Keep it off-screen when closed */
+}
+
+.slidemenu.open {
+  /*  transform: translateX(0); */ /* Slide into view when open */
+  /*   transform: translateX(0%); */
+  transform: translateX(0px);
+}
+
+.sidebartext {
+  font-size: 1.5rem;
+}

@@ -1,0 +1,14 @@
+@layer utilities {
+  .text-center {
+    text-align: center;
+  }
+  .hidden {
+    display: none;
+  }
+  .p-1 {
+    padding: 4px;
+  }
+  .m-1 {
+    margin: 4px;
+  }
+}
