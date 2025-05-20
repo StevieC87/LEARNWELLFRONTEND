@@ -12,7 +12,7 @@ export default function EditPageComp(props) {
   //. SO I THINK: UNFILTERED FIELDS: all languages
   //. filteredFieldsS: only selected language (FOR DISPLAY)
 
-  const { schema, settings, pagefieldsdata, pagedata } = props;
+  const { schema, settings, pagefieldsdata, pagedata, neworexisting, pageid } = props;
 
   console.log(schema, "schema");
   console.log(settings, "settings");
@@ -26,7 +26,7 @@ export default function EditPageComp(props) {
   const [pagefields, setPageFields] = useState(schema.fields);
   const [pagefieldsdataS, setPageFieldsDataS] = useState(pagefieldsdata);
   const [pagedataS, setPageDataS] = useState(pagedata);
-  const pageid = pagedata._id; //string
+  //const pageid = pagedata._id; //string
 
   const fieldData = useSelector((state) => state.PagesSlice.fields);
 
@@ -221,7 +221,13 @@ export default function EditPageComp(props) {
 
 
 
-        {<h1 className="">Edit {pagetitle}   </h1>}
+
+        {neworexisting === 'new' && (
+          <h1 >New {pagetitle}</h1 >
+        )}
+        {neworexisting === 'existing' && (
+          <h1> Edit {pagetitle}</h1>
+        )}
 
         {(filteredFieldsS.length === 0) && (
           <div className="emptyfields">

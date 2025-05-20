@@ -23,6 +23,8 @@ export default async function EditPage({ params, searchParams }) {
   let settings;
   let pagefieldsdata = [];
   let pagedata;
+  let neworexisting;
+  let pageidfromserver;
 
   let url;
   console.log(schema, "schema");
@@ -50,12 +52,14 @@ export default async function EditPage({ params, searchParams }) {
   } else if (response.ok) {
     console.log("response ok");
     const data = await response.json();
-    console.log(data, "data");
+    console.log(data, "data123321");
 
     schema = data.schema;
     settings = data.settings;
     pagefieldsdata = data.pagefieldsdata;
     pagedata = data.pagedata;
+    neworexisting = data.neworexisting;
+    pageidfromserver = data.pageid;
     /*  fieldsdata = data.pagefields;
      pagedata = data.pagedata;
      multilingalBool = data.multilingual;
@@ -71,8 +75,15 @@ export default async function EditPage({ params, searchParams }) {
 
   return (
     <>
-      <EditPageComp schema={schema} settings={settings} pagefieldsdata={pagefieldsdata}
-        pagedata={pagedata} />
+      <EditPageComp
+        schema={schema}
+        settings={settings}
+        pagefieldsdata={pagefieldsdata}
+        pagedata={pagedata}
+        neworexisting={neworexisting}
+        pageid={pageidfromserver}
+
+      />
       {/* fieldsdata={fieldsdata} pagedata={pagedata} multilingalBool={multilingalBool} multilingualLangs={multilingualLangs}  */}
     </>
   );
