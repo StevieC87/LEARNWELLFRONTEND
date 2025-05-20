@@ -5,18 +5,24 @@ import { ObjectId } from 'bson';
 import FieldRenderer from './FieldRenderer';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateField } from '../../../../redux/slices/PagesSlice';
+import { useRouter } from 'next/navigation';
 
 export default function EditPageComp(props) {
+  const router = useRouter();
   const dispatch = useDispatch();
 
   //. SO I THINK: UNFILTERED FIELDS: all languages
   //. filteredFieldsS: only selected language (FOR DISPLAY)
 
-  const { schema, settings, pagefieldsdata, pagedata, neworexisting, pageid } = props;
+  const { schema, settings, pagefieldsdata, pagedata, neworexisting, pageid, pagetype } = props;
 
-  console.log(schema, "schema");
+  console.log(schema, "schema1234");
   console.log(settings, "settings");
   console.log(pagedata, "pagedata123");
+  console.log(pagefieldsdata, "pagefieldsdata");
+  console.log(neworexisting, "neworexisting1234");
+  console.log(pageid, "pageid");
+  console.log(pagetype, "pagetype1234");
   const hello = useSelector((state) => state.PagesSlice.hello);
   console.log(hello, "hello");
 
@@ -157,19 +163,27 @@ export default function EditPageComp(props) {
         pageid: pageid,
         locale: selectedLang,
         schema: pagedataS.schema,
-      }),
+        pagetype: pagetype,
+        //  pagedata: pagedataS,
+        neworexisting: neworexisting,
 
-      //}
+      }),
     })
     console.log(response, "response55555555");
     if (response.ok) {
       const data = await response.json();
       setIsSaving(false);
       setErrorSave(false);
+      const pageid = data.pageid;
+      const pagetype = data.pagetype;
+      //const url = `${process.env.NEXT_PUBLIC_API_URL}/dash/pages2/${pageid}?pagetype=${pagetype}`;
+      const url = `dash/pages2/${pageid}?pagetype=${pagetype}`;
+      router.push(url);
     }
     else if (!response.ok) {
       setIsSaving(false);
       setErrorSave(true);
+
     }
   }
 

@@ -10,16 +10,18 @@ export default async function EditPage({ params, searchParams }) {
   const pageid = edit;
   //get query params
 
-  const pagetype = searchParams.pagetype; // query param ?
+  const pagetype = await searchParams.pagetype; // query param ?
   console.log(pagetype, "pagetype");
 
-  let schemaname
-  if (edit === "newpage") {
-    schemaname = searchParams.schema; // query param ?
-
-
-  }
   let schema;
+  //when creating a new POST -> WE PASS THE SCHEMA WE WANT IN THE URL (e.g blog for new blog etc)
+  if (edit === "newpage") {
+    schema = await searchParams.schema; // query param ?
+  }
+  //! ISSUE NOW SCHEM AAINT BEING SET OR PASSED
+  //HOW DID I DO IT BEFORE 
+
+
   let settings;
   let pagefieldsdata = [];
   let pagedata;
@@ -27,18 +29,28 @@ export default async function EditPage({ params, searchParams }) {
   let pageidfromserver;
 
   let url;
-  console.log(schema, "schema");
+  //console.log(schema, "schema");
+
+  //. ------- CREATING URL FOR FETCHING SCHEMA AND DATA -----------
+  //. if new page:
+  // 1. we change the url -> so backend recognises
+  // 2. in the backend we
+  //  a) return schema but no fields data (they dont exist yet)
+  //  b) return settings
+  //  c) return pagedata (empty)
+  //  d) return neworexisting (new)
+  //  e) return pageid (new) - which we create in the backend
+
   if (pageid === "newpage") {
     //we still need to fetch the settings  and the schema 
-    url = `http://localhost:3000/schema/newpage?pagetype=${pagetype}&schemaname=${schemaname}`;
-
+    url = `http://localhost:3000/schema/newpage?pagetype=${pagetype}&schemaname=${schema}`;
   }
 
+  //. IF EXISTING PAGE -> FETCH DATA FROM DB (for component)
   else if (pageid !== "newpage") {
     url = `http://localhost:3000/schema/${pageid}?pagetype=${pagetype}`;
   }
-  //    const url = `http://localhost:3000/schema/${pageid}?pagetype=${pagetype}`;
-  console.log(url, "url");
+
   const response = await fetch(url, {
     method: "GET",
     headers: {
@@ -60,18 +72,16 @@ export default async function EditPage({ params, searchParams }) {
     pagedata = data.pagedata;
     neworexisting = data.neworexisting;
     pageidfromserver = data.pageid;
-    /*  fieldsdata = data.pagefields;
-     pagedata = data.pagedata;
-     multilingalBool = data.multilingual;
-     multilingualLangs = data.languages; */
-    // console.log(fieldsdata, "fieldsdata");
-  }
 
-  /*  function getFieldValue(fieldsdata, fieldName) {
-     const field = fieldsdata.find((f) => f.field === fieldName);
-     return field?.content || "";
-   } */
-  //pull in existing fields 
+    console.log(schema, "schema5555");
+    console.log(settings, "settings5555");
+    console.log(pagefieldsdata, "pagefieldsdata5555");
+    console.log(pagedata, "pagedata5555");
+    console.log(neworexisting, "neworexisting5555");
+    console.log(pageidfromserver, "pageidfromserver5555");
+
+
+  }
 
   return (
     <>
@@ -82,9 +92,10 @@ export default async function EditPage({ params, searchParams }) {
         pagedata={pagedata}
         neworexisting={neworexisting}
         pageid={pageidfromserver}
+        pagetype={pagetype}
 
       />
-      {/* fieldsdata={fieldsdata} pagedata={pagedata} multilingalBool={multilingalBool} multilingualLangs={multilingualLangs}  */}
+
     </>
   );
 }

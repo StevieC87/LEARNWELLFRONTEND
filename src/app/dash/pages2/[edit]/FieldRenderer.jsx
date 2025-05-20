@@ -2,8 +2,7 @@
 //! ADD ID OF THE FIELD  - PASS TO REDUX 
 
 const FieldRenderer = ({ type, name, value, label, onChange }) => {
-  ; console.log(type, name, value, 'field555554444');
-  console.log(label, 'label11111111');
+  ;
   switch (type) {
     case "text":
 
