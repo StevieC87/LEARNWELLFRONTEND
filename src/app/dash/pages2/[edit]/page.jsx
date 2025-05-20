@@ -1,9 +1,9 @@
 
 import EditPageComp from "./editpage";
+import { ObjectId } from 'bson';
 
 export default async function EditPage({ params, searchParams }) {
-
-
+  let createID = new ObjectId().toString();
 
   // const { edit } = await params;
   const { edit } = await params;
@@ -12,14 +12,30 @@ export default async function EditPage({ params, searchParams }) {
 
   const pagetype = searchParams.pagetype; // query param ?
   console.log(pagetype, "pagetype");
-  // console.log(edit, "edit");
-  //let pageslug = edit;
-  /*  let multilingalBool;
-   let multilingualLangs = []; */
 
-  /* WE NEED TO CHEKC IF THIS WEBSITE IS TO MULTILINGUAL */
+  let schemaname
+  if (edit === "newpage") {
+    schemaname = searchParams.schema; // query param ?
 
-  const url = `http://localhost:3000/schema/${pageid}?pagetype=${pagetype}`;
+
+  }
+  let schema;
+  let settings;
+  let pagefieldsdata = [];
+  let pagedata;
+
+  let url;
+  console.log(schema, "schema");
+  if (pageid === "newpage") {
+    //we still need to fetch the settings  and the schema 
+    url = `http://localhost:3000/schema/newpage?pagetype=${pagetype}&schemaname=${schemaname}`;
+
+  }
+
+  else if (pageid !== "newpage") {
+    url = `http://localhost:3000/schema/${pageid}?pagetype=${pagetype}`;
+  }
+  //    const url = `http://localhost:3000/schema/${pageid}?pagetype=${pagetype}`;
   console.log(url, "url");
   const response = await fetch(url, {
     method: "GET",
@@ -28,13 +44,6 @@ export default async function EditPage({ params, searchParams }) {
       //'Authorization': `Bearer ${ process.env.NEXT_PUBLIC_API_KEY } `,
     },
   });
-
-  let schema;
-  let settings;
-  let pagefieldsdata = [];
-  let pagedata;
-  // let headertitle = "";
-
   if (!response.ok) {
     console.log("respo0nse not ok");
     console.log(response, "response");

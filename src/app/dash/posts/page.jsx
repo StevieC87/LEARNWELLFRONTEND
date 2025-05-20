@@ -1,4 +1,5 @@
 import Link from "next/link";
+// import { redirect } from 'next/navigation';
 
 
 export default async function PostsPage() {
@@ -22,11 +23,14 @@ export default async function PostsPage() {
     console.log(postslist, "postslist");
   }
 
+  //! probabyl make this client component or include - COZ WE WANNA DEFINE WHAT WE WANT A BLOG, AN ARTICLE, A PRODUCT ETC - and we gotta send that to get the corresponding schema
   return (
     <>
       <div>
         <h1>Posts Page</h1>
         <p>This is the posts page.</p>
+        {/* <button onClick={() => createPost()} ></button> */}
+        <Link className="button button-primary" href="/dash/pages2/newpage?pagetype=post&schema=blog">Create New page</Link>
       </div>
       <table>
         <thead>
