@@ -44,6 +44,7 @@ export default function EditPageComp(props) {
 
   const [issaving, setIsSaving] = useState(false);
   const [errorsave, setErrorSave] = useState(false);
+  const [showsaved, setShowSaved] = useState(false);
 
   useEffect(() => {
     console.log("pagefields", pagefields);
@@ -164,7 +165,7 @@ export default function EditPageComp(props) {
         locale: selectedLang,
         schema: pagedataS.schema,
         pagetype: pagetype,
-        //  pagedata: pagedataS,
+        pagedata: pagedataS,
         neworexisting: neworexisting,
 
       }),
@@ -183,6 +184,11 @@ export default function EditPageComp(props) {
         router.push(url);
 
       }
+      setShowSaved(true);
+      setTimeout(() => {
+        setShowSaved(false);
+      }, 2000);
+
     }
     else if (!response.ok) {
       //console.log(response, "response not ok");
@@ -226,20 +232,24 @@ export default function EditPageComp(props) {
 
             </div>
           )} */}
+          <div className="flex flex-row">
+            <button onClick={onSave} className="button button-primary">
+              {issaving && (
+                <span>Saving</span>
+              )}
 
-          <button onClick={onSave} className="button button-primary">
-            {issaving && (
-              <span>Saving</span>
-            )}
+              {!issaving && (
+                <span>Save</span>
+              )}
+              {errorsave && (
+                <span className="text-red-500">Error</span>
+              )}
 
-            {!issaving && (
-              <span>Save</span>
+            </button>
+            {showsaved && (
+              <span className="text-green-500">Saved</span>
             )}
-            {errorsave && (
-              <span className="text-red-500">Error</span>
-            )}
-
-          </button>
+          </div>
         </div>
 
 

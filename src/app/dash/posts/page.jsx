@@ -1,6 +1,6 @@
 import Link from "next/link";
 // import { redirect } from 'next/navigation';
-
+import DeletePage from "../pages2/components/Deletepage";
 
 export default async function PostsPage() {
 
@@ -37,6 +37,8 @@ export default async function PostsPage() {
           <tr>
             <th>Page</th>
             <th>Seo</th>
+            <th>Delete</th>
+
 
           </tr>
         </thead>
@@ -48,6 +50,9 @@ export default async function PostsPage() {
               </td>
               <td className="">
                 <Link href={`/dash/pages2/editseo/${post._id}?pagetype=post`} className="">Page SEO settings</Link>
+              </td>
+              <td className="">
+                <span><DeletePage pagetype='post' pageid={post._id} /></span>
               </td>
 
             </tr>

@@ -1,6 +1,7 @@
 
 import Link from "next/link";
 import './pageslist.css'
+import DeletePage from "./components/Deletepage";
 
 export default async function Pages() {
 
@@ -39,7 +40,7 @@ export default async function Pages() {
             <tr>
               <th>Page</th>
               <th>Seo</th>
-
+              <th>Delete</th>
             </tr>
           </thead>
           <tbody>
@@ -49,6 +50,9 @@ export default async function Pages() {
               <tr key={page._id} className="pageitem ">
                 <td className="">
                   <Link href={`/dash/pages2/${page._id}?pagetype=page`} className="">{page.title}</Link>
+                </td>
+                <td className="">
+                  <span><DeletePage pagetype='page' pageid={page._id} /></span>
                 </td>
                 {/*  <td className="">
                   <Link href={`/dash/pages2/editseo/${page._id}?pagetype=page`} className="">Page SEO settings</Link>
