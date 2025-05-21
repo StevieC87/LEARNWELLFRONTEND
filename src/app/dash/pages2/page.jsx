@@ -17,6 +17,8 @@ export default async function Pages() {
   if (!response.ok) {
     console.log("respo0nse not ok");
     console.log(response, "response");
+
+
   }
   else if (response.ok) {
     console.log("response ok");
@@ -32,12 +34,11 @@ export default async function Pages() {
     <div className="pageslist">
       <h1 className="">Pages</h1>
       <p className="">This is the pages page</p>
-      <p>Here you can create top-level page like About,Services, etc</p>
-
-      <Link href="/dash/pages/createnew" className=" button-primary t-10 mb-10">Create New Page</Link>
 
       <div>
-        <span>Schemas without pages:</span>
+        {schemanopages.length > 0 && (
+          <span>Schemas without pages:</span>
+        )}
         {schemanopages.length > 0 && schemanopages.map((schema) => (
           <div key={schema} className="pageitem pt-10 flex flex-row gap-10">
             <div className="flex flex-col">

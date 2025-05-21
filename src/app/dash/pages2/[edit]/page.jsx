@@ -5,6 +5,9 @@ import { ObjectId } from 'bson';
 export default async function EditPage({ params, searchParams }) {
   let createID = new ObjectId().toString();
 
+  //if new monoschema page exists, and user tries aanew - stop them
+  let existingpagenewerror = false;
+
   // const { edit } = await params;
   const { edit } = await params;
   const pageid = edit;
@@ -42,11 +45,15 @@ export default async function EditPage({ params, searchParams }) {
   //  e) return pageid (new) - which we create in the backend
 
   if (pageid === "newpage") {
-    //we still need to fetch the settings  and the schema 
+    //we still need to fetch the settings  and the schema
+    //instead of an id im sening the string: newpage
     url = `http://localhost:3000/schema/newpage?pagetype=${pagetype}&schemaname=${schema}`;
+
+    //in the backend: if it's a new page, and it's of pagetype page, i need to make sure it doesnt exist in the db
   }
 
   //. IF EXISTING PAGE -> FETCH DATA FROM DB (for component)
+
   else if (pageid !== "newpage") {
     url = `http://localhost:3000/schema/${pageid}?pagetype=${pagetype}`;
   }
@@ -61,6 +68,15 @@ export default async function EditPage({ params, searchParams }) {
   if (!response.ok) {
     console.log("respo0nse not ok");
     console.log(response, "response");
+    const data = await response.json();
+    console.log(data, "data");
+    if (data.erroris = 'pageexists') {
+
+      existingpagenewerror = true;
+      console.log(existingpagenewerror, "existingpagenewerror");
+    }
+    //existingpagenewerror
+
   } else if (response.ok) {
     console.log("response ok");
     const data = await response.json();
@@ -85,16 +101,23 @@ export default async function EditPage({ params, searchParams }) {
 
   return (
     <>
-      <EditPageComp
-        schema={schema}
-        settings={settings}
-        pagefieldsdata={pagefieldsdata}
-        pagedata={pagedata}
-        neworexisting={neworexisting}
-        pageid={pageidfromserver}
-        pagetype={pagetype}
+      {existingpagenewerror && (
+        <span>Page already exists</span>
+      )}
+      {!existingpagenewerror && (
 
-      />
+
+        <EditPageComp
+          schema={schema}
+          settings={settings}
+          pagefieldsdata={pagefieldsdata}
+          pagedata={pagedata}
+          neworexisting={neworexisting}
+          pageid={pageidfromserver}
+          pagetype={pagetype}
+
+        />
+      )}
 
     </>
   );

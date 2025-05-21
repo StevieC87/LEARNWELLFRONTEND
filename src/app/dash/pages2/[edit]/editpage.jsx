@@ -179,7 +179,7 @@ export default function EditPageComp(props) {
       const pagetype = data.pagetype;
       //const url = `${process.env.NEXT_PUBLIC_API_URL}/dash/pages2/${pageid}?pagetype=${pagetype}`;
       //if page post redirect to edit version of itself
-      if (pagetype === "post" && neworexisting === "new") {
+      if (neworexisting === "new") {
         const url = `${pageid}?pagetype=${pagetype}`;
         router.push(url);
 
