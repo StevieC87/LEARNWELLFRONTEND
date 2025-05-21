@@ -177,10 +177,21 @@ export default function EditPageComp(props) {
       const pageid = data.pageid;
       const pagetype = data.pagetype;
       //const url = `${process.env.NEXT_PUBLIC_API_URL}/dash/pages2/${pageid}?pagetype=${pagetype}`;
-      const url = `dash/pages2/${pageid}?pagetype=${pagetype}`;
-      router.push(url);
+      //if page post redirect to edit version of itself
+      if (pagetype === "post" && neworexisting === "new") {
+        const url = `${pageid}?pagetype=${pagetype}`;
+        router.push(url);
+
+      }
     }
     else if (!response.ok) {
+      //console.log(response, "response not ok");
+      //print error message
+      const errorData = await response.json();
+      console.log(errorData, "errorData");
+      if (errorData.errorthing === "titlemissing") {
+        alert("Please add a field with name 'title' to the schema of the page");
+      }
       setIsSaving(false);
       setErrorSave(true);
 
