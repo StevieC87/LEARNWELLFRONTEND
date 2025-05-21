@@ -106,7 +106,7 @@ export default function EditPageComp(props) {
 
     }
 
-  }, [initialmerge]);
+  }, [initialmerge, selectedLang]);
 
 
   useEffect(() => {
@@ -209,6 +209,9 @@ export default function EditPageComp(props) {
     }
   }
 
+  const publishPage = async () => {
+  }
+
   //MAYE NO WNEED TO MERGE THE TWO 
 
 
@@ -255,7 +258,11 @@ export default function EditPageComp(props) {
             {showsaved && (
               <span className="text-green-500">Saved</span>
             )}
+            <button onClick={publishPage} className="button button-secondary">
+              Publish
+            </button>
           </div>
+
         </div>
 
 
