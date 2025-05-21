@@ -6,6 +6,7 @@ import DeletePage from "./components/Deletepage";
 export default async function Pages() {
 
   let pageslist = [];
+  let schemanopages = [];
   const response = await fetch("http://localhost:3000/pages/getpageslist", {
     method: "GET",
     headers: {
@@ -21,6 +22,8 @@ export default async function Pages() {
     console.log("response ok");
     const data = await response.json();
     pageslist = data.pages;
+    schemanopages = data.schemasnopages;
+    console.log(schemanopages, "schemanopages");
     console.log(pageslist, "pageslist");
   }
 
@@ -32,6 +35,17 @@ export default async function Pages() {
       <p>Here you can create top-level page like About,Services, etc</p>
 
       <Link href="/dash/pages/createnew" className=" button-primary t-10 mb-10">Create New Page</Link>
+
+      <div>
+        <span>Schemas without pages:</span>
+        {schemanopages.length > 0 && schemanopages.map((schema) => (
+          <div key={schema} className="pageitem pt-10 flex flex-row gap-10">
+            <div className="flex flex-col">
+              <Link href={`/dash/pages2/newpage?pagetype=page&schema=${schema}`} className="">{schema}</Link>
+            </div>
+          </div>
+        ))}
+      </div>
 
       <div className="">
         <h1 className="text-2xl">Pages List</h1>
