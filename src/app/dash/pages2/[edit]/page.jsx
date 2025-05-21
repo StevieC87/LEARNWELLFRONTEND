@@ -70,6 +70,7 @@ export default async function EditPage({ params, searchParams }) {
     console.log(response, "response");
     const data = await response.json();
     console.log(data, "data");
+    console.log(data.erroris, "data.erroris");
     if (data.erroris = 'pageexists') {
 
       existingpagenewerror = true;

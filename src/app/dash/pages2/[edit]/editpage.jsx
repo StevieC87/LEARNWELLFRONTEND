@@ -38,13 +38,18 @@ export default function EditPageComp(props) {
 
   const [filteredFieldsS, setFilteredFieldsS] = useState([]);
   //  const [selectedLang, setSelectedLang] = useState(settings.languages[0]);
-  const [selectedLang, setSelectedLang] = useState('en');
+
   const [mergedfields, setMergedFields] = useState([]);
   const [initialmerge, setInitialMerge] = useState(false);
 
   const [issaving, setIsSaving] = useState(false);
   const [errorsave, setErrorSave] = useState(false);
   const [showsaved, setShowSaved] = useState(false);
+
+  const [multilingalBool, setMultilingualBool] = useState(settings.multilingualyesno);
+  const [multilingualLangs, setMultilingualLangs] = useState(settings.languages);
+  const [defaultlang, setDefaultLang] = useState(settings.defaultlanguage);
+  const [selectedLang, setSelectedLang] = useState(defaultlang);
 
   useEffect(() => {
     console.log("pagefields", pagefields);
@@ -216,10 +221,11 @@ export default function EditPageComp(props) {
 
 
 
-          {/*  {multilingalBool && (
+          {multilingualLangs && (
             <div className="langpicker flex flex-row gap-5">
               <label htmlFor="lang" className="block text-sm font-medium text-gray-700 self-center">
                 Language</label>
+
               <select name="" id="" onChange={(e) => setSelectedLang(e.target.value)}>
                 {multilingualLangs.map((lang) => {
                   return (
@@ -231,7 +237,7 @@ export default function EditPageComp(props) {
               </select>
 
             </div>
-          )} */}
+          )}
           <div className="flex flex-row">
             <button onClick={onSave} className="button button-primary">
               {issaving && (
