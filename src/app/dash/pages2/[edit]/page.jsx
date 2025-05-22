@@ -120,7 +120,7 @@ export default function EditPage() {
             pagedata={pagedata}
             neworexisting={neworexisting}
             pageid={pageidfromserver}
-            pagetype={searchParams.pagetype}
+            pagetype={pagetype}
           />
 
 
