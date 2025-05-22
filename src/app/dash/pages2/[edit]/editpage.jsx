@@ -26,7 +26,7 @@ export default function EditPageComp(props) {
   const hello = useSelector((state) => state.PagesSlice.hello);
   console.log(hello, "hello");
 
-  const pagetitle = schema.title;
+  const pagetitle = schema?.title;
 
 
   const [pagefields, setPageFields] = useState(schema.fields);
@@ -46,22 +46,21 @@ export default function EditPageComp(props) {
   const [errorsave, setErrorSave] = useState(false);
   const [showsaved, setShowSaved] = useState(false);
 
-  const [multilingalBool, setMultilingualBool] = useState(settings.multilingualyesno);
-  const [multilingualLangs, setMultilingualLangs] = useState(settings.languages);
-  const [defaultlang, setDefaultLang] = useState(settings.defaultlanguage);
-  const [selectedLang, setSelectedLang] = useState(defaultlang);
+  const [multilingalBool, setMultilingualBool] = useState(settings.multilingualyesno || false);
+  const [multilingualLangs, setMultilingualLangs] = useState(settings.languages || []);
+  const [defaultlang, setDefaultLang] = useState(settings.defaultlanguage || null);
+  const [selectedLang, setSelectedLang] = useState(defaultlang || multilingualLangs[0] || null);
 
   useEffect(() => {
     console.log("pagefields", pagefields);
     console.log("pagefieldsdata", pagefieldsdata);
-
     //merge pagefields with pagefieldsdata
     const mergedinitial = pagefields.map((fieldObj) => {
       const match = pagefieldsdataS.find((item) => item.field === fieldObj.name);
       let createID = new ObjectId().toString();
       return {
         ...fieldObj,
-        content: match ? match.content : [],
+        content: match ? match.content : '',
         _id: match ? match._id : createID,
         locale: match ? match.locale : selectedLang,
         type: fieldObj.type,
@@ -76,46 +75,43 @@ export default function EditPageComp(props) {
     );
     console.log(mergedinitial, "mergedinitial");
     setInitialMerge(mergedinitial);
-
+    setFilteredFieldsS(mergedinitial);
   }, [pagefields, pagefieldsdata])
 
-  useEffect(() => {
-    console.log('initialmerge', initialmerge);
-
-    if (initialmerge && initialmerge.length > 0) {
-      console.log('yesyesyyes')
-      const filteredFields = initialmerge.map((field) => {
-        console.log(field, "field333");
-        const langContent = field.content.find(c => c.locale === selectedLang);
-        console.log(langContent, "langContent3333");
-        const currentVersion = langContent?.versions.find(v => v.isCurrent);
-
-
-        return {
-          _id: field._id || createID,
-          locale: langContent?.locale || selectedLang,
-          content: currentVersion?.content || '',
-          type: field.type,
-          name: field.name || field.field,
-          schema: field.schema,
-        };
-
-      });
-      console.log("filteredFields", filteredFields);
-      setFilteredFieldsS(filteredFields);
-
-    }
-
-  }, [initialmerge, selectedLang]);
+  /*  useEffect(() => {
+     console.log('initialmerge', initialmerge);
+ 
+     if (initialmerge && initialmerge.length > 0) {
+       console.log('yesyesyyes')
+       const filteredFields = initialmerge.map((field) => {
+         console.log(field, "field333");
+          const langContent = field.content.find(c => c.locale === selectedLang); 
+       console.log(langContent, "langContent3333");
+         //const currentVersion = langContent?.versions.find(v => v.isCurrent);
+ 
+ 
+         return {
+           _id: field._id || createID,
+           locale: langContent?.locale || selectedLang,
+           content: currentVersion?.content || '',
+           type: field.type,
+           name: field.name || field.field,
+           schema: field.schema,
+         };
+ 
+       });
+       console.log("filteredFields", filteredFields);
+       setFilteredFieldsS(filteredFields);
+ 
+     }
+ 
+   }, [initialmerge, selectedLang]); */
 
 
   useEffect(() => {
     console.log("filteredFieldsS", filteredFieldsS);
     filteredFieldsS.forEach((item) => {
-
       dispatch(updateField({ name: item.name, content: item.content, id: item._id, locale: item.locale, type: item.type, schema: item.schema }));
-
-
     }
     );
 
@@ -235,7 +231,7 @@ export default function EditPageComp(props) {
             <div className="langpicker flex flex-row gap-5">
               <label htmlFor="lang" className="block text-sm font-medium text-gray-700 self-center">
                 Language</label>
-
+              {selectedLang}
               <select name="" id="" onChange={(e) => setSelectedLang(e.target.value)}>
                 {multilingualLangs.map((lang) => {
                   return (
@@ -249,7 +245,7 @@ export default function EditPageComp(props) {
             </div>
           )}
           <div className="flex flex-row">
-            <button onClick={onSave('save')} className="button button-primary">
+            <button onClick={() => onSave('save')} className="button button-primary">
               {issaving && (
                 <span>Saving</span>
               )}
@@ -265,7 +261,7 @@ export default function EditPageComp(props) {
             {showsaved && (
               <span className="text-green-500">Saved</span>
             )}
-            <button onClick={onSave('publish')} className="button button-secondary">
+            <button onClick={() => onSave('publish')} className="button button-secondary">
               Publish
             </button>
           </div>
