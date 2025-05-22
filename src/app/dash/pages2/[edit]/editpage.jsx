@@ -147,14 +147,23 @@ export default function EditPageComp(props) {
   }, [mergedfields]);
 
 
-  const onSave = async () => {
+  const onSave = async (saveorpublish) => {
     setIsSaving(true);
+    let url;
+    if (saveorpublish === "save") {
+      console.log("save");
+      url = `${process.env.NEXT_PUBLIC_API_URL}/schema`;
+
+    }
+    else if (saveorpublish === "publish") {
+      console.log("publish");
+      url = `${process.env.NEXT_PUBLIC_API_URL}/publish`;
+    }
     //we do fetch post to backend
 
 
     //FIRST WE GET EVERYTHING FROM THE REDUX STORE
     //NEXT_PUBLIC_API_URL 
-    const url = `${process.env.NEXT_PUBLIC_API_URL}/schema`;
     console.log(url, "url");
 
     const response = await fetch(url, {
@@ -209,8 +218,6 @@ export default function EditPageComp(props) {
     }
   }
 
-  const publishPage = async () => {
-  }
 
   //MAYE NO WNEED TO MERGE THE TWO 
 
@@ -242,7 +249,7 @@ export default function EditPageComp(props) {
             </div>
           )}
           <div className="flex flex-row">
-            <button onClick={onSave} className="button button-primary">
+            <button onClick={onSave('save')} className="button button-primary">
               {issaving && (
                 <span>Saving</span>
               )}
@@ -258,7 +265,7 @@ export default function EditPageComp(props) {
             {showsaved && (
               <span className="text-green-500">Saved</span>
             )}
-            <button onClick={publishPage} className="button button-secondary">
+            <button onClick={onSave('publish')} className="button button-secondary">
               Publish
             </button>
           </div>
