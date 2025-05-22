@@ -5,9 +5,13 @@ import { ObjectId } from 'bson';
 //import { useRouter } from 'next/router';
 import { useParams } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { setSelectedLanguage } from '../../../../redux/slices/DashSlice';
 
 export default function EditPage() {
   const params = useParams();
+  const dispatch = useDispatch();
   const searchParams = useSearchParams();
 
   const edit = params.edit;
@@ -25,16 +29,18 @@ export default function EditPage() {
   const [currentlanguage, setCurrentLanguage] = useState();
   const [data, setData] = useState({})
 
+  const selectedLanguage = useSelector((state) => state.DashSlice.selectedLanguage);
+
 
   useEffect(() => {
-
+    console.log("selectedLanguage4444", selectedLanguage);
     const FetchPageData = async () => {
       // let createID = new ObjectId().toString();
       let url;
       const pageid = edit;
       //set URL depending if new/existing page
       if (pageid !== "newpage") {
-        url = `http://localhost:3000/schema/${pageid}?pagetype=${pagetype}`;
+        url = `http://localhost:3000/schema/${pageid}?pagetype=${pagetype}&language=${selectedLanguage}`;
       }
       else if (pageid === "newpage") {
         let schemaq = searchParams.get('schema');
@@ -74,6 +80,9 @@ export default function EditPage() {
           setPageData(data.pagedata);
           setNewOrExisting(data.neworexisting);
           setPageIdFromServer(data.pageid);
+          if (!selectedLanguage) {
+            dispatch(setSelectedLanguage(data.settings.defaultlanguage))
+          };
         }
 
       } catch (error) {
@@ -81,25 +90,25 @@ export default function EditPage() {
       }
     }
     FetchPageData();
-  }, []);
+  }, [selectedLanguage]);
 
-  /*  useEffect(() => {
-     console.log("settings333333", settings);
-     console.log("pagefieldsdata", pagefieldsdata);
-     console.log("pagedata", pagedata);
-     console.log("schema", schema);
-     console.log("neworexisting", neworexisting);
-     console.log("pageidfromserver", pageidfromserver);
-     //   console.log("existingpagenewerror", existingpagenewerror);
-     //  console.log("currentlanguage", currentlanguage);
-     //  console.log("pagetype", pagetype);
- 
-   }, [settings, pagefieldsdata, pagedata, schema, neworexisting, pageidfromserver]);
-  */
+  useEffect(() => {
+    console.log("settings333333", settings);
+    console.log("pagefieldsdataxxxxxxxxxxx", pagefieldsdata);
+    console.log("pagedata", pagedata);
+    console.log("schema", schema);
+    console.log("neworexisting", neworexisting);
+    console.log("pageidfromserver", pageidfromserver);
+    //   console.log("existingpagenewerror", existingpagenewerror);
+    //  console.log("currentlanguage", currentlanguage);
+    //  console.log("pagetype", pagetype);
+
+  }, [settings, pagefieldsdata, pagedata, schema, neworexisting, pageidfromserver]);
+
   return (
     <>
       <span>hello</span>
-
+      <span>{selectedLanguage}</span>
       {data && Object.keys(data).length > 0 && (
         <>
           <span>yes</span>

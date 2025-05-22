@@ -5,6 +5,7 @@ import { ObjectId } from 'bson';
 import FieldRenderer from './FieldRenderer';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateField } from '../../../../redux/slices/PagesSlice';
+import { setSelectedLanguage } from '../../../../redux/slices/DashSlice';
 import { useRouter } from 'next/navigation';
 
 export default function EditPageComp(props) {
@@ -19,25 +20,25 @@ export default function EditPageComp(props) {
   console.log(schema, "schema1234");
   console.log(settings, "settings");
   console.log(pagedata, "pagedata123");
-  console.log(pagefieldsdata, "pagefieldsdata");
+  console.log(pagefieldsdata, "pagefieldsdata777777777");
   console.log(neworexisting, "neworexisting1234");
   console.log(pageid, "pageid");
   console.log(pagetype, "pagetype1234");
   const hello = useSelector((state) => state.PagesSlice.hello);
   console.log(hello, "hello");
 
+  const selectedLanguage = useSelector((state) => state.DashSlice.selectedLanguage);
+
   const pagetitle = schema?.title;
 
 
   const [pagefields, setPageFields] = useState(schema.fields);
-  const [pagefieldsdataS, setPageFieldsDataS] = useState(pagefieldsdata);
   const [pagedataS, setPageDataS] = useState(pagedata);
   //const pageid = pagedata._id; //string
 
   const fieldData = useSelector((state) => state.PagesSlice.fields);
 
   const [filteredFieldsS, setFilteredFieldsS] = useState([]);
-  //  const [selectedLang, setSelectedLang] = useState(settings.languages[0]);
 
   const [mergedfields, setMergedFields] = useState([]);
   const [initialmerge, setInitialMerge] = useState(false);
@@ -49,20 +50,21 @@ export default function EditPageComp(props) {
   const [multilingalBool, setMultilingualBool] = useState(settings.multilingualyesno || false);
   const [multilingualLangs, setMultilingualLangs] = useState(settings.languages || []);
   const [defaultlang, setDefaultLang] = useState(settings.defaultlanguage || null);
-  const [selectedLang, setSelectedLang] = useState(defaultlang || multilingualLangs[0] || null);
+  // const [selectedLang, setSelectedLang] = useState(defaultlang || multilingualLangs[0] || null);
 
   useEffect(() => {
-    console.log("pagefields", pagefields);
-    console.log("pagefieldsdata", pagefieldsdata);
+    console.log("pagefields333", pagefields);
+    console.log("pagefieldsdata333", pagefieldsdata);
     //merge pagefields with pagefieldsdata
     const mergedinitial = pagefields.map((fieldObj) => {
-      const match = pagefieldsdataS.find((item) => item.field === fieldObj.name);
+      const match = pagefieldsdata.find((item) => item.field === fieldObj.name);
+      console.log(match, "match3333333333");
       let createID = new ObjectId().toString();
       return {
         ...fieldObj,
         content: match ? match.content : '',
         _id: match ? match._id : createID,
-        locale: match ? match.locale : selectedLang,
+        locale: match ? match.locale : selectedLanguage,
         type: fieldObj.type,
         name: fieldObj.name || match?.field || null,
         schema: match ? match.schema : null,
@@ -172,7 +174,7 @@ export default function EditPageComp(props) {
         schemaname: schema.name,
         fields: fieldData,
         pageid: pageid,
-        locale: selectedLang,
+        locale: selectedLanguage,
         schema: pagedataS.schema,
         pagetype: pagetype,
         pagedata: pagedataS,
@@ -215,9 +217,6 @@ export default function EditPageComp(props) {
   }
 
 
-  //MAYE NO WNEED TO MERGE THE TWO 
-
-
   return (
     <>
       <div className="editpagecontainer">
@@ -231,11 +230,20 @@ export default function EditPageComp(props) {
             <div className="langpicker flex flex-row gap-5">
               <label htmlFor="lang" className="block text-sm font-medium text-gray-700 self-center">
                 Language</label>
-              {selectedLang}
-              <select name="" id="" onChange={(e) => setSelectedLang(e.target.value)}>
+
+              <span>      123        {selectedLanguage} 321</span>
+
+              <select name="" id=""
+                /*  onChange={(e) => setSelectedLang(e.target.value)} */
+                onChange={(e) => dispatch(setSelectedLanguage(e.target.value))}
+                value={selectedLanguage}
+              >
+                //! i want here to show the language from redux
                 {multilingualLangs.map((lang) => {
                   return (
-                    <option key={lang} value={lang}>
+                    <option key={lang} value={lang}
+
+                    >
                       {lang}
                     </option>
                   );

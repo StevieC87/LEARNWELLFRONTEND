@@ -1,5 +1,6 @@
 //THIS IS FOR THE EDMIT PAGE ETC
 //FOR BETWEEN COMPOENNETS LKE SET LANGUAGE ETC import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 const DashSlice = createSlice({
   name: "DashSlice",
@@ -9,7 +10,7 @@ const DashSlice = createSlice({
 
   reducers: {
     setSelectedLanguage(state, action) {
-      state.isSideNavOpen = action.payload;
+      state.selectedLanguage = action.payload;
     },
   },
 });
