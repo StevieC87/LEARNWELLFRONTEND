@@ -24,8 +24,6 @@ export default function EditPageComp(props) {
   console.log(neworexisting, "neworexisting1234");
   console.log(pageid, "pageid");
   console.log(pagetype, "pagetype1234");
-  const hello = useSelector((state) => state.PagesSlice.hello);
-  console.log(hello, "hello");
 
   const selectedLanguage = useSelector((state) => state.DashSlice.selectedLanguage);
 
@@ -50,6 +48,10 @@ export default function EditPageComp(props) {
   const [multilingalBool, setMultilingualBool] = useState(settings.multilingualyesno || false);
   const [multilingualLangs, setMultilingualLangs] = useState(settings.languages || []);
   const [defaultlang, setDefaultLang] = useState(settings.defaultlanguage || null);
+
+  //to prevent publishing if made changes prior to publishing
+  const [hasChanges, setHasChanges] = useState(true);
+
   // const [selectedLang, setSelectedLang] = useState(defaultlang || multilingualLangs[0] || null);
 
   useEffect(() => {
@@ -144,19 +146,23 @@ export default function EditPageComp(props) {
 
   }, [mergedfields]);
 
+  const changelanguage = (e) => {
+    //first save current progress, before switching language
+    if (hasChanges) {
+      onSave();
+    }
+    dispatch(setSelectedLanguage(e.target.value));
 
-  const onSave = async (saveorpublish) => {
+
+  }
+
+
+  const onSave = async () => {
+    setHasChanges(false);
     setIsSaving(true);
-    let url;
-    if (saveorpublish === "save") {
-      console.log("save");
-      url = `${process.env.NEXT_PUBLIC_API_URL}/schema`;
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/schema`;
 
-    }
-    else if (saveorpublish === "publish") {
-      console.log("publish");
-      url = `${process.env.NEXT_PUBLIC_API_URL}/publish`;
-    }
+
     //we do fetch post to backend
 
 
@@ -214,8 +220,67 @@ export default function EditPageComp(props) {
       setErrorSave(true);
 
     }
-  }
+    setHasChanges(false);
 
+  }
+  const onPublish = async () => {
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/publish`;
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        //  Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        schemaname: schema.name,
+        fields: fieldData,
+        pageid: pageid,
+        locale: selectedLanguage,
+        schema: pagedataS.schema,
+        pagetype: pagetype,
+        pagedata: pagedataS,
+        neworexisting: neworexisting,
+
+      }),
+    })
+    console.log(response, "response55555555");
+    if (response.ok) {
+      const data = await response.json();
+      setIsSaving(false);
+      setErrorSave(false);
+      const pageid = data.pageid;
+      const pagetype = data.pagetype;
+      //const url = `${process.env.NEXT_PUBLIC_API_URL}/dash/pages2/${pageid}?pagetype=${pagetype}`;
+      //if page post redirect to edit version of itself
+      if (neworexisting === "new") {
+        const url = `${pageid}?pagetype=${pagetype}`;
+        router.push(url);
+
+      }
+      // setShowSaved(true);
+      // setTimeout(() => {
+      //   setShowSaved(false);
+      //  }, 2000);
+
+    }
+    else if (!response.ok) {
+      //console.log(response, "response not ok");
+      //print error message
+      const errorData = await response.json();
+      console.log(errorData, "errorData");
+      if (errorData.errorthing === "titlemissing") {
+        alert("Please add a field with name 'title' to the schema of the page");
+      }
+      //setIsSaving(false);
+      // setErrorSave(true);
+
+    }
+    /*  setHasChanges(false);
+     setIsSaving(true);
+     let url = `${process.env.NEXT_PUBLIC_API_URL}/publish`;
+     console */
+  }
 
   return (
     <>
@@ -231,11 +296,10 @@ export default function EditPageComp(props) {
               <label htmlFor="lang" className="block text-sm font-medium text-gray-700 self-center">
                 Language</label>
 
-              <span>      123        {selectedLanguage} 321</span>
 
               <select name="" id=""
                 /*  onChange={(e) => setSelectedLang(e.target.value)} */
-                onChange={(e) => dispatch(setSelectedLanguage(e.target.value))}
+                onChange={(e) => changelanguage(e)}
                 value={selectedLanguage}
               >
                 //! i want here to show the language from redux
@@ -249,11 +313,12 @@ export default function EditPageComp(props) {
                   );
                 })}
               </select>
+              <span>{selectedLanguage}</span>
 
             </div>
           )}
           <div className="flex flex-row">
-            <button onClick={() => onSave('save')} className="button button-primary">
+            <button onClick={() => onSave()} className="button button-primary">
               {issaving && (
                 <span>Saving</span>
               )}
@@ -269,7 +334,8 @@ export default function EditPageComp(props) {
             {showsaved && (
               <span className="text-green-500">Saved</span>
             )}
-            <button onClick={() => onSave('publish')} className="button button-secondary">
+            <button onClick={() => onPublish()} /* className="button button-primary" */
+              className={!hasChanges ? "button button-primary" : "button button-primary disabled"}>
               Publish
             </button>
           </div>
@@ -305,7 +371,6 @@ export default function EditPageComp(props) {
             console.log(fieldData1, "fieldData1");
             console.log(fieldData1.id, "fieldData1.content");
             return (
-              /*   <span>hello</span> */
               <FieldRenderer
                 key={field.name}
                 type={field.type}
@@ -316,6 +381,8 @@ export default function EditPageComp(props) {
                 onChange={(e) => {
                   const newValue = e.target.value;
                   dispatch(updateField({ name: field.name, content: newValue, id: fieldData1.id, locale: fieldData1.locale, schema: fieldData1.schema, type: field.type }));
+                  setHasChanges(true);
+
                 }}
               />
 

@@ -107,11 +107,8 @@ export default function EditPage() {
 
   return (
     <>
-      <span>hello</span>
-      <span>{selectedLanguage}</span>
       {data && Object.keys(data).length > 0 && (
         <>
-          <span>yes</span>
 
           <EditPageComp
             schema={schema}
