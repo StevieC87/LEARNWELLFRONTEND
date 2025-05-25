@@ -10,6 +10,7 @@ import { useState } from 'react';
 const FieldRenderer = ({ type, name, value, label, onChange2, fielddata }) => {
   ;
   const dispatch = useDispatch();
+  const slugduplicatewarning = useSelector((state) => state.PagesSlice.slugduplicatewarning);
   // const fieldData1 = useSelector((state) => state.PagesSlice.fields[name]);
 
   console.log(fielddata, "fielddata33333333");
@@ -42,6 +43,11 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata }) => {
             onChange={onChange}
 
           />
+          {name === "slug" && slugduplicatewarning && (
+            <p className="text-red-500 mt-1">
+              This slug is already in use, has been renamed.
+            </p>
+          )}
         </div>
       );
     case "textarea":

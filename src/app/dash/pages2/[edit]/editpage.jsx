@@ -4,7 +4,7 @@ import { use, useEffect, useState } from 'react';
 import { ObjectId } from 'bson';
 import FieldRenderer from './FieldRenderer';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateField } from '../../../../redux/slices/PagesSlice';
+import { updateField, setSlugDuplicateWarning } from '../../../../redux/slices/PagesSlice';
 import { setSelectedLanguage } from '../../../../redux/slices/DashSlice';
 import { useRouter } from 'next/navigation';
 
@@ -51,6 +51,9 @@ export default function EditPageComp(props) {
 
   //to prevent publishing if made changes prior to publishing
   const [hasChanges, setHasChanges] = useState(true);
+
+  //to show message if slug existed and was renamed
+  // const [slugduplicatewarning, setSlugDuplicateWarning] = useState(false);
 
   // const [selectedLang, setSelectedLang] = useState(defaultlang || multilingualLangs[0] || null);
 
@@ -209,8 +212,14 @@ export default function EditPageComp(props) {
       setErrorSave(false);
       const pageid = data.pageid;
       const pagetype = data.pagetype;
-      const slugduplicatewarning = data.slugexists;
-      console.log(slugduplicatewarning, "slugduplicatewarning");
+      const slugduplicatewarningv = data.slugexists;
+      console.log(slugduplicatewarningv, "slugduplicatewarning");
+      if (slugduplicatewarningv) {
+        dispatch(setSlugDuplicateWarning(true));
+        setTimeout(() => {
+          dispatch(setSlugDuplicateWarning(false));
+        }, 4000);
+      }
       //const url = `${process.env.NEXT_PUBLIC_API_URL}/dash/pages2/${pageid}?pagetype=${pagetype}`;
       //if page post redirect to edit version of itself
       if (neworexisting === "new") {

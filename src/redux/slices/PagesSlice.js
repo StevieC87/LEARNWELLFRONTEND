@@ -5,6 +5,7 @@ const PagesSlice = createSlice({
   initialState: {
     hello: "hello",
     fields: {},
+    slugduplicatewarning: false,
   },
 
   reducers: {
@@ -28,9 +29,12 @@ const PagesSlice = createSlice({
         type,
       };
     },
+    setSlugDuplicateWarning(state, action) {
+      state.slugduplicatewarning = action.payload;
+    },
   },
 });
 
-export const { updateField } = PagesSlice.actions;
+export const { updateField, setSlugDuplicateWarning } = PagesSlice.actions;
 
 export default PagesSlice.reducer;
