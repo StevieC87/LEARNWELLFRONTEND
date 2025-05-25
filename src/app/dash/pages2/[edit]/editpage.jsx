@@ -190,6 +190,7 @@ export default function EditPageComp(props) {
     })
 
     if (!response.ok) {
+      setErrorSave(true);
       console.log(response, "response not ok");
       //print error message
       const errorData = await response.json();
@@ -198,7 +199,7 @@ export default function EditPageComp(props) {
         alert("Please add a field with name 'title' to the schema of the page");
       }
       setIsSaving(false);
-      setErrorSave(true);
+
 
     }
     else if (response.ok) {
@@ -242,6 +243,7 @@ export default function EditPageComp(props) {
         pagetype: pagetype,
         pagedata: pagedataS,
         neworexisting: neworexisting,
+        slug: fieldData.slug ? fieldData.slug.content : "", //slug field
 
       }),
     })
@@ -288,15 +290,10 @@ export default function EditPageComp(props) {
       <div className="editpagecontainer">
 
         <div className="topbuttons p-4">
-
-
-
-
           {multilingualLangs && (
             <div className="langpicker flex flex-row gap-5">
               <label htmlFor="lang" className="block text-sm font-medium text-gray-700 self-center">
                 Language</label>
-
 
               <select name="" id=""
                 /*  onChange={(e) => setSelectedLang(e.target.value)} */
@@ -314,7 +311,7 @@ export default function EditPageComp(props) {
                   );
                 })}
               </select>
-              <span>{selectedLanguage}</span>
+
 
             </div>
           )}
@@ -324,29 +321,27 @@ export default function EditPageComp(props) {
                 <span>Saving</span>
               )}
 
-              {!issaving && (
+              {!issaving && !showsaved && (
                 <span>Save</span>
               )}
               {errorsave && (
                 <span className="text-red-500">Error</span>
               )}
+              {showsaved && !issaving && (
+                <span className="text-green-500">Saved</span>
+              )}
 
             </button>
-            {showsaved && (
-              <span className="text-green-500">Saved</span>
+
+            {neworexisting === 'existing' && (
+              <button onClick={() => onPublish()} /* className="button button-primary" */
+                className={!hasChanges ? "button button-primary" : "button button-primary disabled"}>
+                Publish
+              </button>
             )}
-            <button onClick={() => onPublish()} /* className="button button-primary" */
-              className={!hasChanges ? "button button-primary" : "button button-primary disabled"}>
-              Publish
-            </button>
           </div>
 
         </div>
-
-
-
-
-
 
         {neworexisting === 'new' && (
           <h1 >New {pagetitle}</h1 >
@@ -377,14 +372,18 @@ export default function EditPageComp(props) {
                 type={field.type}
                 name={field.name}
                 label={field.name}
+                fielddata={fieldData1}
                 value={fieldData1.content || ""}
+                onChange2={(e) => {
 
-                onChange={(e) => {
-                  const newValue = e.target.value;
-                  dispatch(updateField({ name: field.name, content: newValue, id: fieldData1.id, locale: fieldData1.locale, schema: fieldData1.schema, type: field.type }));
                   setHasChanges(true);
-
                 }}
+              /*   onChange={(e) => {
+                    const newValue = e.target.value;
+                    dispatch(updateField({ name: field.name, content: newValue, id: fieldData1.id, locale: fieldData1.locale, schema: fieldData1.schema, type: field.type }));
+                    setHasChanges(true);
+  
+                  }}  */
               />
 
             )

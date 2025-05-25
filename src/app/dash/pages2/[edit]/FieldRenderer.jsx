@@ -1,8 +1,32 @@
+'use client'
+import { validateSlug } from './utilities/validation';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateField } from '@/redux/slices/PagesSlice';
+import { useState } from 'react';
+
 
 //! ADD ID OF THE FIELD  - PASS TO REDUX 
 
-const FieldRenderer = ({ type, name, value, label, onChange }) => {
+const FieldRenderer = ({ type, name, value, label, onChange2, fielddata }) => {
   ;
+  const dispatch = useDispatch();
+  // const fieldData1 = useSelector((state) => state.PagesSlice.fields[name]);
+
+  console.log(fielddata, "fielddata33333333");
+
+  const onChange = (e) => {
+    const newValue = e.target.value;
+    dispatch(updateField({
+      name: name,
+      content: newValue, id: fielddata.id,
+      locale: fielddata.locale,
+      schema: fielddata.schema,
+      type: type
+    }));
+    //setHasChanges(true);
+    onChange2();
+  }
+
   switch (type) {
     case "text":
 
@@ -16,6 +40,7 @@ const FieldRenderer = ({ type, name, value, label, onChange }) => {
             type="text"
             value={value}
             onChange={onChange}
+
           />
         </div>
       );
