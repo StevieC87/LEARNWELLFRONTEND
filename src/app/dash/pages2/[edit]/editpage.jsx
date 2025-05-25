@@ -188,8 +188,21 @@ export default function EditPageComp(props) {
 
       }),
     })
-    console.log(response, "response55555555");
-    if (response.ok) {
+
+    if (!response.ok) {
+      console.log(response, "response not ok");
+      //print error message
+      const errorData = await response.json();
+      console.log(errorData, "errorData");
+      if (errorData.errorthing === "titlemissing") {
+        alert("Please add a field with name 'title' to the schema of the page");
+      }
+      setIsSaving(false);
+      setErrorSave(true);
+
+    }
+    else if (response.ok) {
+      console.log(response, "response saved ok");
       const data = await response.json();
       setIsSaving(false);
       setErrorSave(false);
@@ -206,18 +219,6 @@ export default function EditPageComp(props) {
       setTimeout(() => {
         setShowSaved(false);
       }, 2000);
-
-    }
-    else if (!response.ok) {
-      //console.log(response, "response not ok");
-      //print error message
-      const errorData = await response.json();
-      console.log(errorData, "errorData");
-      if (errorData.errorthing === "titlemissing") {
-        alert("Please add a field with name 'title' to the schema of the page");
-      }
-      setIsSaving(false);
-      setErrorSave(true);
 
     }
     setHasChanges(false);
@@ -365,11 +366,11 @@ export default function EditPageComp(props) {
 
           (filteredFieldsS.length !== 0) && filteredFieldsS.map((field) => {
             // const fieldData = useSelector((state) => state.PagesSlice.fields[field.name]) || {};
-            console.log(field, 'field555555')
-            console.log(field.name, "field.name111");
+            //  console.log(field, 'field555555')
+            //   console.log(field.name, "field.name111");
             let fieldData1 = fieldData[field.name] || {};
-            console.log(fieldData1, "fieldData1");
-            console.log(fieldData1.id, "fieldData1.content");
+            // console.log(fieldData1, "fieldData1");
+            //console.log(fieldData1.id, "fieldData1.content");
             return (
               <FieldRenderer
                 key={field.name}

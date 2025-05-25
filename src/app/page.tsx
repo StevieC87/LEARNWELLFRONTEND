@@ -1,7 +1,7 @@
 export default async function Home() {
   /*  let Homepagedata = {};
   let Homepagefields = []; */
-  const response = await fetch("http://localhost:3000/pages/homepage", {
+  /*  const response = await fetch("http://localhost:3000/pages/homepage", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -27,5 +27,12 @@ export default async function Home() {
     return field?.content || "";
   }
 
-  return <>{<p>Title: {getFieldValue(fieldsdata, "Header1Title")}</p>}</>;
+  return <>{<p>Title: {getFieldValue(fieldsdata, "Header1Title")}</p>}</>; */
+
+  return (
+    <div>
+      <h1>Welcome to the Homepage</h1>
+      <p>This is a simple example of a Next.js page.</p>
+    </div>
+  );
 }
