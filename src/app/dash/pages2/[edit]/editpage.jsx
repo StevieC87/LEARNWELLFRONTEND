@@ -209,6 +209,8 @@ export default function EditPageComp(props) {
       setErrorSave(false);
       const pageid = data.pageid;
       const pagetype = data.pagetype;
+      const slugduplicatewarning = data.slugexists;
+      console.log(slugduplicatewarning, "slugduplicatewarning");
       //const url = `${process.env.NEXT_PUBLIC_API_URL}/dash/pages2/${pageid}?pagetype=${pagetype}`;
       //if page post redirect to edit version of itself
       if (neworexisting === "new") {
