@@ -378,12 +378,7 @@ export default function EditPageComp(props) {
 
                   setHasChanges(true);
                 }}
-              /*   onChange={(e) => {
-                    const newValue = e.target.value;
-                    dispatch(updateField({ name: field.name, content: newValue, id: fieldData1.id, locale: fieldData1.locale, schema: fieldData1.schema, type: field.type }));
-                    setHasChanges(true);
-  
-                  }}  */
+
               />
 
             )
