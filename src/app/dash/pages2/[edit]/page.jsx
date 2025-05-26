@@ -7,7 +7,7 @@ import { useParams } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { setSelectedLanguage } from '../../../../redux/slices/DashSlice';
+import { setSelectedLanguage, setMultilingualSharedId } from '../../../../redux/slices/DashSlice';
 
 export default function EditPage() {
   const params = useParams();
@@ -30,6 +30,9 @@ export default function EditPage() {
   const [data, setData] = useState({})
 
   const selectedLanguage = useSelector((state) => state.DashSlice.selectedLanguage);
+  const multilingualsharedid = useSelector((state) => state.DashSlice.multilingualsharedid);
+
+  const pageexiststhislanguage = useSelector((state) => state.DashSlice.pageexiststhislanguage);
 
 
   useEffect(() => {
@@ -40,7 +43,10 @@ export default function EditPage() {
       const pageid = edit;
       //set URL depending if new/existing page
       if (pageid !== "newpage") {
-        url = `http://localhost:3000/schema/${pageid}?pagetype=${pagetype}&language=${selectedLanguage}`;
+        url = `http://localhost:3000/schema/${pageid}?pagetype=${pagetype}&language=${selectedLanguage}&multilingualsharedid=${multilingualsharedid}`;
+
+
+
       }
       else if (pageid === "newpage") {
         let schemaq = searchParams.get('schema');
@@ -84,6 +90,7 @@ export default function EditPage() {
           if (!selectedLanguage) {
             dispatch(setSelectedLanguage(data.settings.defaultlanguage))
           };
+          dispatch(setMultilingualSharedId(data.multilingualsharedid));
         }
 
       } catch (error) {

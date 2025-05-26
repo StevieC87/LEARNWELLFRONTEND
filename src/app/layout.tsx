@@ -15,6 +15,20 @@ import "../styles/extra/states.css";
 import "../styles/extra/utilities.css";
 import "../styles/forms.css";
 
+if (process.env.NEXT_PUBLIC_NODE_ENV === "development") {
+  const originalWarn = console.warn;
+  console.warn = (...args) => {
+    if (
+      typeof args[0] === "string" &&
+      args[0].includes("params should be awaited")
+    )
+      return;
+    originalWarn(...args);
+  };
+
+  // override warning
+}
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],

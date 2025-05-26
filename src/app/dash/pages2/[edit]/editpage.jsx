@@ -5,7 +5,7 @@ import { ObjectId } from 'bson';
 import FieldRenderer from './FieldRenderer';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateField, setSlugDuplicateWarning } from '../../../../redux/slices/PagesSlice';
-import { setSelectedLanguage } from '../../../../redux/slices/DashSlice';
+import { setSelectedLanguage, setMultilingualSharedId, setPageExistsThisLanguage } from '../../../../redux/slices/DashSlice';
 import { useRouter } from 'next/navigation';
 
 export default function EditPageComp(props) {
@@ -52,6 +52,8 @@ export default function EditPageComp(props) {
   //to prevent publishing if made changes prior to publishing
   const [hasChanges, setHasChanges] = useState(true);
 
+  const multilingualsharedid = useSelector((state) => state.DashSlice.multilingualsharedid);
+  const pageexiststhislanguage = useSelector((state) => state.DashSlice.pageexiststhislanguage);
   //to show message if slug existed and was renamed
   // const [slugduplicatewarning, setSlugDuplicateWarning] = useState(false);
 
@@ -149,14 +151,28 @@ export default function EditPageComp(props) {
 
   }, [mergedfields]);
 
-  const changelanguage = (e) => {
+  const changelanguage = async (e) => {
     //first save current progress, before switching language
-    if (hasChanges) {
-      onSave();
-    }
+    /*  if (hasChanges) {
+       onSave();
+     } */
     dispatch(setSelectedLanguage(e.target.value));
-
-
+    //WE NEED TO SEE HERE IF THERE IS A PAGE FOR THIS SELECTED LANGUAGE 
+    //EASY: WE DO A FETCH, WE RETURN BACK - IF IT'S NEW OR EXISTING FOR THIS SPECIFIC LANGUAGE
+    // PUT IT IN REDUX - AND SEND APPROPRAITE FETCH 
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/checkexistslanguage?pagetype=${pagetype}&pageid=${pageid}&language=${e.target.value}`;
+    const response = await fetch(url)
+    if (!response.ok) {
+      console.log(response, "response not ok");
+    }
+    else if (response.ok) {
+      const data = await response.json();
+      console.log(data, "data from checkexistslanguage");
+      let exists = data.exists;
+      dispatch(setPageExistsThisLanguage(exists));
+      dispatch(setMultilingualSharedId(data.multilingualsharedid));
+      console.log(exists, "exists");
+    }
   }
 
 
@@ -188,6 +204,8 @@ export default function EditPageComp(props) {
         pagetype: pagetype,
         pagedata: pagedataS,
         neworexisting: neworexisting,
+        multilingualsharedid: multilingualsharedid,
+        pageexiststhislanguage: pageexiststhislanguage
 
       }),
     })
@@ -214,6 +232,9 @@ export default function EditPageComp(props) {
       const pagetype = data.pagetype;
       const slugduplicatewarningv = data.slugexists;
       console.log(slugduplicatewarningv, "slugduplicatewarning");
+      console.log(data.multilingualsharedid, "multilingualsharedid11111111111111");
+      dispatch(setMultilingualSharedId(data.multilingualsharedid));
+      console.log(data.locale, "locale22222222222222");
       if (slugduplicatewarningv) {
         dispatch(setSlugDuplicateWarning(true));
         setTimeout(() => {
