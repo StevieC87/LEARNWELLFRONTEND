@@ -15,10 +15,8 @@ export default function EditPage() {
   const searchParams = useSearchParams();
 
   const edit = params.edit;
+  const pageid = edit;
   const pagetype = searchParams.get('pagetype');
-  console.log(edit, "edit333");
-  console.log(pagetype, "pagetype333");
-
   const [settings, setSettings] = useState();
   const [pagefieldsdata, setPageFieldsData] = useState([]);
   const [pagedata, setPageData] = useState();
@@ -26,7 +24,6 @@ export default function EditPage() {
   const [neworexisting, setNewOrExisting] = useState();
   const [pageidfromserver, setPageIdFromServer] = useState();
   const [existingpagenewerror, setExistingPageNewError] = useState(false);
-  const [currentlanguage, setCurrentLanguage] = useState();
   const [data, setData] = useState({})
 
   const selectedLanguage = useSelector((state) => state.DashSlice.selectedLanguage);
@@ -36,21 +33,16 @@ export default function EditPage() {
 
 
   useEffect(() => {
-    console.log("selectedLanguage4444", selectedLanguage);
     const FetchPageData = async () => {
-      // let createID = new ObjectId().toString();
       let url;
-      const pageid = edit;
+      let schemaq = searchParams.get('schema');
       //set URL depending if new/existing page
-      if (pageid !== "newpage") {
-        url = `http://localhost:3000/schema/${pageid}?pagetype=${pagetype}&language=${selectedLanguage}&multilingualsharedid=${multilingualsharedid}`;
+      if (pageid === "newpage") {
 
-
-
-      }
-      else if (pageid === "newpage") {
-        let schemaq = searchParams.get('schema');
         url = `http://localhost:3000/schema/newpage?pagetype=${pagetype}&schemaname=${schemaq}`;
+      }
+      else if (pageid !== "newpage") {
+        url = `http://localhost:3000/schema/${pageid}?pagetype=${pagetype}&schemaname=${schemaq}&language=${selectedLanguage}&multilingualsharedid=${multilingualsharedid}`;
       }
       try {
         const response = await fetch(url, {
@@ -98,20 +90,8 @@ export default function EditPage() {
       }
     }
     FetchPageData();
-  }, [selectedLanguage]);
+  }, []);
 
-  useEffect(() => {
-    console.log("settings333333", settings);
-    console.log("pagefieldsdataxxxxxxxxxxx", pagefieldsdata);
-    console.log("pagedata", pagedata);
-    console.log("schema", schema);
-    console.log("neworexisting", neworexisting);
-    console.log("pageidfromserver", pageidfromserver);
-    //   console.log("existingpagenewerror", existingpagenewerror);
-    //  console.log("currentlanguage", currentlanguage);
-    //  console.log("pagetype", pagetype);
-
-  }, [settings, pagefieldsdata, pagedata, schema, neworexisting, pageidfromserver]);
 
   return (
     <>

@@ -12,11 +12,9 @@ export default function EditPageComp(props) {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  //. SO I THINK: UNFILTERED FIELDS: all languages
-  //. filteredFieldsS: only selected language (FOR DISPLAY)
-
   const { schema, settings, pagefieldsdata, pagedata, neworexisting, pageid, pagetype } = props;
 
+  //. -------------------------- PROPS 
   console.log(schema, "schema1234");
   console.log(settings, "settings");
   console.log(pagedata, "pagedata123");
@@ -25,35 +23,37 @@ export default function EditPageComp(props) {
   console.log(pageid, "pageid");
   console.log(pagetype, "pagetype1234");
 
-  const selectedLanguage = useSelector((state) => state.DashSlice.selectedLanguage);
-
   const pagetitle = schema?.title;
-
-
   const [pagefields, setPageFields] = useState(schema.fields);
   const [pagedataS, setPageDataS] = useState(pagedata);
-  //const pageid = pagedata._id; //string
 
+  //. --------------------------
+
+  //const pageid = pagedata._id; //string
   const fieldData = useSelector((state) => state.PagesSlice.fields);
 
-  const [filteredFieldsS, setFilteredFieldsS] = useState([]);
+  //..................... FILTERING FIELDS 
 
+  const [filteredFieldsS, setFilteredFieldsS] = useState([]);
   const [mergedfields, setMergedFields] = useState([]);
   const [initialmerge, setInitialMerge] = useState(false);
 
+  //..................... UI STATES 
   const [issaving, setIsSaving] = useState(false);
   const [errorsave, setErrorSave] = useState(false);
   const [showsaved, setShowSaved] = useState(false);
-
-  const [multilingalBool, setMultilingualBool] = useState(settings.multilingualyesno || false);
-  const [multilingualLangs, setMultilingualLangs] = useState(settings.languages || []);
-  const [defaultlang, setDefaultLang] = useState(settings.defaultlanguage || null);
-
   //to prevent publishing if made changes prior to publishing
   const [hasChanges, setHasChanges] = useState(true);
 
+
+  //..................... LANGUAGE RELATED STATES 
+  const [multilingalBool, setMultilingualBool] = useState(settings.multilingualyesno || false);
+  const [multilingualLangs, setMultilingualLangs] = useState(settings.languages || []);
+  const [defaultlang, setDefaultLang] = useState(settings.defaultlanguage || null);
   const multilingualsharedid = useSelector((state) => state.DashSlice.multilingualsharedid);
   const pageexiststhislanguage = useSelector((state) => state.DashSlice.pageexiststhislanguage);
+  const selectedLanguage = useSelector((state) => state.DashSlice.selectedLanguage);
+
   //to show message if slug existed and was renamed
   // const [slugduplicatewarning, setSlugDuplicateWarning] = useState(false);
 
@@ -145,12 +145,8 @@ export default function EditPageComp(props) {
 
   }, [filteredFieldsS]);
 
-  useEffect(() => {
 
-    console.log("mergedfields", mergedfields);
-
-  }, [mergedfields]);
-
+  //. THIS NOT NECESSARY - INSTEAD WE JUST SEND THE LANGUAGE ON NEW only 
   const changelanguage = async (e) => {
     //first save current progress, before switching language
     /*  if (hasChanges) {
@@ -327,23 +323,24 @@ export default function EditPageComp(props) {
               <label htmlFor="lang" className="block text-sm font-medium text-gray-700 self-center">
                 Language</label>
 
-              <select name="" id=""
-                /*  onChange={(e) => setSelectedLang(e.target.value)} */
-                onChange={(e) => changelanguage(e)}
-                value={selectedLanguage}
-              >
+              {neworexisting === 'new' && (
+                <select name="" id=""
+                  /*  onChange={(e) => setSelectedLang(e.target.value)} */
+                  onChange={(e) => changelanguage(e)}
+                  value={selectedLanguage}
+                >
                 //! i want here to show the language from redux
-                {multilingualLangs.map((lang) => {
-                  return (
-                    <option key={lang} value={lang}
+                  {multilingualLangs.map((lang) => {
+                    return (
+                      <option key={lang} value={lang}
 
-                    >
-                      {lang}
-                    </option>
-                  );
-                })}
-              </select>
-
+                      >
+                        {lang}
+                      </option>
+                    );
+                  })}
+                </select>
+              )}
 
             </div>
           )}

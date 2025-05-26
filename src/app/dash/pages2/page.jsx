@@ -64,7 +64,7 @@ export default async function Pages() {
 
               <tr key={page._id} className="pageitem ">
                 <td className="">
-                  <Link href={`/dash/pages2/${page._id}?pagetype=page`} className="">{page.title}</Link>
+                  <Link href={`/dash/pages2/${page._id}?pagetype=page&schema=${page.schema}`} className="">{page.title}</Link>
                 </td>
                 <td className="">
                   <span><DeletePage pagetype='page' pageid={page._id} /></span>

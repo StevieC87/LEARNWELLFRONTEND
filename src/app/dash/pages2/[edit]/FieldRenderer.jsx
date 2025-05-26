@@ -13,7 +13,7 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata }) => {
   const slugduplicatewarning = useSelector((state) => state.PagesSlice.slugduplicatewarning);
   // const fieldData1 = useSelector((state) => state.PagesSlice.fields[name]);
 
-  console.log(fielddata, "fielddata33333333");
+  //console.log(fielddata, "fielddata33333333");
 
   const onChange = (e) => {
     const newValue = e.target.value;

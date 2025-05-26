@@ -7,7 +7,7 @@ const DashSlice = createSlice({
   initialState: {
     selectedLanguage: "",
     multilingualsharedid: "",
-    pageexiststhislanguage: false, // This is used to check if a page exists in the current language
+    pageexiststhislanguage: "", // This is used to check if a page exists in the current language
   },
 
   reducers: {
