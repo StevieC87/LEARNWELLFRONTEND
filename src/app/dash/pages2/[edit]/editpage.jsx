@@ -24,6 +24,7 @@ export default function EditPageComp(props) {
   console.log(pagetype, "pagetype1234");
   console.log(language, "language1234");
 
+
   const pagetitle = schema?.title;
   const [pagefields, setPageFields] = useState(schema.fields);
   const [pagedataS, setPageDataS] = useState(pagedata);
@@ -53,7 +54,20 @@ export default function EditPageComp(props) {
   const multilingualsharedid = useSelector((state) => state.DashSlice.multilingualsharedid);
   const pageexiststhislanguage = useSelector((state) => state.DashSlice.pageexiststhislanguage);
   const selectedLanguage = useSelector((state) => state.DashSlice.selectedLanguage);
+  const defaultlanguage = useSelector((state) => state.DashSlice.settings.defaultlanguage);
+  const [languageui, setLanguageUI] = useState(language || defaultlanguage || null);
 
+  useEffect(() => {
+    console.log(defaultlanguage, "defaultlanguage44444");
+    console.log(language, "language44444");
+    if (!language) {
+      setLanguageUI(defaultlanguage);
+    }
+    else {
+      setLanguageUI(language);
+    }
+
+  }, [language, defaultlanguage])
   //to show message if slug existed and was renamed
   // const [slugduplicatewarning, setSlugDuplicateWarning] = useState(false);
 
@@ -250,7 +264,7 @@ export default function EditPageComp(props) {
             <div className="langpicker flex flex-row gap-5">
               <label htmlFor="lang" className="block text-sm font-medium text-gray-700 self-center">
                 Language: </label>
-              <span>{language}</span>
+              <span>{languageui}</span>
               {/* {neworexisting === 'new' && (
                 <select name="" id=""
                   onChange={(e) => changelanguage(e)}
