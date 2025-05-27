@@ -42,6 +42,7 @@ export default function Pages() {
         console.log("response ok");
         const data = await response.json();
         setPagesList(data.pages);
+
         setSchemaNoPages(data.schemasnopages);
       }
     }
@@ -51,6 +52,11 @@ export default function Pages() {
     //setPageLinkUrl
   }, [userrole]);
 
+
+  useEffect(() => {
+
+    console.log('schemanopages44444444444', schemanopages);
+  }, [schemanopages]);
 
   // here i will list all the page - to take some complexity off the sidenav for now - wordpress style
   return (
@@ -62,8 +68,11 @@ export default function Pages() {
         {schemanopages.length > 0 && (
           <span>Schemas without pages:</span>
         )}
-        {schemanopages.length > 0 && schemanopages.map((schema) => (
-          <div key={`${schema.schema}${schema.language}`} className="pageitem pt-10 flex flex-row gap-10">
+        {schemanopages.length > 0 && schemanopages.map((schema, index) => (
+
+
+
+          <div key={`${schema.schema}${schema.language}`} data-key={`${schema.schema}${schema.language} `} className="pageitem pt-10 flex flex-row gap-10">
             <div className="flex flex-col">
               {multilingual && (
                 <Link href={`/dash/pages2/newpage?pagetype=page&schema=${schema.schema}&language=${schema.language}`} className="">{schema.schema} {schema.language}</Link>
@@ -73,27 +82,26 @@ export default function Pages() {
               )}
             </div>
           </div>
+
         ))}
       </div>
 
       <div className="">
         <h1 className="text-2xl">Pages List</h1>
-        <table>
-          <thead>
-            <tr>
-              <th>Page</th>
-              <th>Schema</th>
-              {multilingual && (
-                <th>Language</th>
-              )}
-              <th>Seo</th>
-              <th>Delete</th>
-            </tr>
-          </thead>
-          <tbody>
-            {pageslist.length > 0 && pageslist.map((page) => (
-              console.log(page, "page444444"),
-
+        {pageslist.length > 0 && pageslist.map((page, index) => (
+          <table>
+            <thead>
+              <tr>
+                <th>Page</th>
+                <th>Schema</th>
+                {multilingual && (
+                  <th>Language</th>
+                )}
+                <th>Seo</th>
+                <th>Delete</th>
+              </tr>
+            </thead>
+            <tbody>
               <tr key={page._id} className="pageitem ">
                 <td className="">
                   {multilingual && (
@@ -117,28 +125,17 @@ export default function Pages() {
                     <span><DeletePage pagetype='page' pageid={page._id} /></span>
                   </td>
                 )}
-                {/*  <td className="">
-                  <Link href={`/dash/pages2/editseo/${page._id}?pagetype=page`} className="">Page SEO settings</Link>
-                </td> */}
+
 
               </tr>
-            ))}
 
 
 
-          </tbody>
-        </table>
-        {/* {pageslist.map((page) => (
-          <div key={page._id} className="pageitem pt-10 flex flex-row gap-10">
-            <div className="flex flex-col">
-              <Link href={`/dash/pages/${page.slug}`} className="">{page.title}</Link>
-            </div>
-            <div className="flex flex-col gap">
-              <Link href={`/dash/pages/editseo/${page.slug}`} className="">Page SEO settings</Link>
-            </div>
-          
-          </div>
-        ))} */}
+
+            </tbody>
+          </table>
+        ))}
+
       </div>
 
 
