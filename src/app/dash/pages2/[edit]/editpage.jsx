@@ -85,7 +85,7 @@ export default function EditPageComp(props) {
         ...fieldObj,
         content: match ? match.content : '',
         _id: match ? match._id : createID,
-        locale: match ? match.locale : language,
+        locale: match ? match.locale : language || defaultlanguage || null,
         type: fieldObj.type,
         name: fieldObj.name || match?.field || null,
         schema: match ? match.schema : null,
@@ -133,7 +133,7 @@ export default function EditPageComp(props) {
         schemaname: schema.name,
         fields: fieldData,
         pageid: pageid,
-        locale: language,
+        locale: language || defaultlanguage || null,
         schema: pagedataS.schema,
         pagetype: pagetype,
         pagedata: pagedataS,
@@ -181,7 +181,7 @@ export default function EditPageComp(props) {
       //if page post redirect to edit version of itself
       if (neworexisting === "new") {
         const url = `${pageid}?pagetype=${pagetype}&schema=${schema}&language=${language}`;
-        router.push(url);
+        router.replace(url);
 
       }
       setShowSaved(true);
