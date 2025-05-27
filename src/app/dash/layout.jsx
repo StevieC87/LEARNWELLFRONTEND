@@ -89,17 +89,21 @@ export default async function Layout({ children }) {
     // redirect('/login');
   }
 
+  //let triggergetglobaldataforredux = GetDataforRedux();
+
 
   return (
-    <div className="outerlayoutdiv">
-      <div className="adminwrapperdiv">
-        <RefreshToken shouldRefresh={shouldRefresh} />
-        <SlideMenuDesktop />
-        <MainContent children1={children} />
+    <>
+      {/* <Sidenav /> */}
+      <div className="outerlayoutdiv">
+        <div className="adminwrapperdiv">
+          <RefreshToken shouldRefresh={shouldRefresh} />
+          <SlideMenuDesktop />
+          <MainContent children1={children} />
 
+        </div>
+        <BottomBar />
       </div>
-      <BottomBar />
-    </div>
-
+    </>
   );
 }

@@ -7,7 +7,12 @@ const DashSlice = createSlice({
   initialState: {
     selectedLanguage: "",
     multilingualsharedid: "",
-    pageexiststhislanguage: "", // This is used to check if a page exists in the current language
+    pageexiststhislanguage: "", // This is used to check if a page exists in the userrole: "",
+    settings: {
+      multilingual: "",
+      defaultlanguage: "",
+      languages: [],
+    },
   },
 
   reducers: {
@@ -20,6 +25,12 @@ const DashSlice = createSlice({
     setPageExistsThisLanguage(state, action) {
       state.pageexiststhislanguage = action.payload;
     },
+    setUserRole(state, action) {
+      state.userrole = action.payload;
+    },
+    setSettings(state, action) {
+      state.settings = action.payload; // This will set the entire settings object
+    },
   },
 });
 
@@ -27,6 +38,8 @@ export const {
   setSelectedLanguage,
   setMultilingualSharedId,
   setPageExistsThisLanguage,
+  setUserRole,
+  setSettings,
 } = DashSlice.actions;
 
 export default DashSlice.reducer;

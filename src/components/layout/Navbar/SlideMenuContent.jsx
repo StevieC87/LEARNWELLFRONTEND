@@ -3,14 +3,42 @@ import './css/slidemenu.css';
 import Link from 'next/link';
 import LogoutButton from '@/app/users/components/Logout.jsx';
 import Image from 'next/image'; // Import Image from next/image
-export default function SlideMenu() {
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUserRole, setSettings } from '@/redux/slices/DashSlice'; // Import the action to set user role
 
+
+export default function SlideMenu() {
+  const dispatch = useDispatch();
+  const userrole = useSelector((state) => state.DashSlice.userrole);
+
+  useEffect(() => {
+    let getuserroleverify = async () => {
+      const response = await fetch('http://localhost:3000/getdataforredux', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include', // this is what sends/receives cookie
+      });
+      if (!response.ok) {
+        console.log("Failed to fetch user role");
+        return;
+      }
+      const data = await response.json();
+      console.log("User role fetched successfully:", data);
+      dispatch(setUserRole(data.role)); // Dispatch the action to set user role in 
+      dispatch(setSettings(data.settings)); // Dispatch the action to set settings in the Redux store
+      // Redux store
+      // You can use the user role data here if needed
+    }
+    getuserroleverify();
+
+
+  }, []);
 
   return (
-    <div
-
-
-    >
+    <div >
 
       <nav className="flex flex-col p-4">
 
@@ -33,9 +61,11 @@ export default function SlideMenu() {
         <Link href="/dash/users" className="py-2 sidebartext">
           Users
         </Link>
-        <Link href="/dash/settings" className="py-2 sidebartext">
-          Settings
-        </Link>
+        {userrole === 'superadmin' && (
+          <Link href="/dash/settings" className="py-2 sidebartext">
+            Settings
+          </Link>
+        )}
         <Link href="/dash/gptrender" className="py-2 sidebartext">
           AI UI Generator
         </Link>

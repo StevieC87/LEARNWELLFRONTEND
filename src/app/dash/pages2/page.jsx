@@ -1,33 +1,56 @@
-
+'use client';
+import { useEffect, useState } from "react";
+import { useSelector } from 'react-redux';
 import Link from "next/link";
 import './pageslist.css'
 import DeletePage from "./components/Deletepage";
 
-export default async function Pages() {
 
-  let pageslist = [];
-  let schemanopages = [];
-  const response = await fetch("http://localhost:3000/pages/getpageslist", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      //'Authorization': `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
-    },
-  });
-  if (!response.ok) {
-    console.log("respo0nse not ok");
-    console.log(response, "response");
+export default function Pages() {
+  const multilingual = useSelector((state) => state.DashSlice.settings.multilingual);
+  const userrole = useSelector((state) => state.DashSlice.userrole);
+
+  const [pageslist, setPagesList] = useState([]);
+  const [schemanopages, setSchemaNoPages] = useState([]);
+  const [issuperadmin, setIsSuperAdmin] = useState(false);
+
+  const [pagelinkurl, setPageLinkUrl] = useState('');
+
+  useEffect(() => {
+    if (userrole === "superadmin") {
+      setIsSuperAdmin(true);
+    }
 
 
-  }
-  else if (response.ok) {
-    console.log("response ok");
-    const data = await response.json();
-    pageslist = data.pages;
-    schemanopages = data.schemasnopages;
-    console.log(schemanopages, "schemanopages");
-    console.log(pageslist, "pageslist");
-  }
+
+    const fetchpageslist = async () => {
+
+      const response = await fetch("http://localhost:3000/pages/getpageslist", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          //'Authorization': `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
+        },
+      });
+      if (!response.ok) {
+        console.log("respo0nse not ok");
+        console.log(response, "response");
+
+
+      }
+      else if (response.ok) {
+        console.log("response ok");
+        const data = await response.json();
+        setPagesList(data.pages);
+        setSchemaNoPages(data.schemasnopages);
+      }
+    }
+    fetchpageslist();
+
+
+    //setPageLinkUrl
+  }, [userrole]);
+
 
   // here i will list all the page - to take some complexity off the sidenav for now - wordpress style
   return (
@@ -42,7 +65,12 @@ export default async function Pages() {
         {schemanopages.length > 0 && schemanopages.map((schema) => (
           <div key={`${schema.schema}${schema.language}`} className="pageitem pt-10 flex flex-row gap-10">
             <div className="flex flex-col">
-              <Link href={`/dash/pages2/newpage?pagetype=page&schema=${schema.schema}&language=${schema.language}`} className="">{schema.schema} {schema.language}</Link>
+              {multilingual && (
+                <Link href={`/dash/pages2/newpage?pagetype=page&schema=${schema.schema}&language=${schema.language}`} className="">{schema.schema} {schema.language}</Link>
+              )}
+              {!multilingual && (
+                <Link href={`/dash/pages2/newpage?pagetype=page&schema=${schema.schema}`} className="">{schema.schema}</Link>
+              )}
             </div>
           </div>
         ))}
@@ -54,6 +82,10 @@ export default async function Pages() {
           <thead>
             <tr>
               <th>Page</th>
+              <th>Schema</th>
+              {multilingual && (
+                <th>Language</th>
+              )}
               <th>Seo</th>
               <th>Delete</th>
             </tr>
@@ -64,11 +96,27 @@ export default async function Pages() {
 
               <tr key={page._id} className="pageitem ">
                 <td className="">
-                  <Link href={`/dash/pages2/${page._id}?pagetype=page&schema=${page.schema}&language=${page.locale}`} className="">{page.title}</Link>
+                  {multilingual && (
+                    <Link href={`/dash/pages2/${page._id}?pagetype=page&schema=${page.schema}&language=${page.locale}`} className="">{page.title}</Link>
+                  )}
+                  {!multilingual && (
+                    <Link href={`/dash/pages2/${page._id}?pagetype=page&schema=${page.schema}`} className="">{page.title}</Link>
+                  )}
                 </td>
-                <td className="">
-                  <span><DeletePage pagetype='page' pageid={page._id} /></span>
+                <td>
+                  {page.schema}
                 </td>
+                {multilingual && (
+                  <td>{page.locale}</td>
+                )}
+                <td>
+
+                </td>
+                {issuperadmin && (
+                  <td className="">
+                    <span><DeletePage pagetype='page' pageid={page._id} /></span>
+                  </td>
+                )}
                 {/*  <td className="">
                   <Link href={`/dash/pages2/editseo/${page._id}?pagetype=page`} className="">Page SEO settings</Link>
                 </td> */}
