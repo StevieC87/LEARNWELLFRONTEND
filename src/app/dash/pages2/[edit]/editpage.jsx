@@ -150,6 +150,8 @@ export default function EditPageComp(props) {
       setErrorSave(false);
       const pageid = data.pageid;
       const pagetype = data.pagetype;
+      const language = data.language;
+      const schema = data.schema;
       const slugduplicatewarningv = data.slugexists;
       console.log(slugduplicatewarningv, "slugduplicatewarning");
       console.log(data.multilingualsharedid, "multilingualsharedid11111111111111");
@@ -164,7 +166,7 @@ export default function EditPageComp(props) {
       //const url = `${process.env.NEXT_PUBLIC_API_URL}/dash/pages2/${pageid}?pagetype=${pagetype}`;
       //if page post redirect to edit version of itself
       if (neworexisting === "new") {
-        const url = `${pageid}?pagetype=${pagetype}`;
+        const url = `${pageid}?pagetype=${pagetype}&schema=${schema}&language=${language}`;
         router.push(url);
 
       }
