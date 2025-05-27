@@ -107,6 +107,7 @@ export default function EditPage() {
             neworexisting={neworexisting}
             pageid={pageidfromserver}
             pagetype={pagetype}
+            language={language}
           />
 
 

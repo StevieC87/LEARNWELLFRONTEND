@@ -42,7 +42,7 @@ export default async function Pages() {
         {schemanopages.length > 0 && schemanopages.map((schema) => (
           <div key={`${schema.schema}${schema.language}`} className="pageitem pt-10 flex flex-row gap-10">
             <div className="flex flex-col">
-              <Link href={`/dash/pages2/newpage?pagetype=page&schema=${schema.schema}&language={schema.language}`} className="">{schema.schema} {schema.language}</Link>
+              <Link href={`/dash/pages2/newpage?pagetype=page&schema=${schema.schema}&language=${schema.language}`} className="">{schema.schema} {schema.language}</Link>
             </div>
           </div>
         ))}

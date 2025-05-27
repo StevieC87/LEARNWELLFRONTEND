@@ -12,9 +12,9 @@ export default function EditPageComp(props) {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const { schema, settings, pagefieldsdata, pagedata, neworexisting, pageid, pagetype } = props;
+  const { schema, settings, pagefieldsdata, pagedata, neworexisting, pageid, pagetype, language } = props;
 
-  //. -------------------------- PROPS 
+  //.  GET DATA FROM PROPS  ------------------------ 
   console.log(schema, "schema1234");
   console.log(settings, "settings");
   console.log(pagedata, "pagedata123");
@@ -22,6 +22,7 @@ export default function EditPageComp(props) {
   console.log(neworexisting, "neworexisting1234");
   console.log(pageid, "pageid");
   console.log(pagetype, "pagetype1234");
+  console.log(language, "language1234");
 
   const pagetitle = schema?.title;
   const [pagefields, setPageFields] = useState(schema.fields);
@@ -35,7 +36,6 @@ export default function EditPageComp(props) {
   //..................... FILTERING FIELDS 
 
   const [filteredFieldsS, setFilteredFieldsS] = useState([]);
-  const [mergedfields, setMergedFields] = useState([]);
   const [initialmerge, setInitialMerge] = useState(false);
 
   //..................... UI STATES 
@@ -59,10 +59,10 @@ export default function EditPageComp(props) {
 
   // const [selectedLang, setSelectedLang] = useState(defaultlang || multilingualLangs[0] || null);
 
+  //. MERGE SCHEMA FIELDS WITH PAGEFIELDSDATA
+  // (if new page:we just we create id, add locale)
   useEffect(() => {
-    console.log("pagefields333", pagefields);
-    console.log("pagefieldsdata333", pagefieldsdata);
-    //merge pagefields with pagefieldsdata
+    //,merge pagefields with pagefieldsdata
     const mergedinitial = pagefields.map((fieldObj) => {
       const match = pagefieldsdata.find((item) => item.field === fieldObj.name);
       console.log(match, "match3333333333");
@@ -85,93 +85,17 @@ export default function EditPageComp(props) {
     console.log(mergedinitial, "mergedinitial");
     setInitialMerge(mergedinitial);
     setFilteredFieldsS(mergedinitial);
-  }, [pagefields, pagefieldsdata])
 
-  /*  useEffect(() => {
-     console.log('initialmerge', initialmerge);
- 
-     if (initialmerge && initialmerge.length > 0) {
-       console.log('yesyesyyes')
-       const filteredFields = initialmerge.map((field) => {
-         console.log(field, "field333");
-          const langContent = field.content.find(c => c.locale === selectedLang); 
-       console.log(langContent, "langContent3333");
-         //const currentVersion = langContent?.versions.find(v => v.isCurrent);
- 
- 
-         return {
-           _id: field._id || createID,
-           locale: langContent?.locale || selectedLang,
-           content: currentVersion?.content || '',
-           type: field.type,
-           name: field.name || field.field,
-           schema: field.schema,
-         };
- 
-       });
-       console.log("filteredFields", filteredFields);
-       setFilteredFieldsS(filteredFields);
- 
-     }
- 
-   }, [initialmerge, selectedLang]); */
-
-
-  useEffect(() => {
-    console.log("filteredFieldsS", filteredFieldsS);
-    filteredFieldsS.forEach((item) => {
+    //, SET THE MERGED FIELDS TO REDUX STORE
+    mergedinitial.forEach((item) => {
       dispatch(updateField({ name: item.name, content: item.content, id: item._id, locale: item.locale, type: item.type, schema: item.schema }));
     }
-    );
-
-    /* console.log("filteredFieldsS", filteredFieldsS);
-  
-  
-    const merged = pagefields.map((fieldObj) => {
-      const match = filteredFieldsS.find((item) => item.field === fieldObj.name);
-      return {
-        ...fieldObj,
-        content: match ? match.content : "", // or null if you prefer
-        _id: match ? match._id : null,
-        locale: match ? match.locale : null,
-        type: match ? match.type : null,
-  
-      };
-  
-    });
-    setMergedFields(merged); */
+    )
+  }, [pagefields, pagefieldsdata])
 
 
 
-  }, [filteredFieldsS]);
-
-
-  //. THIS NOT NECESSARY - INSTEAD WE JUST SEND THE LANGUAGE ON NEW only 
-  const changelanguage = async (e) => {
-    //first save current progress, before switching language
-    /*  if (hasChanges) {
-       onSave();
-     } */
-    dispatch(setSelectedLanguage(e.target.value));
-    //WE NEED TO SEE HERE IF THERE IS A PAGE FOR THIS SELECTED LANGUAGE 
-    //EASY: WE DO A FETCH, WE RETURN BACK - IF IT'S NEW OR EXISTING FOR THIS SPECIFIC LANGUAGE
-    // PUT IT IN REDUX - AND SEND APPROPRAITE FETCH 
-    let url = `${process.env.NEXT_PUBLIC_API_URL}/checkexistslanguage?pagetype=${pagetype}&pageid=${pageid}&language=${e.target.value}`;
-    const response = await fetch(url)
-    if (!response.ok) {
-      console.log(response, "response not ok");
-    }
-    else if (response.ok) {
-      const data = await response.json();
-      console.log(data, "data from checkexistslanguage");
-      let exists = data.exists;
-      dispatch(setPageExistsThisLanguage(exists));
-      dispatch(setMultilingualSharedId(data.multilingualsharedid));
-      console.log(exists, "exists");
-    }
-  }
-
-
+  //. ON SAVE FUNCTION ========================
   const onSave = async () => {
     setHasChanges(false);
     setIsSaving(true);
@@ -195,7 +119,7 @@ export default function EditPageComp(props) {
         schemaname: schema.name,
         fields: fieldData,
         pageid: pageid,
-        locale: selectedLanguage,
+        locale: language,
         schema: pagedataS.schema,
         pagetype: pagetype,
         pagedata: pagedataS,
@@ -253,6 +177,8 @@ export default function EditPageComp(props) {
     setHasChanges(false);
 
   }
+
+  //. ON PUBLISH FUNCTION ========================  
   const onPublish = async () => {
     let url = `${process.env.NEXT_PUBLIC_API_URL}/publish`;
 
@@ -321,15 +247,13 @@ export default function EditPageComp(props) {
           {multilingualLangs && (
             <div className="langpicker flex flex-row gap-5">
               <label htmlFor="lang" className="block text-sm font-medium text-gray-700 self-center">
-                Language</label>
-
-              {neworexisting === 'new' && (
+                Language: </label>
+              <span>{language}</span>
+              {/* {neworexisting === 'new' && (
                 <select name="" id=""
-                  /*  onChange={(e) => setSelectedLang(e.target.value)} */
                   onChange={(e) => changelanguage(e)}
                   value={selectedLanguage}
                 >
-                //! i want here to show the language from redux
                   {multilingualLangs.map((lang) => {
                     return (
                       <option key={lang} value={lang}
@@ -341,6 +265,9 @@ export default function EditPageComp(props) {
                   })}
                 </select>
               )}
+              {neworexisting === 'existing' && (
+                <span>{language}</span>
+              )} */}
 
             </div>
           )}
@@ -386,32 +313,30 @@ export default function EditPageComp(props) {
           </div>
         )}
 
-        {/* (mergedfields.length > 0) && mergedfields.map((field) => { */
+        {(filteredFieldsS.length !== 0) && filteredFieldsS.map((field) => {
+          // const fieldData = useSelector((state) => state.PagesSlice.fields[field.name]) || {};
+          //  console.log(field, 'field555555')
+          //   console.log(field.name, "field.name111");
+          let fieldData1 = fieldData[field.name] || {};
+          // console.log(fieldData1, "fieldData1");
+          //console.log(fieldData1.id, "fieldData1.content");
+          return (
+            <FieldRenderer
+              key={field.name}
+              type={field.type}
+              name={field.name}
+              label={field.name}
+              fielddata={fieldData1}
+              value={fieldData1.content || ""}
+              onChange2={(e) => {
 
-          (filteredFieldsS.length !== 0) && filteredFieldsS.map((field) => {
-            // const fieldData = useSelector((state) => state.PagesSlice.fields[field.name]) || {};
-            //  console.log(field, 'field555555')
-            //   console.log(field.name, "field.name111");
-            let fieldData1 = fieldData[field.name] || {};
-            // console.log(fieldData1, "fieldData1");
-            //console.log(fieldData1.id, "fieldData1.content");
-            return (
-              <FieldRenderer
-                key={field.name}
-                type={field.type}
-                name={field.name}
-                label={field.name}
-                fielddata={fieldData1}
-                value={fieldData1.content || ""}
-                onChange2={(e) => {
+                setHasChanges(true);
+              }}
 
-                  setHasChanges(true);
-                }}
+            />
 
-              />
-
-            )
-          })}
+          )
+        })}
 
 
         <div>
@@ -458,6 +383,30 @@ export default function EditPageComp(props) {
     </>
   )
 }
+/* //. THIS NOT NECESSARY - INSTEAD WE JUST SEND THE LANGUAGE ON NEW only 
+const changelanguage = async (e) => {
+  //first save current progress, before switching language
+  // if (hasChanges) {
+   //  onSave();
+  // } 
+  dispatch(setSelectedLanguage(e.target.value));
+  //WE NEED TO SEE HERE IF THERE IS A PAGE FOR THIS SELECTED LANGUAGE 
+  //EASY: WE DO A FETCH, WE RETURN BACK - IF IT'S NEW OR EXISTING FOR THIS SPECIFIC LANGUAGE
+  // PUT IT IN REDUX - AND SEND APPROPRAITE FETCH 
+  let url = `${process.env.NEXT_PUBLIC_API_URL}/checkexistslanguage?pagetype=${pagetype}&pageid=${pageid}&language=${e.target.value}`;
+  const response = await fetch(url)
+  if (!response.ok) {
+    console.log(response, "response not ok");
+  }
+  else if (response.ok) {
+    const data = await response.json();
+    console.log(data, "data from checkexistslanguage");
+    let exists = data.exists;
+    dispatch(setPageExistsThisLanguage(exists));
+    dispatch(setMultilingualSharedId(data.multilingualsharedid));
+    console.log(exists, "exists");
+  }
+} */
 
 /* */
 /* key={field.name}
@@ -468,4 +417,58 @@ value={field.content || ""} */
      ...prev,
      [field.name]: e.target.value,
    }))
+   
+     const [mergedfields, setMergedFields] = useState([]);
+  const merged = pagefields.map((fieldObj) => {
+      const match = filteredFieldsS.find((item) => item.field === fieldObj.name);
+      return {
+        ...fieldObj,
+        content: match ? match.content : "", // or null if you prefer
+        _id: match ? match._id : null,
+        locale: match ? match.locale : null,
+        type: match ? match.type : null,
+  
+      };
+  
+    });
+    setMergedFields(merged);
+    (mergedfields.length > 0) && mergedfields.map((field) => { 
  } */
+
+/*  useEffect(() => {
+console.log('initialmerge', initialmerge);
+ 
+if (initialmerge && initialmerge.length > 0) {
+console.log('yesyesyyes')
+const filteredFields = initialmerge.map((field) => {
+  console.log(field, "field333");
+   const langContent = field.content.find(c => c.locale === selectedLang); 
+console.log(langContent, "langContent3333");
+  //const currentVersion = langContent?.versions.find(v => v.isCurrent);
+ 
+ 
+  return {
+    _id: field._id || createID,
+    locale: langContent?.locale || selectedLang,
+    content: currentVersion?.content || '',
+    type: field.type,
+    name: field.name || field.field,
+    schema: field.schema,
+  };
+ 
+});
+console.log("filteredFields", filteredFields);
+setFilteredFieldsS(filteredFields);
+ 
+}
+ 
+}, [initialmerge, selectedLang]); */
+
+/*  //, SAVE THE FIELDS TO REDUX STORE
+  useEffect(() => {
+    console.log("filteredFieldsS", filteredFieldsS);
+    filteredFieldsS.forEach((item) => {
+      dispatch(updateField({ name: item.name, content: item.content, id: item._id, locale: item.locale, type: item.type, schema: item.schema }));
+    }
+    );
+  }, [filteredFieldsS]); */
