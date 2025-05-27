@@ -46,30 +46,59 @@ export default function SlideMenu() {
           <Image className="logocolor" src="/images/logo/logocolor.svg" alt="Logo" width={30} height={30} />
           <span className="poppinsSemiBold  text-black text-xl">Alpine<span className="logocolortest">Web</span></span>
         </div>
-        <Link href="#home" className="py-2 sidebartext">
-          Home
-        </Link>
-        <Link href="/dash/analytics" className="py-2 sidebartext">
-          Analytics
-        </Link>
-        <Link href="/dash/posts" className="py-2 sidebartext">
-          Posts
-        </Link>
-        <Link href="/dash/pages2" className="py-2 sidebartext">
-          Pages2
-        </Link>
-        <Link href="/dash/users" className="py-2 sidebartext">
-          Users
-        </Link>
+        {/*   <div className="sidebarlinkforicon">
+
+
+
+          <Link href="#home" className="sidebartext sidebarlinkforicon">
+            Home
+          </Link>
+        </div> */}
+        <div className="sidebarlinkforicon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-graph-up" viewBox="0 0 16 16">
+            <path fillRule="evenodd" d="M0 0h1v15h15v1H0zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07" />
+          </svg><Link href="/dash/analytics" className="py-2 sidebartext sidebarlinkforicon">
+            Analytics
+          </Link>
+        </div>
+        <div className="sidebarlinkforicon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-journal-text" viewBox="0 0 16 16">
+            <path d="M5 10.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5" />
+            <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2" />
+            <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1z" />
+          </svg>
+          <Link href="/dash/posts" className="py-2 sidebartext ">
+            Posts
+          </Link>
+        </div>
+        <div className="sidebarlinkforicon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-file-earmark-text" viewBox="0 0 16 16">
+            <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5" />
+            <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z" />
+          </svg>
+          <Link href="/dash/pages2" className="py-2 sidebartext ">
+            Pages
+          </Link>
+        </div>
+        <div className="sidebarlinkforicon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-person" viewBox="0 0 16 16">
+            <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z" />
+          </svg>
+          <Link href="/dash/users" className="py-2 sidebartext ">
+            Users
+          </Link>
+        </div>
         {userrole === 'superadmin' && (
-          <Link href="/dash/settings" className="py-2 sidebartext">
+          <Link href="/dash/settings" className="py-2 sidebartext ">
             Settings
           </Link>
         )}
-        <Link href="/dash/gptrender" className="py-2 sidebartext">
+
+        <LogoutButton />
+
+        <Link href="/dash/gptrender" className="py-2 sidebartext ">
           AI UI Generator
         </Link>
-        <LogoutButton />
       </nav>
     </div>
   );

@@ -30,4 +30,13 @@
 
 .sidebartext {
   font-size: 1.5rem;
+  padding-left: 10px;
+}
+.sidebarlinkforicon {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  /*  padding: 10px; */
+
+  text-decoration: none;
 }
