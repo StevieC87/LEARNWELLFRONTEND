@@ -16,7 +16,9 @@ export default function EditPage() {
 
   const edit = params.edit;
   const pageid = edit;
+  const schemaq = searchParams.get('schema');
   const pagetype = searchParams.get('pagetype');
+  const language = searchParams.get('language');
   const [settings, setSettings] = useState();
   const [pagefieldsdata, setPageFieldsData] = useState([]);
   const [pagedata, setPageData] = useState();
@@ -35,14 +37,13 @@ export default function EditPage() {
   useEffect(() => {
     const FetchPageData = async () => {
       let url;
-      let schemaq = searchParams.get('schema');
       //set URL depending if new/existing page
       if (pageid === "newpage") {
 
         url = `http://localhost:3000/schema/newpage?pagetype=${pagetype}&schemaname=${schemaq}`;
       }
       else if (pageid !== "newpage") {
-        url = `http://localhost:3000/schema/${pageid}?pagetype=${pagetype}&schemaname=${schemaq}&language=${selectedLanguage}&multilingualsharedid=${multilingualsharedid}`;
+        url = `http://localhost:3000/schema/${pageid}?pagetype=${pagetype}&schemaname=${schemaq}&language=${language}&multilingualsharedid=${multilingualsharedid}`;
       }
       try {
         const response = await fetch(url, {

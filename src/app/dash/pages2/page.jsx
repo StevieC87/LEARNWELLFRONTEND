@@ -40,9 +40,9 @@ export default async function Pages() {
           <span>Schemas without pages:</span>
         )}
         {schemanopages.length > 0 && schemanopages.map((schema) => (
-          <div key={schema} className="pageitem pt-10 flex flex-row gap-10">
+          <div key={`${schema.schema}${schema.language}`} className="pageitem pt-10 flex flex-row gap-10">
             <div className="flex flex-col">
-              <Link href={`/dash/pages2/newpage?pagetype=page&schema=${schema}`} className="">{schema}</Link>
+              <Link href={`/dash/pages2/newpage?pagetype=page&schema=${schema.schema}&language={schema.language}`} className="">{schema.schema} {schema.language}</Link>
             </div>
           </div>
         ))}
@@ -64,7 +64,7 @@ export default async function Pages() {
 
               <tr key={page._id} className="pageitem ">
                 <td className="">
-                  <Link href={`/dash/pages2/${page._id}?pagetype=page&schema=${page.schema}`} className="">{page.title}</Link>
+                  <Link href={`/dash/pages2/${page._id}?pagetype=page&schema=${page.schema}&language=${page.locale}`} className="">{page.title}</Link>
                 </td>
                 <td className="">
                   <span><DeletePage pagetype='page' pageid={page._id} /></span>
