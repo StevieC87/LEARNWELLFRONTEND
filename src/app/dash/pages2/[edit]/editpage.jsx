@@ -55,12 +55,14 @@ export default function EditPageComp(props) {
   const pageexiststhislanguage = useSelector((state) => state.DashSlice.pageexiststhislanguage);
   const selectedLanguage = useSelector((state) => state.DashSlice.selectedLanguage);
   const defaultlanguage = useSelector((state) => state.DashSlice.settings.defaultlanguage);
-  const [languageui, setLanguageUI] = useState(language || defaultlanguage || null);
+  const [languageui, setLanguageUI] = useState(language || defaultlanguage || "");
+
 
   useEffect(() => {
     console.log(defaultlanguage, "defaultlanguage44444");
     console.log(language, "language44444");
     if (!language) {
+      console.log(language, "language44444 from useeffect");
       setLanguageUI(defaultlanguage);
     }
     else {
@@ -85,7 +87,7 @@ export default function EditPageComp(props) {
         ...fieldObj,
         content: match ? match.content : '',
         _id: match ? match._id : createID,
-        locale: match ? match.locale : language || defaultlanguage || null,
+        locale: match ? match.locale : languageui || defaultlanguage || null,
         type: fieldObj.type,
         name: fieldObj.name || match?.field || null,
         schema: match ? match.schema : null,
@@ -105,9 +107,14 @@ export default function EditPageComp(props) {
       dispatch(updateField({ name: item.name, content: item.content, id: item._id, locale: item.locale, type: item.type, schema: item.schema }));
     }
     )
-  }, [pagefields, pagefieldsdata])
+  }, [pagefields, pagefieldsdata, languageui])
+
+  const changelanguage = async (e) => {
+    console.log(language, "language from changelanguage");
+    setLanguageUI(e.target.value);
 
 
+  }
 
   //. ON SAVE FUNCTION ========================
   const onSave = async () => {
@@ -133,7 +140,7 @@ export default function EditPageComp(props) {
         schemaname: schema.name,
         fields: fieldData,
         pageid: pageid,
-        locale: language || defaultlanguage || null,
+        locale: languageui,
         schema: pagedataS.schema,
         pagetype: pagetype,
         pagedata: pagedataS,
@@ -208,7 +215,7 @@ export default function EditPageComp(props) {
         schemaname: schema.name,
         fields: fieldData,
         pageid: pageid,
-        locale: language,
+        locale: languageui,
         schema: pagedataS.schema,
         pagetype: pagetype,
         pagedata: pagedataS,
@@ -264,26 +271,27 @@ export default function EditPageComp(props) {
             <div className="langpicker flex flex-row gap-5">
               <label htmlFor="lang" className="block text-sm font-medium text-gray-700 self-center">
                 Language: </label>
-              <span>{languageui}</span>
-              {/* {neworexisting === 'new' && (
-                <select name="" id=""
-                  onChange={(e) => changelanguage(e)}
-                  value={selectedLanguage}
-                >
-                  {multilingualLangs.map((lang) => {
-                    return (
-                      <option key={lang} value={lang}
 
-                      >
-                        {lang}
-                      </option>
-                    );
-                  })}
-                </select>
-              )}
+              {(pagetype === 'post' && neworexisting === 'new') &&
+                (
+                  <select name="" id=""
+                    onChange={(e) => changelanguage(e)}
+                    value={languageui}
+                  >
+                    {multilingualLangs.map((lang) => {
+                      return (
+                        <option key={lang} value={lang}
+
+                        >
+                          {lang}
+                        </option>
+                      );
+                    })}
+                  </select>
+                )}
               {neworexisting === 'existing' && (
-                <span>{language}</span>
-              )} */}
+                <span>{languageui}</span>
+              )}
 
             </div>
           )}
@@ -334,7 +342,7 @@ export default function EditPageComp(props) {
           //  console.log(field, 'field555555')
           //   console.log(field.name, "field.name111");
           let fieldData1 = fieldData[field.name] || {};
-          // console.log(fieldData1, "fieldData1");
+          console.log(fieldData1, "fieldData1");
           //console.log(fieldData1.id, "fieldData1.content");
           return (
             <FieldRenderer
@@ -354,137 +362,8 @@ export default function EditPageComp(props) {
           )
         })}
 
-
-        <div>
-          {/*  {filteredFieldsS.map((field) => (
-
-            <div key={field._id} className="fielddivblock">
-              <label htmlFor={field.field} className="block text-sm font-medium text-gray-700">Text Block Title
-
-              </label>
-              <input
-                type="text"
-                className="editfield"
-                data-type="blockname"
-                id={`${field._id.toString()}-fieldid`}
-                name={field.field}
-                value={field.field}
-                onChange={onChangeField}
-              />
-              <label htmlFor={field.field} className="block text-sm font-medium text-gray-700">Text Block Content
-
-              </label>
-              <input
-                type="text"
-                data-type="blockcontent"
-                id={`${field._id.toString()}-contentid`}
-                name={field.content}
-                value={field.content}
-                onChange={onChangeField}
-              />
-            </div>
-
-          ))}
- */}
-
-        </div>
-
-        <div className="flex flex-col gap-5" style={{ width: "300px" }}>
-
-
-
-        </div>
       </div>
 
     </>
   )
 }
-/* //. THIS NOT NECESSARY - INSTEAD WE JUST SEND THE LANGUAGE ON NEW only 
-const changelanguage = async (e) => {
-  //first save current progress, before switching language
-  // if (hasChanges) {
-   //  onSave();
-  // } 
-  dispatch(setSelectedLanguage(e.target.value));
-  //WE NEED TO SEE HERE IF THERE IS A PAGE FOR THIS SELECTED LANGUAGE 
-  //EASY: WE DO A FETCH, WE RETURN BACK - IF IT'S NEW OR EXISTING FOR THIS SPECIFIC LANGUAGE
-  // PUT IT IN REDUX - AND SEND APPROPRAITE FETCH 
-  let url = `${process.env.NEXT_PUBLIC_API_URL}/checkexistslanguage?pagetype=${pagetype}&pageid=${pageid}&language=${e.target.value}`;
-  const response = await fetch(url)
-  if (!response.ok) {
-    console.log(response, "response not ok");
-  }
-  else if (response.ok) {
-    const data = await response.json();
-    console.log(data, "data from checkexistslanguage");
-    let exists = data.exists;
-    dispatch(setPageExistsThisLanguage(exists));
-    dispatch(setMultilingualSharedId(data.multilingualsharedid));
-    console.log(exists, "exists");
-  }
-} */
-
-/* */
-/* key={field.name}
-field={field}
-value={field.content || ""} */
-/*  onChange={(e) =>
-   setFormValues((prev) => ({
-     ...prev,
-     [field.name]: e.target.value,
-   }))
-   
-     const [mergedfields, setMergedFields] = useState([]);
-  const merged = pagefields.map((fieldObj) => {
-      const match = filteredFieldsS.find((item) => item.field === fieldObj.name);
-      return {
-        ...fieldObj,
-        content: match ? match.content : "", // or null if you prefer
-        _id: match ? match._id : null,
-        locale: match ? match.locale : null,
-        type: match ? match.type : null,
-  
-      };
-  
-    });
-    setMergedFields(merged);
-    (mergedfields.length > 0) && mergedfields.map((field) => { 
- } */
-
-/*  useEffect(() => {
-console.log('initialmerge', initialmerge);
- 
-if (initialmerge && initialmerge.length > 0) {
-console.log('yesyesyyes')
-const filteredFields = initialmerge.map((field) => {
-  console.log(field, "field333");
-   const langContent = field.content.find(c => c.locale === selectedLang); 
-console.log(langContent, "langContent3333");
-  //const currentVersion = langContent?.versions.find(v => v.isCurrent);
- 
- 
-  return {
-    _id: field._id || createID,
-    locale: langContent?.locale || selectedLang,
-    content: currentVersion?.content || '',
-    type: field.type,
-    name: field.name || field.field,
-    schema: field.schema,
-  };
- 
-});
-console.log("filteredFields", filteredFields);
-setFilteredFieldsS(filteredFields);
- 
-}
- 
-}, [initialmerge, selectedLang]); */
-
-/*  //, SAVE THE FIELDS TO REDUX STORE
-  useEffect(() => {
-    console.log("filteredFieldsS", filteredFieldsS);
-    filteredFieldsS.forEach((item) => {
-      dispatch(updateField({ name: item.name, content: item.content, id: item._id, locale: item.locale, type: item.type, schema: item.schema }));
-    }
-    );
-  }, [filteredFieldsS]); */

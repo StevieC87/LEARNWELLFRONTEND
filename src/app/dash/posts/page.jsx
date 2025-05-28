@@ -5,6 +5,7 @@ import DeletePage from "../pages2/components/Deletepage";
 export default async function PostsPage() {
 
   let postslist = [];
+  let multischemas = [];
   const response = await fetch("http://localhost:3000/getpostslist", {
     method: "GET",
     headers: {
@@ -20,7 +21,9 @@ export default async function PostsPage() {
     console.log("response ok");
     const data = await response.json();
     postslist = data.postpages;
+    multischemas = data.multischemas;
     console.log(postslist, "postslist");
+    console.log(multischemas, "multischemas");
   }
 
   //! probabyl make this client component or include - COZ WE WANNA DEFINE WHAT WE WANT A BLOG, AN ARTICLE, A PRODUCT ETC - and we gotta send that to get the corresponding schema
@@ -28,9 +31,16 @@ export default async function PostsPage() {
     <>
       <div>
         <h1>Posts Page</h1>
-        <p>This is the posts page.</p>
         {/* <button onClick={() => createPost()} ></button> */}
-        <Link className="button button-primary" href="/dash/pages2/newpage?pagetype=post&schema=blog">Create New page</Link>
+        <Link className="" href="/dash/pages2/newpage?pagetype=post&schema=blog">Create New: </Link>
+        {multischemas.length > 0 && multischemas.map((schema) => (
+          <>
+
+            <Link key={schema._id} href={`/dash/pages2/newpage?pagetype=post&schema=${schema}`} className="button button-secondary">{schema}</Link>
+          </>
+          /*     */
+        ))}
+
       </div>
       <table>
         <thead>
@@ -46,7 +56,7 @@ export default async function PostsPage() {
           {postslist.length > 0 && postslist.map((post) => (
             <tr key={post._id} className="pageitem ">
               <td className="">
-                <Link href={`/dash/pages2/${post._id}?pagetype=post`} className="">{post.title}</Link>
+                <Link href={`/dash/pages2/${post._id}?pagetype=post&schema=${post.schema}`} className="">{post.title}</Link>
               </td>
               <td className="">
                 <Link href={`/dash/pages2/editseo/${post._id}?pagetype=post`} className="">Page SEO settings</Link>
@@ -59,7 +69,7 @@ export default async function PostsPage() {
           ))}
 
 
-
+          {/* http://localhost:3001/dash/pages2/6836f58300452f6f5e1442f3?pagetype=page&schema=About */}
         </tbody>
       </table>
 
