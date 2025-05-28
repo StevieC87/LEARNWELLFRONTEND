@@ -33,7 +33,7 @@ export default function DeletePage(props) {
         urlredirectto = '/dash/posts';
       }
       else if (pagetype === 'page') {
-        urlredirectto = '/dash/pages2';
+        urlredirectto = '/dash/pages';
       }
       router.push(urlredirectto);
     }

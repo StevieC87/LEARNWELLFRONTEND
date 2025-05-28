@@ -48,7 +48,7 @@ export default function EditPageComp(props) {
 
 
   //..................... LANGUAGE RELATED STATES 
-  const [multilingalBool, setMultilingualBool] = useState(settings.multilingualyesno || false);
+  const [multilingalBool, setMultilingualBool] = useState(settings.ismultilingual);
   const [multilingualLangs, setMultilingualLangs] = useState(settings.languages || []);
   const [defaultlang, setDefaultLang] = useState(settings.defaultlanguage || null);
   const multilingualsharedid = useSelector((state) => state.DashSlice.multilingualsharedid);
@@ -59,6 +59,7 @@ export default function EditPageComp(props) {
 
 
   useEffect(() => {
+    console.log(multilingalBool, "multilingalBool77777");
     console.log(defaultlanguage, "defaultlanguage44444");
     console.log(language, "language44444");
     if (!language) {
@@ -269,28 +270,35 @@ export default function EditPageComp(props) {
         <div className="topbuttons p-4">
           {multilingualLangs && (
             <div className="langpicker flex flex-row gap-5">
-              <label htmlFor="lang" className="block text-sm font-medium text-gray-700 self-center">
-                Language: </label>
 
-              {(pagetype === 'post' && neworexisting === 'new') &&
+
+              {(multilingalBool && pagetype === 'post' && neworexisting === 'new') &&
                 (
-                  <select name="" id=""
-                    onChange={(e) => changelanguage(e)}
-                    value={languageui}
-                  >
-                    {multilingualLangs.map((lang) => {
-                      return (
-                        <option key={lang} value={lang}
+                  <div className="flex flex-row gap-2">
+                    <label htmlFor="lang" className="block text-sm font-medium text-gray-700 self-center">
+                      Language: </label>
+                    <select name="" id=""
+                      onChange={(e) => changelanguage(e)}
+                      value={languageui}
+                    >
+                      {multilingualLangs.map((lang) => {
+                        return (
+                          <option key={lang} value={lang}
 
-                        >
-                          {lang}
-                        </option>
-                      );
-                    })}
-                  </select>
+                          >
+                            {lang}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
                 )}
-              {neworexisting === 'existing' && (
-                <span>{languageui}</span>
+              {((multilingalBool && neworexisting === 'existing') || multilingalBool && neworexisting === 'new' && pagetype == 'page') && (
+                <div className="flex flex-row gap-2">
+                  <label htmlFor="lang" className="block text-sm font-medium text-gray-700 self-center">
+                    Language: </label>
+                  <span>{languageui}</span>
+                </div>
               )}
 
             </div>

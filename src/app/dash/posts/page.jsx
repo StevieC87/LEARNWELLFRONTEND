@@ -1,6 +1,6 @@
 import Link from "next/link";
 // import { redirect } from 'next/navigation';
-import DeletePage from "../pages2/components/Deletepage";
+import DeletePage from "../pages/components/Deletepage";
 
 export default async function PostsPage() {
 
@@ -31,16 +31,15 @@ export default async function PostsPage() {
     <>
       <div>
         <h1>Posts Page</h1>
-        {/* <button onClick={() => createPost()} ></button> */}
-        <Link className="" href="/dash/pages2/newpage?pagetype=post&schema=blog">Create New: </Link>
-        {multischemas.length > 0 && multischemas.map((schema) => (
-          <>
+        <div className="pt-5"  >
+          {/* <button onClick={() => createPost()} ></button> */}
+          <Link className="" href="/dash/pages/newpage?pagetype=post&schema=blog">Create New: </Link>
 
-            <Link key={schema._id} href={`/dash/pages2/newpage?pagetype=post&schema=${schema}`} className="button button-secondary">{schema}</Link>
-          </>
-          /*     */
-        ))}
+          {multischemas.length > 0 && multischemas.map((schema) => (
+            <Link key={schema} href={`/dash/pages/newpage?pagetype=post&schema=${schema}`} className="button button-secondary m-3">{schema}</Link>
 
+          ))}
+        </div>
       </div>
       <table>
         <thead>
@@ -56,10 +55,10 @@ export default async function PostsPage() {
           {postslist.length > 0 && postslist.map((post) => (
             <tr key={post._id} className="pageitem ">
               <td className="">
-                <Link href={`/dash/pages2/${post._id}?pagetype=post&schema=${post.schema}`} className="">{post.title}</Link>
+                <Link href={`/dash/pages/${post._id}?pagetype=post&schema=${post.schema}`} className="">{post.title}</Link>
               </td>
               <td className="">
-                <Link href={`/dash/pages2/editseo/${post._id}?pagetype=post`} className="">Page SEO settings</Link>
+                <Link href={`/dash/pages/editseo/${post._id}?pagetype=post`} className="">Page SEO settings</Link>
               </td>
               <td className="">
                 <span><DeletePage pagetype='post' pageid={post._id} /></span>
@@ -69,7 +68,7 @@ export default async function PostsPage() {
           ))}
 
 
-          {/* http://localhost:3001/dash/pages2/6836f58300452f6f5e1442f3?pagetype=page&schema=About */}
+
         </tbody>
       </table>
 
