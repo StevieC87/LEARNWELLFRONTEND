@@ -27,7 +27,6 @@ export default async function Pages() {
   return (
     <div className="pageslist">
       <h1 className="">Pages</h1>
-      <p className="">This is the pages page</p>
       <p>Here you can create top-level page like About,Services, etc</p>
 
       <Link href="/dash/pages/createnew" className=" button-primary t-10 mb-10">Create New Page</Link>
@@ -59,17 +58,7 @@ export default async function Pages() {
 
           </tbody>
         </table>
-        {/* {pageslist.map((page) => (
-          <div key={page._id} className="pageitem pt-10 flex flex-row gap-10">
-            <div className="flex flex-col">
-              <Link href={`/dash/pages/${page.slug}`} className="">{page.title}</Link>
-            </div>
-            <div className="flex flex-col gap">
-              <Link href={`/dash/pages/editseo/${page.slug}`} className="">Page SEO settings</Link>
-            </div>
-          
-          </div>
-        ))} */}
+
       </div>
 
 

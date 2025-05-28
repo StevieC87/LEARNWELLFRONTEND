@@ -62,33 +62,30 @@ export default function Pages() {
   return (
     <div className="pageslist">
       <h1 className="">Pages</h1>
-      <p className="">This is the pages page</p>
 
       <div>
         {schemanopages.length > 0 && (
           <span>Schemas without pages:</span>
         )}
         {schemanopages.length > 0 && schemanopages.map((schema, index) => (
-
-
-
-          <div key={`${schema.schema}${schema.language}`} data-key={`${schema.schema}${schema.language} `} className="pageitem pt-10 flex flex-row gap-10">
+          <div key={`${schema.schema}${schema.language}`} data-key={`${schema.schema}${schema.language} `} className="pageitem pt-2 flex flex-row gap-10">
             <div className="flex flex-col">
               {multilingual && (
-                <Link href={`/dash/pages2/newpage?pagetype=page&schema=${schema.schema}&language=${schema.language}`} className="">{schema.schema} {schema.language}</Link>
+                <Link href={`/dash/pages2/newpage?pagetype=page&schema=${schema.schema}&language=${schema.language}`} className="underline">{schema.schema} {schema.language}</Link>
               )}
               {!multilingual && (
-                <Link href={`/dash/pages2/newpage?pagetype=page&schema=${schema.schema}`} className="">{schema.schema}</Link>
+                <Link href={`/dash/pages2/newpage?pagetype=page&schema=${schema.schema}`} className="underline">{schema.schema}</Link>
               )}
             </div>
           </div>
 
         ))}
       </div>
+      {pageslist.length > 0 && pageslist.map((page, index) => (
+        <div className="">
 
-      <div className="">
-        <h1 className="text-2xl">Pages List</h1>
-        {pageslist.length > 0 && pageslist.map((page, index) => (
+          <h1 className="text-2xl">Pages List</h1>
+
           <table>
             <thead>
               <tr>
@@ -134,9 +131,10 @@ export default function Pages() {
 
             </tbody>
           </table>
-        ))}
+        </div>
+      ))}
 
-      </div>
+
 
 
 
