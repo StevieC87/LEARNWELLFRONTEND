@@ -4,8 +4,7 @@ import { useSelector } from 'react-redux';
 import Link from "next/link";
 import './pageslist.css'
 import DeletePage from "./components/Deletepage";
-
-
+// import LexicalField from '../uicomponents/customfields/Lexical/LexicalField';
 export default function Pages() {
   const multilingual = useSelector((state) => state.DashSlice.settings.multilingual);
   const userrole = useSelector((state) => state.DashSlice.userrole);
@@ -62,7 +61,7 @@ export default function Pages() {
   return (
     <div className="pageslist">
       {/*    <h1 className="">Pages</h1> */}
-
+      {/*       <LexicalField /> */}
       <div>
         {schemanopages.length > 0 && (
           <span>Schemas without pages:</span>

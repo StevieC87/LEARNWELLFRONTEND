@@ -3,6 +3,7 @@ import { validateSlug } from './utilities/validation';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateField } from '@/redux/slices/PagesSlice';
 import { useState } from 'react';
+import SummernoteField from '../../uicomponents/customfields/Summernote/SummernoteField';
 
 
 //! ADD ID OF THE FIELD  - PASS TO REDUX 
@@ -19,7 +20,8 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata }) => {
     const newValue = e.target.value;
     dispatch(updateField({
       name: name,
-      content: newValue, id: fielddata.id,
+      content: newValue,
+      id: fielddata.id,
       locale: fielddata.locale,
       schema: fielddata.schema,
       type: type
@@ -59,6 +61,24 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata }) => {
             name={name}
             value={value}
             onChange={onChange}
+          />
+        </div>
+      );
+
+    case "wysi":
+      return (
+
+        <div className="fielddivblock">
+          <label htmlFor={name} className="block text-sm font-medium text-gray-700">{label}</label>
+          <SummernoteField
+            /*  key={name} */
+            name={name}
+            id={fielddata.id}
+            locale={fielddata.locale}
+            schema={fielddata.schema}
+            type={type}
+            value={value}
+          // onChange={onChange}
           />
         </div>
       );
