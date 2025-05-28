@@ -30,6 +30,7 @@ export default function Pages() {
           "Content-Type": "application/json",
           //'Authorization': `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
         },
+        credentials: 'include', // Include cookies in the request
       });
       if (!response.ok) {
         console.log("respo0nse not ok");
@@ -116,7 +117,7 @@ export default function Pages() {
                   <td>{page.locale}</td>
                 )}
                 <td>
-
+                  <Link key={page._id} href={`/dash/pages/seo?pageid=${page._id}&pagetype=page&schema=${page.schema}&language=${page.locale}`} className="">Seo</Link>
                 </td>
                 {issuperadmin && (
                   <td className="">

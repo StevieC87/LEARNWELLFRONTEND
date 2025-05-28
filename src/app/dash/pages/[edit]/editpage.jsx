@@ -137,6 +137,7 @@ export default function EditPageComp(props) {
         "Content-Type": "application/json",
         //  Authorization: `Bearer ${token}`,
       },
+      credentials: 'include', // Include cookies in the request
       body: JSON.stringify({
         schemaname: schema.name,
         fields: fieldData,
@@ -212,6 +213,7 @@ export default function EditPageComp(props) {
         "Content-Type": "application/json",
         //  Authorization: `Bearer ${token}`,
       },
+      credentials: 'include', // Include cookies in the request
       body: JSON.stringify({
         schemaname: schema.name,
         fields: fieldData,

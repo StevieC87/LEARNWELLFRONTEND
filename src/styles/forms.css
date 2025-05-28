@@ -51,7 +51,7 @@ legend {
   font-weight: bold;
 }
 
-/* SLIDER SWITCH TOGGLE */
+/* -------------- SLIDER SWITCH TOGGLE -----------*/
 
 .switch {
   position: relative;
@@ -113,4 +113,29 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+/* ------------------------ */
+
+.formlabelvertical {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-top: 10px;
+}
+.labeltip1 {
+  font-weight: normal !important;
+  font-family: "Poppins";
+  font-size: 1.4rem;
+}
+.labeltip2 {
+  font-weight: normal !important;
+  font-family: "Poppins";
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+}
+.seoform {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 600px;
 }

@@ -14,9 +14,10 @@ export default function DeletePage(props) {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        credentials: 'include', // this is what sends/receives cookie
 
       },
+      credentials: 'include', // this is what sends/receives cookie
+
 
     });
 

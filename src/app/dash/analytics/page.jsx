@@ -7,6 +7,7 @@ export default async function Analytics() {
       'Content-Type': 'application/json',
       //'Authorization': `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
     },
+    credentials: 'include', // Include cookies in the request
   });
   console.log("Status OK:", response.ok);
   if (!response.ok) {

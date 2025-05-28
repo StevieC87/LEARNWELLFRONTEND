@@ -27,6 +27,7 @@ export default async function HomeMultilang({ params }) {
     headers: {
       'Content-Type': 'application/json',
     },
+
     //cache: 'no-store', // Ensures fresh data on each request
   });
   if (!response.ok) {

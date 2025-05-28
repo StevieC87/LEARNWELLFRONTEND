@@ -161,7 +161,15 @@ export default function EditPageComp(props) {
     //EASY: WE DO A FETCH, WE RETURN BACK - IF IT'S NEW OR EXISTING FOR THIS SPECIFIC LANGUAGE
     // PUT IT IN REDUX - AND SEND APPROPRAITE FETCH 
     let url = `${process.env.NEXT_PUBLIC_API_URL}/checkexistslanguage?pagetype=${pagetype}&pageid=${pageid}&language=${e.target.value}`;
-    const response = await fetch(url)
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        //  Authorization: `Bearer ${token}`,
+      },
+      credentials: 'include', // Include cookies in the request
+    });
+
     if (!response.ok) {
       console.log(response, "response not ok");
     }
@@ -195,6 +203,7 @@ export default function EditPageComp(props) {
         "Content-Type": "application/json",
         //  Authorization: `Bearer ${token}`,
       },
+      credentials: 'include', // Include cookies in the request
       body: JSON.stringify({
         schemaname: schema.name,
         fields: fieldData,
@@ -266,6 +275,7 @@ export default function EditPageComp(props) {
         "Content-Type": "application/json",
         //  Authorization: `Bearer ${token}`,
       },
+      credentials: 'include', // Include cookies in the request
       body: JSON.stringify({
         schemaname: schema.name,
         fields: fieldData,

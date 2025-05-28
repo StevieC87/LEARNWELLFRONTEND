@@ -12,6 +12,7 @@ export default async function PostsPage() {
       "Content-Type": "application/json",
       //'Authorization': `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
     },
+    credentials: 'include', // this is what sends/receives cookie
   });
   if (!response.ok) {
     console.log("respo0nse not ok");
