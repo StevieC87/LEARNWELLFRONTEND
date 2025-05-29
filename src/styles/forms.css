@@ -139,3 +139,20 @@ input:checked + .slider:before {
   gap: 1rem;
   max-width: 600px;
 }
+
+.jsonld-block {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 600px;
+  margin-bottom: 1rem;
+  margin-top: 2.5rem;
+  /*  border: 2px solid #d1d5db; */
+  padding: 1rem;
+  border-radius: 0.375rem;
+  width: 100%;
+
+  align-items: start;
+  justify-content: start;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}

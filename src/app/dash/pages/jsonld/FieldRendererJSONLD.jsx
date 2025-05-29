@@ -16,11 +16,9 @@ const FieldRendererJSONLD = ({ type, name, value, label, onChange2, fielddata, p
   //console.log(fielddata, "fielddata33333333");
 
   const onChange = (e) => {
-
     const name = e.target.name; // Get the field name from the input's name attribute
     const type = e.target.type; // Get the field type from the input's type attribute
     const content = e.target.value; // Get the field value from the input's value attribute
-
     const blocknameparentblock = e.target.dataset.parentblock; // Get 
 
     dispatch(changeBlocksAndFieldsblockupdatefield({
@@ -38,7 +36,7 @@ const FieldRendererJSONLD = ({ type, name, value, label, onChange2, fielddata, p
 
       return (
         //! add custom class maybe after? 
-        <div className="fielddivblock">
+        <div className="">
           <label htmlFor={name} className="block text-sm font-medium text-gray-700">{label}</label>
           <input
             key={name}
@@ -54,7 +52,7 @@ const FieldRendererJSONLD = ({ type, name, value, label, onChange2, fielddata, p
       );
     case "textarea":
       return (
-        <div className="fielddivblock">
+        <div className="">
           <label htmlFor={name} className="block text-sm font-medium text-gray-700">{label}</label>
           <textarea
             key={name}
@@ -70,7 +68,7 @@ const FieldRendererJSONLD = ({ type, name, value, label, onChange2, fielddata, p
 
     case "number":
       return (
-        <div className="fielddivblock">
+        <div className="">
           <label htmlFor={name} className="block text-sm font-medium text-gray-700">{label}</label>
           <input
             key={name}
@@ -85,7 +83,7 @@ const FieldRendererJSONLD = ({ type, name, value, label, onChange2, fielddata, p
       );
     case "checkbox":
       return (
-        <div className="fielddivblock">
+        <div className="">
           <label htmlFor={name} className="block text-sm font-medium text-gray-700">{label}</label>
           <input
             key={name}
@@ -101,7 +99,7 @@ const FieldRendererJSONLD = ({ type, name, value, label, onChange2, fielddata, p
       );
     case "date":
       return (
-        <div className="fielddivblock">
+        <div className="">
           <label htmlFor={name} className="block text-sm font-medium text-gray-700">{label}</label>
           <input
             key={name}
