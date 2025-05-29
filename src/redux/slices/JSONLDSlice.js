@@ -35,10 +35,16 @@ const JSONLDSlice = createSlice({
         }
       }
     },
+    cleanBlocksandFields(state) {
+      state.blocksandfields = [];
+    },
   },
 });
 
-export const { updateBlocksAndFields, changeBlocksAndFieldsblockupdatefield } =
-  JSONLDSlice.actions;
+export const {
+  updateBlocksAndFields,
+  changeBlocksAndFieldsblockupdatefield,
+  cleanBlocksandFields,
+} = JSONLDSlice.actions;
 
 export default JSONLDSlice.reducer;

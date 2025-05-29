@@ -1,31 +1,52 @@
+'use client';
 import Link from "next/link";
 // import { redirect } from 'next/navigation';
 import DeletePage from "../pages/components/Deletepage";
+import { useEffect, useState } from "react";
 
-export default async function PostsPage() {
 
-  let postslist = [];
-  let multischemas = [];
-  const response = await fetch("http://localhost:3000/getpostslist", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      //'Authorization': `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
-    },
-    credentials: 'include', // this is what sends/receives cookie
-  });
-  if (!response.ok) {
-    console.log("respo0nse not ok");
-    console.log(response, "response");
-  }
-  else if (response.ok) {
-    console.log("response ok");
-    const data = await response.json();
-    postslist = data.postpages;
-    multischemas = data.multischemas;
-    console.log(postslist, "postslist");
-    console.log(multischemas, "multischemas");
-  }
+export default function PostsPage() {
+
+
+  //let postslist = [];
+  // let multischemas = [];
+  const [postslist, setPosts] = useState([]);
+  const [multischemas, setMultischemas] = useState([]);
+
+  useEffect(() => {
+    // This effect runs only once when the component mounts
+    console.log("PostsPage component mounted");
+
+    const fetchfunction = async () => {
+      const response = await fetch("http://localhost:3000/getpostslist", {
+        method: "GET",
+
+        credentials: 'include',
+        // this is what sends/receives cookie
+      });
+      if (!response.ok) {
+        console.log("respo0nse not ok");
+        console.log(response, "response");
+      }
+      else if (response.ok) {
+        console.log("response ok");
+        const data = await response.json();
+        console.log(data, "data");
+        // postslist = data.postpages;
+        setPosts(data.postpages);
+        // schemas = data.postschemas;
+        setMultischemas(data.multischemas);
+        console.log("data fetched successfully");
+        //multischemas = data.multischemas;
+        console.log(postslist, "postslist");
+        console.log(multischemas, "multischemas");
+      }
+    }
+    fetchfunction();
+
+  }, []);
+
+
 
   //! probabyl make this client component or include - COZ WE WANNA DEFINE WHAT WE WANT A BLOG, AN ARTICLE, A PRODUCT ETC - and we gotta send that to get the corresponding schema
   return (

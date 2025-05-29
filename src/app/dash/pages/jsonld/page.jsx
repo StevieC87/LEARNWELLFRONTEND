@@ -1,13 +1,14 @@
 'use client';
-import { use, useEffect, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useSearchParams } from 'next/navigation';
 import FieldRendererJSONLD from './FieldRendererJSONLD';
-import { updateBlocksAndFields } from '@/redux/slices/JSONLDSlice';
+import { updateBlocksAndFields, cleanBlocksandFields } from '@/redux/slices/JSONLDSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 
 export default function JsonLDPage() {
   const dispatch = useDispatch();
+  const effectRan = useRef(false);
 
   const searchParams = useSearchParams();
   const pageid = searchParams.get('pageid');
@@ -21,6 +22,9 @@ export default function JsonLDPage() {
   const [blocksnow, setBlocksnow] = useState({});
 
   useEffect(() => {
+    if (effectRan.current) return;
+    effectRan.current = true;
+    dispatch(cleanBlocksandFields()); // Clear previous blocks and fields
     const getjsonldschema = async () => {
       const response = await fetch(`http://localhost:3000/getjsonldschema?schema=${schema}`, {
         method: "GET",
