@@ -3,7 +3,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { updateField } from '@/redux/slices/PagesSlice';
 import { useState } from 'react';
-import { updateBlocksAndFields } from '@/redux/slices/JSONLDSlice';
+import { updateBlocksAndFields, changeBlocksAndFieldsblockupdatefield } from '@/redux/slices/JSONLDSlice';
 
 
 //! ADD ID OF THE FIELD  - PASS TO REDUX 
@@ -16,19 +16,17 @@ const FieldRendererJSONLD = ({ type, name, value, label, onChange2, fielddata, p
   //console.log(fielddata, "fielddata33333333");
 
   const onChange = (e) => {
-    //get parent block from data attribute
-    //console.log(e.target, "e.target");
-    //console.log(e.target.value, "e.target.value");
-    //console.log(e.target.name, "e.target.name");
-    //console.log(e.target.type, "e.target.type");
-    console.log(e.target.dataset.parentblock, "e.target.dataset.parentblock");
-    const newValue = e.target.value;
-    dispatch(updateBlocksAndFields({
-      blocknameparentblock: e.target.dataset.parentblock,
+
+    const name = e.target.name; // Get the field name from the input's name attribute
+    const type = e.target.type; // Get the field type from the input's type attribute
+    const content = e.target.value; // Get the field value from the input's value attribute
+
+    const blocknameparentblock = e.target.dataset.parentblock; // Get 
+
+    dispatch(changeBlocksAndFieldsblockupdatefield({
+      blocknameparentblock: blocknameparentblock,
       name: name,
-      content: newValue,
-      // locale: fielddata.locale,
-      // schema: fielddata.schema,
+      content: content,
       type: type
     }));
 

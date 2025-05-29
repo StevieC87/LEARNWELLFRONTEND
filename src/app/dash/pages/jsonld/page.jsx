@@ -15,11 +15,10 @@ export default function JsonLDPage() {
   const pagetype = searchParams.get('pagetype');
   const language = searchParams.get('language');
 
-
-  const [schemablocks, setSchemaBlocks] = useState([]);
-  // const [formValues, setFormValues] = useState({});
+  const blocksandfields = useSelector((state) => state.JSONLDSlice.blocksandfields);
   console.log(pageid, schema, pagetype, language, "search params");
 
+  const [blocksnow, setBlocksnow] = useState({});
 
   useEffect(() => {
     const getjsonldschema = async () => {
@@ -34,31 +33,21 @@ export default function JsonLDPage() {
       else if (response.ok) {
         const data = await response.json();
         console.log(data, "data")
-        setSchemaBlocks(data.schema.jsonldblocks);
         let schemablocks = data.schema.jsonldblocks;
         dispatch(updateBlocksAndFields({
-
           schemablocks
-
-
-
         }));
       }
     }
 
-    /*  pageid,
-              schema,
-              pagetype, */
     getjsonldschema();
   }, []);
 
-
-  useEffect(() => {
-    console.log('schemablocks', schemablocks);
-
-
-  }, [schemablocks]);
-
+  /*   useEffect(() => {
+  
+  
+    }, [blocksandfields]
+   */
 
 
   return (
@@ -66,7 +55,7 @@ export default function JsonLDPage() {
     <div className="jsonld-page">
       <h1 className="text-2xl font-bold mb-4">JSON-LD Configuration</h1>
 
-      {schemablocks.length > 0 && schemablocks.map((block, index) => (
+      {blocksandfields.length > 0 && blocksandfields.map((block, index) => (
         <div key={index} className="jsonld-block">
           <h2 className="text-xl font-semibold mb-2">{block.name}</h2>
           <div className="jsonld-fields">
@@ -75,7 +64,12 @@ export default function JsonLDPage() {
                 <FieldRendererJSONLD
                   type={field.type}
                   name={field.name}
-                  // value={formValues[block.name]?.fields?.[field.name] || field.value || ""}
+                  //  value={formValues[block.name]?.fields?.[field.name] || field.value || ""}
+/*                   value={field.value || ""}
+
+ */               value={
+                    (block.fields.find(f => f.name === field.name)?.value) ?? ""
+                  }
                   label={field.label}
                   placeholder={field.placeholder || ""}
                   parentblock={block.name}
