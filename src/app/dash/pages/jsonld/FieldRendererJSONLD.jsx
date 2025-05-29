@@ -27,9 +27,8 @@ const FieldRendererJSONLD = ({ type, name, value, label, onChange2, fielddata, p
       blocknameparentblock: e.target.dataset.parentblock,
       name: name,
       content: newValue,
-      id: fielddata.id,
-      locale: fielddata.locale,
-      schema: fielddata.schema,
+      // locale: fielddata.locale,
+      // schema: fielddata.schema,
       type: type
     }));
 

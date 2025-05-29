@@ -2,8 +2,13 @@
 import { use, useEffect, useState } from "react";
 import { useSearchParams } from 'next/navigation';
 import FieldRendererJSONLD from './FieldRendererJSONLD';
+import { updateBlocksAndFields } from '@/redux/slices/JSONLDSlice';
+import { useDispatch, useSelector } from 'react-redux';
+
 
 export default function JsonLDPage() {
+  const dispatch = useDispatch();
+
   const searchParams = useSearchParams();
   const pageid = searchParams.get('pageid');
   const schema = searchParams.get('schema');
@@ -12,7 +17,7 @@ export default function JsonLDPage() {
 
 
   const [schemablocks, setSchemaBlocks] = useState([]);
-  const [formValues, setFormValues] = useState({});
+  // const [formValues, setFormValues] = useState({});
   console.log(pageid, schema, pagetype, language, "search params");
 
 
@@ -30,8 +35,20 @@ export default function JsonLDPage() {
         const data = await response.json();
         console.log(data, "data")
         setSchemaBlocks(data.schema.jsonldblocks);
+        let schemablocks = data.schema.jsonldblocks;
+        dispatch(updateBlocksAndFields({
+
+          schemablocks
+
+
+
+        }));
       }
     }
+
+    /*  pageid,
+              schema,
+              pagetype, */
     getjsonldschema();
   }, []);
 
@@ -43,9 +60,6 @@ export default function JsonLDPage() {
   }, [schemablocks]);
 
 
-  useEffect(() => {
-    console.log('formValues44444444', formValues);
-  }, [formValues]);
 
   return (
 
@@ -61,7 +75,7 @@ export default function JsonLDPage() {
                 <FieldRendererJSONLD
                   type={field.type}
                   name={field.name}
-                  value={formValues[block.name]?.fields?.[field.name] || field.value || ""}
+                  // value={formValues[block.name]?.fields?.[field.name] || field.value || ""}
                   label={field.label}
                   placeholder={field.placeholder || ""}
                   parentblock={block.name}

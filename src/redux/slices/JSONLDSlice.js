@@ -13,8 +13,11 @@ const JSONLDSlice = createSlice({
     },
     //blocksandfields
     updateBlocksAndFields(state, action) {
-      const { blocksandfields } = action.payload;
-      state.blocksandfields = blocksandfields;
+      const { schemablocks } = action.payload;
+      /*  if (!Array.isArray(state.blocksandfields)) {
+        state.blocksandfields = [];
+      } */
+      state.blocksandfields.push(...schemablocks);
     },
   },
 });
