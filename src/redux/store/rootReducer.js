@@ -3,11 +3,13 @@ import { combineReducers } from "@reduxjs/toolkit";
 import SlideMenuSlice from "../slices/SlideMenu";
 import PagesSlice from "../slices/PagesSlice";
 import DashSlice from "../slices/DashSlice";
+import JSONLDSlice from "../slices/JSONLDSlice";
 
 const rootReducer = combineReducers({
   SlideMenuSlice: SlideMenuSlice,
   PagesSlice: PagesSlice,
   DashSlice: DashSlice,
+  JSONLDSlice: JSONLDSlice,
   /* UtilsSlice: UtilsSlice, */
 });
 

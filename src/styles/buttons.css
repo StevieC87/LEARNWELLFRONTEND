@@ -52,11 +52,11 @@
   /* Outline button */
   .button-outline {
     background-color: transparent;
-    color: #007bff;
-    border-color: #007bff;
+    color: #5bcaec;
+    border-color: #5bcaec;
   }
   .button-outline:hover {
-    background-color: #007bff;
+    background-color: #5bcaec;
     color: #ffffff;
   }
   .button-outline:active {

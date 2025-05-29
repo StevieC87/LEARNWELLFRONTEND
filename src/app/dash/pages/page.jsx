@@ -96,6 +96,7 @@ export default function Pages() {
                 <th>Language</th>
               )}
               <th>Seo</th>
+              <th>JSON-LD</th>
               <th>Delete</th>
             </tr>
           </thead>
@@ -118,6 +119,9 @@ export default function Pages() {
                 )}
                 <td>
                   <Link key={page._id} href={`/dash/pages/seo?pageid=${page._id}&pagetype=page&schema=${page.schema}&language=${page.locale}`} className="">Seo</Link>
+                </td>
+                <td>
+                  <Link key={page._id} href={`/dash/pages/jsonld?pageid=${page._id}&pagetype=page&schema=${page.schema}&language=${page.locale}`} className="">JSON-LD</Link>
                 </td>
                 {issuperadmin && (
                   <td className="">

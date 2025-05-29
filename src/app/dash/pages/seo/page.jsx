@@ -12,18 +12,10 @@ export default function PageSpecificSEO() {
       metaDescription: "",
       robots: "",
       canonicalUrl: "",
-      metaKeywords: "",
       hreflangs: "",
-      ogTitle: "",
-      ogDescription: "",
       ogImage: "",
       ogType: "",
-      ogUrl: "",
-      siteName: "",
       twitterCardType: "",
-      twitterTitle: "",
-      twitterDescription: "",
-      twitterImage: "",
       jsonldContext: "https://schema.org",
       jsonldType: "WebPage",
       jsonldName: "",
@@ -40,7 +32,7 @@ export default function PageSpecificSEO() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/sitewideseo", {
+        const response = await fetch("http://localhost:3000/pagespecificseo", {
           method: "GET",
           credentials: 'include',
         });
@@ -51,18 +43,10 @@ export default function PageSpecificSEO() {
             metaDescription: data.metaDescription || "",
             robots: data.robots || "",
             canonicalUrl: data.canonicalUrl || "",
-            metaKeywords: data.metaKeywords || "",
             hreflangs: data.hreflangs || "",
-            ogTitle: data.ogTitle || "",
-            ogDescription: data.ogDescription || "",
             ogImage: data.ogImage || "",
             ogType: data.ogType || "",
-            ogUrl: data.ogUrl || "",
-            siteName: data.siteName || "",
             twitterCardType: data.twitterCardType || "",
-            twitterTitle: data.twitterTitle || "",
-            twitterDescription: data.twitterDescription || "",
-            twitterImage: data.twitterImage || "",
             jsonldContext: data.jsonldContext || "https://schema.org",
             jsonldType: data.jsonldType || "WebPage",
             jsonldName: data.jsonldName || "",
@@ -74,7 +58,9 @@ export default function PageSpecificSEO() {
             jsonldDatePublished: data.jsonldDatePublished || "",
             jsonldDateModified: data.jsonldDateModified || "",
           });
+          console.log(result, "")
         }
+
       } catch (error) {
         console.error("Error fetching SEO settings:", error);
       }
@@ -86,7 +72,7 @@ export default function PageSpecificSEO() {
   const onSubmit = async (data) => {
     const formData = new FormData();
     for (const key in data) {
-      if (key === "ogImage" || key === "twitterImage") {
+      if (key === "ogImage") {
         const fileInput = document.querySelector(`input[name="${key}"]`);
         if (fileInput?.files?.[0]) {
           formData.append(key, fileInput.files[0]);
@@ -103,14 +89,15 @@ export default function PageSpecificSEO() {
     });
 
     if (response.ok) {
-      setShowSuccess(true);
-      setShowError(false);
-      setTimeout(() => setShowSuccess(false), 3000);
-    } else {
-      setShowError(true);
-      setShowSuccess(false);
-      setTimeout(() => setShowError(false), 3000);
+      /*   setShowSuccess(true);
+        setShowError(false);
+        setTimeout(() => setShowSuccess(false), 3000);
+      } else {
+        setShowError(true);
+        setShowSuccess(false);
+        setTimeout(() => setShowError(false), 3000); */
     }
+
   };
 
   const field = (name, label, tip = "", type = "text") => (
@@ -123,9 +110,11 @@ export default function PageSpecificSEO() {
     </div>
   );
 
+
+
   return (
     <>
-      <h1>Site-Wide SEO Settings</h1>
+      <h1>Page-Specific SEO Settings</h1>
       {showsuccess && <div className="alert alert-success">SEO settings saved.</div>}
       {showerror && <div className="alert alert-danger">Error saving SEO settings.</div>}
 
@@ -134,139 +123,78 @@ export default function PageSpecificSEO() {
           <button className="button button-primary" type="submit">Save SEO Settings</button>
         </div>
 
-        <div className="formlabelvertical">
-          <label>Meta Title</label>
-          <input {...register("metaTitle")} />
+        <div id="metatagscontent" >
+          <div className="formlabelvertical">
+            <label>
+              Meta Title - <span className="labeltip1">Shown in browser tab and search results.</span>
+              <p className="labeltip2">Tip: Keep under 60–64 characters. Keep it concise and unique per page.</p>
+            </label>
+            <input {...register("metaTitle")} />
+          </div>
+
+          <div className="formlabelvertical">
+            <label>
+              Meta Description - <span className="labeltip1">Displayed in search engine results.</span>
+              <p className="labeltip2">Tip: Keep under 155–160 characters.</p>
+            </label>
+            <input {...register("metaDescription")} />
+          </div>
+
+          <div className="formlabelvertical">
+            <label>
+              Robots - <span className="labeltip1">Controls search engine indexing.</span>
+              <p className="labeltip2">Tip: Example: index, follow. Use noindex for drafts or private pages</p>
+            </label>
+            <input {...register("robots")} />
+          </div>
+
+          <div className="formlabelvertical">
+            <label>
+              Canonical URL - <span className="labeltip1">Preferred URL for this page.</span>
+              <p className="labeltip2">Avoids duplicate content issues. One per page.
+                .             Tip: Use absolute URL (e.g. https://example.com/page)</p>
+            </label>
+            <input {...register("canonicalUrl")} />
+          </div>
+
+          <div className="formlabelvertical">
+            <label>
+              Hreflangs - <span className="labeltip1">Language/region alternate URLs.</span>
+              <p className="labeltip2">Required for multilingual SEO. Matches language and regional versions. Use ISO codes.
+                Tip: Format: en:/en, fr:/fr</p>
+            </label>
+            <input {...register("hreflangs")} />
+          </div>
+
+          <div className="formlabelvertical">
+            <label>
+              OG Type - <span className="labeltip1">Open Graph object type.</span>
+              <p className="labeltip2">Tip: Example: website, article, product. Required by OG. Select based on content type.
+              </p>
+            </label>
+            <input {...register("ogType")} />
+          </div>
+
+          <div className="formlabelvertical">
+            <label>
+              Image - <span className="labeltip1">Image for social sharing.</span>
+              <p className="labeltip2">Tip: Recommended size: 1200x630px. Use JPG/PNG. Should be visually appealing, not text-heavy.
+              </p>
+            </label>
+            <input {...register("ogImage")} type="file" accept="image/*" />
+          </div>
+
+          <div className="formlabelvertical">
+            <label>
+              Twitter Card Type - <span className="labeltip1">Type of Twitter card.</span>
+              <p className="labeltip2">Use summary_large_image for rich previews. Set explicitly.
+
+              </p>
+            </label>
+            <input {...register("twitterCardType")} />
+          </div>
         </div>
 
-        <div className="formlabelvertical">
-          <label>Meta Description</label>
-          <input {...register("metaDescription")} />
-        </div>
-
-        <div className="formlabelvertical">
-          <label>Meta Keywords (deprecated)</label>
-          <input {...register("metaKeywords")} />
-        </div>
-
-        <div className="formlabelvertical">
-          <label>Robots</label>
-          <input {...register("robots")} />
-        </div>
-
-        <div className="formlabelvertical">
-          <label>Canonical URL</label>
-          <input {...register("canonicalUrl")} />
-        </div>
-
-        <div className="formlabelvertical">
-          <label>Hreflangs (e.g. en:/en, fr:/fr)</label>
-          <input {...register("hreflangs")} />
-        </div>
-
-        <div className="formlabelvertical">
-          <label>OG Title</label>
-          <input {...register("ogTitle")} />
-        </div>
-
-        <div className="formlabelvertical">
-          <label>OG Description</label>
-          <input {...register("ogDescription")} />
-        </div>
-
-        <div className="formlabelvertical">
-          <label>OG Type</label>
-          <input {...register("ogType")} />
-        </div>
-
-        <div className="formlabelvertical">
-          <label>OG URL</label>
-          <input {...register("ogUrl")} />
-        </div>
-
-        <div className="formlabelvertical">
-          <label>OG Image</label>
-          <input {...register("ogImage")} type="file" accept="image/*" />
-        </div>
-
-        <div className="formlabelvertical">
-          <label>Site Name</label>
-          <input {...register("siteName")} />
-        </div>
-
-        <div className="formlabelvertical">
-          <label>Twitter Card Type</label>
-          <input {...register("twitterCardType")} />
-        </div>
-
-        <div className="formlabelvertical">
-          <label>Twitter Title</label>
-          <input {...register("twitterTitle")} />
-        </div>
-
-        <div className="formlabelvertical">
-          <label>Twitter Description</label>
-          <input {...register("twitterDescription")} />
-        </div>
-
-        <div className="formlabelvertical">
-          <label>Twitter Image</label>
-          <input {...register("twitterImage")} type="file" accept="image/*" />
-        </div>
-
-        {/* JSON-LD Fields */}
-        {/*    <h2>JSON-LD Structured Data</h2>
-        <div className="formlabelvertical">
-          <label>@context</label>
-          <input {...register("jsonldContext")} readOnly />
-        </div>
-        <div className="formlabelvertical">
-          <label>@type</label>
-          <select {...register("jsonldType")}>
-            <option value="WebPage">WebPage</option>
-            <option value="Article">Article</option>
-            <option value="Product">Product</option>
-            <option value="BlogPosting">BlogPosting</option>
-            <option value="NewsArticle">NewsArticle</option>
-            <option value="Event">Event</option>
-            <option value="Person">Person</option>
-            <option value="Organization">Organization</option>
-            
-          </select>
-        </div>
-        <div className="formlabelvertical">
-          <label>Name (JSON-LD)</label>
-          <input {...register("jsonldName")} />
-        </div>
-        <div className="formlabelvertical">
-          <label>Description (JSON-LD)</label>
-          <input {...register("jsonldDescription")} />
-        </div>
-        <div className="formlabelvertical">
-          <label>URL (JSON-LD)</label>
-          <input {...register("jsonldUrl")} />
-        </div>
-        <div className="formlabelvertical">
-          <label>inLanguage (ISO code, e.g. en)</label>
-          <input {...register("jsonldInLanguage")} />
-        </div>
-        <div className="formlabelvertical">
-          <label>Image URL(s) (comma separated for multiple)</label>
-          <input {...register("jsonldImage")} />
-        </div>
-        <div className="formlabelvertical">
-          <label>Author (name or Person object as JSON)</label>
-          <input {...register("jsonldAuthor")} />
-        </div>
-        <div className="formlabelvertical">
-          <label>Date Published (ISO 8601)</label>
-          <input {...register("jsonldDatePublished")} type="datetime-local" />
-        </div>
-        <div className="formlabelvertical">
-          <label>Date Modified (ISO 8601)</label>
-          <input {...register("jsonldDateModified")} type="datetime-local" />
-        </div> */}
-        {/* End JSON-LD Fields */}
       </form>
     </>
   );
