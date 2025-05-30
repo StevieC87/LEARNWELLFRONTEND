@@ -16,16 +16,9 @@ export default function PageSpecificSEO() {
       ogImage: "",
       ogType: "",
       twitterCardType: "",
-      jsonldContext: "https://schema.org",
-      jsonldType: "WebPage",
-      jsonldName: "",
-      jsonldDescription: "",
-      jsonldUrl: "",
-      jsonldInLanguage: "",
-      jsonldImage: "",
-      jsonldAuthor: "",
-      jsonldDatePublished: "",
-      jsonldDateModified: "",
+      ogTitle: "",
+      ogDescription: "",
+      ogSitename: "",
     }
   });
 
@@ -47,16 +40,9 @@ export default function PageSpecificSEO() {
             ogImage: data.ogImage || "",
             ogType: data.ogType || "",
             twitterCardType: data.twitterCardType || "",
-            jsonldContext: data.jsonldContext || "https://schema.org",
-            jsonldType: data.jsonldType || "WebPage",
-            jsonldName: data.jsonldName || "",
-            jsonldDescription: data.jsonldDescription || "",
-            jsonldUrl: data.jsonldUrl || "",
-            jsonldInLanguage: data.jsonldInLanguage || "",
-            jsonldImage: data.jsonldImage || "",
-            jsonldAuthor: data.jsonldAuthor || "",
-            jsonldDatePublished: data.jsonldDatePublished || "",
-            jsonldDateModified: data.jsonldDateModified || "",
+            ogTitle: data.ogTitle || "",
+            ogDescription: data.ogDescription || "",
+            ogSitename: data.ogSitename || "",
           });
           console.log(result, "")
         }
@@ -192,6 +178,30 @@ export default function PageSpecificSEO() {
               </p>
             </label>
             <input {...register("twitterCardType")} />
+          </div>
+
+          <div className="formlabelvertical">
+            <label>
+              OG Title - <span className="labeltip1">Title for Open Graph (social sharing).</span>
+              <p className="labeltip2">Tip: Should match or complement Meta Title. Used by Facebook, LinkedIn, etc.</p>
+            </label>
+            <input {...register("ogTitle")} />
+          </div>
+
+          <div className="formlabelvertical">
+            <label>
+              OG Description - <span className="labeltip1">Description for Open Graph.</span>
+              <p className="labeltip2">Tip: Should match or complement Meta Description. Used by social platforms.</p>
+            </label>
+            <input {...register("ogDescription")} />
+          </div>
+
+          <div className="formlabelvertical">
+            <label>
+              OG Site Name - <span className="labeltip1">Name of your website for Open Graph.</span>
+              <p className="labeltip2">Tip: Example: Your Brand Name. Used by Facebook, LinkedIn, etc.</p>
+            </label>
+            <input {...register("ogSitename")} />
           </div>
         </div>
 

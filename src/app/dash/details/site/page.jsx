@@ -1,0 +1,147 @@
+"use client";
+import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+
+export default function WebsiteDetailsForm() {
+  const { register, handleSubmit, reset } = useForm({
+    defaultValues: {
+      url: "",
+      name: "",
+      description: "",
+      defaultImage: "",
+      logo: "",
+    }
+  });
+
+  const [logoFile, setLogoFile] = useState(null);
+  const [defaultImageFile, setDefaultImageFile] = useState(null);
+
+  useEffect(() => {
+    const fetchsitedetails = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/sitedetails", {
+          method: "GET",
+          credentials: 'include', // Include cookies in the request
+        });
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Fetched site details:", data);
+          reset({
+            url: data.url || "",
+            name: data.name || "",
+            description: data.description || "",
+            defaultImage: data.defaultImage || "",
+            logo: data.logo || "",
+          });
+          setDefaultImageFile(data.defaultImage || "");
+          setLogoFile(data.logo || "");
+        } else {
+          console.error("Failed to fetch site details");
+        }
+      } catch (error) {
+        console.error("Error fetching site details:", error);
+      }
+    }
+    fetchsitedetails();
+  }, []);
+
+
+  const onSubmit = async (data) => {
+    const formData = new FormData();
+    formData.append("url", data.url);
+    formData.append("name", data.name);
+    formData.append("description", data.description);
+    if (defaultImageFile) formData.append("defaultImage", defaultImageFile);
+    if (logoFile) formData.append("logo", logoFile);
+
+    const response = await fetch("http://localhost:3000/sitedetails", {
+      method: "POST",
+      credentials: 'include',
+      body: formData,
+    });
+
+    if (response.ok) {
+      /*   setShowSuccess(true);
+        setShowError(false);
+        setTimeout(() => setShowSuccess(false), 3000);
+      } else {
+        setShowError(true);
+        setShowSuccess(false);
+        setTimeout(() => setShowError(false), 3000); */
+    }
+
+  };
+
+  return (
+    <>
+      <div>
+        <h1>Website Details</h1>
+      </div>
+      <form className="seoform" onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex justify-end">
+          <button className="button button-primary" type="submit">Save SEO Settings</button>
+        </div>
+        <div className="formlabelvertical">
+          <label>
+            Website URL
+            <span className="labeltip1"> The main address of your website.</span>
+            <p className="labeltip2"> Tip: Use a valid URL (e.g., https://example.com).</p>
+          </label>
+          <input {...register("url")} />
+        </div>
+        <div className="formlabelvertical">
+          <label>
+            Website Name
+            <span className="labeltip1"> The public name of your website.</span>
+            <p className="labeltip2"> Tip: Keep it short and recognizable.</p>
+          </label>
+          <input {...register("name")} />
+        </div>
+        <div className="formlabelvertical">
+          <label>
+            Website Description
+            <span className="labeltip1"> Appears in search engines and link previews.</span>
+            <p className="labeltip2"> Tip: Limit to 155–160 characters.</p>
+          </label>
+          <textarea {...register("description")} />
+        </div>
+        <div className="formlabelvertical">
+          <label>
+            Default Image
+            <span className="labeltip1"> Used as the default preview image.</span>
+            <p className="labeltip2"> Tip: Use a clear, high-quality image.</p>
+          </label>
+          <img src={`${process.env.NEXT_PUBLIC_API_URL}/${defaultImageFile}`} alt="Current Default Image" width="200" />
+
+          <input
+            type="file"
+            accept="image/*"
+            onChange={e => setDefaultImageFile(e.target.files[0])}
+          />
+          {defaultImageFile && (
+            <p>Selected Default Image: {defaultImageFile.name}. Leave file input empty to keep</p>
+          )}
+        </div>
+        <div className="formlabelvertical">
+          <label>
+            Logo
+            <span className="labeltip1"> The logo displayed on your site.</span>
+            <p className="labeltip2"> Tip: Use a transparent PNG or SVG for best results.</p>
+          </label>
+          <img src={`${process.env.NEXT_PUBLIC_API_URL}/${logoFile}`} alt="Current Logo" width="200" />
+          <input
+            type="file"
+            accept="image/*"
+
+            onChange={e => setLogoFile(e.target.files[0])}
+          />
+          {logoFile && (
+            <p>Selected Logo: {logoFile.name}.  Leave file input empty to keep</p>
+          )}
+
+        </div>
+
+      </form>
+    </>
+  );
+}

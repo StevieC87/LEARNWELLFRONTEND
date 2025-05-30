@@ -16,6 +16,10 @@ export default function SiteWideSEO() {
       twitterCardType: "",
       defaultRobots: "",
       defaultLanguage: "",
+      ogTitle: "",
+      ogDescription: "",
+      ogSitename: "",
+      ogType: "",
     }
   });
 
@@ -43,6 +47,10 @@ export default function SiteWideSEO() {
             twitterCardType: data.twitterCardType || "",
             defaultRobots: data.defaultRobots || "",
             defaultLanguage: data.defaultLanguage || "",
+            ogTitle: data.ogTitle || "",
+            ogDescription: data.ogDescription || "",
+            ogSitename: data.ogSitename || "",
+            ogType: data.ogType || "",
           });
         }
       } catch (error) {
@@ -67,6 +75,10 @@ export default function SiteWideSEO() {
     formData.append("twitterCardType", data.twitterCardType);
     formData.append("defaultRobots", data.defaultRobots);
     formData.append("defaultLanguage", data.defaultLanguage);
+    formData.append("ogTitle", data.ogTitle);
+    formData.append("ogDescription", data.ogDescription);
+    formData.append("ogSitename", data.ogSitename);
+    formData.append("ogType", data.ogType);
 
     // Get the file from the input manually
     const imageInput = document.querySelector('input[name="image"]');
@@ -185,7 +197,38 @@ export default function SiteWideSEO() {
           </label>
           <input {...register("defaultLanguage")} />
         </div>
-
+        <div className="formlabelvertical">
+          <label>
+            OG Title
+            <span className="labeltip1"> Open Graph title for social sharing.</span>
+            <p className="labeltip2">Tip: Usually matches your page or brand title.</p>
+          </label>
+          <input {...register("ogTitle")} />
+        </div>
+        <div className="formlabelvertical">
+          <label>
+            OG Description
+            <span className="labeltip1"> Open Graph description for social sharing.</span>
+            <p className="labeltip2">Tip: Short summary for social previews.</p>
+          </label>
+          <input {...register("ogDescription")} />
+        </div>
+        <div className="formlabelvertical">
+          <label>
+            OG Sitename
+            <span className="labeltip1"> Open Graph site name.</span>
+            <p className="labeltip2">Tip: Your website or brand name.</p>
+          </label>
+          <input {...register("ogSitename")} />
+        </div>
+        <div className="formlabelvertical">
+          <label>
+            OG Type
+            <span className="labeltip1"> Open Graph type (e.g. website, article).</span>
+            <p className="labeltip2">Tip: Usually "website" or "article".</p>
+          </label>
+          <input {...register("ogType")} />
+        </div>
       </form>
     </>
   );
