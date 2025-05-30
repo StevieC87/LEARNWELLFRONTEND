@@ -4,14 +4,25 @@ import { useSelector } from 'react-redux';
 import Link from "next/link";
 import './pageslist.css'
 import DeletePage from "./components/Deletepage";
+import { useSearchParams } from 'next/navigation';
+
+
 // import LexicalField from '../uicomponents/customfields/Lexical/LexicalField';
+
 export default function Pages() {
+  const searchParams = useSearchParams();
+  const pagetype = searchParams.get('pagetype');
+  console.log('pagetype', pagetype);
+
   const multilingual = useSelector((state) => state.DashSlice.settings.multilingual);
   const userrole = useSelector((state) => state.DashSlice.userrole);
 
   const [pageslist, setPagesList] = useState([]);
   const [schemanopages, setSchemaNoPages] = useState([]);
   const [issuperadmin, setIsSuperAdmin] = useState(false);
+
+  //for posts
+  const [multischemas, setMultischemas] = useState([]);
 
   const [pagelinkurl, setPageLinkUrl] = useState('');
 
@@ -23,8 +34,13 @@ export default function Pages() {
 
 
     const fetchpageslist = async () => {
-
-      const response = await fetch("http://localhost:3000/pages/getpageslist", {
+      let url;
+      if (pagetype === 'post') {
+        url = "http://localhost:3000/getpostslist";
+      } else if (pagetype === 'page') {
+        url = "http://localhost:3000/pages/getpageslist";
+      }
+      const response = await fetch(url, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -35,22 +51,26 @@ export default function Pages() {
       if (!response.ok) {
         console.log("respo0nse not ok");
         console.log(response, "response");
-
-
       }
       else if (response.ok) {
         console.log("response ok");
         const data = await response.json();
+        console.log('data22222222', data);
         setPagesList(data.pages);
+        if (pagetype === 'pages') {
+          setSchemaNoPages(data.schemasnopages);
+        }
+        else if (pagetype === 'post') {
+          setMultischemas(data.multischemas);
+        }
 
-        setSchemaNoPages(data.schemasnopages);
       }
     }
     fetchpageslist();
 
 
     //setPageLinkUrl
-  }, [userrole]);
+  }, [userrole, pagetype]);
 
 
   useEffect(() => {
@@ -64,10 +84,10 @@ export default function Pages() {
       {/*    <h1 className="">Pages</h1> */}
       {/*       <LexicalField /> */}
       <div>
-        {schemanopages.length > 0 && (
+        {(pagetype === "page" && schemanopages.length > 0) && (
           <span>Schemas without pages:</span>
         )}
-        {schemanopages.length > 0 && schemanopages.map((schema, index) => (
+        {pagetype === "page" && schemanopages.length > 0 && schemanopages.map((schema, index) => (
           <div key={`${schema.schema}${schema.language}`} data-key={`${schema.schema}${schema.language} `} className="pageitem pt-2 flex flex-row gap-10">
             <div className="flex flex-col">
               {multilingual && (
@@ -78,6 +98,14 @@ export default function Pages() {
               )}
             </div>
           </div>
+
+        ))}
+        {(pagetype === "post" && multischemas.length > 0) && (
+          <Link className="" href="/dash/pages/newpage?pagetype=post&schema=blog">Create New: </Link>
+
+        )}
+        {pagetype === "post" && multischemas.length > 0 && multischemas.map((schema) => (
+          <Link key={schema} href={`/dash/pages/newpage?pagetype=post&schema=${schema}`} className="button button-secondary m-3">{schema}</Link>
 
         ))}
       </div>
@@ -105,10 +133,10 @@ export default function Pages() {
               <tr key={page._id} className="pageitem ">
                 <td className="">
                   {multilingual && (
-                    <Link key={page._id} href={`/dash/pages/${page._id}?pagetype=page&schema=${page.schema}&language=${page.locale}`} className="">{page.title}</Link>
+                    <Link key={page._id} href={`/dash/pages/${page._id}?pagetype=${pagetype}&schema=${page.schema}&language=${page.locale}`} className="">{page.title}</Link>
                   )}
                   {!multilingual && (
-                    <Link key={page._id} href={`/dash/pages/${page._id}?pagetype=page&schema=${page.schema}`} className="">{page.title}</Link>
+                    <Link key={page._id} href={`/dash/pages/${page._id}?pagetype=${pagetype}&schema=${page.schema}`} className="">{page.title}</Link>
                   )}
                 </td>
                 <td>
@@ -117,11 +145,11 @@ export default function Pages() {
                 {multilingual && (
                   <td>{page.locale}</td>
                 )}
-                <td>
-                  <Link key={page._id} href={`/dash/pages/seo?pageid=${page._id}&pagetype=page&schema=${page.schema}&language=${page.locale}`} className="">Seo</Link>
+                <td id="seo">
+                  <Link key={page._id} href={`/dash/pages/seo?pageid=${page._id}&pagetype=${pagetype}&schema=${page.schema}&language=${page.locale}slug=${page.slug}`} className="">Seo</Link>
                 </td>
-                <td>
-                  <Link key={page._id} href={`/dash/pages/jsonld?pageid=${page._id}&pagetype=page&schema=${page.schema}&language=${page.locale}`} className="">JSON-LD</Link>
+                <td id="jsonld">
+                  <Link key={page._id} href={`/dash/pages/jsonld?pageid=${page._id}&pagetype=${pagetype}&schema=${page.schema}&language=${page.locale}&slug=${page.slug}`} className="">JSON-LD</Link>
                 </td>
                 {issuperadmin && (
                   <td className="">

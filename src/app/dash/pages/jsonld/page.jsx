@@ -15,6 +15,7 @@ export default function JsonLDPage() {
   const schema = searchParams.get('schema');
   const pagetype = searchParams.get('pagetype');
   const language = searchParams.get('language');
+  const slug = searchParams.get('slug');
 
   const blocksandfields = useSelector((state) => state.JSONLDSlice.blocksandfields);
   console.log(pageid, schema, pagetype, language, "search params");
@@ -86,6 +87,10 @@ export default function JsonLDPage() {
       body: JSON.stringify({
         blocksandfields: blocksandfields,
         schema: schema,
+        slug: slug,
+        pageid: pageid,
+        pagetype: pagetype,
+        language: language,
       }),
       credentials: 'include', // Include cookies in the request
     });

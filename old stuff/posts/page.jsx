@@ -1,7 +1,7 @@
 'use client';
 import Link from "next/link";
 // import { redirect } from 'next/navigation';
-import DeletePage from "../pages/components/Deletepage";
+import DeletePage from "../../src/app/dash/pages/components/Deletepage";
 import { useEffect, useState } from "react";
 
 
@@ -12,6 +12,10 @@ export default function PostsPage() {
   // let multischemas = [];
   const [postslist, setPosts] = useState([]);
   const [multischemas, setMultischemas] = useState([]);
+  const multilingual = useSelector((state) => state.DashSlice.settings.multilingual);
+  const userrole = useSelector((state) => state.DashSlice.userrole);
+  const [issuperadmin, setIsSuperAdmin] = useState(false);
+
 
   useEffect(() => {
     // This effect runs only once when the component mounts
@@ -67,7 +71,9 @@ export default function PostsPage() {
         <thead>
           <tr>
             <th>Page</th>
+            <th>Schema</th>
             <th>Seo</th>
+            <th>JSON-LD</th>
             <th>Delete</th>
 
 
@@ -77,7 +83,13 @@ export default function PostsPage() {
           {postslist.length > 0 && postslist.map((post) => (
             <tr key={post._id} className="pageitem ">
               <td className="">
-                <Link href={`/dash/pages/${post._id}?pagetype=post&schema=${post.schema}`} className="">{post.title}</Link>
+                {multilingual && (
+                  <Link href={`/dash/pages/${post._id}?pagetype=post&schema=${post.schema}&language=${}`} className="">{post.title}</Link>
+
+                )}
+                {!multilingual && (
+                  <Link href={`/dash/pages/${post._id}?pagetype=post&schema=${post.schema}`} className="">{post.title}</Link>
+                )}
               </td>
               <td className="">
                 <Link href={`/dash/pages/editseo/${post._id}?pagetype=post`} className="">Page SEO settings</Link>
