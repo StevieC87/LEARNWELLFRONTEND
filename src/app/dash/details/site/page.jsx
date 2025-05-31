@@ -1,13 +1,15 @@
 "use client";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
+import { useSelector } from 'react-redux';
 
 export default function WebsiteDetailsForm() {
+  const defaultlanguage = useSelector((state) => state.DashSlice.settings.defaultlanguage);
   const { register, handleSubmit, reset } = useForm({
     defaultValues: {
       url: "",
-      name: "",
-      description: "",
+      brandname: "",
+      //  description: "",
       defaultImage: "",
       logo: "",
     }
@@ -28,7 +30,7 @@ export default function WebsiteDetailsForm() {
           console.log("Fetched site details:", data);
           reset({
             url: data.url || "",
-            name: data.name || "",
+            brandname: data.brandname || "",
             description: data.description || "",
             defaultImage: data.defaultImage || "",
             logo: data.logo || "",
@@ -49,8 +51,10 @@ export default function WebsiteDetailsForm() {
   const onSubmit = async (data) => {
     const formData = new FormData();
     formData.append("url", data.url);
-    formData.append("name", data.name);
-    formData.append("description", data.description);
+    formData.append("brandname", data.brandname);
+    // formData.append("description", data.description);
+    //append default langauge 
+    formData.append("defaultlanguage", defaultlanguage);
     if (defaultImageFile) formData.append("defaultImage", defaultImageFile);
     if (logoFile) formData.append("logo", logoFile);
 
@@ -76,6 +80,7 @@ export default function WebsiteDetailsForm() {
     <>
       <div>
         <h1>Website Details</h1>
+        <span>for default language {defaultlanguage} - and or fallback</span>
       </div>
       <form className="seoform" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex justify-end">
@@ -91,20 +96,20 @@ export default function WebsiteDetailsForm() {
         </div>
         <div className="formlabelvertical">
           <label>
-            Website Name
+            Brand Name
             <span className="labeltip1"> The public name of your website.</span>
             <p className="labeltip2"> Tip: Keep it short and recognizable.</p>
           </label>
-          <input {...register("name")} />
+          <input {...register("brandname")} />
         </div>
-        <div className="formlabelvertical">
+        {/*  <div className="formlabelvertical">
           <label>
             Website Description
             <span className="labeltip1"> Appears in search engines and link previews.</span>
             <p className="labeltip2"> Tip: Limit to 155–160 characters.</p>
           </label>
           <textarea {...register("description")} />
-        </div>
+        </div> */}
         <div className="formlabelvertical">
           <label>
             Default Image

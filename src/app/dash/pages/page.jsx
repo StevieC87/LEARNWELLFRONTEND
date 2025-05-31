@@ -57,7 +57,7 @@ export default function Pages() {
         const data = await response.json();
         console.log('data22222222', data);
         setPagesList(data.pages);
-        if (pagetype === 'pages') {
+        if (pagetype === 'page') {
           setSchemaNoPages(data.schemasnopages);
         }
         else if (pagetype === 'post') {
@@ -109,7 +109,16 @@ export default function Pages() {
 
         ))}
       </div>
-      <h1 className="text-2xl">Pages List</h1>
+      <h1 className="text-2xl pt-10">
+        {pagetype === "page" && (
+          <span>Pages List</span>
+        )}
+        {pagetype === "post" && (
+          <span>Posts List</span>
+        )}
+      </h1>
+
+
 
       <div className="" >
 

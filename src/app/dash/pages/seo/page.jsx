@@ -1,18 +1,26 @@
 'use client';
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
+import { useSearchParams } from 'next/navigation';
+
+
 
 export default function PageSpecificSEO() {
+  const searchParams = useSearchParams();
+
+  const pageid = searchParams.get('pageid');
   const [showsuccess, setShowSuccess] = useState(false);
   const [showerror, setShowError] = useState(false);
+
+  const [defaultimg, setDefaultImage] = useState(null);
 
   const { register, handleSubmit, reset } = useForm({
     defaultValues: {
       metaTitle: "",
       metaDescription: "",
-      robots: "",
+      robots: "index, follow",
       canonicalUrl: "",
-      hreflangs: "",
+      hreflang: "",
       ogImage: "",
       ogType: "",
       twitterCardType: "",
@@ -25,27 +33,34 @@ export default function PageSpecificSEO() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/pagespecificseo", {
+        const response = await fetch(`http://localhost:3000/pagespecificseo?pageid=${pageid}`, {
           method: "GET",
           credentials: 'include',
         });
         if (response.ok) {
           const data = await response.json();
+          console.log("FetchedSEOsettings:", data);
           reset({
-            metaTitle: data.metaTitle || "",
-            metaDescription: data.metaDescription || "",
+            metaTitle: data.metatitle || "",
+            metaDescription: data.metadescription || "",
             robots: data.robots || "",
-            canonicalUrl: data.canonicalUrl || "",
-            hreflangs: data.hreflangs || "",
-            ogImage: data.ogImage || "",
-            ogType: data.ogType || "",
-            twitterCardType: data.twitterCardType || "",
-            ogTitle: data.ogTitle || "",
-            ogDescription: data.ogDescription || "",
-            ogSitename: data.ogSitename || "",
+            canonicalUrl: data.canonicalurl || "",
+            hreflang: data.hreflang || "",
+            ogImage: data.ogimage || "",
+            ogType: "", //e,g. article, image etc 
+            //NEED TO SET THIS MAYBE IN schema 
+            twitterCardType: "",
+            ogTitle: data.metatitle || "",
+            ogDescription: data.metadescription || "",
+            ogSitename: data.ogsitename || "",
           });
-          console.log(result, "")
+          setDefaultImage(data.ogimage || null);
+          //  console.log(result, "")
         }
+        else if (!response.ok) {
+          console.error("FailedtofetchSEOsettings");
+        }
+
 
       } catch (error) {
         console.error("Error fetching SEO settings:", error);
@@ -145,11 +160,11 @@ export default function PageSpecificSEO() {
 
           <div className="formlabelvertical">
             <label>
-              Hreflangs - <span className="labeltip1">Language/region alternate URLs.</span>
+              Hreflang - <span className="labeltip1">Language/region alternate URLs.</span>
               <p className="labeltip2">Required for multilingual SEO. Matches language and regional versions. Use ISO codes.
                 Tip: Format: en:/en, fr:/fr</p>
             </label>
-            <input {...register("hreflangs")} />
+            <input {...register("hreflang")} />
           </div>
 
           <div className="formlabelvertical">
@@ -163,11 +178,29 @@ export default function PageSpecificSEO() {
 
           <div className="formlabelvertical">
             <label>
-              Image - <span className="labeltip1">Image for social sharing.</span>
+              OG Image - <span className="labeltip1">Image for social sharing.</span>
               <p className="labeltip2">Tip: Recommended size: 1200x630px. Use JPG/PNG. Should be visually appealing, not text-heavy.
               </p>
             </label>
-            <input {...register("ogImage")} type="file" accept="image/*" />
+            {defaultimg && (
+              <>
+                <p>Selected Default Image: {defaultimg.name}. Leave file input empty to keep</p>
+                <img src={`${process.env.NEXT_PUBLIC_API_URL}/${defaultimg}`} alt="Current Logo" width="200" />
+              </>
+            )}
+
+            <input {...register("ogImage")} type="file" accept="image/*"
+              onChange={(e) => {
+                setDefaultImage(e.target.files[0]);
+                /*  const file = e.target.files[0];
+                 if (file) {
+                   setDefaultImage(URL.createObjectURL(file));
+                 } else {
+                   setDefaultImage(null);
+                 } */
+              }
+              } />
+
           </div>
 
           <div className="formlabelvertical">

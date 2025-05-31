@@ -32,7 +32,7 @@ export default async function Pages() {
       <Link href="/dash/pages/createnew" className=" button-primary t-10 mb-10">Create New Page</Link>
 
       <div className="">
-        <h1 className="text-2xl">Pages List</h1>
+        <h1 className="text-2xl mt-5">Pages List</h1>
         <table>
           <thead>
             <tr>
