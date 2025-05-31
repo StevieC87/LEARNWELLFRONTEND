@@ -31,12 +31,16 @@ export default function DeletePage(props) {
       console.log(data, "data");
       let urlredirectto;
       if (pagetype === 'post') {
-        urlredirectto = '/dash/posts';
+        const query = window.location.search;
+        window.location.href = '/dash/posts' + query;
+        //urlredirectto = '/dash/posts';
       }
       else if (pagetype === 'page') {
-        urlredirectto = '/dash/pages';
+        const query = window.location.search;
+        window.location.href = '/dash/pages' + query;
+        // urlredirectto = '/dash/pages';
       }
-      router.push(urlredirectto);
+      // router.push(urlredirectto);
     }
 
   }
