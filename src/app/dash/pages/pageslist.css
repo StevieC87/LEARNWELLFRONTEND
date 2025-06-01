@@ -2,3 +2,6 @@
   display: flex;
   flex-direction: column;
 }
+.pageitem {
+  background-color: transparent;
+}

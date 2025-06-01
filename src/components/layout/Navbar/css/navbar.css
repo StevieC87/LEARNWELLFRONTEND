@@ -13,6 +13,9 @@
   /*  margin-left: 5px; */
   align-self: top;
   height: 32px;
+  width: 100vw;
+  position: fixed;
+  bottom: 0;
 }
 
 .navlogoarea {
