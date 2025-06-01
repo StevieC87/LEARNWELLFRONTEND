@@ -1,0 +1,21 @@
+.langchoosediv {
+  display: flex;
+  flex-direction: row;
+  max-width: 300px;
+  gap: 20px;
+  margin-top: 10px;
+  padding-left: 10px;
+
+  /* var(--border-color); */
+}
+
+.languageoption {
+  border: 1px solid var(--border-color);
+  padding: 4px;
+}
+.chooselanglang {
+  font-family: "Poppins";
+  font-weight: 300 !important;
+  font-weight: normal !important;
+  padding: 3px;
+}

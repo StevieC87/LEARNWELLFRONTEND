@@ -67,6 +67,9 @@
     font-family: "Poppins", sans-serif;
     font-weight: 400;
   }
+  .poppinsl {
+    font-family: "Poppins";
+  }
 
   /* Text Utilities */
   .text-center {

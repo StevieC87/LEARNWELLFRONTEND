@@ -1,12 +1,16 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import './settings.css'
+//redirect refrech roter
+import { useRouter } from 'next/navigation';
 //! KEEP IT SIMPLE, IM STARTING WITHA NEW BOLERPLATE EVERYT IME, 
 //!I CAN ADAPT THE CODE EASILY TO ADD NEW LANGUAGES 
 //! WE NEED THIS FOR: IN ORDER TO SET LANGUAGES PROBABLY IN THE BEGINNING, DECIDE IF MULTILINGAUL OR NOT, AND SET LANGUAGES FOR LATER 
 
 //DEFAULT LANGUAGE 
 export default function Settings() {
+  const router = useRouter();
 
   const [multilingualvalue, setMultilingualValue] = useState(false);
   const [defaultLanguage, setDefaultLanguage] = useState(); // Default language 
@@ -27,7 +31,7 @@ export default function Settings() {
   };
   const [selectedLanguages, setSelectedLanguages] = useState([]);
   const [additionalanguagetoadd, setAdditionalLanguageToAdd] = useState('');
-
+  const [addedlanguage, setAddedLanguage] = useState(0); // This will hold the language to be added
 
 
   //first I NEED TO POPULATE THE VALUES FROM THE DATABASE 
@@ -69,7 +73,7 @@ export default function Settings() {
     fetchSettings();
 
 
-  }, []);
+  }, [addedlanguage]);
 
   const onSave = async () => {
     console.log(selectedLanguages, "selectedLanguages");
@@ -134,6 +138,10 @@ export default function Settings() {
     }
     const data = await response.json();
     console.log("Language added successfully:", data);
+    setAddedLanguage(prev => prev + 1); // Increment the added language count
+    //router.refresh();
+
+
 
   }
 
@@ -145,74 +153,82 @@ export default function Settings() {
 
 
     <>
-      <div className="">
+      <div className="flex flex-row justify-between items-center">
         <h1 className="">Settings</h1>
-        <p className="">This is the settings page - for supseradmin only</p>
-      </div>
-
-      <form >
-        <div className="switchbuttonmulti flex flex-row ">
-          <label htmlFor="">Multilingual: </label>
-          <label className="switch">
-            <input type="checkbox" onChange={() => changeMultilingualValue()} checked={multilingualvalue} />
-            <span className="slider round"></span>
-          </label>
-        </div>
-
-        <div className="defautlang">
-          <label htmlFor="defaultlanguage">Default Language:</label>
-          <select id="defaultlanguage" name="defaultlanguage"
-            value={defaultLanguage}
-            onChange={e => setDefaultLanguage(e.target.value)}
-
-          >
-            {languages.map((language, index) => (
-              <option key={index} value={language}>{language}</option>
-            ))}
-          </select>
-        </div>
-
-        <div className="languagesselect">
-          {languages.map((language, index) => (
-            console.log(language, "language44444444"),
-            <div key={index} className="languageoption">
-              <label htmlFor={language} >{language}</label>
-              <input type="checkbox" id={language} name='languagecheckbox'
-                checked={selectedLanguages.includes(language)}
-                onChange={() => {
-                  setSelectedLanguages(prev =>
-                    prev.includes(language)
-                      ? prev.filter(l => l !== language)
-                      : [...prev, language]
-                  );
-                }}
-              />
-            </div>
-          ))}
-        </div>
         <button type="button" className="button button-primary" onClick={() => onSave()}>Save Settings</button>
-      </form>
-
-
-      <div className="otherlanguages">
-        <h2>Other Languages</h2>
-        <p>Click to add more languages:</p>
-        <select
-          id="otherlanguages"
-          name="otherlanguages"
-          value={additionalanguagetoadd}
-          onChange={e => setAdditionalLanguageToAdd(e.target.value)}
-        >
-          {otherlanguages.map((language, index) => (
-            <option key={index} value={language}>
-              {language}
-            </option>
-          ))}
-        </select>
-        <button className="button" onClick={() => addAditionallanguage1()}>Add it</button>
-
       </div>
+      <div className="card mt-10">
+        <form >
+          <div className="switchbuttonmulti flex flex-row items-center">
+            <label htmlFor="">Multilingual: </label>
+            <label className="switch  ml-5">
+              <input type="checkbox" onChange={() => changeMultilingualValue()} checked={multilingualvalue} />
+              <span className="slider round"></span>
+            </label>
+          </div>
 
+          <div className="defautlang pt-5">
+            <label htmlFor="defaultlanguage">Default Language:</label>
+            <select id="defaultlanguage" name="defaultlanguage"
+              value={defaultLanguage}
+              onChange={e => setDefaultLanguage(e.target.value)}
+              className="ml-5"
+
+            >
+              {languages.map((language, index) => (
+                <option key={index} value={language}>{language}</option>
+              ))}
+            </select>
+          </div>
+
+          {multilingualvalue && (
+            <div className="languagesselect">
+              <span className="poppinsSemiBold">Selected Languages:</span>
+              <div className="langchoosediv">
+                {languages.length > 0 && languages.map((language, index) => (
+                  console.log(language, "language44444444"),
+                  <div key={index} className="languageoption">
+                    <label htmlFor={language} className="chooselanglang">{language}</label>
+                    <input type="checkbox" id={language} name='languagecheckbox'
+                      checked={selectedLanguages.includes(language)}
+                      onChange={() => {
+                        setSelectedLanguages(prev =>
+                          prev.includes(language)
+                            ? prev.filter(l => l !== language)
+                            : [...prev, language]
+                        );
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+
+        </form>
+
+        {multilingualvalue && (
+          <div className="otherlanguages">
+
+            <p className="poppinsSemiBold pt-5 pb-5">Add more languages:</p>
+            <select
+              id="otherlanguages"
+              name="otherlanguages"
+              value={additionalanguagetoadd}
+              onChange={e => setAdditionalLanguageToAdd(e.target.value)}
+            >
+              {otherlanguages.map((language, index) => (
+                <option key={index} value={language}>
+                  {language}
+                </option>
+              ))}
+            </select>
+            <button className="button" onClick={() => addAditionallanguage1()}>Add it</button>
+
+          </div>
+        )}
+      </div>
 
 
     </>
