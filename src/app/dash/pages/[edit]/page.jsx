@@ -33,6 +33,7 @@ export default function EditPage() {
 
   const pageexiststhislanguage = useSelector((state) => state.DashSlice.pageexiststhislanguage);
 
+  const [publishstatus, setPublishStatus] = useState(false);
 
   useEffect(() => {
     const FetchPageData = async () => {
@@ -78,12 +79,14 @@ export default function EditPage() {
           setSettings(data.settings);
           setPageFieldsData(data.pagefieldsdata);
           setPageData(data.pagedata);
+          console.log(data.pagedata, "pagedatapagedata");
           setNewOrExisting(data.neworexisting);
           setPageIdFromServer(data.pageid);
           if (!selectedLanguage) {
             dispatch(setSelectedLanguage(data.settings.defaultlanguage))
           };
-          dispatch(setMultilingualSharedId(data.multilingualsharedid));
+          dispatch(setMultilingualSharedId(data.multilingualsharedid)); +
+            setPublishStatus(data.publishstatus);
         }
 
       } catch (error) {
@@ -108,6 +111,8 @@ export default function EditPage() {
             pageid={pageidfromserver}
             pagetype={pagetype}
             language={language}
+            pagetitle={pagedata ? pagedata.title : ""}
+            publishstatus={publishstatus}
           />
 
 

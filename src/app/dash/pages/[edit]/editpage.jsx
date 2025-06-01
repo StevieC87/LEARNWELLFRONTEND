@@ -12,7 +12,7 @@ export default function EditPageComp(props) {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const { schema, settings, pagefieldsdata, pagedata, neworexisting, pageid, pagetype, language } = props;
+  const { schema, settings, pagefieldsdata, pagedata, neworexisting, pageid, pagetype, language, pagetitle, publishstatus } = props;
 
   //.  GET DATA FROM PROPS  ------------------------ 
   console.log(schema, "schema1234");
@@ -25,7 +25,8 @@ export default function EditPageComp(props) {
   console.log(language, "language1234");
 
 
-  const pagetitle = schema?.title;
+  //const pagetitle = schema?.title;
+  const [pagetitles, setPageTitle] = useState(pagetitle);
   const [pagefields, setPageFields] = useState(schema.fields);
   const [pagedataS, setPageDataS] = useState(pagedata);
 
@@ -46,6 +47,7 @@ export default function EditPageComp(props) {
   //to prevent publishing if made changes prior to publishing
   const [hasChanges, setHasChanges] = useState(true);
 
+  const [publishswitchstatus, setPublishSwitchStatus] = useState(publishstatus);
 
   //..................... LANGUAGE RELATED STATES 
   const [multilingalBool, setMultilingualBool] = useState(settings.ismultilingual);
@@ -57,7 +59,7 @@ export default function EditPageComp(props) {
   const defaultlanguage = useSelector((state) => state.DashSlice.settings.defaultlanguage);
   const [languageui, setLanguageUI] = useState(language || defaultlanguage || "");
 
-
+  //,set multilingual state from props + depedency
   useEffect(() => {
     console.log(multilingalBool, "multilingalBool77777");
     console.log(defaultlanguage, "defaultlanguage44444");
@@ -241,6 +243,7 @@ export default function EditPageComp(props) {
         router.push(url);
 
       }
+      setPublishSwitchStatus(true);
       // setShowSaved(true);
       // setTimeout(() => {
       //   setShowSaved(false);
@@ -265,11 +268,89 @@ export default function EditPageComp(props) {
      console */
   }
 
+  //! i need to get existing publish status from the db
+  //i gues in the backend before i send it 
+  //publishswitchstatus, setPublishSwitchStatus]
+  const changePublish = async () => {
+    //with previous thing
+
+    console.log("change publish status");
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/changepublishstatus`;
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: 'include', // Include cookies in the request
+      body: JSON.stringify({
+        pageid: pageid,
+        published: !publishswitchstatus, //toggle the publish status
+        //!change this 
+      }),
+
+    });
+    setPublishSwitchStatus(setPublishSwitchStatus => !setPublishSwitchStatus);
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data, "data from change publish status");
+    }
+  }
+
   return (
     <>
       <div className="editpagecontainer">
 
-        <div className="topbuttons p-4">
+        <div className="topbuttons">
+          {neworexisting === 'new' && (
+            <h1 >New {pagetitles} {pagetype.charAt(0).toUpperCase() + pagetype.slice(1)}</h1 >
+          )}
+          {neworexisting === 'existing' && (
+            <h1> Edit {pagetitles} {pagetype.charAt(0).toUpperCase() + pagetype.slice(1)}</h1>
+          )}
+          <div className="flex flex-col gap-5">
+            <div className="flex flex-row gap-5">
+
+              <button onClick={() => onSave()} className="button button-primary">
+                {issaving && (
+                  <span>Saving</span>
+                )}
+
+                {!issaving && !showsaved && (
+                  <span>Save</span>
+                )}
+                {errorsave && (
+                  <span className="text-red-500">Error</span>
+                )}
+                {showsaved && !issaving && (
+                  <span className="text-green-500">Saved</span>
+                )}
+
+              </button>
+
+              {neworexisting === 'existing' && (
+                <button onClick={() => onPublish()} /* className="button button-primary" */
+                  className={!hasChanges ? "button button-primary" : "button button-primary disabled"}>
+                  Publish
+                </button>
+              )}
+            </div>
+
+            <div className="switchbuttonmulti flex flex-row items-center">
+              {/* only if publihsed=1  */}
+              <label htmlFor="">Published: </label>
+              <label className="switch  ml-5">
+                <input type="checkbox" onChange={() => changePublish()} checked={publishswitchstatus} />
+                <span className="slider round"></span>
+              </label>
+
+            </div>
+          </div>
+
+        </div>
+
+
+        <div className="flex flex-row items-center">
           {multilingualLangs && (
             <div className="langpicker flex flex-row gap-5">
 
@@ -305,41 +386,7 @@ export default function EditPageComp(props) {
 
             </div>
           )}
-          <div className="flex flex-row">
-            <button onClick={() => onSave()} className="button button-primary">
-              {issaving && (
-                <span>Saving</span>
-              )}
-
-              {!issaving && !showsaved && (
-                <span>Save</span>
-              )}
-              {errorsave && (
-                <span className="text-red-500">Error</span>
-              )}
-              {showsaved && !issaving && (
-                <span className="text-green-500">Saved</span>
-              )}
-
-            </button>
-
-            {neworexisting === 'existing' && (
-              <button onClick={() => onPublish()} /* className="button button-primary" */
-                className={!hasChanges ? "button button-primary" : "button button-primary disabled"}>
-                Publish
-              </button>
-            )}
-          </div>
-
         </div>
-
-        {neworexisting === 'new' && (
-          <h1 >New {pagetitle}</h1 >
-        )}
-        {neworexisting === 'existing' && (
-          <h1> Edit {pagetitle}</h1>
-        )}
-
         {(filteredFieldsS.length === 0) && (
           <div className="emptyfields">
             <h2>No fields found</h2>
@@ -352,7 +399,7 @@ export default function EditPageComp(props) {
           //  console.log(field, 'field555555')
           //   console.log(field.name, "field.name111");
           let fieldData1 = fieldData[field.name] || {};
-          console.log(fieldData1, "fieldData1");
+          //console.log(fieldData1, "fieldData1");
           //console.log(fieldData1.id, "fieldData1.content");
           return (
             <FieldRenderer

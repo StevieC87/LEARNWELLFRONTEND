@@ -38,9 +38,8 @@ export default function Analytics() {
 
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
+    <div className="flex flex-col items-center  h-screen">
       <h1 className="text-4xl font-bold mb-4">Analytics</h1>
-      <p className="text-lg">This is the analytics page.</p>
       <div className="mt-8 fade-in mapsdiv">
         {countriesdata && Object.keys(countriesdata).length > 0 ? (
           <MapAnalyticsComponent countriesdata={countriesdata} />
