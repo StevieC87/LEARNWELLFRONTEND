@@ -78,13 +78,15 @@ export default function WebsiteDetailsForm() {
 
   return (
     <>
-      <div>
+      <div className="titlebuttons">
         <h1>Website Details</h1>
-        <span>for default language {defaultlanguage} - and or fallback</span>
+
+        <button className="button button-primary " type="submit">Save SEO Settings</button>
       </div>
+      <span>for default language {defaultlanguage} </span>
       <form className="seoform" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex justify-end">
-          <button className="button button-primary" type="submit">Save SEO Settings</button>
+
         </div>
         <div className="formlabelvertical">
           <label>

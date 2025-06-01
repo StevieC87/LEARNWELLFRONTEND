@@ -153,7 +153,7 @@ export default function Settings() {
 
 
     <>
-      <div className="flex flex-row justify-between items-center">
+      <div className="titlebuttons">
         <h1 className="">Settings</h1>
         <button type="button" className="button button-primary" onClick={() => onSave()}>Save Settings</button>
       </div>
@@ -224,7 +224,7 @@ export default function Settings() {
                 </option>
               ))}
             </select>
-            <button className="button" onClick={() => addAditionallanguage1()}>Add it</button>
+            <button className="button ml-4" onClick={() => addAditionallanguage1()}>Add it</button>
 
           </div>
         )}
