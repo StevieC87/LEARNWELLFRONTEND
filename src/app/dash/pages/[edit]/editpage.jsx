@@ -335,16 +335,17 @@ export default function EditPageComp(props) {
                 </button>
               )}
             </div>
+            {neworexisting === 'existing' && (
+              <div className="switchbuttonmulti flex flex-row items-center">
 
-            <div className="switchbuttonmulti flex flex-row items-center">
-              {/* only if publihsed=1  */}
-              <label htmlFor="">Published: </label>
-              <label className="switch  ml-5">
-                <input type="checkbox" onChange={() => changePublish()} checked={publishswitchstatus} disabled={pagetype === 'page' ? true : false} />
-                <span className="slider round"></span>
-              </label>
+                <label htmlFor="">Published: </label>
+                <label className="switch  ml-5">
+                  <input type="checkbox" onChange={() => changePublish()} checked={publishswitchstatus} disabled={pagetype === 'page' ? true : false} />
+                  <span className="slider round"></span>
+                </label>
 
-            </div>
+              </div>
+            )}
           </div>
 
         </div>
@@ -408,6 +409,7 @@ export default function EditPageComp(props) {
               name={field.name}
               label={field.name}
               fielddata={fieldData1}
+              placeholder={field.placeholder || ""}
               value={fieldData1.content || ""}
               onChange2={(e) => {
 

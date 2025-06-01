@@ -8,7 +8,7 @@ import SummernoteField from '../../uicomponents/customfields/Summernote/Summerno
 
 //! ADD ID OF THE FIELD  - PASS TO REDUX 
 
-const FieldRenderer = ({ type, name, value, label, onChange2, fielddata }) => {
+const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeholder }) => {
   ;
   const dispatch = useDispatch();
   const slugduplicatewarning = useSelector((state) => state.PagesSlice.slugduplicatewarning);
@@ -24,7 +24,8 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata }) => {
       id: fielddata.id,
       locale: fielddata.locale,
       schema: fielddata.schema,
-      type: type
+      type: type,
+      placeholder: placeholder
     }));
     //setHasChanges(true);
     onChange2();
@@ -43,6 +44,7 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata }) => {
             type="text"
             value={value}
             onChange={onChange}
+            placeholder={placeholder}
 
           />
           {name === "slug" && slugduplicatewarning && (
@@ -61,6 +63,7 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata }) => {
             name={name}
             value={value}
             onChange={onChange}
+            placeholder={placeholder}
           />
         </div>
       );
@@ -78,6 +81,7 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata }) => {
             schema={fielddata.schema}
             type={type}
             value={value}
+            placeholder={placeholder}
           // onChange={onChange}
           />
         </div>
@@ -92,6 +96,7 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata }) => {
             type="number"
             value={value}
             onChange={onChange}
+            placeholder={placeholder}
           />
         </div>
       );
@@ -120,6 +125,7 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata }) => {
             type="date"
             value={value}
             onChange={onChange}
+            placeholder={placeholder}
           />
         </div>
       );
