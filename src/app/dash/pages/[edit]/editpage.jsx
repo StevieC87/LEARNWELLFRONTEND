@@ -340,7 +340,7 @@ export default function EditPageComp(props) {
               {/* only if publihsed=1  */}
               <label htmlFor="">Published: </label>
               <label className="switch  ml-5">
-                <input type="checkbox" onChange={() => changePublish()} checked={publishswitchstatus} />
+                <input type="checkbox" onChange={() => changePublish()} checked={publishswitchstatus} disabled={pagetype === 'page' ? true : false} />
                 <span className="slider round"></span>
               </label>
 
