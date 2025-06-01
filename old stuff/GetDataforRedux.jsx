@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 
 export default function GetDataforRedux() {
   const dispatch = useDispatch();
-  /* useEffect(() => {
+  useEffect(() => {
     let getuserroleverify = async () => {
       const response = await fetch('http://localhost:3000/users/verifyjwtrole', {
         method: 'GET',
@@ -25,7 +25,7 @@ export default function GetDataforRedux() {
     }
     getuserroleverify();
 
-  }, []); */
+  }, []);
   return null; // This component does not render anything
 
 }

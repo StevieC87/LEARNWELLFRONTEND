@@ -3,7 +3,7 @@
 }
 
 .navbar1 {
-  background-color: white;
+  background-color: #eef2f6;
   /*   display: grid; */
   display: var(--navbargridtohide);
   z-index: 10001;

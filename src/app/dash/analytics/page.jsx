@@ -1,33 +1,40 @@
+'use client'
 import MapAnalyticsComponent from "./Map";
-export default async function Analytics() {
-  let countriesdata;
-  const response = await fetch('http://localhost:3000/testanalytics', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      //'Authorization': `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
-    },
-    credentials: 'include', // Include cookies in the request
-  });
-  console.log("Status OK:", response.ok);
-  if (!response.ok) {
-    return {
-      notFound: true,
-    };
-  }
-  else if (response.ok) {
-    const data = await response.json();
-    console.log(data, 'data');
-    console.log(data.data, 'data.data');
-    countriesdata = data.data;
-    console.log(typeof countriesdata, 'typeof data.message');
+import { useEffect, useState } from "react";
 
-  }
-  /* console.log(response, 'response')
- const data = await response.json();
- console.log(data, 'data')
- 
-*/
+export default function Analytics() {
+  const [countriesdata, setCountriesData] = useState(null);
+
+  useEffect(() => {
+    const fetchCountriesData = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/testanalytics', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include', // Include cookies in the request
+        });
+
+        if (!response.ok) {
+          console.log('fetchnotok');
+          return;
+        }
+
+        const data = await response.json();
+        console.log(data, 'data');
+        console.log(data.data, 'data.data');
+        setCountriesData(data.data || {}); // Use data.data if it exists, 
+        console.log(typeof countriesdata, 'typeof data.message');
+
+      } catch (error) {
+        console.error('Error fetching countries data:', error);
+      }
+    };
+
+    fetchCountriesData();
+
+  }, []);
 
 
   return (
