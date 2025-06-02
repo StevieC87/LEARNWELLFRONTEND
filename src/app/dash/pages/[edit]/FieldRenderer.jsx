@@ -18,6 +18,7 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
   //console.log(fielddata, "fielddata33333333");
 
   const onChange = (e) => {
+
     const newValue = e.target.value;
     dispatch(updateField({
       name: name,
@@ -65,6 +66,7 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
             key={name}
             name={name}
             value={value}
+            required={required || false}
             onChange={onChange}
             placeholder={placeholder}
           />
@@ -85,6 +87,7 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
             type={type}
             value={value}
             placeholder={placeholder}
+            required={required || false}
           // onChange={onChange}
           />
         </div>
@@ -100,6 +103,8 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
             value={value}
             onChange={onChange}
             placeholder={placeholder}
+
+            required={required || false}
           />
         </div>
       );
@@ -115,6 +120,7 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
             onChange={(e) =>
               onChange({ target: { name: name, value: e.target.checked } })
             }
+
           />
         </div>
       );
@@ -129,6 +135,8 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
             value={value}
             onChange={onChange}
             placeholder={placeholder}
+
+            required={required || false}
           />
         </div>
       );

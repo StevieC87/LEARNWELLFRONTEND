@@ -115,7 +115,7 @@ export default function EditPage() {
             neworexisting={neworexisting}
             pageid={pageidfromserver}
             pagetype={pagetype}
-            language={language}
+            language={language || selectedLanguage}
             pagetitle={pagedata ? pagedata.title : ""}
             publishstatus={publishstatus}
             triggerrefreshonsavechild={triggerrefreshonsavechild}

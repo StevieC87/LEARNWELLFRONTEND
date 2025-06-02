@@ -150,7 +150,8 @@ export default function EditPageComp(props) {
         pagedata: pagedataS,
         neworexisting: neworexisting,
         multilingualsharedid: multilingualsharedid,
-        pageexiststhislanguage: pageexiststhislanguage
+        pageexiststhislanguage: pageexiststhislanguage,
+        slugpath: fieldData.slugpath ? fieldData.slugpath.content : "", //slug field
 
       }),
     })
@@ -409,7 +410,7 @@ export default function EditPageComp(props) {
                 key={field.name}
                 type={field.type}
                 name={field.name}
-                label={field.name}
+                label={field.label || field.name}
                 fielddata={fieldData1}
                 placeholder={field.placeholder || ""}
                 value={fieldData1.content || ""}

@@ -49,6 +49,7 @@ export default function WebsiteDetailsForm() {
 
 
   const onSubmit = async (data) => {
+    alert('hello')
     const formData = new FormData();
     formData.append("url", data.url);
     formData.append("brandname", data.brandname);
@@ -78,13 +79,17 @@ export default function WebsiteDetailsForm() {
 
   return (
     <>
-      <div className="titlebuttons">
-        <h1>Website Details</h1>
 
-        <button className="button button-primary " type="submit">Save SEO Settings</button>
-      </div>
-      <span>for default language {defaultlanguage} </span>
+
       <form className="seoform" onSubmit={handleSubmit(onSubmit)}>
+        <div className="titlebuttons">
+          <div>
+            <h1>Website Details</h1>
+            <span>for default language {defaultlanguage} </span>
+          </div>
+
+          <button className="button button-primary " type="submit">Save SEO Settings</button>
+        </div>
         <div className="flex justify-end">
 
         </div>
