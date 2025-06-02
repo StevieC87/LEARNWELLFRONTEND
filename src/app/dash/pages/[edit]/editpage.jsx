@@ -120,11 +120,11 @@ export default function EditPageComp(props) {
   }
 
   //. ON SAVE FUNCTION ========================
-  const onSave = async () => {
+  const onSave = async (e) => {
+    e.preventDefault();
     setHasChanges(false);
     setIsSaving(true);
     let url = `${process.env.NEXT_PUBLIC_API_URL}/schema`;
-
 
     //we do fetch post to backend
 
@@ -302,127 +302,128 @@ export default function EditPageComp(props) {
   return (
     <>
       <div className="editpagecontainer">
+        <form onSubmit={(e) => onSave(e)} >
+          <div className="topbuttons">
+            {neworexisting === 'new' && (
+              <h1 >New {pagetitles} {pagetype.charAt(0).toUpperCase() + pagetype.slice(1)}</h1 >
+            )}
+            {neworexisting === 'existing' && (
+              <h1> Edit {pagetitles} {pagetype.charAt(0).toUpperCase() + pagetype.slice(1)}</h1>
+            )}
+            <div className="flex flex-col gap-5">
+              <div className="flex flex-row gap-5">
+                {/* onClick={(e) => onSave(e)} */}
+                <button type="submit" className="button button-primary">
+                  {issaving && (
+                    <span>Saving</span>
+                  )}
 
-        <div className="topbuttons">
-          {neworexisting === 'new' && (
-            <h1 >New {pagetitles} {pagetype.charAt(0).toUpperCase() + pagetype.slice(1)}</h1 >
-          )}
-          {neworexisting === 'existing' && (
-            <h1> Edit {pagetitles} {pagetype.charAt(0).toUpperCase() + pagetype.slice(1)}</h1>
-          )}
-          <div className="flex flex-col gap-5">
-            <div className="flex flex-row gap-5">
+                  {!issaving && !showsaved && (
+                    <span>Save</span>
+                  )}
+                  {errorsave && (
+                    <span className="text-red-500">Error</span>
+                  )}
+                  {showsaved && !issaving && (
+                    <span className="text-green-500">Saved</span>
+                  )}
 
-              <button onClick={() => onSave()} className="button button-primary">
-                {issaving && (
-                  <span>Saving</span>
-                )}
-
-                {!issaving && !showsaved && (
-                  <span>Save</span>
-                )}
-                {errorsave && (
-                  <span className="text-red-500">Error</span>
-                )}
-                {showsaved && !issaving && (
-                  <span className="text-green-500">Saved</span>
-                )}
-
-              </button>
-
-              {neworexisting === 'existing' && (
-                <button onClick={() => onPublish()} /* className="button button-primary" */
-                  className={!hasChanges ? "button button-primary" : "button button-primary disabled"}>
-                  Publish
                 </button>
+
+                {neworexisting === 'existing' && (
+                  <button onClick={() => onPublish()} /* className="button button-primary" */
+                    className={!hasChanges ? "button button-primary" : "button button-primary disabled"}>
+                    Publish
+                  </button>
+                )}
+              </div>
+              {neworexisting === 'existing' && (
+                <div className="switchbuttonmulti flex flex-row items-center">
+
+                  <label htmlFor="">Published: </label>
+                  <label className="switch  ml-5">
+                    <input type="checkbox" onChange={() => changePublish()} checked={publishswitchstatus} disabled={pagetype === 'page' ? true : false} />
+                    <span className="slider round"></span>
+                  </label>
+
+                </div>
               )}
             </div>
-            {neworexisting === 'existing' && (
-              <div className="switchbuttonmulti flex flex-row items-center">
 
-                <label htmlFor="">Published: </label>
-                <label className="switch  ml-5">
-                  <input type="checkbox" onChange={() => changePublish()} checked={publishswitchstatus} disabled={pagetype === 'page' ? true : false} />
-                  <span className="slider round"></span>
-                </label>
+          </div>
+
+
+          <div className="flex flex-row items-center">
+            {multilingualLangs && (
+              <div className="langpicker flex flex-row gap-5">
+
+
+                {(multilingalBool && pagetype === 'post' && neworexisting === 'new') &&
+                  (
+                    <div className="flex flex-row gap-2">
+                      <label htmlFor="lang" className="block text-sm font-medium text-gray-700 self-center">
+                        Language: </label>
+                      <select name="" id=""
+                        onChange={(e) => changelanguage(e)}
+                        value={languageui}
+                      >
+                        {multilingualLangs.map((lang) => {
+                          return (
+                            <option key={lang} value={lang}
+
+                            >
+                              {lang}
+                            </option>
+                          );
+                        })}
+                      </select>
+                    </div>
+                  )}
+                {((multilingalBool && neworexisting === 'existing') || multilingalBool && neworexisting === 'new' && pagetype == 'page') && (
+                  <div className="flex flex-row gap-2">
+                    <label htmlFor="lang" className="block text-sm font-medium text-gray-700 self-center">
+                      Language: </label>
+                    <span>{languageui}</span>
+                  </div>
+                )}
 
               </div>
             )}
           </div>
-
-        </div>
-
-
-        <div className="flex flex-row items-center">
-          {multilingualLangs && (
-            <div className="langpicker flex flex-row gap-5">
-
-
-              {(multilingalBool && pagetype === 'post' && neworexisting === 'new') &&
-                (
-                  <div className="flex flex-row gap-2">
-                    <label htmlFor="lang" className="block text-sm font-medium text-gray-700 self-center">
-                      Language: </label>
-                    <select name="" id=""
-                      onChange={(e) => changelanguage(e)}
-                      value={languageui}
-                    >
-                      {multilingualLangs.map((lang) => {
-                        return (
-                          <option key={lang} value={lang}
-
-                          >
-                            {lang}
-                          </option>
-                        );
-                      })}
-                    </select>
-                  </div>
-                )}
-              {((multilingalBool && neworexisting === 'existing') || multilingalBool && neworexisting === 'new' && pagetype == 'page') && (
-                <div className="flex flex-row gap-2">
-                  <label htmlFor="lang" className="block text-sm font-medium text-gray-700 self-center">
-                    Language: </label>
-                  <span>{languageui}</span>
-                </div>
-              )}
-
+          {(filteredFieldsS.length === 0) && (
+            <div className="emptyfields">
+              <h2>No fields found</h2>
+              <p>Please add a field to get started.</p>
             </div>
           )}
-        </div>
-        {(filteredFieldsS.length === 0) && (
-          <div className="emptyfields">
-            <h2>No fields found</h2>
-            <p>Please add a field to get started.</p>
-          </div>
-        )}
 
-        {(filteredFieldsS.length !== 0) && filteredFieldsS.map((field) => {
-          // const fieldData = useSelector((state) => state.PagesSlice.fields[field.name]) || {};
-          //  console.log(field, 'field555555')
-          //   console.log(field.name, "field.name111");
-          let fieldData1 = fieldData[field.name] || {};
-          //console.log(fieldData1, "fieldData1");
-          //console.log(fieldData1.id, "fieldData1.content");
-          return (
-            <FieldRenderer
-              key={field.name}
-              type={field.type}
-              name={field.name}
-              label={field.name}
-              fielddata={fieldData1}
-              placeholder={field.placeholder || ""}
-              value={fieldData1.content || ""}
-              onChange2={(e) => {
+          {(filteredFieldsS.length !== 0) && filteredFieldsS.map((field) => {
+            // const fieldData = useSelector((state) => state.PagesSlice.fields[field.name]) || {};
+            //  console.log(field, 'field555555')
+            //   console.log(field.name, "field.name111");
+            let fieldData1 = fieldData[field.name] || {};
+            //console.log(fieldData1, "fieldData1");
+            //console.log(fieldData1.id, "fieldData1.content");
+            return (
+              <FieldRenderer
+                key={field.name}
+                type={field.type}
+                name={field.name}
+                label={field.name}
+                fielddata={fieldData1}
+                placeholder={field.placeholder || ""}
+                value={fieldData1.content || ""}
+                onChange2={(e) => {
 
-                setHasChanges(true);
-              }}
+                  setHasChanges(true);
+                }}
+                required={field.required || false}
 
-            />
+              />
 
-          )
-        })}
-
+            )
+          })}
+        </form>
       </div>
 
     </>
