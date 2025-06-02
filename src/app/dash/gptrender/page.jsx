@@ -19,7 +19,6 @@ export default function GptRenderPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt }),
-        credentials: "include", // Include cookies in the request
       });
       const data = await res.json();
       console.log(data, 'data')

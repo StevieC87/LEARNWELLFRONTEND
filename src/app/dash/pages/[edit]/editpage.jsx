@@ -12,7 +12,7 @@ export default function EditPageComp(props) {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const { schema, settings, pagefieldsdata, pagedata, neworexisting, pageid, pagetype, language, pagetitle, publishstatus } = props;
+  const { schema, settings, pagefieldsdata, pagedata, neworexisting, pageid, pagetype, language, pagetitle, publishstatus, triggerrefreshonsavechild } = props;
 
   //.  GET DATA FROM PROPS  ------------------------ 
   console.log(schema, "schema1234");
@@ -196,9 +196,11 @@ export default function EditPageComp(props) {
 
       }
       setShowSaved(true);
+
       setTimeout(() => {
         setShowSaved(false);
       }, 2000);
+      triggerrefreshonsavechild(); // Trigger refresh in parent component
 
     }
     setHasChanges(false);

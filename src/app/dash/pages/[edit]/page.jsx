@@ -30,11 +30,13 @@ export default function EditPage() {
 
   const selectedLanguage = useSelector((state) => state.DashSlice.selectedLanguage);
   const multilingualsharedid = useSelector((state) => state.DashSlice.multilingualsharedid);
+  const defaultlanguage = useSelector((state) => state.DashSlice.settings.defaultlanguage);
 
   const pageexiststhislanguage = useSelector((state) => state.DashSlice.pageexiststhislanguage);
 
   const [publishstatus, setPublishStatus] = useState(false);
 
+  const [triggerrefresh, setTriggerRefresh] = useState(0);
   useEffect(() => {
     const FetchPageData = async () => {
       let url;
@@ -53,6 +55,7 @@ export default function EditPage() {
             "Content-Type": "application/json",
 
           },
+          cache: 'no-store',
           credentials: 'include', // this is what sends/receives cookie
         });
         if (!response.ok) {
@@ -85,8 +88,8 @@ export default function EditPage() {
           if (!selectedLanguage) {
             dispatch(setSelectedLanguage(data.settings.defaultlanguage))
           };
-          dispatch(setMultilingualSharedId(data.multilingualsharedid)); +
-            setPublishStatus(data.publishstatus);
+          dispatch(setMultilingualSharedId(data.multilingualsharedid));
+          setPublishStatus(data.publishstatus);
         }
 
       } catch (error) {
@@ -94,9 +97,11 @@ export default function EditPage() {
       }
     }
     FetchPageData();
-  }, []);
+  }, [triggerrefresh]); //
 
-
+  const triggerrefreshonsavechild = () => {
+    setTriggerRefresh(prev => prev + 1);
+  }
   return (
     <>
       {data && Object.keys(data).length > 0 && (
@@ -113,6 +118,7 @@ export default function EditPage() {
             language={language}
             pagetitle={pagedata ? pagedata.title : ""}
             publishstatus={publishstatus}
+            triggerrefreshonsavechild={triggerrefreshonsavechild}
           />
 
 

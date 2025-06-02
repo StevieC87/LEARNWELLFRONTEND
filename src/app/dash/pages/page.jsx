@@ -24,10 +24,13 @@ export default function Pages() {
   //for posts
   const [multischemas, setMultischemas] = useState([]);
 
+
   const [pagelinkurl, setPageLinkUrl] = useState('');
 
   useEffect(() => {
+    console.log(userrole, "userroleinpageslist");
     if (userrole === "superadmin") {
+      console.log("userrole is superadmin");
       setIsSuperAdmin(true);
     }
 
@@ -38,7 +41,7 @@ export default function Pages() {
       if (pagetype === 'post') {
         url = "http://localhost:3000/getpostslist";
       } else if (pagetype === 'page') {
-        url = "http://localhost:3000/pages/getpageslist";
+        url = "http://localhost:3000/getpageslist";
       }
       const response = await fetch(url, {
         method: "GET",
@@ -94,7 +97,7 @@ export default function Pages() {
                 <Link href={`/dash/pages/newpage?pagetype=page&schema=${schema.schema}&language=${schema.language}`} className="underline">{schema.schema} {schema.language}</Link>
               )}
               {!multilingual && (
-                <Link href={`/dash/pages/newpage?pagetype=page&schema=${schema.schema}`} className="underline">{schema.schema}</Link>
+                <Link href={`/dash/pages/newpage?pagetype=page&schema=${schema.schema}&language=${schema.language}`} className="underline">{schema.schema}</Link>
               )}
             </div>
           </div>
@@ -134,7 +137,11 @@ export default function Pages() {
               )}
               <th>Seo</th>
               <th>JSON-LD</th>
-              <th>Delete</th>
+              {(issuperadmin || pagetype === 'post') && (
+                <th>Delete</th>
+              )}
+
+
             </tr>
           </thead>
           <tbody>
@@ -145,7 +152,7 @@ export default function Pages() {
                     <Link key={page._id} href={`/dash/pages/${page._id}?pagetype=${pagetype}&schema=${page.schema}&language=${page.locale}`} className="">{page.title}</Link>
                   )}
                   {!multilingual && (
-                    <Link key={page._id} href={`/dash/pages/${page._id}?pagetype=${pagetype}&schema=${page.schema}`} className="">{page.title}</Link>
+                    <Link key={page._id} href={`/dash/pages/${page._id}?pagetype=${pagetype}&schema=${page.schema}&language=${page.locale}`} className="">{page.title}</Link>
                   )}
                 </td>
                 <td>
@@ -160,7 +167,7 @@ export default function Pages() {
                 <td id="jsonld">
                   <Link key={page._id} href={`/dash/pages/jsonld?pageid=${page._id}&pagetype=${pagetype}&schema=${page.schema}&language=${page.locale}&slug=${page.slug}`} className="">JSON-LD</Link>
                 </td>
-                {issuperadmin && (
+                {(issuperadmin || pagetype === 'post') && (
                   <td className="">
                     <span><DeletePage pagetype='page' pageid={page._id} /></span>
                   </td>

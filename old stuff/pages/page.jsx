@@ -5,7 +5,7 @@ import './pageslist.css'
 export default async function Pages() {
 
   let pageslist = [];
-  const response = await fetch("http://localhost:3000/pages/getpageslist", {
+  const response = await fetch("http://localhost:3000/getpageslist", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
