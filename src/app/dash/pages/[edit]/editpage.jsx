@@ -152,6 +152,7 @@ export default function EditPageComp(props) {
         multilingualsharedid: multilingualsharedid,
         pageexiststhislanguage: pageexiststhislanguage,
         slugpath: fieldData.slugpath ? fieldData.slugpath.content : "", //slug field
+        multilingalBool: multilingalBool,
 
       }),
     })
