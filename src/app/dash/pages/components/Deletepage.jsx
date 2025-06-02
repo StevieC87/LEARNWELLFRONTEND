@@ -7,7 +7,8 @@ export default function DeletePage(props) {
   const router = useRouter();
 
   const { pagetype, pageid } = props;
-
+  console.log(pagetype, "pagetypeindeletepage");
+  console.log(pageid, "pageidindeletepage");
   const onclickDelete = async (e) => {
     const url = `${process.env.NEXT_PUBLIC_API_URL}/schema/${pageid}?pagetype=${pagetype}`;
     const response = await fetch(url, {
@@ -27,19 +28,15 @@ export default function DeletePage(props) {
     }
     else if (response.ok) {
       console.log("response ok");
-      const data = response.json();
-      console.log(data, "data");
+      const data = await response.json();
+      console.log(data, "data222");
       let urlredirectto;
-      if (pagetype === 'post') {
-        const query = window.location.search;
-        window.location.href = '/dash/posts' + query;
-        //urlredirectto = '/dash/posts';
-      }
-      else if (pagetype === 'page') {
-        const query = window.location.search;
-        window.location.href = '/dash/pages' + query;
-        // urlredirectto = '/dash/pages';
-      }
+
+
+      const query = window.location.search;
+      window.location.href = '/dash/pages' + query;
+      // urlredirectto = '/dash/pages';
+
       // router.push(urlredirectto);
     }
 

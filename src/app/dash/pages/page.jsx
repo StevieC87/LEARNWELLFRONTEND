@@ -169,7 +169,7 @@ export default function Pages() {
                 </td>
                 {(issuperadmin || pagetype === 'post') && (
                   <td className="">
-                    <span><DeletePage pagetype='page' pageid={page._id} /></span>
+                    <span><DeletePage pagetype={pagetype} pageid={page._id} /></span>
                   </td>
                 )}
 
