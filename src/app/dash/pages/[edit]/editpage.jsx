@@ -64,6 +64,7 @@ export default function EditPageComp(props) {
     console.log(multilingalBool, "multilingalBool77777");
     console.log(defaultlanguage, "defaultlanguage44444");
     console.log(language, "language44444");
+    console.log(typeof language, "typeof language44444");
     if (!language) {
       console.log(language, "language44444 from useeffect");
       setLanguageUI(defaultlanguage);
@@ -132,7 +133,7 @@ export default function EditPageComp(props) {
     //FIRST WE GET EVERYTHING FROM THE REDUX STORE
     //NEXT_PUBLIC_API_URL 
     console.log(url, "url");
-
+    console.log(languageui, "languageuilanguageuilanguageuilanguageui");
     const response = await fetch(url, {
       method: "POST",
       headers: {

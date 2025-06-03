@@ -16,6 +16,7 @@ export default function Pages() {
 
   const multilingual = useSelector((state) => state.DashSlice.settings.multilingual);
   const userrole = useSelector((state) => state.DashSlice.userrole);
+  const defaultlanguage = useSelector((state) => state.DashSlice.settings.defaultlanguage);
 
   const [pageslist, setPagesList] = useState([]);
   const [schemanopages, setSchemaNoPages] = useState([]);
@@ -87,6 +88,7 @@ export default function Pages() {
       {/*    <h1 className="">Pages</h1> */}
       {/*       <LexicalField /> */}
       <div>
+        {/* THIS IS TO SHOW THE MISSING PAGES */}
         {(pagetype === "page" && schemanopages.length > 0) && (
           <span>Schemas without pages:</span>
         )}
@@ -145,6 +147,7 @@ export default function Pages() {
             </tr>
           </thead>
           <tbody>
+            {/* THIS IS TO SHOW THE LIST OF EXISTING PAGES */}
             {pageslist.length > 0 && pageslist.map((page, index) => (
               <tr key={page._id} className="pageitem ">
                 <td className="">
@@ -152,7 +155,7 @@ export default function Pages() {
                     <Link key={page._id} href={`/dash/pages/${page._id}?pagetype=${pagetype}&schema=${page.schema}&language=${page.locale}`} className="">{page.title}</Link>
                   )}
                   {!multilingual && (
-                    <Link key={page._id} href={`/dash/pages/${page._id}?pagetype=${pagetype}&schema=${page.schema}&language=${page.locale}`} className="">{page.title}</Link>
+                    <Link key={page._id} href={`/dash/pages/${page._id}?pagetype=${pagetype}&schema=${page.schema}&language=${defaultlanguage}`} className="">{page.title}</Link>
                   )}
                 </td>
                 <td>
@@ -162,10 +165,10 @@ export default function Pages() {
                   <td>{page.locale}</td>
                 )}
                 <td id="seo">
-                  <Link key={page._id} href={`/dash/pages/seo?pageid=${page._id}&pagetype=${pagetype}&schema=${page.schema}&language=${page.locale}slug=${page.slug}`} className="">Seo</Link>
+                  <Link key={page._id} href={`/dash/pages/seo?pageid=${page._id}&pagetype=${pagetype}&schema=${page.schema}&language=${page.locale || defaultlanguage}slug=${page.slug}`} className="">Seo</Link>
                 </td>
                 <td id="jsonld">
-                  <Link key={page._id} href={`/dash/pages/jsonld?pageid=${page._id}&pagetype=${pagetype}&schema=${page.schema}&language=${page.locale}&slug=${page.slug}`} className="">JSON-LD</Link>
+                  <Link key={page._id} href={`/dash/pages/jsonld?pageid=${page._id}&pagetype=${pagetype}&schema=${page.schema}&language=${page.locale || defaultlanguage}&slug=${page.slug}`} className="">JSON-LD</Link>
                 </td>
                 {(issuperadmin || pagetype === 'post') && (
                   <td className="">
