@@ -308,10 +308,10 @@ export default function EditPageComp(props) {
         <form onSubmit={(e) => onSave(e)} >
           <div className="topbuttons">
             {neworexisting === 'new' && (
-              <h1 >Create {schema.name} {pagetitles} {pagetype.charAt(0).toUpperCase() + pagetype.slice(1)}</h1 >
+              <h1 >Create {schema.name} {pagetype.charAt(0).toUpperCase() + pagetype.slice(1)} </h1 >
             )}
             {neworexisting === 'existing' && (
-              <h1> Edit {pagetitles} {pagetype.charAt(0).toUpperCase() + pagetype.slice(1)}</h1>
+              <h1> Edit {schema.name}  {pagetype.charAt(0).toUpperCase() + pagetype.slice(1)} : {pagetitles}</h1>
             )}
             <div className="flex flex-col gap-5">
               <div className="flex flex-row gap-5">
