@@ -96,10 +96,10 @@ export default function Pages() {
           <div key={`${schema.schema}${schema.language}`} data-key={`${schema.schema}${schema.language} `} className="pageitem pt-2 flex flex-row gap-10">
             <div className="flex flex-col">
               {multilingual && (
-                <Link href={`/dash/pages/newpage?pagetype=page&schema=${schema.schema}&language=${schema.language}`} className="underline">{schema.schema} {schema.language}</Link>
+                <Link href={`/dash/pages/newpage?pagetype=page&schema=${schema.schema}&language=${schema.language || defaultlanguage}`} className="underline">{schema.schema} {schema.language}</Link>
               )}
               {!multilingual && (
-                <Link href={`/dash/pages/newpage?pagetype=page&schema=${schema.schema}&language=${schema.language}`} className="underline">{schema.schema}</Link>
+                <Link href={`/dash/pages/newpage?pagetype=page&schema=${schema.schema}&language=${schema.language || defaultlanguage} `} className="underline">{schema.schema}</Link>
               )}
             </div>
           </div>
