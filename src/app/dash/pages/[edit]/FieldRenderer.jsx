@@ -8,7 +8,7 @@ import SummernoteField from '../../uicomponents/customfields/Summernote/Summerno
 
 //! ADD ID OF THE FIELD  - PASS TO REDUX 
 
-const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeholder, required }) => {
+const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeholder, required, disabled }) => {
   ;
 
   const dispatch = useDispatch();
@@ -49,6 +49,7 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
             onChange={onChange}
             placeholder={placeholder}
             required={required || false}
+            disabled={disabled || false}
 
           />
           {name === "slug" && slugduplicatewarning && (

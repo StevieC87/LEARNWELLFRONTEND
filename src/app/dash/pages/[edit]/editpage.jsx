@@ -308,7 +308,7 @@ export default function EditPageComp(props) {
         <form onSubmit={(e) => onSave(e)} >
           <div className="topbuttons">
             {neworexisting === 'new' && (
-              <h1 >New {pagetitles} {pagetype.charAt(0).toUpperCase() + pagetype.slice(1)}</h1 >
+              <h1 >Create {schema.name} {pagetitles} {pagetype.charAt(0).toUpperCase() + pagetype.slice(1)}</h1 >
             )}
             {neworexisting === 'existing' && (
               <h1> Edit {pagetitles} {pagetype.charAt(0).toUpperCase() + pagetype.slice(1)}</h1>
@@ -421,6 +421,7 @@ export default function EditPageComp(props) {
                   setHasChanges(true);
                 }}
                 required={field.required || false}
+                disabled={field.disabled || false}
 
               />
 
