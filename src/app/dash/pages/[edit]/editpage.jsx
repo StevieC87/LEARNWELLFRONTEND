@@ -59,6 +59,11 @@ export default function EditPageComp(props) {
   const defaultlanguage = useSelector((state) => state.DashSlice.settings.defaultlanguage);
   const [languageui, setLanguageUI] = useState(language || defaultlanguage || "");
 
+  const [titlefield, setTitleField] = useState(null);
+  const reduxtitlefield = useSelector((state) => state.PagesSlice.fields?.title) || '';
+  const [slugfield, setSlugField] = useState(null);
+  const [slugpathfield, setSlugPathField] = useState(null);
+
   //,set multilingual state from props + depedency
   useEffect(() => {
     console.log(multilingalBool, "multilingalBool77777");
@@ -103,8 +108,31 @@ export default function EditPageComp(props) {
       // id: match ? match._id : createID,
     );
     console.log(mergedinitial, "mergedinitial");
-    setInitialMerge(mergedinitial);
-    setFilteredFieldsS(mergedinitial);
+    //i wanna put the title field in its own state
+    const titleField = mergedinitial.find((field) => field.name === 'title');
+    console.log(titleField, 'titleFieldtitleFieldtitleFieldtitleField')
+    // const slugField = mergedinitial.find((field) => field.name === 'slug');
+    //  const slugPathField = mergedinitial.find((field) => field.name === 'slugpath');
+
+    // setTitleField(titleField);
+    dispatch(updateField({
+      name: titleField.name,
+      content: titleField?.content,
+      id: titleField?.id,
+      locale: titleField?.locale,
+      schema: titleField?.schema,
+      type: titleField?.type,
+      placeholder: titleField?.placeholder
+    }));
+    // setSlugField(slugField);
+    // setSlugPathField(slugPathField);
+
+    //remove them from the array
+    const removedstandardfields = mergedinitial.filter((field) => field.name !== 'title' && field.name !== 'slug' && field.name !== 'slugpath');
+
+
+    setInitialMerge(removedstandardfields);
+    setFilteredFieldsS(removedstandardfields);
 
     //, SET THE MERGED FIELDS TO REDUX STORE
     mergedinitial.forEach((item) => {
@@ -112,6 +140,8 @@ export default function EditPageComp(props) {
     }
     )
   }, [pagefields, pagefieldsdata, languageui])
+
+
 
   const changelanguage = async (e) => {
     console.log(language, "language from changelanguage");
@@ -312,11 +342,40 @@ export default function EditPageComp(props) {
       <div className="editpagecontainer">
         <form onSubmit={(e) => onSave(e)} >
           <div className="topbuttons">
-            {neworexisting === 'new' && (
+            <div>
+              <span>{reduxtitlefield.content}1</span>
+
+              <FieldRenderer
+                key={reduxtitlefield?.name}
+                type={reduxtitlefield?.type}
+                name={reduxtitlefield?.name}
+                /* label={titlefield?.label || titlefield?.name} */
+                label=''
+                fielddata={reduxtitlefield || ''}
+                /* placeholder={titlefield?.placeholder || ""} */
+                placeholder="Add title"
+                value={reduxtitlefield.content || ""}
+
+              //THE  ISSUE IS IM NOT LOADING THE VALUE FOR THE REDUX I THINK 
+              /*  onChange2={(e) => {
+                 setHasChanges(true);
+               }} */
+              /* required={titlefield?.required || false}
+              disabled={titlefield?.disabled || false}
+              autofocus={titlefield?.autofocus || true}
+              inputcssclass=''
+              inputdivcssclass=''
+              labelcssclass='' */
+
+              />
+
+            </div>
+
+            {/*  {neworexisting === 'new' && (
               <h1 >Create {schema.name} {pagetype.charAt(0).toUpperCase() + pagetype.slice(1)} </h1 >
-            )}
+            )} */}
             {neworexisting === 'existing' && (
-              <h1> Edit {schema.name}  {pagetype.charAt(0).toUpperCase() + pagetype.slice(1)} : {pagetitles}</h1>
+              <h3> Edit {schema.name}</h3>
             )}
             <div className="flex flex-col gap-5">
               <div className="flex flex-row gap-5">
@@ -359,7 +418,6 @@ export default function EditPageComp(props) {
             </div>
 
           </div>
-
 
           <div className="flex flex-row items-center">
             {multilingualLangs && (
@@ -410,7 +468,7 @@ export default function EditPageComp(props) {
             //  console.log(field, 'field555555')
             //   console.log(field.name, "field.name111");
             let fieldData1 = fieldData[field.name] || {};
-            //console.log(fieldData1, "fieldData1");
+            console.log(fieldData1, "fieldData1");
             //console.log(fieldData1.id, "fieldData1.content");
             return (
               <FieldRenderer
@@ -433,6 +491,7 @@ export default function EditPageComp(props) {
 
             )
           })}
+
         </form>
       </div>
 

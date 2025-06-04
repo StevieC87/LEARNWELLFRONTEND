@@ -8,8 +8,8 @@ import SummernoteField from '../../uicomponents/customfields/Summernote/Summerno
 
 //! ADD ID OF THE FIELD  - PASS TO REDUX 
 
-const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeholder, required, disabled, autofocus }) => {
-  ;
+const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeholder, required, disabled, autofocus, inputcssclass, inputdivcssclass, labeldivcssclass, labelcssclass }) => {
+  console.log(fielddata, "fielddata33333333");
 
   const dispatch = useDispatch();
   const slugduplicatewarning = useSelector((state) => state.PagesSlice.slugduplicatewarning);
@@ -30,7 +30,7 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
       placeholder: placeholder
     }));
     //setHasChanges(true);
-    onChange2();
+    // onChange2();
   }
 
   switch (type) {
@@ -39,14 +39,14 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
       console.log(required, "requiredrequiredrequiredrequired");
       return (
         //! add custom class maybe after? 
-        <div className="fielddivblock">
+        <div className="">
           <label htmlFor={name} className="block text-sm font-medium text-gray-700">{label}</label>
           <input
             key={name}
             name={name}
             type="text"
             value={value}
-            onChange={onChange}
+            onChange={(e) => onChange(e)}
             placeholder={placeholder}
             required={required || false}
             disabled={disabled || false}
