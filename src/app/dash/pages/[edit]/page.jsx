@@ -36,6 +36,7 @@ export default function EditPage() {
   const pageexiststhislanguage = useSelector((state) => state.DashSlice.pageexiststhislanguage);
 
   const [publishstatus, setPublishStatus] = useState(false);
+  const [frontendcomponent, setFrontendComponent] = useState('');
 
   const [triggerrefresh, setTriggerRefresh] = useState(0);
   useEffect(() => {
@@ -91,6 +92,7 @@ export default function EditPage() {
           };
           dispatch(setMultilingualSharedId(data.multilingualsharedid));
           setPublishStatus(data.publishstatus);
+          setFrontendComponent(data.frontendcomponent)
         }
 
       } catch (error) {
@@ -120,6 +122,7 @@ export default function EditPage() {
             pagetitle={pagedata ? pagedata.title : ""}
             publishstatus={publishstatus}
             triggerrefreshonsavechild={triggerrefreshonsavechild}
+            frontendcomponent={frontendcomponent}
           />
 
 

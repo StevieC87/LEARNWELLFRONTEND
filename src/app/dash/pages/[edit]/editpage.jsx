@@ -12,7 +12,7 @@ export default function EditPageComp(props) {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const { schema, settings, pagefieldsdata, pagedata, neworexisting, pageid, pagetype, language, pagetitle, publishstatus, triggerrefreshonsavechild } = props;
+  const { schema, settings, pagefieldsdata, pagedata, neworexisting, pageid, pagetype, language, pagetitle, publishstatus, triggerrefreshonsavechild, frontendcomponent } = props;
 
   //.  GET DATA FROM PROPS  ------------------------ 
   console.log(schema, "schema1234");
@@ -154,6 +154,7 @@ export default function EditPageComp(props) {
         pageexiststhislanguage: pageexiststhislanguage,
         slugpath: fieldData.slugpath ? fieldData.slugpath.content : "", //slug field
         multilingalBool: multilingalBool,
+        frontendcomponent: frontendcomponent, //frontend component name
 
       }),
     })
@@ -231,7 +232,7 @@ export default function EditPageComp(props) {
         pagedata: pagedataS,
         neworexisting: neworexisting,
         slug: fieldData.slug ? fieldData.slug.content : "", //slug field
-
+        frontendcomponent: frontendcomponent, //frontend component name
       }),
     })
     console.log(response, "response55555555");

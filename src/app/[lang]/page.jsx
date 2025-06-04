@@ -12,16 +12,17 @@ export default async function HomeMultilang({ params }) {
   const allHeaders = await headers();
   const fullUrl = allHeaders.get('x-full-url');
   const pathname = allHeaders.get('x-custom-pathname');
-  let slugsinurl = pathname.split("/");
+  let slugsinurl = pathname.split("/").filter(Boolean);;
   let slugsinurlcount = slugsinurl.length;
   let pageslug;
   let showerror = false;
-  if (slugsinurlcount === 2) {
+  if (slugsinurlcount === 0) {
     pageslug = "homepage";
 
   }
-  else if (slugsinurlcount > 2) {
-    pageslug = slugsinurl[2]; // e.g. about  
+  else {
+    langslug
+      = slugsinurl[0];
   }
 
 
