@@ -5,9 +5,9 @@ export async function generateMetadata({ params }) {
   const fullUrl = allHeaders.get('x-full-url');
   const pathname = allHeaders.get('x-custom-pathname');
   let slugsinurl = pathname.split("/").filter(Boolean);;
-  console.log(fullUrl, "fullUrl from headers");
-  console.log(pathname, "pathname from headers");
-  console.log(slugsinurl, "slugsinurl from headers");
+  // console.log(fullUrl, "fullUrl from headers");
+  //  console.log(pathname, "pathname from headers");
+  //  console.log(slugsinurl, "slugsinurl from headers");
   let slugsinurlcount = slugsinurl.length;
   let slugpath = pathname;
   let langslug

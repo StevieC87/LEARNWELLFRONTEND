@@ -231,7 +231,11 @@ export default function EditPageComp(props) {
         pagetype: pagetype,
         pagedata: pagedataS,
         neworexisting: neworexisting,
-        slug: fieldData.slug ? fieldData.slug.content : "", //slug field
+        multilingualsharedid: multilingualsharedid,
+        pageexiststhislanguage: pageexiststhislanguage,
+        slug: fieldData.slug ? fieldData.slug.content : "",
+        slugpath: fieldData.slugpath ? fieldData.slugpath.content : "", //slug field
+        multilingalBool: multilingalBool,
         frontendcomponent: frontendcomponent, //frontend component name
       }),
     })
