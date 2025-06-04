@@ -30,8 +30,7 @@ if (process.env.NEXT_PUBLIC_NODE_ENV === "development") {
 console.log("hello");
 
 
-//! THIS IS FOR MONOLINGUAL PAGES - for now
-export async function generateMetadata({ params }) {
+/* export async function generateMetadata({ params }) {
   const allHeaders = await headers();
   const fullUrl = allHeaders.get('x-full-url');
   const pathname = allHeaders.get('x-custom-pathname');
@@ -134,12 +133,7 @@ export async function generateMetadata({ params }) {
       //robots, ando
       robots: robotsobject,
     }
-  }
-  /*   return {
-      title: "Homepage",
-      description: "This is the homepage of the website",
-    }; */
-}
+   */
 
 
 

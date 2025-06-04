@@ -1,10 +1,20 @@
+import { redirect } from 'next/navigation';
+
 export default async function Home({ params }) {
   // let Homepagedata = {};
   // let Homepagefields = [];
+  let langslug = await params.lang;
+  if (langslug) {
+    console.log(langslug, 'langslug')
+    redirect('/langslug'); // or detect language dynamically
+  }
+  else {
+    redirect('/en'); // or detect language dynamically
 
+  }
   //! this is for MONOLINGUAL 
   //TRY AFTER MULTILINGAUL 
-
+  redirect('/en'); // or detect language dynamically
   const response = await fetch("http://localhost:3000/api/monolingual/homepage", {
     method: "GET",
     headers: {
