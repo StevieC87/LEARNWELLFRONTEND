@@ -8,6 +8,13 @@ import AboutPage from '@/multilangpages/AboutPage';
 
 export default async function Page({ params }) {
 
+  //HERE I INCLUDE !ALL! THE PAGE COMPONENTS (about, contact, what have you)
+  const componentMap = {
+    AboutPage,
+    //ContactPage,
+    // ServicesPage,
+  };
+  let SelectedComponent;
   //! here i need to fetch the page data based on the slug and lang
   // -> see what page component it is  (frm its schema taht is saved in db)
   // -> render it and pass data as props 
@@ -46,6 +53,8 @@ export default async function Page({ params }) {
   console.log(pagesslugwithlang, "pagesslugwithlang from slugsinurl");
   console.log(pageslug, "pageslug from slugsinurl");
 
+
+  let frontendcomponent;
   try {
     const response = await fetch(`http://localhost:3000/api/multilingual/${pagesslugwithlang}?language=${lang}`, {
       method: 'GET',
@@ -56,25 +65,32 @@ export default async function Page({ params }) {
       //cache: 'no-store', // Ensures fresh data on each request
     });
     if (!response.ok) {
-      // console.error("Failed to fetch page data");
+      console.error("Failed to fetch page data");
       showerror = true;
     }
     else {
-      data = await response.json();
+      console.log('data fetched successfully')
+        ;
+      let data = await response.json();
       console.log("Fetched page data:", data);
-      fieldsdata = data.pagefields;
+      frontendcomponent = data.frontendcomponent;
+      SelectedComponent = componentMap[frontendcomponent];
+      console.log("Frontend component:", frontendcomponent);
+      let alldata = data.pagedata;
+      console.log(alldata, "alldata keys");
+      fieldsdata = data.fields;
       console.log("Pagefields:", fieldsdata);
       showerror = false;
     }
   }
   catch (error) {
-    console.error("Error fetching page data:");
-    showerror = true;
+    // console.error("Error fetching page data:");
+    // showerror = true;
   }
 
   return (
     <>
-      <span>hello</span>
+      <SelectedComponent />;
     </>
   )
   // const pageKey = slugToPageKey[lang]?.[slug];
