@@ -3,6 +3,7 @@ import { headers } from 'next/headers'
 
 // import AboutPage from '@/multilangpags/AboutPage';
 import AboutPage from '@/multilangpages/AboutPage';
+import ArticlePage from '@/multilangpages/ArticlePage';
 // import ContactPage from '@/components/pages/ContactPage';
 // import other shared components...
 
@@ -11,6 +12,7 @@ export default async function Page({ params }) {
   //HERE I INCLUDE !ALL! THE PAGE COMPONENTS (about, contact, what have you)
   const componentMap = {
     AboutPage,
+    ArticlePage
     //ContactPage,
     // ServicesPage,
   };
@@ -40,16 +42,18 @@ export default async function Page({ params }) {
   let pagesslugwithlang// e.g. 'en/services/wedesign'
   //let langslug;
   let showerror = false;
-
+  let alldata;
+  let fieldsdata;
+  let pagefieldsarray;
 
   //pages slug is the rest of the path after the language slug
   pageslug = slugsinurl.slice(1).join("/"); // e.g. 'about', 'contact', etc.
   console.log(pageslug, 'pageslugpageslug')
-  let pagesslug2 = pageslug.replace(/\//g, '-'); // e.g. 'en-services-wedesign'
+  let pagesslug2 = pageslug.replace(/\//g, '*'); // e.g. 'en-services-wedesign'
   console.log(pagesslug2, 'pagesslug2 from slugsinurl');
   pagesslugwithlang = slugsinurl.join("/"); // e.g. 'en/services/wedesign'
   //i wanna turn this to replace / with - 
-  pagesslugwithlang = pagesslugwithlang.replace(/\//g, '-'); // e.g. 'en-services-wedesign'
+  pagesslugwithlang = pagesslugwithlang.replace(/\//g, '*'); // e.g. 'en-services-wedesign'
   console.log(pagesslugwithlang, "pagesslugwithlang from slugsinurl");
   console.log(pageslug, "pageslug from slugsinurl");
 
@@ -76,9 +80,11 @@ export default async function Page({ params }) {
       frontendcomponent = data.frontendcomponent;
       SelectedComponent = componentMap[frontendcomponent];
       console.log("Frontend component:", frontendcomponent);
-      let alldata = data.pagedata;
-      console.log(alldata, "alldata keys");
-      fieldsdata = data.fields;
+      alldata = data.pagedata;
+      console.log(alldata, "alldata ");
+      fieldsdata = data.pagedata.fields;
+      pagefieldsarray = data.pagefields;
+      ;
       console.log("Pagefields:", fieldsdata);
       showerror = false;
     }
@@ -90,7 +96,7 @@ export default async function Page({ params }) {
 
   return (
     <>
-      <SelectedComponent />;
+      <SelectedComponent pagedata={alldata} fieldsdata={pagefieldsarray} />;
     </>
   )
   // const pageKey = slugToPageKey[lang]?.[slug];
