@@ -59,10 +59,9 @@ export default function EditPageComp(props) {
   const defaultlanguage = useSelector((state) => state.DashSlice.settings.defaultlanguage);
   const [languageui, setLanguageUI] = useState(language || defaultlanguage || "");
 
-  const [titlefield, setTitleField] = useState(null);
   const reduxtitlefield = useSelector((state) => state.PagesSlice.fields?.title) || '';
-  const [slugfield, setSlugField] = useState(null);
-  const [slugpathfield, setSlugPathField] = useState(null);
+  const reduxslugfield = useSelector((state) => state.PagesSlice.fields?.slug) || '';
+  const reduxslugpathfield = useSelector((state) => state.PagesSlice.fields?.slugpath) || '';
 
   //,set multilingual state from props + depedency
   useEffect(() => {
@@ -110,11 +109,6 @@ export default function EditPageComp(props) {
     console.log(mergedinitial, "mergedinitial");
     //i wanna put the title field in its own state
     const titleField = mergedinitial.find((field) => field.name === 'title');
-    console.log(titleField, 'titleFieldtitleFieldtitleFieldtitleField')
-    // const slugField = mergedinitial.find((field) => field.name === 'slug');
-    //  const slugPathField = mergedinitial.find((field) => field.name === 'slugpath');
-
-    // setTitleField(titleField);
     dispatch(updateField({
       name: titleField.name,
       content: titleField?.content,
@@ -124,8 +118,26 @@ export default function EditPageComp(props) {
       type: titleField?.type,
       placeholder: titleField?.placeholder
     }));
-    // setSlugField(slugField);
-    // setSlugPathField(slugPathField);
+    const slugFielda = mergedinitial.find((field) => field.name === 'slug');
+    dispatch(updateField({
+      name: slugFielda.name,
+      content: slugFielda?.content,
+      id: slugFielda?.id,
+      locale: slugFielda?.locale,
+      schema: slugFielda?.schema,
+      type: slugFielda?.type,
+      placeholder: slugFielda?.placeholder
+    }));
+    const slugPathFielda = mergedinitial.find((field) => field.name === 'slugpath')
+    dispatch(updateField({
+      name: slugPathFielda.name,
+      content: slugPathFielda?.content,
+      id: slugPathFielda?.id,
+      locale: slugPathFielda?.locale,
+      schema: slugPathFielda?.schema,
+      type: slugPathFielda?.type,
+      placeholder: slugPathFielda?.placeholder
+    }));
 
     //remove them from the array
     const removedstandardfields = mergedinitial.filter((field) => field.name !== 'title' && field.name !== 'slug' && field.name !== 'slugpath');
@@ -343,7 +355,6 @@ export default function EditPageComp(props) {
         <form onSubmit={(e) => onSave(e)} >
           <div className="topbuttons">
             <div>
-              <span>{reduxtitlefield.content}1</span>
 
               <FieldRenderer
                 key={reduxtitlefield?.name}
@@ -355,28 +366,26 @@ export default function EditPageComp(props) {
                 /* placeholder={titlefield?.placeholder || ""} */
                 placeholder="Add title"
                 value={reduxtitlefield.content || ""}
-
-              //THE  ISSUE IS IM NOT LOADING THE VALUE FOR THE REDUX I THINK 
-              /*  onChange2={(e) => {
-                 setHasChanges(true);
-               }} */
-              /* required={titlefield?.required || false}
-              disabled={titlefield?.disabled || false}
-              autofocus={titlefield?.autofocus || true}
-              inputcssclass=''
-              inputdivcssclass=''
-              labelcssclass='' */
-
+                onChange2={(e) => {
+                  setHasChanges(true);
+                }}
+                /* inputcssclass, inputdivcssclass, labeldivcssclass, labelcssclass */
+                inputcssclass="titleinput"
+                inputdivcssclass="titleinputdiv"
+                labelcssclass="titlelabel"
               />
+
+
+
 
             </div>
 
             {/*  {neworexisting === 'new' && (
               <h1 >Create {schema.name} {pagetype.charAt(0).toUpperCase() + pagetype.slice(1)} </h1 >
             )} */}
-            {neworexisting === 'existing' && (
+            {/*  {neworexisting === 'existing' && (
               <h3> Edit {schema.name}</h3>
-            )}
+            )} */}
             <div className="flex flex-col gap-5">
               <div className="flex flex-row gap-5">
                 {/* onClick={(e) => onSave(e)} */}
@@ -462,7 +471,34 @@ export default function EditPageComp(props) {
               <p>Please add a field to get started.</p>
             </div>
           )}
-
+          <FieldRenderer
+            key={reduxslugfield?.name}
+            type={reduxslugfield?.type}
+            name={reduxslugfield?.name}
+            /* label={titlefield?.label || titlefield?.name} */
+            label={reduxslugfield?.label || reduxslugfield?.name}
+            fielddata={reduxslugfield || ''}
+            /* placeholder={titlefield?.placeholder || ""} */
+            placeholder={reduxslugfield.placeholder || "Add slug"}
+            value={reduxslugfield.content || ""}
+            onChange2={(e) => {
+              setHasChanges(true);
+            }}
+          />
+          <FieldRenderer
+            key={reduxslugpathfield?.name}
+            type={reduxslugpathfield?.type}
+            name={reduxslugpathfield?.name}
+            /* label={titlefield?.label || titlefield?.name} */
+            label={reduxslugpathfield?.label || reduxslugpathfield?.name}
+            fielddata={reduxslugpathfield || ''}
+            /* placeholder={titlefield?.placeholder || ""} */
+            placeholder={reduxslugpathfield.placeholder || "Add slug path e.g: /articles/webdesign/myarticletitle) (leave empty for default: /articles/myarticletitle)"}
+            value={reduxslugpathfield.content || ""}
+            onChange2={(e) => {
+              setHasChanges(true);
+            }}
+          />
           {(filteredFieldsS.length !== 0) && filteredFieldsS.map((field) => {
             // const fieldData = useSelector((state) => state.PagesSlice.fields[field.name]) || {};
             //  console.log(field, 'field555555')

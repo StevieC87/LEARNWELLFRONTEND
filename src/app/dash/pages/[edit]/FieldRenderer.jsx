@@ -8,7 +8,7 @@ import SummernoteField from '../../uicomponents/customfields/Summernote/Summerno
 
 //! ADD ID OF THE FIELD  - PASS TO REDUX 
 
-const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeholder, required, disabled, autofocus, inputcssclass, inputdivcssclass, labeldivcssclass, labelcssclass }) => {
+const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeholder, required, disabled, autofocus, inputcssclass, inputdivcssclass, labelcssclass }) => {
   console.log(fielddata, "fielddata33333333");
 
   const dispatch = useDispatch();
@@ -39,8 +39,8 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
       console.log(required, "requiredrequiredrequiredrequired");
       return (
         //! add custom class maybe after? 
-        <div className="">
-          <label htmlFor={name} className="block text-sm font-medium text-gray-700">{label}</label>
+        <div className={inputdivcssclass || 'fielddivblock'}>
+          <label htmlFor={name} className={`block text-sm font-medium text-gray-700 ${labelcssclass}`}>{label}</label>
           <input
             key={name}
             name={name}
@@ -52,6 +52,8 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
             disabled={disabled || false}
             // autoFocus={autofocus || false}
             autoFocus={name === "title" ? true : false}
+            className={inputcssclass || ''}
+
           />
           {name === "slug" && slugduplicatewarning && (
             <p className="text-red-500 mt-1">
