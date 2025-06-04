@@ -422,6 +422,7 @@ export default function EditPageComp(props) {
                 }}
                 required={field.required || false}
                 disabled={field.disabled || false}
+                autofocus={field.autofocus || false}
 
               />
 

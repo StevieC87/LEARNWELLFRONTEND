@@ -110,7 +110,7 @@ export default function Pages() {
 
         )}
         {pagetype === "post" && multischemas.length > 0 && multischemas.map((schema) => (
-          <Link key={schema} href={`/dash/pages/newpage?pagetype=post&schema=${schema}`} className="button button-secondary m-3">{schema}</Link>
+          <Link key={schema} href={`/dash/pages/newpage?pagetype=post&schema=${schema}`} className="button button-primary m-3">{schema}</Link>
 
         ))}
       </div>

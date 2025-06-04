@@ -32,6 +32,7 @@ export default function EditPage() {
   const multilingualsharedid = useSelector((state) => state.DashSlice.multilingualsharedid);
   const defaultlanguage = useSelector((state) => state.DashSlice.settings.defaultlanguage);
 
+
   const pageexiststhislanguage = useSelector((state) => state.DashSlice.pageexiststhislanguage);
 
   const [publishstatus, setPublishStatus] = useState(false);
