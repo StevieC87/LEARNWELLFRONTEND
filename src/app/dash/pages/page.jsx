@@ -25,6 +25,7 @@ export default function Pages() {
   //for posts
   const [multischemas, setMultischemas] = useState([]);
 
+  const [refreshlist, setRefreshList] = useState(0);
 
   const [pagelinkurl, setPageLinkUrl] = useState('');
 
@@ -74,13 +75,20 @@ export default function Pages() {
 
 
     //setPageLinkUrl
-  }, [userrole, pagetype]);
+  }, [userrole, pagetype, refreshlist]);
 
 
   useEffect(() => {
 
     console.log('schemanopages44444444444', schemanopages);
   }, [schemanopages]);
+
+
+  const Deletecallback = (pageid) => {
+    console.log('Deletecallback called with pageid:', pageid);
+    setRefreshList((prev) => prev + 1);
+  }
+
 
   // here i will list all the page - to take some complexity off the sidenav for now - wordpress style
   return (
@@ -172,7 +180,10 @@ export default function Pages() {
                 </td>
                 {(issuperadmin || pagetype === 'post') && (
                   <td className="">
-                    <span><DeletePage pagetype={pagetype} pageid={page._id} /></span>
+                    <span><DeletePage pagetype={pagetype} pageid={page._id}
+                      RefreshList1={Deletecallback}
+
+                    /></span>
                   </td>
                 )}
 

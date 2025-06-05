@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 export default function DeletePage(props) {
   const router = useRouter();
 
-  const { pagetype, pageid } = props;
+  const { pagetype, pageid, RefreshList1 } = props;
   console.log(pagetype, "pagetypeindeletepage");
   console.log(pageid, "pageidindeletepage");
   const onclickDelete = async (e) => {
@@ -32,11 +32,11 @@ export default function DeletePage(props) {
       console.log(data, "data222");
       let urlredirectto;
 
-
-      const query = window.location.search;
-      window.location.href = '/dash/pages' + query;
+      RefreshList1(); // Call the RefreshList1 function passed as a prop to refresh the list after deletion
+      // const query = window.location.search;
+      //window.location.href = '/dash/pages' + query;
       // urlredirectto = '/dash/pages';
-
+      // router.push(router.asPath);
       // router.push(urlredirectto);
     }
 
