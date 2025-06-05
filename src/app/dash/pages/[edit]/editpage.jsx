@@ -11,43 +11,19 @@ import { useRouter } from 'next/navigation';
 export default function EditPageComp(props) {
   const router = useRouter();
   const dispatch = useDispatch();
+  //.  GET DATA FROM PROPS  ------------------------
 
   const { schema, settings, pagefieldsdata, pagedata, neworexisting, pageid, pagetype, language, pagetitle, publishstatus, triggerrefreshonsavechild, frontendcomponent } = props;
-
-  //.  GET DATA FROM PROPS  ------------------------ 
-  console.log(schema, "schema1234");
-  console.log(settings, "settings");
-  console.log(pagedata, "pagedata123");
-  console.log(pagefieldsdata, "pagefieldsdata777777777");
-  console.log(neworexisting, "neworexisting1234");
-  console.log(pageid, "pageid");
-  console.log(pagetype, "pagetype1234");
-  console.log(language, "language1234");
-
-
-  //const pagetitle = schema?.title;
-  const [pagetitles, setPageTitle] = useState(pagetitle);
   const [pagefields, setPageFields] = useState(schema.fields);
   const [pagedataS, setPageDataS] = useState(pagedata);
-
   //. --------------------------
 
   //const pageid = pagedata._id; //string
   const fieldData = useSelector((state) => state.PagesSlice.fields);
-
   //..................... FILTERING FIELDS 
-
   const [filteredFieldsS, setFilteredFieldsS] = useState([]);
   const [initialmerge, setInitialMerge] = useState(false);
-
   //..................... UI STATES 
-  const [issaving, setIsSaving] = useState(false);
-  const [errorsave, setErrorSave] = useState(false);
-  const [showsaved, setShowSaved] = useState(false);
-  //to prevent publishing if made changes prior to publishing
-  const [hasChanges, setHasChanges] = useState(true);
-
-  const [publishswitchstatus, setPublishSwitchStatus] = useState(publishstatus);
 
   //..................... LANGUAGE RELATED STATES 
   const [multilingalBool, setMultilingualBool] = useState(settings.ismultilingual);
@@ -62,6 +38,16 @@ export default function EditPageComp(props) {
   const reduxtitlefield = useSelector((state) => state.PagesSlice.fields?.title) || '';
   const reduxslugfield = useSelector((state) => state.PagesSlice.fields?.slug) || '';
   const reduxslugpathfield = useSelector((state) => state.PagesSlice.fields?.slugpath) || '';
+  console.log(reduxslugpathfield, "reduxslugpathfieldreduxslugpathfieldreduxslugpathfieldreduxslugpathfield");
+  const [hasChanges, setHasChanges] = useState(false);
+  const [issaving, setIsSaving] = useState(false);
+  const [showsaved, setShowSaved] = useState(false);
+  const [ispublishing, setIsPublishing] = useState(false);
+  const [publishchanges, setPublishchange] = useState(publishstatus || false);
+  const [errorsave, setErrorSave] = useState(false);
+  const [publishswitchstatus, setPublishSwitchStatus] = useState(publishstatus || false);
+
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   //,set multilingual state from props + depedency
   useEffect(() => {
@@ -166,6 +152,7 @@ export default function EditPageComp(props) {
   const onSave = async (e) => {
     e.preventDefault();
     setHasChanges(false);
+    setPublishchange(true)
     setIsSaving(true);
     let url = `${process.env.NEXT_PUBLIC_API_URL}/schema`;
 
@@ -238,6 +225,11 @@ export default function EditPageComp(props) {
       //if page post redirect to edit version of itself
       if (neworexisting === "new") {
         const url = `${pageid}?pagetype=${pagetype}&schema=${schema}&language=${language}`;
+        setIsTransitioning(true); // Start the transition
+        setTimeout(() => {
+          router.replace(url); // Navigate to the new route
+          setIsTransitioning(false); // End the transition
+        }, 300); // Duration matches the CSS animation
         router.replace(url);
 
       }
@@ -256,7 +248,7 @@ export default function EditPageComp(props) {
   //. ON PUBLISH FUNCTION ========================  
   const onPublish = async () => {
     let url = `${process.env.NEXT_PUBLIC_API_URL}/publish`;
-
+    setIsPublishing(true);
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -285,6 +277,7 @@ export default function EditPageComp(props) {
     if (response.ok) {
       const data = await response.json();
       setIsSaving(false);
+      setPublishchange(false);
       setErrorSave(false);
       const pageid = data.pageid;
       const pagetype = data.pagetype;
@@ -296,6 +289,9 @@ export default function EditPageComp(props) {
 
       }
       setPublishSwitchStatus(true);
+      setTimeout(() => {
+        setIsPublishing(false);
+      }, 2000);
       // setShowSaved(true);
       // setTimeout(() => {
       //   setShowSaved(false);
@@ -351,51 +347,33 @@ export default function EditPageComp(props) {
 
   return (
     <>
-      <div className="editpagecontainer">
+      <div className={`editpagecontainer fade-in2 ${isTransitioning ? '' : 'visible'}`}>
         <form onSubmit={(e) => onSave(e)} >
+
           <div className="topbuttons">
-            <div>
-
-              <FieldRenderer
-                key={reduxtitlefield?.name}
-                type={reduxtitlefield?.type}
-                name={reduxtitlefield?.name}
-                /* label={titlefield?.label || titlefield?.name} */
-                label=''
-                fielddata={reduxtitlefield || ''}
-                /* placeholder={titlefield?.placeholder || ""} */
-                placeholder="Add title"
-                value={reduxtitlefield.content || ""}
-                onChange2={(e) => {
-                  setHasChanges(true);
-                }}
-                /* inputcssclass, inputdivcssclass, labeldivcssclass, labelcssclass */
-                inputcssclass="titleinput"
-                inputdivcssclass="titleinputdiv"
-                labelcssclass="titlelabel"
-              />
-
-
-
-
-            </div>
-
-            {/*  {neworexisting === 'new' && (
-              <h1 >Create {schema.name} {pagetype.charAt(0).toUpperCase() + pagetype.slice(1)} </h1 >
-            )} */}
-            {/*  {neworexisting === 'existing' && (
-              <h3> Edit {schema.name}</h3>
-            )} */}
-            <div className="flex flex-col gap-5">
+            <div className="flex flex-row gap-5 ">
               <div className="flex flex-row gap-5">
                 {/* onClick={(e) => onSave(e)} */}
-                <button type="submit" className="button button-primary">
+                <button onClick={() => {
+                  // const slug = fieldData.slug ? fieldData.slug.content : "";
+                  let slug = reduxslugpathfield.content;
+                  //remove / if first leter of slug
+                  if (slug.startsWith('/')) {
+                    slug = slug.slice(1);
+                  }
+                  //replace / with * in slug
+                  slug = slug.replace(/\//g, '*');
+                  console.log(slug, "slugfrombutton");
+                  window.open(`${process.env.NEXT_PUBLIC_API_URL}/preview?${slug || ''}`, '_blank');
+
+                }}>Preview</button>
+                <button type="submit" className={hasChanges ? "button button-primary" : "button button-outline"}>
                   {issaving && (
                     <span>Saving</span>
                   )}
 
                   {!issaving && !showsaved && (
-                    <span>Save</span>
+                    <span>Save Draft</span>
                   )}
                   {errorsave && (
                     <span className="text-red-500">Error</span>
@@ -407,9 +385,16 @@ export default function EditPageComp(props) {
                 </button>
 
                 {neworexisting === 'existing' && (
-                  <button onClick={() => onPublish()} /* className="button button-primary" */
-                    className={!hasChanges ? "button button-primary" : "button button-primary disabled"}>
-                    Publish
+                  <button onClick={() => onPublish()}
+                  >
+                    <>
+                      {!ispublishing && (
+                        publishchanges ? 'Publish Changes' : 'Publish'
+                      )}
+                      {ispublishing && (
+                        <span> Published</span>
+                      )}
+                    </>
                   </button>
                 )}
               </div>
@@ -425,6 +410,27 @@ export default function EditPageComp(props) {
                 </div>
               )}
             </div>
+
+          </div>
+
+          <div>
+
+            <FieldRenderer
+              key={reduxtitlefield?.name}
+              type={reduxtitlefield?.type}
+              name={reduxtitlefield?.name}
+              label=''
+              fielddata={reduxtitlefield || ''}
+              placeholder="Add title"
+              value={reduxtitlefield.content || ""}
+              onChange2={(e) => {
+                setHasChanges(true);
+                setIsPublishing(false); // Reset publishing state when title changes
+              }}
+              inputcssclass="titleinput"
+              inputdivcssclass="titleinputdiv"
+              labelcssclass="titlelabel"
+            />
 
           </div>
 
@@ -483,6 +489,7 @@ export default function EditPageComp(props) {
             value={reduxslugfield.content || ""}
             onChange2={(e) => {
               setHasChanges(true);
+              setIsPublishing(false);
             }}
           />
           <FieldRenderer
@@ -497,6 +504,7 @@ export default function EditPageComp(props) {
             value={reduxslugpathfield.content || ""}
             onChange2={(e) => {
               setHasChanges(true);
+              setIsPublishing(false);
             }}
           />
           {(filteredFieldsS.length !== 0) && filteredFieldsS.map((field) => {
@@ -518,6 +526,7 @@ export default function EditPageComp(props) {
                 onChange2={(e) => {
 
                   setHasChanges(true);
+                  setIsPublishing(false);
                 }}
                 required={field.required || false}
                 disabled={field.disabled || false}

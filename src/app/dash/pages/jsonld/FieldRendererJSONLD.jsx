@@ -1,7 +1,7 @@
 'use client'
 
 import { useDispatch, useSelector } from 'react-redux';
-import { updateField } from '@/redux/slices/PagesSlice';
+import { updateField } from '@/redux/slices/EditPageSlice';
 import { useState } from 'react';
 import { updateBlocksAndFields, changeBlocksAndFieldsblockupdatefield } from '@/redux/slices/JSONLDSlice';
 
@@ -11,7 +11,7 @@ import { updateBlocksAndFields, changeBlocksAndFieldsblockupdatefield } from '@/
 const FieldRendererJSONLD = ({ type, name, value, label, onChange2, fielddata, placeholder, parentblock }) => {
   ;
   const dispatch = useDispatch();
-  // const fieldData1 = useSelector((state) => state.PagesSlice.fields[name]);
+  // const fieldData1 = useSelector((state) => state.EditPageSlice.fields[name]);
 
   //console.log(fielddata, "fielddata33333333");
 

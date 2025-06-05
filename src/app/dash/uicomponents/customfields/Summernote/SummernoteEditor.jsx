@@ -7,7 +7,7 @@ import './summernote/summernote-lite.css';
 import './summernote/summernote-lite.js';
 import $ from 'jquery';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateField } from '../../../../../redux/slices/PagesSlice';
+import { updateField } from '../../../../../redux/slices/PagesSlice.js';
 
 // optional if you want consistent styling
 

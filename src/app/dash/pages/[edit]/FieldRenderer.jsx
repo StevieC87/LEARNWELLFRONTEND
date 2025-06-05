@@ -29,8 +29,8 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
       type: type,
       placeholder: placeholder
     }));
-    //setHasChanges(true);
-    // onChange2();
+    setHasChanges(true);
+    onChange2();
   }
 
   switch (type) {

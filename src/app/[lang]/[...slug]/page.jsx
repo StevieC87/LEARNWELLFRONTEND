@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { headers } from 'next/headers'
-
+// import { draftMode } from 'next/headers';
 // import AboutPage from '@/multilangpags/AboutPage';
 import AboutPage from '@/multilangpages/AboutPage';
 import ArticlePage from '@/multilangpages/ArticlePage';
@@ -8,7 +8,7 @@ import ArticlePage from '@/multilangpages/ArticlePage';
 // import other shared components...
 
 export default async function Page({ params }) {
-
+  // const { isEnabled } = draftMode();
   //HERE I INCLUDE !ALL! THE PAGE COMPONENTS (about, contact, what have you)
   const componentMap = {
     AboutPage,
@@ -60,6 +60,17 @@ export default async function Page({ params }) {
 
   let frontendcomponent;
   try {
+    /* let url;
+    if (data == isEnabled) {
+      //url = `http://localhost:3000/api/multilingual/${pagesslugwithlang}?language=${lang}`;
+      console.log(params.slug, "params.slug as draft");
+    }
+    else {
+      //url = `http://localhost:3000/api/multilingual/${pagesslugwithlang}?language=${lang}`;
+      console.log(params.slug, "params.slug as published");
+    }
+ */
+
     const response = await fetch(`http://localhost:3000/api/multilingual/${pagesslugwithlang}?language=${lang}`, {
       method: 'GET',
       headers: {
