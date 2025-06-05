@@ -1,14 +1,14 @@
 import { notFound } from 'next/navigation';
 import { headers } from 'next/headers'
-// import { draftMode } from 'next/headers';
 // import AboutPage from '@/multilangpags/AboutPage';
 import AboutPage from '@/multilangpages/AboutPage';
 import ArticlePage from '@/multilangpages/ArticlePage';
+//search params
+import { searchParams } from 'next/navigation';
 // import ContactPage from '@/components/pages/ContactPage';
 // import other shared components...
-
-export default async function Page({ params }) {
-  // const { isEnabled } = draftMode();
+import FetchPreview from '../../../multilangpages/components/Fetchpreview';
+export default async function Page({ params, searchParams }) {
   //HERE I INCLUDE !ALL! THE PAGE COMPONENTS (about, contact, what have you)
   const componentMap = {
     AboutPage,
@@ -23,6 +23,13 @@ export default async function Page({ params }) {
 
 
   const { lang, slug } = await params;
+  let queryparams = await searchParams;
+  console.log(queryparams, "queryparams in multilingual page");
+  let ispreview = queryparams?.preview === 'true' ? true : false;
+  let previewtoken = queryparams?.previewtoken || null;
+  console.log(previewtoken, "queryparams.previewtoken in multilingual page");
+  console.log(ispreview, "queryparams.preview in multilingual page");
+
   console.log(lang, 'lang') // e.g. 'fr'
   console.log(slug, 'slug') //e.g ['services', 'wedesign']
   const fullSlug = Array.isArray(slug) ? slug.join('/') : slug;
@@ -60,25 +67,30 @@ export default async function Page({ params }) {
 
   let frontendcomponent;
   try {
-    /* let url;
-    if (data == isEnabled) {
-      //url = `http://localhost:3000/api/multilingual/${pagesslugwithlang}?language=${lang}`;
-      console.log(params.slug, "params.slug as draft");
+
+    let response;
+
+    if (ispreview) {
+      //previewtoken
+      response = await fetch(`http://localhost:3000/api/multilingualpreview/${pagesslugwithlang}?language=${lang}&previewtoken=${previewtoken}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        //cache: 'no-store', // Ensures fresh data on each request
+      });
+
     }
     else {
-      //url = `http://localhost:3000/api/multilingual/${pagesslugwithlang}?language=${lang}`;
-      console.log(params.slug, "params.slug as published");
+      response = await fetch(`http://localhost:3000/api/multilingual/${pagesslugwithlang}?language=${lang}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+
+        //cache: 'no-store', // Ensures fresh data on each request
+      });
     }
- */
-
-    const response = await fetch(`http://localhost:3000/api/multilingual/${pagesslugwithlang}?language=${lang}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-
-      //cache: 'no-store', // Ensures fresh data on each request
-    });
     if (!response.ok) {
       console.error("Failed to fetch page data");
       showerror = true;
@@ -99,6 +111,7 @@ export default async function Page({ params }) {
       console.log("Pagefields:", fieldsdata);
       showerror = false;
     }
+
   }
   catch (error) {
     // console.error("Error fetching page data:");
@@ -107,7 +120,10 @@ export default async function Page({ params }) {
 
   return (
     <>
-      <SelectedComponent pagedata={alldata} fieldsdata={pagefieldsarray} />;
+
+
+      <SelectedComponent pagedata={alldata} fieldsdata={pagefieldsarray} />
+
     </>
   )
   // const pageKey = slugToPageKey[lang]?.[slug];

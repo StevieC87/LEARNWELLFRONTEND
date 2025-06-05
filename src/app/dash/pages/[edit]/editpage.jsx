@@ -345,6 +345,45 @@ export default function EditPageComp(props) {
     }
   }
 
+  const preview = async () => {
+    let slug = reduxslugpathfield.content;
+    let previewtoken;
+    console.log(slug, "slugfrombutton");
+    //createpreviewtoken
+    const createpreviewtoken = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/createpreviewtoken`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include', // Include cookies in the request
+    })
+    if (!createpreviewtoken.ok) {
+      console.log(createpreviewtoken, "createpreviewtoken not ok");
+      return;
+    }
+    else {
+      console.log(createpreviewtoken, "createpreviewtoken ok");
+      let data = await createpreviewtoken.json();
+      previewtoken = data.previewtoken;
+      console.log(previewtoken, "previewtokenfromcreatepreviewtoken");
+      window.open(`http://localhost:3001${slug}?preview=true&previewtoken=${previewtoken}`);
+    }
+
+    //! do a fetch create preview token
+
+    //! then include that token in the url  
+    //remove / if first leter of slug
+    /*   if (slug.startsWith('/')) {
+        slug = slug.slice(1);
+      } */
+    //replace / with * in slug
+    //  slug = slug.replace(/\//g, '*');
+    // console.log(slug, "slugfrombutton");
+    // window.open(`${process.env.NEXT_PUBLIC_API_URL}/api/preview?slug=${slug || ''}`, '_blank');
+
+
+  }
+
   return (
     <>
       <div className={`editpagecontainer fade-in2 ${isTransitioning ? '' : 'visible'}`}>
@@ -354,19 +393,7 @@ export default function EditPageComp(props) {
             <div className="flex flex-row gap-5 ">
               <div className="flex flex-row gap-5">
                 {/* onClick={(e) => onSave(e)} */}
-                <button onClick={() => {
-                  // const slug = fieldData.slug ? fieldData.slug.content : "";
-                  let slug = reduxslugpathfield.content;
-                  //remove / if first leter of slug
-                  if (slug.startsWith('/')) {
-                    slug = slug.slice(1);
-                  }
-                  //replace / with * in slug
-                  slug = slug.replace(/\//g, '*');
-                  console.log(slug, "slugfrombutton");
-                  window.open(`${process.env.NEXT_PUBLIC_API_URL}/preview?${slug || ''}`, '_blank');
-
-                }}>Preview</button>
+                <button onClick={() => preview()}>Preview</button>
                 <button type="submit" className={hasChanges ? "button button-primary" : "button button-outline"}>
                   {issaving && (
                     <span>Saving</span>

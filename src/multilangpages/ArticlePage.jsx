@@ -1,18 +1,33 @@
+// import { Fetchpreview } from './components/Fetchpreview';
 
 export default async function ArticlePage(props) {
+  const { pagedata, fieldsdata, ispreview, lang, pagesslugwithlang } = props;
+  /* 
+    if (ispreview) {
+      console.log("This is a preview mode for ArticlePage");
+      let data = await Fetchpreview(pagesslugwithlang, lang);
+      let pagedata = data.pagedata;
+      let fieldsdata = data.fieldsdata;
+    } */
 
-  const { pagedata, fieldsdata } = props;
   console.log(pagedata, "pagedata in ArticlePage");
   console.log(fieldsdata, "fieldsdata in ArticlePage");
 
-
   function getFieldValue(fieldName) {
+    // if (!showerror) {
+    // console.log(data, "data in getFieldValue");
+    console.log(fieldsdata, "fieldsdata in getFieldValue");
+    const field = fieldsdata.find((f) => f.name === fieldName);
+    return field?.content || "";
+    // }
+  }
+  /* function getFieldValue(fieldName) {
 
     console.log(fieldsdata, "fieldsdata in getFieldValue");
     const field = fieldsdata.find((f) => f.name === fieldName);
     return field?.content || "";
     //}
-  }
+  } */
 
 
   return (
