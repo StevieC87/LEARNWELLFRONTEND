@@ -3,7 +3,6 @@
 import { FetchpagedataStatic } from "@/utilities/fetchpagedatastatic";
 import { headers } from 'next/headers'
 
-
 export default async function AboutPage({ params, searchParams }) {
 
   //, THIS IS FOR SLUGPATH - to send for fetch
@@ -27,7 +26,6 @@ export default async function AboutPage({ params, searchParams }) {
   }
   console.log(slugpath, 'slugpath after replace / with *')
 
-
   //,this is for the preview token
   let queryparams = await searchParams;
   let ispreview = queryparams?.preview === 'true' ? true : false;
@@ -35,15 +33,30 @@ export default async function AboutPage({ params, searchParams }) {
   let previewtoken = queryparams?.previewtoken || null;
   console.log(previewtoken, "previewtken");
 
-
-
   let getpagedata = await FetchpagedataStatic(ispreview, previewtoken, slugpath);
+  if (!getpagedata) {
+    console.log("Error fetching page data");
+    return <div>Error fetching page data</div>;
+  }
+  let data = getpagedata.data;
+  console.log(data, "data from FetchpagedataStatic in AboutPage");
+  let pagedata = data.pagedata;
+  console.log(pagedata, "pagedata in AboutPage");
+  let pagefieldsarray = data.pagefieldsarray;
+  console.log(pagefieldsarray, "pagefieldsarray in AboutPage");
 
-
+  function getFieldValue(fieldName) {
+    // if (!showerror) {
+    // console.log(data, "data in getFieldValue");
+    console.log(pagefieldsarray, "fieldsdata in getFieldValue");
+    const field = pagefieldsarray.find((f) => f.name === fieldName);
+    return field?.content || "";
+    // }
+  }
 
   return (
     <div className="aboutPage">
-      <h1 className="aboutPageh1">About - hardcoded</h1>
+      <h1 className="aboutPageh1">  <p>{getFieldValue("title")}</p></h1>
 
     </div>
   )

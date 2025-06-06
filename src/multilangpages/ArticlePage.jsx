@@ -1,7 +1,7 @@
 // import { Fetchpreview } from './components/Fetchpreview';
 
 export default async function ArticlePage(props) {
-  const { pagedata, fieldsdata, ispreview, lang, pagesslugwithlang } = props;
+  const { pagedata, pagefieldsarray, ispreview, lang, pagesslugwithlang } = props;
   /* 
     if (ispreview) {
       console.log("This is a preview mode for ArticlePage");
@@ -11,13 +11,13 @@ export default async function ArticlePage(props) {
     } */
 
   console.log(pagedata, "pagedata in ArticlePage");
-  console.log(fieldsdata, "fieldsdata in ArticlePage");
+  console.log(pagefieldsarray, "fieldsdata in ArticlePage");
 
   function getFieldValue(fieldName) {
     // if (!showerror) {
     // console.log(data, "data in getFieldValue");
-    console.log(fieldsdata, "fieldsdata in getFieldValue");
-    const field = fieldsdata.find((f) => f.name === fieldName);
+    console.log(pagefieldsarray, "fieldsdata in getFieldValue");
+    const field = pagefieldsarray.find((f) => f.name === fieldName);
     return field?.content || "";
     // }
   }

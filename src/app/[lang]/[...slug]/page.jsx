@@ -7,7 +7,6 @@ import ArticlePage from '@/multilangpages/ArticlePage';
 import { searchParams } from 'next/navigation';
 // import ContactPage from '@/components/pages/ContactPage';
 // import other shared components...
-import FetchPreview from '../../../multilangpages/components/Fetchpreview';
 export default async function Page({ params, searchParams }) {
   //HERE I INCLUDE !ALL! THE PAGE COMPONENTS (about, contact, what have you)
   const componentMap = {
@@ -106,7 +105,7 @@ export default async function Page({ params, searchParams }) {
       alldata = data.pagedata;
       console.log(alldata, "alldata ");
       fieldsdata = data.pagedata.fields;
-      pagefieldsarray = data.pagefields;
+      pagefieldsarray = data.pagefieldsarray;
       ;
       console.log("Pagefields:", fieldsdata);
       showerror = false;
@@ -122,7 +121,7 @@ export default async function Page({ params, searchParams }) {
     <>
 
 
-      <SelectedComponent pagedata={alldata} fieldsdata={pagefieldsarray} />
+      <SelectedComponent pagedata={alldata} pagefieldsarray={pagefieldsarray} />
 
     </>
   )

@@ -39,8 +39,7 @@ export const FetchpagedataStatic = async (
     return {
       data: data,
       // frontendcomponent: data.frontendcomponent,
-      pagedata: data.pagedata,
-      pagefields: data.pagefields,
+      pageData: data.pageData,
       pagefieldsarray: data.pagefieldsarray,
       showerror: false,
       message: "Page data fetched successfully",
