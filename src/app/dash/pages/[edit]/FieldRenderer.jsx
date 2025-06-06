@@ -9,7 +9,7 @@ import SummernoteField from '../../uicomponents/customfields/Summernote/Summerno
 //! ADD ID OF THE FIELD  - PASS TO REDUX 
 
 const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeholder, required, disabled, autofocus, inputcssclass, inputdivcssclass, labelcssclass }) => {
-  console.log(fielddata, "fielddata33333333");
+  // console.log(fielddata, "fielddata33333333");
 
   const dispatch = useDispatch();
   const slugduplicatewarning = useSelector((state) => state.PagesSlice.slugduplicatewarning);

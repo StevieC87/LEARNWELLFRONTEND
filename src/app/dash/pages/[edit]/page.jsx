@@ -37,7 +37,10 @@ export default function EditPage() {
 
   const [publishstatus, setPublishStatus] = useState(false);
   const [frontendcomponent, setFrontendComponent] = useState('');
-
+  const [numberofdrafts, setNumberOfDrafts] = useState(0);
+  //when load, tell us the latest draft creation date
+  //if it exists
+  const [latestdraftcreationdate, setLatestDraftCreationDate] = useState(null); // 
   const [triggerrefresh, setTriggerRefresh] = useState(0);
   useEffect(() => {
     const FetchPageData = async () => {
@@ -83,6 +86,7 @@ export default function EditPage() {
           setSchema(data.schema);
           setSettings(data.settings);
           setPageFieldsData(data.pagefieldsdata);
+          console.log(data.pagefieldsdata, "pagefieldsdatapagefieldsdata111");
           setPageData(data.pagedata);
           console.log(data.pagedata, "pagedatapagedata");
           setNewOrExisting(data.neworexisting);
@@ -93,6 +97,9 @@ export default function EditPage() {
           dispatch(setMultilingualSharedId(data.multilingualsharedid));
           setPublishStatus(data.publishstatus);
           setFrontendComponent(data.frontendcomponent)
+          setNumberOfDrafts(data.pagedata.numberofdrafts);
+          //latestdraftcreationdate, 
+          setLatestDraftCreationDate(data.pagedata.latestdraftcreationdate || null);
         }
 
       } catch (error) {
@@ -123,6 +130,8 @@ export default function EditPage() {
             publishstatus={publishstatus}
             triggerrefreshonsavechild={triggerrefreshonsavechild}
             frontendcomponent={frontendcomponent}
+            numberofdrafts={numberofdrafts}
+            latestdraftcreationdate={latestdraftcreationdate}
           />
 
 

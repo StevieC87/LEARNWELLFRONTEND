@@ -13,8 +13,12 @@ export default function EditPageComp(props) {
   const dispatch = useDispatch();
   //.  GET DATA FROM PROPS  ------------------------
 
-  const { schema, settings, pagefieldsdata, pagedata, neworexisting, pageid, pagetype, language, pagetitle, publishstatus, triggerrefreshonsavechild, frontendcomponent } = props;
+  const { schema, settings, pagefieldsdata, pagedata, neworexisting, pageid, pagetype, language, pagetitle, publishstatus, triggerrefreshonsavechild, frontendcomponent,
+    numberofdrafts, latestdraftcreationdate
+  } = props;
+  console.log(pagefieldsdata, "pagefieldsdatafromprops");
   const [pagefields, setPageFields] = useState(schema.fields);
+  const [pagefieldsdataS, setPageFieldsData] = useState(pagefieldsdata || []);
   const [pagedataS, setPageDataS] = useState(pagedata);
   //. --------------------------
 
@@ -49,6 +53,17 @@ export default function EditPageComp(props) {
 
   const [isTransitioning, setIsTransitioning] = useState(false);
 
+  const [numberofdraftsoninitial, setNumberOfDrafts] = useState(numberofdrafts || 0);
+
+
+  const [currentdraftcreationdate, setCurrentDraftCreationDate] = useState(latestdraftcreationdate);
+  useEffect(() => {
+    console.log(currentdraftcreationdate, "currentdraftcreationdatefromuseeffect");
+  }, [currentdraftcreationdate])
+  const [initialonloadlatestedraftcreationdate, setInitialOnLoadLatestDraftCreationDate] = useState(latestdraftcreationdate);
+  //LEAVE MAYBE REDUX LATER if logic turns oout we need it
+  /*   const currentdraftpagecreationdate = useSelector((state) => state.PagesSlice.currentdraftpagescreationdate) || ''; */
+
   const slugpathfieldaR = useSelector((state) => state.PagesSlice.fields?.slugpath) || '';
   //,set multilingual state from props + depedency
   useEffect(() => {
@@ -73,10 +88,15 @@ export default function EditPageComp(props) {
   //. MERGE SCHEMA FIELDS WITH PAGEFIELDSDATA
   // (if new page:we just we create id, add locale)
   useEffect(() => {
+
     //,merge pagefields with pagefieldsdata
+    console.log(pagefields, "pagefieldspagefields");
+    console.log(pagefieldsdataS, "pagefieldsdataS");
     const mergedinitial = pagefields.map((fieldObj) => {
-      const match = pagefieldsdata.find((item) => item.field === fieldObj.name);
-      console.log(match, "match3333333333");
+      // console.log(fieldObj, 'fieldObj')
+      const match = pagefieldsdataS.find((item) => item.name === fieldObj.name);
+      // console.log(match, "match3333333333");
+
       let createID = new ObjectId().toString();
       return {
         ...fieldObj,
@@ -96,6 +116,7 @@ export default function EditPageComp(props) {
     console.log(mergedinitial, "mergedinitial");
     //i wanna put the title field in its own state
     const titleField = mergedinitial.find((field) => field.name === 'title');
+
     dispatch(updateField({
       name: titleField.name,
       content: titleField?.content,
@@ -138,9 +159,11 @@ export default function EditPageComp(props) {
       dispatch(updateField({ name: item.name, content: item.content, id: item._id, locale: item.locale, type: item.type, schema: item.schema }));
     }
     )
-  }, [pagefields, pagefieldsdata, languageui])
+  }, [pagefields, pagefieldsdataS, languageui])
 
-
+  useEffect(() => {
+    console.log(numberofdraftsoninitial, "numberofdraftsoninitial");
+  }, [numberofdraftsoninitial])
 
   const changelanguage = async (e) => {
     console.log(language, "language from changelanguage");
@@ -216,6 +239,8 @@ export default function EditPageComp(props) {
       console.log(data.multilingualsharedid, "multilingualsharedid11111111111111");
       dispatch(setMultilingualSharedId(data.multilingualsharedid));
       console.log(data.locale, "locale22222222222222");
+      setCurrentDraftCreationDate(data.lastinsertdraftcreationdate);
+
       if (slugduplicatewarningv) {
         dispatch(setSlugDuplicateWarning(true));
         setTimeout(() => {
@@ -370,21 +395,58 @@ export default function EditPageComp(props) {
       window.open(`http://localhost:3001${slug}?preview=true&previewtoken=${previewtoken}`);
     }
 
-    //! do a fetch create preview token
-
-    //! then include that token in the url  
-    //remove / if first leter of slug
-    /*   if (slug.startsWith('/')) {
-        slug = slug.slice(1);
-      } */
-    //replace / with * in slug
-    //  slug = slug.replace(/\//g, '*');
-    // console.log(slug, "slugfrombutton");
-    // window.open(`${process.env.NEXT_PUBLIC_API_URL}/api/preview?slug=${slug || ''}`, '_blank');
 
 
   }
 
+  const undoredo = async (e, undoredo) => {
+    e.preventDefault();
+
+    //WE SHOULDNT SAVE IF LAST VERSION
+    //coz then overwrites with 
+    let haschangesforundo = false; //THIS IT NOT SKIP ONE BACK 
+    if (hasChanges) {
+      onSave(e);
+      haschangesforundo = true;
+    }
+    //put this in other variable/usestate after
+    // let currentdraftpagescreationdate = "";
+    console.log(undoredo, "undoredo");
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/undoredo`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include', // Include cookies in the request
+      body: JSON.stringify({
+        pageid: pageid,
+        undoorredo: undoredo, // 'undo' or 'redo'
+        currentdraftpagecreationdate: currentdraftcreationdate,
+        haschangesforundo: haschangesforundo
+      }),
+    });
+    if (!response.ok) {
+      console.log(response, "response not ok");
+      return;
+    }
+    const data = await response.json();
+    const fieldsfromundoredo = data.fields;
+    console.log(fieldsfromundoredo, "fieldsfromundoredo");
+    console.log(data.creationdate, "data.creationdate");
+    setCurrentDraftCreationDate(data.creationdate);
+
+
+    setPageFieldsData(fieldsfromundoredo);
+    //note: creationdate is a string
+    //console.log(data.creationdate, "data.creationdate");
+    //console.log(typeof data.creationdate, "typeof data.creationdate");
+
+    console.log(data, "data from undoredo");
+
+    //! now replace field values... 
+
+  }
 
   return (
     <>
@@ -393,10 +455,25 @@ export default function EditPageComp(props) {
 
           <div className="topbuttons">
             <div className="flex flex-row gap-5 ">
+              <div id="undoredo" className="undoredo flex gap-3 ">
+                <button onClick={(e) => undoredo(e, 'undo')} id="undobutton" className="">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+                    <title>Undo</title>
+                    <path fillRule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z" />
+                    <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466" />
+                  </svg>
+                </button>
+                <button onClick={(e) => undoredo(e, 'redo')} id="redobutton" className=""><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                  <title>Redo</title>
+                  <path fillRule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z" />
+                  <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466" />
+                </svg>
+                </button>
+              </div>
               <div className="flex flex-row gap-5">
                 {/* onClick={(e) => onSave(e)} */}
                 <button onClick={() => preview()} >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
                     <title>Preview draft</title>
 
                     <path fillRule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5" />
