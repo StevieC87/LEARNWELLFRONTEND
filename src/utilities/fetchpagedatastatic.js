@@ -2,7 +2,11 @@
 /* pagedata: data.pagedata,
 pagefields: data.pagefields,
 pagefieldsarray: data.pagefieldsarray, */
-export const FetchpagedataStatic = async (previewyesno, slugpath) => {
+export const FetchpagedataStatic = async (
+  previewyesno,
+  previewtoken,
+  slugpath
+) => {
   let response;
   if (previewyesno) {
     console.log("Fetching page data for preview mode");

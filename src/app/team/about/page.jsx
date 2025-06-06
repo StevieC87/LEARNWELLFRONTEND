@@ -37,7 +37,7 @@ export default async function AboutPage({ params, searchParams }) {
 
 
 
-  let getpagedata = await FetchpagedataStatic(ispreview, slugpath);
+  let getpagedata = await FetchpagedataStatic(ispreview, previewtoken, slugpath);
 
 
 
