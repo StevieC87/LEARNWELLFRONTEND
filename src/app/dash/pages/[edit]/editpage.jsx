@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateField, setSlugDuplicateWarning } from '../../../../redux/slices/PagesSlice';
 import { setSelectedLanguage, setMultilingualSharedId, setPageExistsThisLanguage } from '../../../../redux/slices/DashSlice';
 import { useRouter } from 'next/navigation';
+import { set } from 'react-hook-form';
 
 export default function EditPageComp(props) {
   const router = useRouter();
@@ -405,9 +406,11 @@ export default function EditPageComp(props) {
     //WE SHOULDNT SAVE IF LAST VERSION
     //coz then overwrites with 
     let haschangesforundo = false; //THIS IT NOT SKIP ONE BACK 
+    let previousdraftcreationdate = currentdraftcreationdate;
     if (hasChanges) {
       onSave(e);
       haschangesforundo = true;
+      setCurrentDraftCreationDate(previousdraftcreationdate)
     }
     //put this in other variable/usestate after
     // let currentdraftpagescreationdate = "";
