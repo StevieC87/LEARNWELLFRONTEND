@@ -43,6 +43,7 @@ export default function EditPage() {
   const [latestdraftcreationdate, setLatestDraftCreationDate] = useState(null); // 
   const [triggerrefresh, setTriggerRefresh] = useState(0);
   useEffect(() => {
+    console.log(triggerrefresh, "triggerrefreshinuseEffect");
     const FetchPageData = async () => {
       let url;
       //set URL depending if new/existing page
@@ -85,8 +86,9 @@ export default function EditPage() {
           console.log(data, "data123321");
           setSchema(data.schema);
           setSettings(data.settings);
+          console.log(data.pagefieldsdata, 'datapagefieldsdata')
           setPageFieldsData(data.pagefieldsdata);
-          console.log(data.pagefieldsdata, "pagefieldsdatapagefieldsdata111");
+
           setPageData(data.pagedata);
           console.log(data.pagedata, "pagedatapagedata");
           setNewOrExisting(data.neworexisting);
@@ -110,6 +112,7 @@ export default function EditPage() {
   }, [triggerrefresh]); //
 
   const triggerrefreshonsavechild = () => {
+    console.log('triggerrefreshonsavechild called');
     setTriggerRefresh(prev => prev + 1);
   }
   return (

@@ -81,6 +81,12 @@ export default function EditPageComp(props) {
     }
 
   }, [language, defaultlanguage])
+
+  //WHEN click save -> and it refreshes the fetch , update the pagefieldsdataS state so it is reflected in the UI
+  useEffect(() => {
+    setPageFieldsData(pagefieldsdata);
+  }, [pagefieldsdata])
+
   //to show message if slug existed and was renamed
   // const [slugduplicatewarning, setSlugDuplicateWarning] = useState(false);
 
@@ -88,8 +94,8 @@ export default function EditPageComp(props) {
 
   //. MERGE SCHEMA FIELDS WITH PAGEFIELDSDATA
   // (if new page:we just we create id, add locale)
-  useEffect(() => {
 
+  useEffect(() => {
     //,merge pagefields with pagefieldsdata
     console.log(pagefields, "pagefieldspagefields");
     console.log(pagefieldsdataS, "pagefieldsdataS");
@@ -174,7 +180,8 @@ export default function EditPageComp(props) {
   }
 
   //. ON SAVE FUNCTION ========================
-  const onSave = async (e) => {
+
+  const onSave = async (e, contextundo) => {
     e.preventDefault();
     setHasChanges(false);
     setPublishchange(true)
@@ -260,15 +267,21 @@ export default function EditPageComp(props) {
         router.replace(url);
 
       }
+      else if (neworexisting === "existing") {
+        if (!contextundo) {
+          triggerrefreshonsavechild();
+        }
+      }
       setShowSaved(true);
 
       setTimeout(() => {
         setShowSaved(false);
       }, 2000);
-      triggerrefreshonsavechild(); // Trigger refresh in parent component
+      // Trigger refresh in parent component
 
     }
     setHasChanges(false);
+    return true;
 
   }
 
@@ -408,9 +421,13 @@ export default function EditPageComp(props) {
     let haschangesforundo = false; //THIS IT NOT SKIP ONE BACK 
     let previousdraftcreationdate = currentdraftcreationdate;
     if (hasChanges) {
-      onSave(e);
+      let savefirst = onSave(e, true);
       haschangesforundo = true;
       setCurrentDraftCreationDate(previousdraftcreationdate)
+      if (!savefirst) {
+        console.log("onSave did not return true, skipping undoredo");
+        return;
+      }
     }
     //put this in other variable/usestate after
     // let currentdraftpagescreationdate = "";
