@@ -115,7 +115,7 @@ export default function EditPageComp(props) {
       return {
         ...fieldObj,
         content: match ? match.content : '',
-        _id: match ? match._id : createID,
+        id: match ? match._id : null, //createID
         locale: match ? match.locale : languageui || defaultlanguage || null,
         type: fieldObj.type,
         name: fieldObj.name || match?.field || null,
@@ -200,6 +200,7 @@ export default function EditPageComp(props) {
     if (nochangescozundonsave === 'nochangescozundonsave') {
       nochangesonlyundosave = true;
     }
+    console.log(nochangesonlyundosave, "nochangesonlyundosave");
 
     //we do fetch post to backend
 
@@ -208,6 +209,7 @@ export default function EditPageComp(props) {
     //NEXT_PUBLIC_API_URL 
     console.log(url, "url");
     console.log(languageui, "languageuilanguageuilanguageuilanguageui");
+    console.log(fieldData, 'fielddataonsave')
     const response = await fetch(url, {
       method: "POST",
       headers: {
