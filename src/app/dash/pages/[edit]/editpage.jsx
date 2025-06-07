@@ -17,12 +17,12 @@ export default function EditPageComp(props) {
   const { schema, settings, pagefieldsdata, pagedata, neworexisting, pageid, pagetype, language, pagetitle, publishstatus, triggerrefreshonsavechild, frontendcomponent,
     numberofdrafts, latestdraftcreationdate, remainingdraftsv, precedingdraftsv, totalnumberofdraftsv
   } = props;
-  console.log('remainingdraftsv prop', remainingdraftsv);
-  console.log('precedingdraftsv prop', precedingdraftsv);
-  console.log('totalnumberofdraftsv prop', totalnumberofdraftsv);
+  //console.log('remainingdraftsv prop', remainingdraftsv);
+  //console.log('precedingdraftsv prop', precedingdraftsv);
+  // console.log('totalnumberofdraftsv prop', totalnumberofdraftsv);
   console.log(pagefieldsdata, "pagefieldsdatafromprops");
   const [pagefields, setPageFields] = useState(schema.fields);
-  const [pagefieldsdataS, setPageFieldsData] = useState(pagefieldsdata || []);
+  const [pagefieldsdataS, setPageFieldsDataS] = useState(pagefieldsdata || []);
   const [pagedataS, setPageDataS] = useState(pagedata);
   //. --------------------------
 
@@ -59,7 +59,10 @@ export default function EditPageComp(props) {
 
   const [totalnumberofdrafts, setNumberOfDrafts] = useState(totalnumberofdraftsv || 0);
   const [remainingdrafts, setRemainingDrafts] = useState(remainingdraftsv || 0);
-  const [precedingdrafts, setPrecedingDrafts] = useState(precedingdraftsv || 0);
+  const [precedingdrafts, setPrecedingDrafts] = useState(precedingdraftsv);
+
+  const [allowsavewithoutchanges, setAllowSaveWithoutChanges] = useState(false);
+  //we allow set ont he front end - not on the backend 
 
   const [currentdraftcreationdate, setCurrentDraftCreationDate] = useState(latestdraftcreationdate);
   useEffect(() => {
@@ -88,7 +91,7 @@ export default function EditPageComp(props) {
 
   //WHEN click save -> and it refreshes the fetch , update the pagefieldsdataS state so it is reflected in the UI
   useEffect(() => {
-    setPageFieldsData(pagefieldsdata);
+    setPageFieldsDataS(pagefieldsdata);
   }, [pagefieldsdata])
 
   //to show message if slug existed and was renamed
@@ -175,7 +178,7 @@ export default function EditPageComp(props) {
   useEffect(() => {
     console.log(totalnumberofdrafts, "totalnumberofdrafts");
     console.log(remainingdrafts, "remainingdrafts");
-    console.log(precedingdrafts, "precedingdrafts");
+    console.log(precedingdrafts, "precedingdraftsUSEEFFECT");
   }, [totalnumberofdrafts, remainingdrafts, precedingdrafts])
 
   const changelanguage = async (e) => {
@@ -187,12 +190,16 @@ export default function EditPageComp(props) {
 
   //. ON SAVE FUNCTION ========================
 
-  const onSave = async (e, contextundo) => {
+  const onSave = async (e, contextundo, nochangescozundonsave) => {
     e.preventDefault();
 
     setPublishchange(true)
     setIsSaving(true);
     let url = `${process.env.NEXT_PUBLIC_API_URL}/schema`;
+    let nochangesonlyundosave;
+    if (nochangescozundonsave === 'nochangescozundonsave') {
+      nochangesonlyundosave = true;
+    }
 
     //we do fetch post to backend
 
@@ -224,6 +231,7 @@ export default function EditPageComp(props) {
         frontendcomponent: frontendcomponent, //frontend component name
         currentdraftcreationdate: currentdraftcreationdate, //this is so we can delete any later drafts (assuming user did undo and changed stuff)
         haschanges: hasChanges, //this is so we can delete any later drafts (assuming user did undo and changed stuff)
+        nochangesonlyundosave: nochangesonlyundosave
 
       }),
     })
@@ -280,9 +288,10 @@ export default function EditPageComp(props) {
           triggerrefreshonsavechild();
         }
       }
-      setNumberOfDrafts(data.totalnumberofdrafts || 0);
-      setRemainingDrafts(data.remainingdrafts || 0);
-      setPrecedingDrafts(data.precedingdrafts || 0);
+      setNumberOfDrafts(data.totalnumberofdrafts);
+      setRemainingDrafts(data.remainingdrafts);
+      console.log('precedingdraftsONSAVE', data.precedingdrafts);
+      setPrecedingDrafts(data.precedingdrafts);
 
       setShowSaved(true);
 
@@ -480,7 +489,7 @@ export default function EditPageComp(props) {
     setCurrentDraftCreationDate(data.creationdate);
 
 
-    setPageFieldsData(fieldsfromundoredo);
+    setPageFieldsDataS(fieldsfromundoredo);
     //note: creationdate is a string
 
     console.log('remainingdrafts', data.remainingdrafts);
@@ -490,6 +499,8 @@ export default function EditPageComp(props) {
     setRemainingDrafts(data.remainingdrafts);
     setPrecedingDrafts(data.precedingdrafts);
     setNumberOfDrafts(data.totalnumberofdrafts);
+    setAllowSaveWithoutChanges(true);
+
 
     console.log(data, "data from undoredo");
 
@@ -500,7 +511,21 @@ export default function EditPageComp(props) {
   return (
     <>
       <div className={`editpagecontainer fade-in2 ${isTransitioning ? '' : 'visible'}`}>
-        <form onSubmit={(e) => onSave(e)} >
+        <form onSubmit={(e) => {
+          if (!hasChanges & !allowsavewithoutchanges) {
+            e.preventDefault();
+            return;
+          }
+          else if
+            (!hasChanges & allowsavewithoutchanges) {
+            onSave(e, false, 'nochangescozundonsave')
+          }
+          else {
+            onSave(e, false);
+          }
+        }
+
+        }>
 
           <div className="topbuttons">
             <div className="flex flex-row gap-5 ">
@@ -700,7 +725,6 @@ export default function EditPageComp(props) {
                 placeholder={field.placeholder || ""}
                 value={fieldData1.content || ""}
                 onChange2={(e) => {
-
                   setHasChanges(true);
                   setIsPublishing(false);
                 }}

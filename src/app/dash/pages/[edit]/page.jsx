@@ -109,6 +109,7 @@ export default function EditPage() {
           //latestdraftcreationdate, 
           setLatestDraftCreationDate(data.pagedata.latestdraftcreationdate || null);
           setRemainingDrafts(data.remainingdrafts)
+          console.log('precedingdraftsBEFORE', data.precedingdrafts);
           setPrecedingDrafts(data.precedingdrafts);
           setTotalNumberOfDrafts(data.totalnumberofdrafts);
 
