@@ -42,6 +42,12 @@ export default function EditPage() {
   //if it exists
   const [latestdraftcreationdate, setLatestDraftCreationDate] = useState(null); // 
   const [triggerrefresh, setTriggerRefresh] = useState(0);
+
+
+  const [remainingdraftsv, setRemainingDrafts] = useState(0);
+  const [precedingdraftsv, setPrecedingDrafts] = useState(0);
+  const [totalnumberofdraftsv, setTotalNumberOfDrafts] = useState(0);
+
   useEffect(() => {
     console.log(triggerrefresh, "triggerrefreshinuseEffect");
     const FetchPageData = async () => {
@@ -102,6 +108,11 @@ export default function EditPage() {
           setNumberOfDrafts(data.pagedata.numberofdrafts);
           //latestdraftcreationdate, 
           setLatestDraftCreationDate(data.pagedata.latestdraftcreationdate || null);
+          setRemainingDrafts(data.remainingdrafts)
+          setPrecedingDrafts(data.precedingdrafts);
+          setTotalNumberOfDrafts(data.totalnumberofdrafts);
+
+
         }
 
       } catch (error) {
@@ -135,6 +146,9 @@ export default function EditPage() {
             frontendcomponent={frontendcomponent}
             numberofdrafts={numberofdrafts}
             latestdraftcreationdate={latestdraftcreationdate}
+            remainingdraftsv={remainingdraftsv}
+            precedingdraftsv={precedingdraftsv}
+            totalnumberofdraftsv={totalnumberofdraftsv}
           />
 
 

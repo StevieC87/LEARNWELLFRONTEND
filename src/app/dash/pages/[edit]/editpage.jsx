@@ -15,8 +15,11 @@ export default function EditPageComp(props) {
   //.  GET DATA FROM PROPS  ------------------------
 
   const { schema, settings, pagefieldsdata, pagedata, neworexisting, pageid, pagetype, language, pagetitle, publishstatus, triggerrefreshonsavechild, frontendcomponent,
-    numberofdrafts, latestdraftcreationdate
+    numberofdrafts, latestdraftcreationdate, remainingdraftsv, precedingdraftsv, totalnumberofdraftsv
   } = props;
+  console.log('remainingdraftsv prop', remainingdraftsv);
+  console.log('precedingdraftsv prop', precedingdraftsv);
+  console.log('totalnumberofdraftsv prop', totalnumberofdraftsv);
   console.log(pagefieldsdata, "pagefieldsdatafromprops");
   const [pagefields, setPageFields] = useState(schema.fields);
   const [pagefieldsdataS, setPageFieldsData] = useState(pagefieldsdata || []);
@@ -54,7 +57,9 @@ export default function EditPageComp(props) {
 
   const [isTransitioning, setIsTransitioning] = useState(false);
 
-  const [numberofdraftsoninitial, setNumberOfDrafts] = useState(numberofdrafts || 0);
+  const [totalnumberofdrafts, setNumberOfDrafts] = useState(totalnumberofdraftsv || 0);
+  const [remainingdrafts, setRemainingDrafts] = useState(remainingdraftsv || 0);
+  const [precedingdrafts, setPrecedingDrafts] = useState(precedingdraftsv || 0);
 
 
   const [currentdraftcreationdate, setCurrentDraftCreationDate] = useState(latestdraftcreationdate);
@@ -169,8 +174,10 @@ export default function EditPageComp(props) {
   }, [pagefields, pagefieldsdataS, languageui])
 
   useEffect(() => {
-    console.log(numberofdraftsoninitial, "numberofdraftsoninitial");
-  }, [numberofdraftsoninitial])
+    console.log(totalnumberofdrafts, "totalnumberofdrafts");
+    console.log(remainingdrafts, "remainingdrafts");
+    console.log(precedingdrafts, "precedingdrafts");
+  }, [totalnumberofdrafts, remainingdrafts, precedingdrafts])
 
   const changelanguage = async (e) => {
     console.log(language, "language from changelanguage");
@@ -272,6 +279,10 @@ export default function EditPageComp(props) {
           triggerrefreshonsavechild();
         }
       }
+      setNumberOfDrafts(data.totalnumberofdrafts || 0);
+      setRemainingDrafts(data.remainingdrafts || 0);
+      setPrecedingDrafts(data.precedingdrafts || 0);
+
       setShowSaved(true);
 
       setTimeout(() => {
@@ -415,7 +426,7 @@ export default function EditPageComp(props) {
 
   const undoredo = async (e, undoredo) => {
     e.preventDefault();
-
+    console.log('helloooooooo')
     //WE SHOULDNT SAVE IF LAST VERSION
     //coz then overwrites with 
     let haschangesforundo = false; //THIS IT NOT SKIP ONE BACK 
@@ -459,9 +470,14 @@ export default function EditPageComp(props) {
 
     setPageFieldsData(fieldsfromundoredo);
     //note: creationdate is a string
-    //console.log(data.creationdate, "data.creationdate");
-    //console.log(typeof data.creationdate, "typeof data.creationdate");
 
+    console.log('remainingdrafts', data.remainingdrafts);
+    console.log('precedingdrafts', data.precedingdrafts);
+    console.log('totalnumberofdrafts', data.totalnumberofdrafts);
+
+    setRemainingDrafts(data.remainingdrafts);
+    setPrecedingDrafts(data.precedingdrafts);
+    setNumberOfDrafts(data.totalnumberofdrafts);
     console.log(data, "data from undoredo");
 
     //! now replace field values... 
@@ -476,7 +492,7 @@ export default function EditPageComp(props) {
           <div className="topbuttons">
             <div className="flex flex-row gap-5 ">
               <div id="undoredo" className="undoredo flex gap-3 ">
-                <button onClick={(e) => undoredo(e, 'undo')} id="undobutton" className="">
+                <button onClick={(e) => undoredo(e, 'undo')} id="undobutton" className={precedingdrafts > 0 ? "" : "text-gray-400"}>
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
                     <title>Undo</title>
                     <path fillRule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z" />
