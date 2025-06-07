@@ -92,7 +92,7 @@ export default function EditPage() {
           console.log(data, "data123321");
           setSchema(data.schema);
           setSettings(data.settings);
-          console.log(data.pagefieldsdata, 'datapagefieldsdata')
+          console.log(data.pagefieldsdata, 'datapagefieldsdata12121')
           setPageFieldsData(data.pagefieldsdata);
 
           setPageData(data.pagedata);

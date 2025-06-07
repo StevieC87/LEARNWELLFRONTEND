@@ -13,7 +13,19 @@ const PagesSlice = createSlice({
       state.hello = action.payload;
     },
     updateField(state, action) {
-      const { name, id, locale, content, pagename, type } = action.payload;
+      const {
+        name,
+        id,
+        locale,
+        content,
+        pagename,
+        type,
+        belongsto,
+        createdAt,
+        required,
+        placeholder,
+        label,
+      } = action.payload;
 
       if (!state.fields[name]) {
         state.fields[name] = {};
@@ -27,6 +39,11 @@ const PagesSlice = createSlice({
         content,
         pagename,
         type,
+        belongsto,
+        createdAt,
+        required,
+        placeholder,
+        label,
       };
     },
     setSlugDuplicateWarning(state, action) {

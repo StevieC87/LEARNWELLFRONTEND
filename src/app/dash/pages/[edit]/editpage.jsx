@@ -104,14 +104,14 @@ export default function EditPageComp(props) {
 
   useEffect(() => {
     //,merge pagefields with pagefieldsdata
-    console.log(pagefields, "pagefieldspagefields");
-    console.log(pagefieldsdataS, "pagefieldsdataS");
+    console.log(pagefields, "pagefieldspagefields55");
+    console.log(pagefieldsdataS, "pagefieldsdataSsasas");
     const mergedinitial = pagefields.map((fieldObj) => {
       // console.log(fieldObj, 'fieldObj')
       const match = pagefieldsdataS.find((item) => item.name === fieldObj.name);
-      // console.log(match, "match3333333333");
+      console.log(match, "match3333333333");
 
-      let createID = new ObjectId().toString();
+      //  let createID = new ObjectId().toString();
       return {
         ...fieldObj,
         content: match ? match.content : '',
@@ -120,6 +120,11 @@ export default function EditPageComp(props) {
         type: fieldObj.type,
         name: fieldObj.name || match?.field || null,
         schema: match ? match.schema : null,
+        belongsto: fieldObj.belongsto || pageid || null,
+        createdAt: fieldObj.createdAt || null,
+        required: fieldObj.required || null,
+        placeholder: fieldObj.placeholder || null,
+        label: fieldObj.label || match?.label || null,
         //  pagename: match.pagename,
       };
     }
@@ -128,39 +133,39 @@ export default function EditPageComp(props) {
       // id: match ? match._id : createID,
     );
     console.log(mergedinitial, "mergedinitial");
-    //i wanna put the title field in its own state
-    const titleField = mergedinitial.find((field) => field.name === 'title');
-
-    dispatch(updateField({
-      name: titleField.name,
-      content: titleField?.content,
-      id: titleField?.id,
-      locale: titleField?.locale,
-      schema: titleField?.schema,
-      type: titleField?.type,
-      placeholder: titleField?.placeholder
-    }));
-    const slugFielda = mergedinitial.find((field) => field.name === 'slug');
-    dispatch(updateField({
-      name: slugFielda.name,
-      content: slugFielda?.content,
-      id: slugFielda?.id,
-      locale: slugFielda?.locale,
-      schema: slugFielda?.schema,
-      type: slugFielda?.type,
-      placeholder: slugFielda?.placeholder
-    }));
-    const slugPathFielda = mergedinitial.find((field) => field.name === 'slugpath')
-    dispatch(updateField({
-      name: slugPathFielda.name,
-      content: slugPathFielda?.content,
-      id: slugPathFielda?.id,
-      locale: slugPathFielda?.locale,
-      schema: slugPathFielda?.schema,
-      type: slugPathFielda?.type,
-      placeholder: slugPathFielda?.placeholder
-    }));
-
+    /*   //i wanna put the title field in its own state
+      const titleField = mergedinitial.find((field) => field.name === 'title');
+      //  console.log(titleField, "titleField");
+        dispatch(updateField({
+          name: titleField.name,
+          content: titleField?.content,
+          id: titleField?.id,
+          locale: titleField?.locale,
+          schema: titleField?.schema,
+          type: titleField?.type,
+          placeholder: titleField?.placeholder
+        }));
+        const slugFielda = mergedinitial.find((field) => field.name === 'slug');
+        dispatch(updateField({
+          name: slugFielda.name,
+          content: slugFielda?.content,
+          id: slugFielda?.id,
+          locale: slugFielda?.locale,
+          schema: slugFielda?.schema,
+          type: slugFielda?.type,
+          placeholder: slugFielda?.placeholder
+        }));
+        const slugPathFielda = mergedinitial.find((field) => field.name === 'slugpath')
+        dispatch(updateField({
+          name: slugPathFielda.name,
+          content: slugPathFielda?.content,
+          id: slugPathFielda?.id,
+          locale: slugPathFielda?.locale,
+          schema: slugPathFielda?.schema,
+          type: slugPathFielda?.type,
+          placeholder: slugPathFielda?.placeholder
+        }));
+     */
     //remove them from the array
     const removedstandardfields = mergedinitial.filter((field) => field.name !== 'title' && field.name !== 'slug' && field.name !== 'slugpath');
 
@@ -170,7 +175,10 @@ export default function EditPageComp(props) {
 
     //, SET THE MERGED FIELDS TO REDUX STORE
     mergedinitial.forEach((item) => {
-      dispatch(updateField({ name: item.name, content: item.content, id: item._id, locale: item.locale, type: item.type, schema: item.schema }));
+      console.log(item, 'mergedinitialitem')
+      dispatch(updateField({
+        name: item.name, content: item.content, id: item.id, locale: item.locale, type: item.type, schema: item.schema, belongsto: item.belongsto, createdAt: item.createdAt, required: item.required, placeholder: item.placeholder, label: item.label
+      }));
     }
     )
   }, [pagefields, pagefieldsdataS, languageui])
