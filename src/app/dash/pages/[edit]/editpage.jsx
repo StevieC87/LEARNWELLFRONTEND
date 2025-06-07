@@ -189,7 +189,7 @@ export default function EditPageComp(props) {
 
   const onSave = async (e, contextundo) => {
     e.preventDefault();
-    setHasChanges(false);
+
     setPublishchange(true)
     setIsSaving(true);
     let url = `${process.env.NEXT_PUBLIC_API_URL}/schema`;
@@ -222,6 +222,8 @@ export default function EditPageComp(props) {
         slugpath: fieldData.slugpath ? fieldData.slugpath.content : "", //slug field
         multilingalBool: multilingalBool,
         frontendcomponent: frontendcomponent, //frontend component name
+        currentdraftcreationdate: currentdraftcreationdate, //this is so we can delete any later drafts (assuming user did undo and changed stuff)
+        haschanges: hasChanges, //this is so we can delete any later drafts (assuming user did undo and changed stuff)
 
       }),
     })
