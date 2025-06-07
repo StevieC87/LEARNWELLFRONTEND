@@ -431,13 +431,15 @@ export default function EditPageComp(props) {
     let haschangesforundo = false; //THIS IT NOT SKIP ONE BACK 
     let previousdraftcreationdate = currentdraftcreationdate;
     if (hasChanges) {
+      alert('has changes')
       let savefirst = onSave(e, true);
       haschangesforundo = true;
-      setCurrentDraftCreationDate(previousdraftcreationdate)
+
       if (!savefirst) {
         console.log("onSave did not return true, skipping undoredo");
         return;
       }
+      setCurrentDraftCreationDate(previousdraftcreationdate)
     }
     //put this in other variable/usestate after
     // let currentdraftpagescreationdate = "";
@@ -472,11 +474,12 @@ export default function EditPageComp(props) {
 
     console.log('remainingdrafts', data.remainingdrafts);
     console.log('precedingdrafts', data.precedingdrafts);
-    console.log('totalnumberofdrafts', data.totalnumberofdrafts);
+    console.log('totalnumberofdrafts222', data.totalnumberofdrafts);
 
     setRemainingDrafts(data.remainingdrafts);
     setPrecedingDrafts(data.precedingdrafts);
     setNumberOfDrafts(data.totalnumberofdrafts);
+
     console.log(data, "data from undoredo");
 
     //! now replace field values... 
@@ -491,14 +494,18 @@ export default function EditPageComp(props) {
           <div className="topbuttons">
             <div className="flex flex-row gap-5 ">
               <div id="undoredo" className="undoredo flex gap-3 ">
-                <button onClick={(e) => undoredo(e, 'undo')} id="undobutton" className={precedingdrafts > 0 ? "" : "text-gray-400"}>
+                <button onClick={(e) => undoredo(e, 'undo')} id="undobutton" className={precedingdrafts > 0 ? "" : "text-gray-400"}
+                  disabled={precedingdrafts <= 0 ? true : false}
+                >
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
                     <title>Undo</title>
                     <path fillRule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z" />
                     <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466" />
                   </svg>
                 </button>
-                <button onClick={(e) => undoredo(e, 'redo')} id="redobutton" className={remainingdrafts > 0 ? "" : "text-gray-400"}>
+                <button onClick={(e) => undoredo(e, 'redo')} id="redobutton" className={remainingdrafts > 0 ? "" : "text-gray-400"}
+                  disabled={remainingdrafts <= 0 ? true : false}
+                >
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-arrow-clockwise" viewBox="0 0 16 16">
                     <title>Redo</title>
                     <path fillRule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z" />
