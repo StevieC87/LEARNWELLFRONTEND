@@ -49,7 +49,6 @@ export default function WebsiteDetailsForm() {
 
 
   const onSubmit = async (data) => {
-    alert('hello')
     const formData = new FormData();
     formData.append("url", data.url);
     formData.append("brandname", data.brandname);
