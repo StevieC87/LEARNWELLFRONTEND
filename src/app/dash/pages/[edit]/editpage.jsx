@@ -290,6 +290,7 @@ export default function EditPageComp(props) {
       }
       setNumberOfDrafts(data.totalnumberofdrafts);
       setRemainingDrafts(data.remainingdrafts);
+      console.log('remainingdraftsONSAVE', data.remainingdrafts);
       console.log('precedingdraftsONSAVE', data.precedingdrafts);
       setPrecedingDrafts(data.precedingdrafts);
 
