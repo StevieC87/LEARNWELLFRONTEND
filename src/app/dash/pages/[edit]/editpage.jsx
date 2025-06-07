@@ -431,15 +431,24 @@ export default function EditPageComp(props) {
     let haschangesforundo = false; //THIS IT NOT SKIP ONE BACK 
     let previousdraftcreationdate = currentdraftcreationdate;
     if (hasChanges) {
-      alert('has changes')
-      let savefirst = onSave(e, true);
-      haschangesforundo = true;
-
-      if (!savefirst) {
-        console.log("onSave did not return true, skipping undoredo");
-        return;
-      }
-      setCurrentDraftCreationDate(previousdraftcreationdate)
+      await new Promise(async (resolve) => {
+        let savefirst = await onSave(e, true);
+        haschangesforundo = true;
+        if (!savefirst) {
+          console.log("onSave fail skip undoredo");
+          return resolve(false);
+        }
+        setCurrentDraftCreationDate(previousdraftcreationdate);
+        resolve(true);
+      });
+      /*  let savefirst = await onSave(e, true);
+       haschangesforundo = true;
+ 
+       if (!savefirst) {
+         console.log("onSave did not return true, skipping undoredo");
+         return;
+       }
+       setCurrentDraftCreationDate(previousdraftcreationdate) */
     }
     //put this in other variable/usestate after
     // let currentdraftpagescreationdate = "";
