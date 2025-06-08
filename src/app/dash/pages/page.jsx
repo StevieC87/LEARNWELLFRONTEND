@@ -5,7 +5,7 @@ import Link from "next/link";
 import './pageslist.css'
 import DeletePage from "./components/Deletepage";
 import { useSearchParams } from 'next/navigation';
-
+import Caret from "./components/caret";
 
 // import LexicalField from '../uicomponents/customfields/Lexical/LexicalField';
 
@@ -82,13 +82,37 @@ export default function Pages() {
 
     console.log('schemanopages44444444444', schemanopages);
   }, [schemanopages]);
-
-
   const Deletecallback = (pageid) => {
     console.log('Deletecallback called with pageid:', pageid);
     setRefreshList((prev) => prev + 1);
   }
 
+
+  const [columnsorted, setColumnSorted] = useState('CreatedAt');
+
+  const [sortdirection, setSortDirection] = useState('asc');
+  const sorttable = (column) => {
+    //try this
+    setColumnSorted(column);
+    let direction = sortdirection === 'asc' ? 'desc' : 'asc';
+    pageslist.sort((a, b) => {
+      if (direction === 'asc') {
+        return a[column].localeCompare(b[column]);
+      } else {
+        return b[column].localeCompare(a[column]);
+      }
+    }
+    );
+    setSortDirection(direction);
+
+  }
+
+  useEffect(() => {
+    console.log('Columnsorted:', columnsorted);
+
+  }, [columnsorted])
+
+  //! add default sort order -> and REFLECT that in the UI BY SETTING THE COLUMNSROTED in the begining + the direction in the state so caret visible on MODIFIED DATE whatever
 
   // here i will list all the page - to take some complexity off the sidenav for now - wordpress style
   return (
@@ -131,24 +155,81 @@ export default function Pages() {
         )}
       </h1>
 
-
-
       <div className="" >
-
-
-
         <table>
           <thead>
             <tr>
-              <th>Page</th>
-              <th>Schema</th>
+              <th className="cursor-pointer" onClick={() => sorttable('title')}
+              >
+                <div className="flex flex-row justify-between items-center">
+                  Title
+                  {columnsorted === 'title' && (
+
+                    <Caret direction={sortdirection === 'asc' ? 'asc' : 'desc'} />
+                  )
+
+                  }
+                </div>
+
+
+              </th>
+              <th className="cursor-pointer" onClick={() => sorttable('schema')}>
+                <div className="flex flex-row justify-between items-center">
+
+                  Type
+                  {columnsorted === 'schema' && (
+
+                    <Caret direction={sortdirection === 'asc' ? 'asc' : 'desc'} />
+                  )
+
+                  }
+                </div>
+              </th>
+
               {multilingual && (
-                <th>Language</th>
+                <th className="cursor-pointer" onClick={() => sorttable('locale')}>
+                  <div className="flex flex-row justify-between items-center">
+
+                    Language
+                    {columnsorted === 'locale' && (
+
+                      <Caret direction={sortdirection === 'asc' ? 'asc' : 'desc'} />
+                    )
+
+                    }
+                  </div>
+                </th>
               )}
-              <th>Seo</th>
-              <th>JSON-LD</th>
+              <th >Seo</th>
+              <th >JSON-LD</th>
+
+              <th className="cursor-pointer" onClick={() => sorttable('lastModified')}>
+                <div className="flex flex-row justify-between items-center">
+
+                  Modified
+                  {columnsorted === 'lastModified' && (
+
+                    <Caret direction={sortdirection === 'asc' ? 'asc' : 'desc'} />
+                  )
+
+                  }
+                </div>
+              </th>
+              <th className="cursor-pointer" onClick={() => sorttable('createdAt')}>
+                <div className="flex flex-row justify-between items-center">
+
+                  Created
+                  {columnsorted === 'createdAt' && (
+
+                    <Caret direction={sortdirection === 'asc' ? 'asc' : 'desc'} />
+                  )
+
+                  }
+                </div>
+              </th>
+
               {(issuperadmin || pagetype === 'post') && (
-                <th>Delete</th>
+                <th >Delete</th>
               )}
 
 
@@ -158,7 +239,7 @@ export default function Pages() {
             {/* THIS IS TO SHOW THE LIST OF EXISTING PAGES */}
             {pageslist.length > 0 && pageslist.map((page, index) => (
               <tr key={page._id} className="pageitem ">
-                <td className="">
+                <td data-label="Title:" className="underline">
                   {multilingual && (
                     <Link key={page._id} href={`/dash/pages/${page._id}?pagetype=${pagetype}&schema=${page.schema}&language=${page.locale}`} className="">{page.title}</Link>
                   )}
@@ -166,27 +247,50 @@ export default function Pages() {
                     <Link key={page._id} href={`/dash/pages/${page._id}?pagetype=${pagetype}&schema=${page.schema}&language=${defaultlanguage}`} className="">{page.title}</Link>
                   )}
                 </td>
-                <td>
+                <td data-label="Type:">
                   {page.schema}
                 </td>
                 {multilingual && (
-                  <td>{page.locale}</td>
+                  <td className="text-center" data-label="Language:">{page.locale}</td>
                 )}
-                <td id="seo">
+                <td data-label="Seo" id="seo" className="underline">
                   <Link key={page._id} href={`/dash/pages/seo?pageid=${page._id}&pagetype=${pagetype}&schema=${page.schema}&language=${page.locale || defaultlanguage}slug=${page.slug}`} className="">Seo</Link>
                 </td>
-                <td id="jsonld">
+                <td data-label="JSON-LD" id="jsonld">
                   <Link key={page._id} href={`/dash/pages/jsonld?pageid=${page._id}&pagetype=${pagetype}&schema=${page.schema}&language=${page.locale || defaultlanguage}&slug=${page.slug}`} className="">JSON-LD</Link>
                 </td>
+
+                <td data-label="Modified:" className="">
+                  {page.lastModified && (
+
+                    new Date(page.lastModified).toLocaleDateString('en-UK', {
+                      year: 'numeric',
+                      month: '2-digit',
+                      day: '2-digit',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })
+
+                  )}
+                </td>
+                <td data-label="Created:" className="">
+                  {new Date(page.createdAt).toLocaleDateString('en-UK', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </td>
+
                 {(issuperadmin || pagetype === 'post') && (
-                  <td className="">
+                  <td data-label="Delete:" className="">
                     <span><DeletePage pagetype={pagetype} pageid={page._id}
                       RefreshList1={Deletecallback}
-
                     /></span>
                   </td>
-                )}
 
+                )}
 
               </tr>
             ))}
