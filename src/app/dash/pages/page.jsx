@@ -117,7 +117,6 @@ export default function Pages() {
 
   }, [columnsorted])
 
-  let originalpageslist = JSON.parse(JSON.stringify(pageslist));
   //! add default sort order -> and REFLECT that in the UI BY SETTING THE COLUMNSROTED in the begining + the direction in the state so caret visible on MODIFIED DATE whatever
 
   // here i will list all the page - to take some complexity off the sidenav for now - wordpress style
@@ -169,14 +168,8 @@ export default function Pages() {
             placeholder="Search by title"
             className="input input-bordered w-full max-w-xs"
             onChange={(e) => {
-
-
-              //setPagesList(pageslist); // Reset to original list before filtering
-
-              console.log('originalPagesList', originalpageslist);
               const searchValue = e.target.value.toLowerCase();
               if (searchValue === '') {
-                console.log('originalPagesList', originalpageslist);
                 //alert('Search is empty');
                 setFilteredPages(pageslist); // Reset to original list if search is empty
                 return;
@@ -185,14 +178,9 @@ export default function Pages() {
                 const filteredPages1 = pageslist.filter(page =>
                   page.title.toLowerCase().includes(searchValue)
 
-                  //||
-                  /*    page.schema.toLowerCase().includes(searchValue) || */
-                  /*    (multilingual && page.locale && page.locale.toLowerCase().includes(searchValue)) */
-
                 );
                 console.log(filteredPages1, "filteredPages in search input");
                 setFilteredPages(filteredPages1);
-                console.log(originalpageslist, "originalPagesList in search input");
               }
 
 
