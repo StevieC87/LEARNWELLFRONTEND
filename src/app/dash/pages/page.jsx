@@ -33,6 +33,9 @@ export default function Pages() {
 
   const [paginationlimit, setPaginationLimit] = useState(10); // default pagination limit
   const [pagenumber, setPageNumber] = useState(1); // default page number
+  const [totalpostpages, setTotalPostsPages] = useState(0); // total number of pages for pagination
+  const [pageswenedArray, setPagesWeNeedArray] = useState([]); // array of pages we need
+
   useEffect(() => {
     console.log(userrole, "userroleinpageslist");
     if (userrole === "superadmin") {
@@ -66,6 +69,14 @@ export default function Pages() {
         const data = await response.json();
         console.log('data22222222', data);
         setPagesList(data.pages);
+        setTotalPostsPages(data.totalpostspages);
+        //  setPagesWeNeed(data.pagesweneed); //number
+        if (data.pagesweneed > 0) {
+          const pagesArray = Array.from({ length: data.pagesweneed }, (_, index) => index + 1);
+          console.log(pagesArray, "pagesArray");
+          setPagesWeNeedArray(pagesArray);
+        }
+
         if (pagetype === 'page') {
           setSchemaNoPages(data.schemasnopages);
         }
@@ -192,7 +203,17 @@ export default function Pages() {
             />
           </div>
           <div className="ml-5">
-            <select name="paginationpages" id="">
+            <select name="paginationpages" id=""
+              onChange={(e) => {
+                setPageNumber(1); // Reset to first page when changing limit
+                const newLimit = parseInt(e.target.value, 10);
+                setPaginationLimit(newLimit);
+                //setPageNumber(1); // Reset to first page when changing limit
+                // Fetch the pages again with the new limit
+                setRefreshList((prev) => prev + 1);
+              }
+              }
+            >
               <option value="10">10</option>
               <option value="20">20</option>
               <option value="50">50</option>
@@ -339,6 +360,21 @@ export default function Pages() {
 
           </tbody>
         </table>
+      </div>
+
+      <div>
+        {pageswenedArray.length > 0 && (
+          <div className="flex flex-row  gap-2 mt-5">
+            {pageswenedArray.map((page) => (
+              <button key={page} className={`button ${pagenumber === page ? 'button-primary' : 'button-secondary'}`} onClick={() => {
+                setPageNumber(page);
+                setRefreshList((prev) => prev + 1);
+              }}>
+                {page}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
 
