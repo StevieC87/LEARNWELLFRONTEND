@@ -642,6 +642,7 @@ export default function EditPageComp(props) {
               inputcssclass="titleinput"
               inputdivcssclass="titleinputdiv"
               labelcssclass="titlelabel"
+              required={reduxtitlefield.required || false}
             />
 
           </div>

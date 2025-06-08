@@ -7,8 +7,8 @@ export default function DeletePage(props) {
   const router = useRouter();
 
   const { pagetype, pageid, RefreshList1 } = props;
-  console.log(pagetype, "pagetypeindeletepage");
-  console.log(pageid, "pageidindeletepage");
+  //  console.log(pagetype, "pagetypeindeletepage");
+  //  console.log(pageid, "pageidindeletepage");
   const onclickDelete = async (e) => {
     const url = `${process.env.NEXT_PUBLIC_API_URL}/schema/${pageid}?pagetype=${pagetype}`;
     const response = await fetch(url, {

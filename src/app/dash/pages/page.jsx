@@ -6,6 +6,7 @@ import './pageslist.css'
 import DeletePage from "./components/Deletepage";
 import { useSearchParams } from 'next/navigation';
 import Caret from "./components/caret";
+import { set } from "react-hook-form";
 
 // import LexicalField from '../uicomponents/customfields/Lexical/LexicalField';
 
@@ -19,6 +20,7 @@ export default function Pages() {
   const defaultlanguage = useSelector((state) => state.DashSlice.settings.defaultlanguage);
 
   const [pageslist, setPagesList] = useState([]);
+  const [filteredpages, setFilteredPages] = useState(pageslist);
   const [schemanopages, setSchemaNoPages] = useState([]);
   const [issuperadmin, setIsSuperAdmin] = useState(false);
 
@@ -77,6 +79,9 @@ export default function Pages() {
     //setPageLinkUrl
   }, [userrole, pagetype, refreshlist]);
 
+  useEffect(() => {
+    setFilteredPages(pageslist);
+  }, [pageslist]);
 
   useEffect(() => {
 
@@ -88,21 +93,21 @@ export default function Pages() {
   }
 
 
-  const [columnsorted, setColumnSorted] = useState('CreatedAt');
+  const [columnsorted, setColumnSorted] = useState('createdAt');
 
-  const [sortdirection, setSortDirection] = useState('asc');
+  const [sortdirection, setSortDirection] = useState('desc');
   const sorttable = (column) => {
     //try this
     setColumnSorted(column);
     let direction = sortdirection === 'asc' ? 'desc' : 'asc';
     pageslist.sort((a, b) => {
-      if (direction === 'asc') {
-        return a[column].localeCompare(b[column]);
-      } else {
-        return b[column].localeCompare(a[column]);
-      }
-    }
-    );
+      let av = a[column] || '';
+      let bv = b[column] || '';
+      return direction === 'asc'
+        ? av.localeCompare(bv)
+        : bv.localeCompare(av);
+    });
+
     setSortDirection(direction);
 
   }
@@ -112,6 +117,7 @@ export default function Pages() {
 
   }, [columnsorted])
 
+  let originalpageslist = JSON.parse(JSON.stringify(pageslist));
   //! add default sort order -> and REFLECT that in the UI BY SETTING THE COLUMNSROTED in the begining + the direction in the state so caret visible on MODIFIED DATE whatever
 
   // here i will list all the page - to take some complexity off the sidenav for now - wordpress style
@@ -155,7 +161,45 @@ export default function Pages() {
         )}
       </h1>
 
+
       <div className="" >
+        <div className="postspagesearchinput">
+          <input
+            type="text"
+            placeholder="Search by title"
+            className="input input-bordered w-full max-w-xs"
+            onChange={(e) => {
+
+
+              //setPagesList(pageslist); // Reset to original list before filtering
+
+              console.log('originalPagesList', originalpageslist);
+              const searchValue = e.target.value.toLowerCase();
+              if (searchValue === '') {
+                console.log('originalPagesList', originalpageslist);
+                //alert('Search is empty');
+                setFilteredPages(pageslist); // Reset to original list if search is empty
+                return;
+              }
+              else {
+                const filteredPages1 = pageslist.filter(page =>
+                  page.title.toLowerCase().includes(searchValue)
+
+                  //||
+                  /*    page.schema.toLowerCase().includes(searchValue) || */
+                  /*    (multilingual && page.locale && page.locale.toLowerCase().includes(searchValue)) */
+
+                );
+                console.log(filteredPages1, "filteredPages in search input");
+                setFilteredPages(filteredPages1);
+                console.log(originalpageslist, "originalPagesList in search input");
+              }
+
+
+
+            }}
+          />
+        </div>
         <table>
           <thead>
             <tr>
@@ -164,10 +208,8 @@ export default function Pages() {
                 <div className="flex flex-row justify-between items-center">
                   Title
                   {columnsorted === 'title' && (
-
                     <Caret direction={sortdirection === 'asc' ? 'asc' : 'desc'} />
                   )
-
                   }
                 </div>
 
@@ -175,10 +217,8 @@ export default function Pages() {
               </th>
               <th className="cursor-pointer" onClick={() => sorttable('schema')}>
                 <div className="flex flex-row justify-between items-center">
-
                   Type
                   {columnsorted === 'schema' && (
-
                     <Caret direction={sortdirection === 'asc' ? 'asc' : 'desc'} />
                   )
 
@@ -189,10 +229,8 @@ export default function Pages() {
               {multilingual && (
                 <th className="cursor-pointer" onClick={() => sorttable('locale')}>
                   <div className="flex flex-row justify-between items-center">
-
                     Language
                     {columnsorted === 'locale' && (
-
                       <Caret direction={sortdirection === 'asc' ? 'asc' : 'desc'} />
                     )
 
@@ -205,10 +243,8 @@ export default function Pages() {
 
               <th className="cursor-pointer" onClick={() => sorttable('lastModified')}>
                 <div className="flex flex-row justify-between items-center">
-
                   Modified
                   {columnsorted === 'lastModified' && (
-
                     <Caret direction={sortdirection === 'asc' ? 'asc' : 'desc'} />
                   )
 
@@ -237,14 +273,17 @@ export default function Pages() {
           </thead>
           <tbody>
             {/* THIS IS TO SHOW THE LIST OF EXISTING PAGES */}
-            {pageslist.length > 0 && pageslist.map((page, index) => (
+            {filteredpages.length > 0 && filteredpages.map((page, index) => (
               <tr key={page._id} className="pageitem ">
                 <td data-label="Title:" className="underline">
                   {multilingual && (
-                    <Link key={page._id} href={`/dash/pages/${page._id}?pagetype=${pagetype}&schema=${page.schema}&language=${page.locale}`} className="">{page.title}</Link>
+                    <Link key={page._id} href={`/dash/pages/${page._id}?pagetype=${pagetype}&schema=${page.schema}&language=${page.locale}`} className="">
+                      <div>{page.title}</div></Link>
                   )}
                   {!multilingual && (
-                    <Link key={page._id} href={`/dash/pages/${page._id}?pagetype=${pagetype}&schema=${page.schema}&language=${defaultlanguage}`} className="">{page.title}</Link>
+                    <Link key={page._id} href={`/dash/pages/${page._id}?pagetype=${pagetype}&schema=${page.schema}&language=${defaultlanguage}`} className="">
+                      <div>{page.title}</div>
+                    </Link>
                   )}
                 </td>
                 <td data-label="Type:">
