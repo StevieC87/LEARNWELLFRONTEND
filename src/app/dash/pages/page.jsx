@@ -31,6 +31,8 @@ export default function Pages() {
 
   const [pagelinkurl, setPageLinkUrl] = useState('');
 
+  const [paginationlimit, setPaginationLimit] = useState(10); // default pagination limit
+  const [pagenumber, setPageNumber] = useState(1); // default page number
   useEffect(() => {
     console.log(userrole, "userroleinpageslist");
     if (userrole === "superadmin") {
@@ -43,9 +45,9 @@ export default function Pages() {
     const fetchpageslist = async () => {
       let url;
       if (pagetype === 'post') {
-        url = "http://localhost:3000/getpostslist";
+        url = `http://localhost:3000/getpostslist?paginationlimit=${paginationlimit}&pagenumber=${pagenumber}`;
       } else if (pagetype === 'page') {
-        url = "http://localhost:3000/getpageslist";
+        url = `http://localhost:3000/getpageslist?paginationlimit=${paginationlimit}&pagenumber=${pagenumber}`;
       }
       const response = await fetch(url, {
         method: "GET",
@@ -162,31 +164,42 @@ export default function Pages() {
 
 
       <div className="" >
-        <div className="postspagesearchinput">
-          <input
-            type="text"
-            placeholder="Search by title"
-            className="input input-bordered w-full max-w-xs"
-            onChange={(e) => {
-              const searchValue = e.target.value.toLowerCase();
-              if (searchValue === '') {
-                //alert('Search is empty');
-                setFilteredPages(pageslist); // Reset to original list if search is empty
-                return;
-              }
-              else {
-                const filteredPages1 = pageslist.filter(page =>
-                  page.title.toLowerCase().includes(searchValue)
+        <div className="flex flex-row" >
+          <div className="postspagesearchinput">
+            <input
+              type="text"
+              placeholder="Search by title"
+              className="input input-bordered w-full max-w-xs"
+              onChange={(e) => {
+                const searchValue = e.target.value.toLowerCase();
+                if (searchValue === '') {
+                  //alert('Search is empty');
+                  setFilteredPages(pageslist); // Reset to original list if search is empty
+                  return;
+                }
+                else {
+                  const filteredPages1 = pageslist.filter(page =>
+                    page.title.toLowerCase().includes(searchValue)
 
-                );
-                console.log(filteredPages1, "filteredPages in search input");
-                setFilteredPages(filteredPages1);
-              }
+                  );
+                  console.log(filteredPages1, "filteredPages in search input");
+                  setFilteredPages(filteredPages1);
+                }
 
 
 
-            }}
-          />
+              }}
+            />
+          </div>
+          <div className="ml-5">
+            <select name="paginationpages" id="">
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+
+            </select>
+          </div>
         </div>
         <table>
           <thead>
