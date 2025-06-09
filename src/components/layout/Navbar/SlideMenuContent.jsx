@@ -6,9 +6,12 @@ import Image from 'next/image'; // Import Image from next/image
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUserRole, setSettings } from '@/redux/slices/DashSlice'; // Import the action to set user role
+//refresh next smooth
+import { useRouter } from 'next/navigation'; // Import useRouter for navigation
 
 
 export default function SlideMenu() {
+  const router = useRouter();
   const dispatch = useDispatch();
   const userrole = useSelector((state) => state.DashSlice.userrole);
 
@@ -23,8 +26,21 @@ export default function SlideMenu() {
       });
       if (!response.ok) {
         console.log("Failed to fetch user role");
+        console.log(response, "response");
+        const failmessage = await response.json();
+        console.log(failmessage, "failmessage");
         if (response.status === 403) {
           console.log("Forbidden: You are not authorized to access this resource.");
+          if (failmessage.action === 'redirecttologin') {
+            // Handle redirection to login page
+            window.location.href = '/users/login'; // Redirect to login page
+          }
+          else if (failmessage.action === 'refreshpage') {
+            // Handle refreshing the page
+            router.refresh(); // Use Next.js router to refresh the page
+            // window.location.reload(); // Refresh the current page
+          }
+
           // Handle unauthorized access, e.g., redirect to login page
           // window.location.href = '/users/login'; // Redirect to login page
         }

@@ -56,7 +56,6 @@ export default function EditPageComp(props) {
 
         <div id="pagecontent" className={`pagecontent ${pagecontent ? 'visible' : 'hidden'}`}>
           <div className="formlabelvertical">
-            content
             <PageContentTab
               schema={schema}
               settings={settings}
