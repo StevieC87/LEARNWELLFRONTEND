@@ -35,7 +35,6 @@ export default function DeletePage(props) {
       console.log("response ok");
       const data = await response.json();
       console.log(data, "data222");
-      const totalpages = data.totalpages;
       let pageredirectifneedbe
       if (pagenumber > 1 && pageindexinarray === 0 && totalpageindexes === 1) {
         pageredirectifneedbe = pagenumber - 1

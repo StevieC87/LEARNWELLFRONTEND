@@ -24,7 +24,7 @@ export default function SEOTab(props) {
   const [changedefaultogtitle, setChangedDefaultOGTitle] = useState(false);
   const [changedefaultofdescription, setChangedDefaultDescription] = useState(false);
 
-  const { register, handleSubmit, reset } = useForm({
+  const { register, handleSubmit, reset, setValue } = useForm({
     defaultValues: {
       metaTitle: "",
       custommetaTitle: "",
@@ -58,12 +58,13 @@ export default function SEOTab(props) {
         });
         if (response.ok) {
           const data = await response.json();
+          console.log(data.custommetaDescription, "custommetadescription from fetch in SEOTab");
           console.log("FetchedSEOsettings:", data);
           reset({
             metaTitle: data.metatitle || "",
-            custommetaTitle: data.custommetatitle || false,
+            custommetaTitle: data.custommetaTitle || false,
             metaDescription: data.metadescription || "",
-            custommetadescription: data.custommetadescription || false,
+            custommetadescription: data.custommetaDescription || false,
             robots: data.robots || "",
             canonicalUrl: data.canonicalurl || "",
             hreflang: data.hreflang || "",
@@ -72,7 +73,7 @@ export default function SEOTab(props) {
             //NEED TO SET THIS MAYBE IN schema 
             twitterCardType: data.twitterCardType || "summary_large_image",
             ogTitle: data.metatitle || "",
-            customOGTitle: data.customogtitle || "",
+            customOGTitle: data.customOGTitle || "",
             /*    customOGTitle: data.customogtitle || "", */
             ogDescription: data.metadescription || "",
             customOGdescription: data.ogCustomdescription || "",
@@ -142,7 +143,23 @@ export default function SEOTab(props) {
           }
         }
 
-      } else {
+      }
+      else if (key === "custommetaTitle") {
+        formData.append(key, changeddefaultmetatitle);
+        //  //  changeddefaultmetadescription
+        //changedefaultogtitle  changedefaultofdescription
+      }
+      else if (key === "custommetadescription") {
+        formData.append(key, changeddefaultmetadescription);
+      }
+      else if (key === "customOGTitle") {
+        formData.append(key, changedefaultogtitle);
+      }
+      else if (key === "customOGdescription") {
+        formData.append(key, changedefaultofdescription);
+      }
+
+      else {
         console.log("Appending key:", key, "with value:", data[key]);
         formData.append(key, data[key]);
       }
@@ -177,9 +194,11 @@ export default function SEOTab(props) {
     if (name === "metaTitle") {
       if (value !== "") {
         setChangedDefaultMetaTitle(true);
+        setValue("custommetaTitle", true); // Set custommetaTitle to true if metaTitle is not empty
       }
       else {
         setChangedDefaultMetaTitle(false);
+        setValue("custommetaTitle", false); // Set custommetaTitle to false if metaTitle is empty
       }
       console.log(checked, "checked");
     }
@@ -187,9 +206,11 @@ export default function SEOTab(props) {
     if (name === 'metaDescription') {
       if (value !== "") {
         setChangedDefaultMetaDescription(true);
+        setValue("custommetadescription", true); // Set custommetadescription to true if metaDescription is not empty
       }
       else {
         setChangedDefaultMetaDescription(false);
+        setValue("custommetadescription", false); // Set custommetadescription to false if metaDescription is empty
       }
     }
     else if (name === "ogTitle") {
@@ -197,17 +218,21 @@ export default function SEOTab(props) {
       if (value !== "") {
 
         setChangedDefaultOGTitle(true);
+        setValue("customOGTitle", true); // Set customOGTitle to true if ogTitle is not empty
       }
       else {
         setChangedDefaultOGTitle(false);
+        setValue("customOGTitle", false); // Set customOGTitle to false if ogTitle is empty
       }
     }
     else if (name === "ogDescription") {
       if (value !== "") {
         setChangedDefaultDescription(true);
+        setValue("customOGdescription", true); // Set customOGdescription to true if ogDescription is not empty
       }
       else {
         setChangedDefaultDescription(false);
+        setValue("customOGdescription", false); // Set customOGdescription to false if ogDescription is empty
       }
     }
 
@@ -224,9 +249,10 @@ export default function SEOTab(props) {
   }
 
   const undoredocheckboxchange = (e) => {
+
     const { name, checked } = e.target;
     console.log(name, "nameeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-    console.log(checked, "checked");
+    console.log(checked, "checkedcheckedchecked");
     if (name === "custommetaTitle") {
       setChangedDefaultMetaTitle(checked);
     }
@@ -293,7 +319,7 @@ export default function SEOTab(props) {
                   Custom Meta Description - <span className="labeltip1">Override default meta title.</span>
                   <p className="labeltip2">Tip: If you want to override default which is based on page title</p>
                 </label>
-                <input type="checkbox" {...register("custommetadescription")} checked={changeddefaultmetadescription}
+                <input type="checkbox" {...register("custommetadescription")}
                   onChange={(e) => undoredocheckboxchange(e)}
                 />
                 {/* 
@@ -320,7 +346,7 @@ export default function SEOTab(props) {
                     Custom OG Title - <span className="labeltip1">Override default Open Graph title.</span>
                     <p className="labeltip2">Tip: If you want to override default which is based on page title</p>
                   </label>
-                  <input type="checkbox" {...register("customOGTitle")} checked={changedefaultogtitle}
+                  <input type="checkbox" {...register("customOGTitle")}
                     onChange={(e) => undoredocheckboxchange(e)}
                   />
                 </div>
@@ -342,7 +368,7 @@ export default function SEOTab(props) {
                     Custom OG Description - <span className="labeltip1">Override default Open Graph description.</span>
                     <p className="labeltip2">Tip: If you want to override default which is based on meta description</p>
                   </label>
-                  <input type="checkbox" {...register("customOGdescription")} checked={changedefaultofdescription}
+                  <input type="checkbox" {...register("customOGdescription")}
                     onChange={(e) => undoredocheckboxchange(e)}
                   />
                 </div>
