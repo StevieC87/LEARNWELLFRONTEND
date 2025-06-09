@@ -269,8 +269,6 @@ export default function Pages() {
                   </div>
                 </th>
               )}
-              <th >Seo</th>
-              <th >JSON-LD</th>
 
               <th className="cursor-pointer" onClick={() => sorttable('lastModified')}>
                 <div className="flex flex-row justify-between items-center">
@@ -323,12 +321,7 @@ export default function Pages() {
                 {multilingual && (
                   <td className="text-center" data-label="Language:">{page.locale}</td>
                 )}
-                <td data-label="Seo" id="seo" className="underline">
-                  <Link key={page._id} href={`/dash/pages/seo?pageid=${page._id}&pagetype=${pagetype}&schema=${page.schema}&language=${page.locale || defaultlanguage}slug=${page.slug}`} className="">Seo</Link>
-                </td>
-                <td data-label="JSON-LD" id="jsonld">
-                  <Link key={page._id} href={`/dash/pages/jsonld?pageid=${page._id}&pagetype=${pagetype}&schema=${page.schema}&language=${page.locale || defaultlanguage}&slug=${page.slug}`} className="">JSON-LD</Link>
-                </td>
+
 
                 <td data-label="Modified:" className="">
                   {page.lastModified && (

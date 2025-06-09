@@ -18,10 +18,18 @@ export default function SEOTab(props) {
 
   const [defaultimg, setDefaultImage] = useState(null);
 
+  const [changeddefaultmetatitle, setChangedDefaultMetaTitle] = useState(false);
+  const [changeddefaultmetadescription, setChangedDefaultMetaDescription] = useState(false);
+
+  const [changedefaultogtitle, setChangedDefaultOGTitle] = useState(false);
+  const [changedefaultofdescription, setChangedDefaultDescription] = useState(false);
+
   const { register, handleSubmit, reset } = useForm({
     defaultValues: {
       metaTitle: "",
+      custommetaTitle: "",
       metaDescription: "",
+      custommetadescription: "",
       robots: "index, follow",
       canonicalUrl: "",
       hreflang: "",
@@ -35,6 +43,7 @@ export default function SEOTab(props) {
       ogSitename: "",
     }
   });
+
   const triggerSEOrefresh = useSelector((state) => state.PagesSlice.triggerSEOrefresh);
   // 
   const [changeddefaultimg, setChangedDefaultImage] = useState(false);
@@ -52,7 +61,9 @@ export default function SEOTab(props) {
           console.log("FetchedSEOsettings:", data);
           reset({
             metaTitle: data.metatitle || "",
+            custommetaTitle: data.custommetatitle || false,
             metaDescription: data.metadescription || "",
+            custommetadescription: data.custommetadescription || false,
             robots: data.robots || "",
             canonicalUrl: data.canonicalurl || "",
             hreflang: data.hreflang || "",
@@ -62,15 +73,29 @@ export default function SEOTab(props) {
             twitterCardType: "",
             ogTitle: data.metatitle || "",
             customOGTitle: data.customogtitle || "",
+            /*    customOGTitle: data.customogtitle || "", */
             ogDescription: data.metadescription || "",
-            customOGdescription: data.customOGdescription || "",
+            customOGdescription: data.ogCustomdescription || "",
             ogSitename: data.ogsitename || "",
           });
           setDefaultImage(data.ogimage || null);
+
+          if (data.customOGTitle) {
+            setChangedDefaultOGTitle(true);
+          }
+          if (data.ogCustomdescription) {
+            setChangedDefaultDescription(true);
+          }
+          if (data.custommetaTitle) {
+            setChangedDefaultMetaTitle(true);
+          }
+          if (data.custommetaDescription) {
+            setChangedDefaultMetaDescription(true);
+          }
           //  console.log(result, "")
         }
         else if (!response.ok) {
-          console.error("FailedtofetchSEOsettings");
+          console.log("FailedtofetchSEOsettings");
         }
 
 
@@ -146,7 +171,57 @@ export default function SEOTab(props) {
 
   };
 
+  const checkifdefaultchanged = (e) => {
+    const { name, value, checked } = e.target;
+    console.log(name, "nameeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+    if (name === "metaTitle") {
+      if (value !== "") {
+        setChangedDefaultMetaTitle(true);
+      }
+      else {
+        setChangedDefaultMetaTitle(false);
+      }
+      console.log(checked, "checked");
+    }
 
+    if (name === 'metaDescription') {
+      if (value !== "") {
+        setChangedDefaultMetaDescription(true);
+      }
+      else {
+        setChangedDefaultMetaDescription(false);
+      }
+    }
+    else if (name === "ogTitle") {
+
+      if (value !== "") {
+
+        setChangedDefaultOGTitle(true);
+      }
+      else {
+        setChangedDefaultOGTitle(false);
+      }
+    }
+    else if (name === "ogDescription") {
+      if (value !== "") {
+        setChangedDefaultDescription(true);
+      }
+      else {
+        setChangedDefaultDescription(false);
+      }
+    }
+
+
+
+    /*  else if (name === "customOGTitle") {
+       setChangedDefaultMetaTitle(checked);
+       console.log(checked, "checked");
+     }
+     else if (name === "customOGdescription") {
+       setChangedDefaultDescription(checked);
+       console.log(checked, "checked");
+     } */
+  }
 
 
 
@@ -162,23 +237,51 @@ export default function SEOTab(props) {
         </div>
 
         <div id="metatagscontent" >
-          <div className="formlabelvertical">
-            <label>
-              Meta Title - <span className="labeltip1">Shown in browser tab and search results.</span>
-              <p className="labeltip2">Tip: Keep under 60–64 characters. Keep it concise and unique per page.</p>
-            </label>
-            <input {...register("metaTitle")} />
+          <div className="flex flex-row">
+            <div className="formlabelvertical">
+              <label>
+                Meta Title - <span className="labeltip1">Shown in browser tab and search results.</span>
+                <p className="labeltip2">Tip: Keep under 60–64 characters. Keep it concise and unique per page.</p>
+              </label>
+              <input {...register("metaTitle")} onChange={(e) => checkifdefaultchanged(e)} />
+            </div>
+            {changeddefaultmetatitle && (
+              <div className="formlabelvertical">
+                <label>
+                  Custom Meta Title - <span className="labeltip1">Override default meta title.</span>
+                  <p className="labeltip2">Tip: If you want to override default which is based on page title</p>
+                </label>
+                <input type="checkbox" {...register("custommetaTitle")} checked={changeddefaultmetatitle} />
+
+              </div>
+
+            )}
+          </div>
+          <div className="flex flex-row">
+
+            <div className="formlabelvertical">
+              <label>
+                Meta Description - <span className="labeltip1">Displayed in search engine results.</span>
+                <p className="labeltip2">Tip: Keep under 155–160 characters.</p>
+              </label>
+              <input {...register("metaDescription")} onChange={(e) => checkifdefaultchanged(e)} />
+            </div>
+            {changeddefaultmetadescription && (
+              <div className="formlabelvertical">
+                <label>
+                  Custom Meta Description - <span className="labeltip1">Override default meta title.</span>
+                  <p className="labeltip2">Tip: If you want to override default which is based on page title</p>
+                </label>
+                <input type="checkbox" {...register("custommetadescription")} checked={changeddefaultmetadescription} />
+                {/* 
+  const [changedefaultogtitle, setChangedDefaultOGTitle] = useState(false);
+  const [changedefaultofdescription, setChangedDefaultDescription] = useState(false); */}
+              </div>
+            )}
+
           </div>
 
-          <div className="formlabelvertical">
-            <label>
-              Meta Description - <span className="labeltip1">Displayed in search engine results.</span>
-              <p className="labeltip2">Tip: Keep under 155–160 characters.</p>
-            </label>
-            <input {...register("metaDescription")} />
-          </div>
-
-          <div className="formlabelvertical">
+          <div id="robots" className="formlabelvertical">
             <label>
               Robots - <span className="labeltip1">Controls search engine indexing.</span>
               <p className="labeltip2">Tip: Example: index, follow. Use noindex for drafts or private pages</p>
@@ -186,7 +289,7 @@ export default function SEOTab(props) {
             <input {...register("robots")} />
           </div>
 
-          <div className="formlabelvertical">
+          <div id="canonical" className="formlabelvertical">
             <label>
               Canonical URL - <span className="labeltip1">Preferred URL for this page.</span>
               <p className="labeltip2">Avoids duplicate content issues. One per page.
@@ -195,7 +298,7 @@ export default function SEOTab(props) {
             <input {...register("canonicalUrl")} />
           </div>
 
-          <div className="formlabelvertical">
+          <div id="hreflang" className="formlabelvertical">
             <label>
               Hreflang - <span className="labeltip1">Language/region alternate URLs.</span>
               <p className="labeltip2">Required for multilingual SEO. Matches language and regional versions. Use ISO codes.
@@ -204,7 +307,7 @@ export default function SEOTab(props) {
             <input {...register("hreflang")} />
           </div>
 
-          <div className="formlabelvertical">
+          <div id="ogtype" className="formlabelvertical">
             <label>
               OG Type - <span className="labeltip1">Open Graph object type.</span>
               <p className="labeltip2">Tip: Example: website, article, product. Required by OG. Select based on content type.
@@ -213,7 +316,7 @@ export default function SEOTab(props) {
             <input {...register("ogType")} />
           </div>
 
-          <div className="formlabelvertical">
+          <div id="ogimage" className="formlabelvertical">
             <label>
               OG Image - <span className="labeltip1">Image for social sharing.</span>
               <p className="labeltip2">Tip: Recommended size: 1200x630px. Use JPG/PNG. Should be visually appealing, not text-heavy.
@@ -261,35 +364,50 @@ export default function SEOTab(props) {
             <input {...register("twitterCardType")} />
           </div>
 
-          <div className="formlabelvertical">
-            <label>
-              OG Title - <span className="labeltip1">Title for Open Graph (social sharing).</span>
-              <p className="labeltip2">Tip: Should match or complement Meta Title. Used by Facebook, LinkedIn, etc.</p>
-            </label>
-            <input {...register("ogTitle")} />
-          </div>
-          <div className="formlabelvertical">
-            <label>
-              Custom OG Title  <span className="labeltip1">Title for Open Graph (social sharing).</span>
-              <p className="labeltip2">If you want to override default which is based on page title</p>
-            </label>
-            <input {...register("customOGTitle")} />
+          <div id="ogtitle" className="flex flex-row">
+
+            <div className="formlabelvertical">
+              <label>
+                OG Title - <span className="labeltip1">Title for Open Graph (social sharing).</span>
+                <p className="labeltip2">Tip: Should match or complement Meta Title. Used by Facebook, LinkedIn, etc.</p>
+              </label>
+              <input {...register("ogTitle")} onChange={(e) => checkifdefaultchanged(e)} />
+            </div>
+            {changedefaultogtitle && (
+              <div className="formlabelvertical">
+                <label>
+                  Custom OG Title - <span className="labeltip1">Override default Open Graph title.</span>
+                  <p className="labeltip2">Tip: If you want to override default which is based on page title</p>
+                </label>
+                <input type="checkbox" {...register("customOGTitle")} checked={changedefaultogtitle} />
+              </div>
+            )}
+
+
           </div>
 
-          <div className="formlabelvertical">
-            <label>
-              OG Description - <span className="labeltip1">Description for Open Graph.</span>
-              <p className="labeltip2">Tip: Should match or complement Meta Description. Used by social platforms.</p>
-            </label>
-            <input {...register("ogDescription")} />
+          <div className="flex flex-row">
+
+            <div className="formlabelvertical">
+              <label>
+                OG Description - <span className="labeltip1">Description for Open Graph.</span>
+                <p className="labeltip2">Tip: Should match or complement Meta Description. Used by social platforms.</p>
+              </label>
+              <input {...register("ogDescription")}
+                onChange={(e) => checkifdefaultchanged(e)}
+              />
+            </div>
+            {changedefaultofdescription && (
+              <div className="formlabelvertical">
+                <label>
+                  Custom OG Description - <span className="labeltip1">Override default Open Graph description.</span>
+                  <p className="labeltip2">Tip: If you want to override default which is based on meta description</p>
+                </label>
+                <input type="checkbox" {...register("customOGdescription")} checked={changedefaultofdescription} />
+              </div>
+            )}
           </div>
-          <div className="formlabelvertical">
-            <label>
-              Custom OG Title  <span className="labeltip1">Custom description for Open Graph (social sharing).</span>
-              <p className="labeltip2">If you want to override default which is based on meta description - otherwise leave blank</p>
-            </label>
-            <input {...register("customOGdescription")} />
-          </div>
+
 
           <div className="formlabelvertical">
             <label>
