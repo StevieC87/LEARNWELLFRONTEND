@@ -2,12 +2,14 @@
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import { useSearchParams } from 'next/navigation';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateField, setSlugDuplicateWarning, setTriggerSEORefresh } from '@/redux/slices/PagesSlice';
 
 
 export default function SEOTab(props) {
   // const searchParams = useSearchParams();
 
+  const dispatch = useDispatch();
   const { pageid } = props
   console.log(typeof pageid, "typeofpageidinSEOTab");
   // const pageid = searchParams.get('pageid');
@@ -29,6 +31,7 @@ export default function SEOTab(props) {
       ogTitle: "",
       customOGTitle: "",
       ogDescription: "",
+      customOGdescription: "",
       ogSitename: "",
     }
   });
@@ -36,6 +39,7 @@ export default function SEOTab(props) {
   // 
   const [changeddefaultimg, setChangedDefaultImage] = useState(false);
 
+  //FETCH SEO SETTINGS
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -59,6 +63,7 @@ export default function SEOTab(props) {
             ogTitle: data.metatitle || "",
             customOGTitle: data.customogtitle || "",
             ogDescription: data.metadescription || "",
+            customOGdescription: data.customOGdescription || "",
             ogSitename: data.ogsitename || "",
           });
           setDefaultImage(data.ogimage || null);
@@ -103,7 +108,10 @@ export default function SEOTab(props) {
             const fileInput = document.querySelector(`input[name="${key}"]`);
             console.log(fileInput, "fileInputfileInputfileInput");
             if (fileInput?.files?.[0]) {
-              formData.append(key, fileInput.files[0]);
+              const file = fileInput.files[0];
+              const fileType = file.name.split('.').pop();
+              const renamedFile = new File([file], `${pageid}.${fileType}`, { type: file.type });
+              formData.append(key, renamedFile);
             }
 
           }
@@ -115,14 +123,18 @@ export default function SEOTab(props) {
       }
     }
     console.log(formData, "formData");
+
+    formData.append("pageid", pageid);
+
     const response = await fetch("http://localhost:3000/savepagespecificSEO",
       {
         method: "POST",
         credentials: 'include',
-        body: formData,
+        body: formData
       });
 
     if (response.ok) {
+      dispatch(setTriggerSEORefresh(true));
       /*   setShowSuccess(true);
         setShowError(false);
         setTimeout(() => setShowSuccess(false), 3000);
@@ -134,15 +146,7 @@ export default function SEOTab(props) {
 
   };
 
-  const field = (name, label, tip = "", type = "text") => (
-    <div className="formlabelvertical">
-      <label>
-        {label}
-        {tip && <><span className="labeltip1"> {tip}</span></>}
-      </label>
-      <input {...register(name)} type={type} accept={type === "file" ? "image/*" : undefined} />
-    </div>
-  );
+
 
 
 
@@ -215,29 +219,36 @@ export default function SEOTab(props) {
               <p className="labeltip2">Tip: Recommended size: 1200x630px. Use JPG/PNG. Should be visually appealing, not text-heavy.
               </p>
             </label>
+
             {defaultimg && (
               <>
                 <p>Selected Default Image: {defaultimg.name}. Leave file input empty to keep</p>
                 <img src={`${process.env.NEXT_PUBLIC_API_URL}/${defaultimg}`} alt="Current Logo" width="200" />
               </>
+
             )}
-
-            <input {...register("ogImage")} name="ogImage" type="file" accept="image/*"
-              onChange={(e) => {
-                setChangedDefaultImage(true);
-                const file = e.target.files[0];
-                console.log(file); // should log a File object
-                setDefaultImage(file);
-                //  setDefaultImage(e.target.files[0]);
-                /*  const file = e.target.files[0];
-                 if (file) {
-                   setDefaultImage(URL.createObjectURL(file));
-                 } else {
-                   setDefaultImage(null);
-                 } */
-              }
-              } />
-
+            <div className="flex justify-between">
+              <input {...register("ogImage")} name="ogImage" type="file" accept="image/*"
+                onChange={(e) => {
+                  setChangedDefaultImage(true);
+                  const file = e.target.files[0];
+                  console.log(file); // should log a File object
+                  setDefaultImage(file);
+                  //  setDefaultImage(e.target.files[0]);
+                  /*  const file = e.target.files[0];
+                   if (file) {
+                     setDefaultImage(URL.createObjectURL(file));
+                   } else {
+                     setDefaultImage(null);
+                   } */
+                }
+                } />
+              <button onClick={() => {
+                setDefaultImage(null);
+                setChangedDefaultImage(false);
+                document.querySelector('input[name="ogImage"]').value = ""; // Clear the file input
+              }}>Remove Image</button>
+            </div>
           </div>
 
           <div className="formlabelvertical">
@@ -271,6 +282,13 @@ export default function SEOTab(props) {
               <p className="labeltip2">Tip: Should match or complement Meta Description. Used by social platforms.</p>
             </label>
             <input {...register("ogDescription")} />
+          </div>
+          <div className="formlabelvertical">
+            <label>
+              Custom OG Title  <span className="labeltip1">Custom description for Open Graph (social sharing).</span>
+              <p className="labeltip2">If you want to override default which is based on meta description - otherwise leave blank</p>
+            </label>
+            <input {...register("customOGdescription")} />
           </div>
 
           <div className="formlabelvertical">

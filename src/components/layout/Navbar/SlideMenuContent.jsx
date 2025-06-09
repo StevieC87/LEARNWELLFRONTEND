@@ -23,6 +23,11 @@ export default function SlideMenu() {
       });
       if (!response.ok) {
         console.log("Failed to fetch user role");
+        if (response.status === 403) {
+          console.log("Forbidden: You are not authorized to access this resource.");
+          // Handle unauthorized access, e.g., redirect to login page
+          // window.location.href = '/users/login'; // Redirect to login page
+        }
         return;
       }
       const data = await response.json();

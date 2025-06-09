@@ -6,10 +6,14 @@ import { useRouter } from 'next/navigation';
 export default function DeletePage(props) {
   const router = useRouter();
 
-  const { pagetype, pageid, RefreshList1 } = props;
+  const { pagetype, pageid, RefreshList1, pageindexinarray, pagenumber } = props;
   //  console.log(pagetype, "pagetypeindeletepage");
   //  console.log(pageid, "pageidindeletepage");
   const onclickDelete = async (e) => {
+
+    console.log(pagenumber, 'pagenumber');
+    console.log(pageindexinarray, "pageindexinarray111111");
+    console.log(typeof pageindexinarray, "typeof pageindexinarray");
     const url = `${process.env.NEXT_PUBLIC_API_URL}/schema/${pageid}?pagetype=${pagetype}`;
     const response = await fetch(url, {
       method: "DELETE",
@@ -30,9 +34,15 @@ export default function DeletePage(props) {
       console.log("response ok");
       const data = await response.json();
       console.log(data, "data222");
-      let urlredirectto;
 
-      RefreshList1(); // Call the RefreshList1 function passed as a prop to refresh the list after deletion
+      let pageredirectifneedbe
+      if (pagenumber > 1 && pageindexinarray === 0) {
+        pageredirectifneedbe = pagenumber - 1
+
+
+      }
+
+      RefreshList1(pageredirectifneedbe); // Call the RefreshList1 function passed as a prop to refresh the list after deletion
       // const query = window.location.search;
       //window.location.href = '/dash/pages' + query;
       // urlredirectto = '/dash/pages';

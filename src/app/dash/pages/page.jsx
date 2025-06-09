@@ -47,12 +47,11 @@ export default function Pages() {
       console.log("userrole is superadmin");
       setIsSuperAdmin(true);
     }
-
-
-
     const fetchpageslist = async () => {
       let url;
-
+      /*  if (data.totalpostpages <= 10) {
+         setPageNumber(1); // Reset to first page if total pages are less than or equal to 10
+       } */
       if (pagetype === 'post') {
         url = `http://localhost:3000/getpostslist?paginationlimit=${paginationlimit}&pagenumber=${pagenumber}&columnsorted=${columnsorted}&sortdirection=${sortdirection}`;
       } else if (pagetype === 'page') {
@@ -76,6 +75,8 @@ export default function Pages() {
         console.log('data22222222', data);
         setPagesList(data.pages);
         setTotalPostsPages(data.totalpostspages);
+
+
         //  setPagesWeNeed(data.pagesweneed); //number
         if (data.pagesweneed > 0) {
           const pagesArray = Array.from({ length: data.pagesweneed }, (_, index) => index + 1);
@@ -106,8 +107,11 @@ export default function Pages() {
 
     console.log('schemanopages44444444444', schemanopages);
   }, [schemanopages]);
-  const Deletecallback = (pageid) => {
-    console.log('Deletecallback called with pageid:', pageid);
+  const Deletecallback = (pagenumber) => {
+    if (pagenumber) {
+      setPageNumber(pagenumber); // Set the page number to the one passed from DeletePage component
+    }
+    console.log(pagenumber, "pagenumber in deletecallback");
     setRefreshList((prev) => prev + 1);
   }
 
@@ -132,14 +136,12 @@ export default function Pages() {
 
   }
 
+
   useEffect(() => {
     console.log('Columnsorted:', columnsorted);
 
   }, [columnsorted])
 
-  //! add default sort order -> and REFLECT that in the UI BY SETTING THE COLUMNSROTED in the begining + the direction in the state so caret visible on MODIFIED DATE whatever
-
-  // here i will list all the page - to take some complexity off the sidenav for now - wordpress style
   return (
     <div className="pageslist">
       {/*    <h1 className="">Pages</h1> */}
@@ -353,7 +355,10 @@ export default function Pages() {
 
                 {(issuperadmin || pagetype === 'post') && (
                   <td data-label="Delete:" className="">
-                    <span><DeletePage pagetype={pagetype} pageid={page._id}
+                    <span><DeletePage pagetype={pagetype} pageid={page._id} pageindexinarray={filteredpages.findIndex(p => p._id === page._id)}
+                      pagenumber={pagenumber}
+
+                      /*   changePagefunction={changePagefunction} */
                       RefreshList1={Deletecallback}
                     /></span>
                   </td>
@@ -370,7 +375,7 @@ export default function Pages() {
       </div>
 
       <div>
-        {pageswenedArray.length > 0 && (
+        {pageswenedArray.length > 1 && (
           <div className="flex flex-row  gap-2 mt-5">
             {pageswenedArray.map((page) => (
               <button key={page} className={`button ${pagenumber === page ? 'button-primary' : 'button-secondary'}`} onClick={() => {
