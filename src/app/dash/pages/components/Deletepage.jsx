@@ -6,7 +6,10 @@ import { useRouter } from 'next/navigation';
 export default function DeletePage(props) {
   const router = useRouter();
 
-  const { pagetype, pageid, RefreshList1, pageindexinarray, pagenumber } = props;
+  //we would need to know 
+
+
+  const { pagetype, pageid, RefreshList1, pageindexinarray, pagenumber, totalpageindexes } = props;
   //  console.log(pagetype, "pagetypeindeletepage");
   //  console.log(pageid, "pageidindeletepage");
   const onclickDelete = async (e) => {
@@ -22,8 +25,6 @@ export default function DeletePage(props) {
 
       },
       credentials: 'include', // this is what sends/receives cookie
-
-
     });
 
     if (!response.ok) {
@@ -34,12 +35,11 @@ export default function DeletePage(props) {
       console.log("response ok");
       const data = await response.json();
       console.log(data, "data222");
-
+      const totalpages = data.totalpages;
       let pageredirectifneedbe
-      if (pagenumber > 1 && pageindexinarray === 0) {
+      if (pagenumber > 1 && pageindexinarray === 0 && totalpageindexes === 1) {
         pageredirectifneedbe = pagenumber - 1
-
-
+        //IF THERE ARE MORE INDEXES AFTER IT
       }
 
       RefreshList1(pageredirectifneedbe); // Call the RefreshList1 function passed as a prop to refresh the list after deletion

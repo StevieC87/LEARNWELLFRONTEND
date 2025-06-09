@@ -165,7 +165,7 @@ export default function Pages() {
 
         ))}
         {(pagetype === "post" && multischemas.length > 0) && (
-          <Link className="" href="/dash/pages/newpage?pagetype=post&schema=blog">Create New: </Link>
+          <span>Create New: </span>
 
         )}
         {pagetype === "post" && multischemas.length > 0 && multischemas.map((schema) => (
@@ -350,7 +350,7 @@ export default function Pages() {
                   <td data-label="Delete:" className="">
                     <span><DeletePage pagetype={pagetype} pageid={page._id} pageindexinarray={filteredpages.findIndex(p => p._id === page._id)}
                       pagenumber={pagenumber}
-
+                      totalpageindexes={filteredpages.length}
                       /*   changePagefunction={changePagefunction} */
                       RefreshList1={Deletecallback}
                     /></span>

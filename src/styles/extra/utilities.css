@@ -1,3 +1,7 @@
+.transparent {
+  background-color: transparent; /* White background */
+}
+
 @layer utilities {
   .text-center {
     text-align: center;
