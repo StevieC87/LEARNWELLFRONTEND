@@ -3,9 +3,9 @@ import { createSlice } from "@reduxjs/toolkit";
 const PagesSlice = createSlice({
   name: "PagesSlice",
   initialState: {
-    hello: "hello",
     fields: {},
     slugduplicatewarning: false,
+    triggerSEOrefresh: 0,
   },
 
   reducers: {
@@ -49,9 +49,13 @@ const PagesSlice = createSlice({
     setSlugDuplicateWarning(state, action) {
       state.slugduplicatewarning = action.payload;
     },
+    setTriggerSEORefresh(state, action) {
+      state.triggerSEOrefresh = action.payload;
+    },
   },
 });
 
-export const { updateField, setSlugDuplicateWarning } = PagesSlice.actions;
+export const { updateField, setSlugDuplicateWarning, setTriggerSEORefresh } =
+  PagesSlice.actions;
 
 export default PagesSlice.reducer;

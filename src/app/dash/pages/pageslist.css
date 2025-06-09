@@ -1,3 +1,19 @@
+.outerlayoutdiv {
+  width: 100vw !important;
+  max-width: 1200px !important;
+}
+@media screen and (width >= 768px) {
+  .outerlayoutdiv {
+    flex-direction: column;
+    width: 100vw !important;
+    height: 100%;
+    display: flex;
+  }
+}
+.maincontent {
+  max-width: 100%;
+}
+
 .pageslist {
   display: flex;
   flex-direction: column;

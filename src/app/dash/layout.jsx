@@ -5,14 +5,14 @@ import { redirect } from 'next/navigation';
 //import Sidenav from '@/components/layout/Sidenav/Sidenav';
 import MainContent from '@/components/layout/MainContent';
 import '@/app/globals.css';
-import '@/components/layout/layout.css'; // Adjust the path as necessary
+//import '@/components/layout/layout.css'; // Adjust the path as necessary
 import { verify } from 'jsonwebtoken';
 
 
 import BottomBar from '@/components/layout/Navbar/BottomBar';
 import SlideMenuDesktop from '@/components/layout/Navbar/SlideMenuDesktop';
 import VerifyToken from '../users/components/VerifyToken';
-import './layout.css';
+//import './layout.css';
 export default async function Layout({ children }) {
 
   let userrole;

@@ -36,6 +36,11 @@ export default function Pages() {
   const [totalpostpages, setTotalPostsPages] = useState(0); // total number of pages for pagination
   const [pageswenedArray, setPagesWeNeedArray] = useState([]); // array of pages we need
 
+  const [columnsorted, setColumnSorted] = useState('lastModified');
+
+  const [sortdirection, setSortDirection] = useState('desc');
+
+
   useEffect(() => {
     console.log(userrole, "userroleinpageslist");
     if (userrole === "superadmin") {
@@ -47,10 +52,11 @@ export default function Pages() {
 
     const fetchpageslist = async () => {
       let url;
+
       if (pagetype === 'post') {
-        url = `http://localhost:3000/getpostslist?paginationlimit=${paginationlimit}&pagenumber=${pagenumber}`;
+        url = `http://localhost:3000/getpostslist?paginationlimit=${paginationlimit}&pagenumber=${pagenumber}&columnsorted=${columnsorted}&sortdirection=${sortdirection}`;
       } else if (pagetype === 'page') {
-        url = `http://localhost:3000/getpageslist?paginationlimit=${paginationlimit}&pagenumber=${pagenumber}`;
+        url = `http://localhost:3000/getpageslist?paginationlimit=${paginationlimit}&pagenumber=${pagenumber}&columnsorted=${columnsorted}&sortdirection=${sortdirection}`;
       }
       const response = await fetch(url, {
         method: "GET",
@@ -106,22 +112,23 @@ export default function Pages() {
   }
 
 
-  const [columnsorted, setColumnSorted] = useState('createdAt');
 
-  const [sortdirection, setSortDirection] = useState('desc');
   const sorttable = (column) => {
     //try this
     setColumnSorted(column);
     let direction = sortdirection === 'asc' ? 'desc' : 'asc';
-    pageslist.sort((a, b) => {
-      let av = a[column] || '';
-      let bv = b[column] || '';
-      return direction === 'asc'
-        ? av.localeCompare(bv)
-        : bv.localeCompare(av);
-    });
 
+    /*     pageslist.sort((a, b) => {
+          let av = a[column] || '';
+          let bv = b[column] || '';
+          return direction === 'asc'
+            ? av.localeCompare(bv)
+            : bv.localeCompare(av);
+        });
+     */
     setSortDirection(direction);
+    //set refres 
+    setRefreshList((prev) => prev + 1);
 
   }
 
@@ -249,9 +256,9 @@ export default function Pages() {
               </th>
 
               {multilingual && (
-                <th className="cursor-pointer" onClick={() => sorttable('locale')}>
+                <th className="cursor-pointer" onClick={() => sorttable('locale')} style={{ width: '40px' }}>
                   <div className="flex flex-row justify-between items-center">
-                    Language
+                    Lang
                     {columnsorted === 'locale' && (
                       <Caret direction={sortdirection === 'asc' ? 'asc' : 'desc'} />
                     )
@@ -273,7 +280,7 @@ export default function Pages() {
                   }
                 </div>
               </th>
-              <th className="cursor-pointer" onClick={() => sorttable('createdAt')}>
+              {/*    <th className="cursor-pointer" onClick={() => sorttable('createdAt')}>
                 <div className="flex flex-row justify-between items-center">
 
                   Created
@@ -284,7 +291,7 @@ export default function Pages() {
 
                   }
                 </div>
-              </th>
+              </th> */}
 
               {(issuperadmin || pagetype === 'post') && (
                 <th >Delete</th>
@@ -334,7 +341,7 @@ export default function Pages() {
 
                   )}
                 </td>
-                <td data-label="Created:" className="">
+                {/*   <td data-label="Created:" className="">
                   {new Date(page.createdAt).toLocaleDateString('en-UK', {
                     year: 'numeric',
                     month: '2-digit',
@@ -342,7 +349,7 @@ export default function Pages() {
                     hour: '2-digit',
                     minute: '2-digit',
                   })}
-                </td>
+                </td> */}
 
                 {(issuperadmin || pagetype === 'post') && (
                   <td data-label="Delete:" className="">

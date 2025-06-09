@@ -5,6 +5,7 @@ import "./globals.css";
 import "../styles/ui.css";
 import "../styles/typography.css";
 import "../styles/variables.css";
+import "../styles/layout.css";
 import "../styles/base.css";
 import "../styles/buttons.css";
 import "../styles/extra/animations.css";
@@ -12,6 +13,7 @@ import "../styles/extra/effects.css";
 import "../styles/extra/states.css";
 import "../styles/extra/utilities.css";
 import "../styles/forms.css";
+
 
 if (process.env.NEXT_PUBLIC_NODE_ENV === "development") {
   const originalWarn = console.warn;

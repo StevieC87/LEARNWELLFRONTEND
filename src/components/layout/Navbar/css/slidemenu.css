@@ -41,3 +41,28 @@
 
   text-decoration: none;
 }
+
+.maincontent-mobile {
+  transform: translateX(var(--adminsidebarwidth));
+}
+.maincontent-blur {
+  filter: blur(2px);
+  /*   background-color: rgba(109, 109, 109, 0.7); */
+}
+.sidenav {
+  height: 100vh;
+  width: var(--adminsidebarwidth);
+  background-color: #eef2f6;
+}
+
+.sidenavh1 {
+  color: white;
+}
+
+.titlebuttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
