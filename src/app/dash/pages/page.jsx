@@ -7,6 +7,7 @@ import DeletePage from "./components/Deletepage";
 import { useSearchParams } from 'next/navigation';
 import Caret from "./components/caret";
 import { set } from "react-hook-form";
+import Showschemasnopages from "./components/Showschemasnopages";
 
 // import LexicalField from '../uicomponents/customfields/Lexical/LexicalField';
 
@@ -28,8 +29,6 @@ export default function Pages() {
   const [multischemas, setMultischemas] = useState([]);
 
   const [refreshlist, setRefreshList] = useState(0);
-
-  const [pagelinkurl, setPageLinkUrl] = useState('');
 
   const [paginationlimit, setPaginationLimit] = useState(10); // default pagination limit
   const [pagenumber, setPageNumber] = useState(1); // default page number
@@ -149,23 +148,10 @@ export default function Pages() {
       {/*    <h1 className="">Pages</h1> */}
       {/*       <LexicalField /> */}
       <div>
-        {/* THIS IS TO SHOW THE MISSING PAGES */}
-        {(pagetype === "page" && schemanopages.length > 0) && (
-          <span>Schemas without pages:</span>
-        )}
-        {pagetype === "page" && schemanopages.length > 0 && schemanopages.map((schema, index) => (
-          <div key={`${schema.schema}${schema.language}`} data-key={`${schema.schema}${schema.language} `} className="pageitem pt-2 flex flex-row gap-10">
-            <div className="flex flex-col">
-              {multilingual && (
-                <Link href={`/dash/pages/newpage?pagetype=page&schema=${schema.schema}&language=${schema.language || defaultlanguage}`} className="underline">{schema.schema} {schema.language}</Link>
-              )}
-              {!multilingual && (
-                <Link href={`/dash/pages/newpage?pagetype=page&schema=${schema.schema}&language=${schema.language || defaultlanguage} `} className="underline">{schema.schema}</Link>
-              )}
-            </div>
-          </div>
+        {/* THIS IS TO SHOW THE MISSING PAGES FOR PAGE SCHEMA*/}
+        <Showschemasnopages multilingual={multilingual} defaultlanguage={defaultlanguage} pagetype={pagetype} schemanopages={schemanopages} />
 
-        ))}
+
         {(pagetype === "post" && multischemas.length > 0) && (
           <span>Create New: </span>
 
@@ -186,43 +172,21 @@ export default function Pages() {
 
 
       <div id="tablediv" className="tablediv" >
-        <div className="flex flex-row" >
-          <div className="postspagesearchinput">
+        <div id="filterdiv" className="flex flex-row" >
+          <div id="searchdiv" className="postspagesearchinput">
             <input
               type="text"
               placeholder="Search by title"
               className="input input-bordered w-full max-w-xs"
               onChange={(e) => searchrecords(e.target.value)}
-
-            // {
-            /*  const searchValue = e.target.value.toLowerCase();
-             if (searchValue === '') {
-               //alert('Search is empty');
-               setFilteredPages(pageslist); // Reset to original list if search is empty
-               return;
-             }
-             else {
-               const filteredPages1 = pageslist.filter(page =>
-                 page.title.toLowerCase().includes(searchValue)
- 
-               );
-               console.log(filteredPages1, "filteredPages in search input");
-               setFilteredPages(filteredPages1);
-             }
-*/
-
-
-            //}}
             />
           </div>
-          <div className="ml-5">
+          <div id="paginationdiv" className="ml-5">
             <select name="paginationpages" id=""
               onChange={(e) => {
-                setPageNumber(1); // Reset to first page when changing limit
+                setPageNumber(1);
                 const newLimit = parseInt(e.target.value, 10);
                 setPaginationLimit(newLimit);
-                //setPageNumber(1); // Reset to first page when changing limit
-                // Fetch the pages again with the new limit
                 setRefreshList((prev) => prev + 1);
               }
               }
