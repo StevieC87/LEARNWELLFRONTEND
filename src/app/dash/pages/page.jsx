@@ -143,7 +143,7 @@ export default function Pages() {
   }, [columnsorted])
 
   return (
-    <div className="pageslist">
+    <div className="pageslistdiv">
       {/*    <h1 className="">Pages</h1> */}
       {/*       <LexicalField /> */}
       <div>
@@ -183,7 +183,7 @@ export default function Pages() {
       </h1>
 
 
-      <div className="" >
+      <div id="tablediv" className="tablediv" >
         <div className="flex flex-row" >
           <div className="postspagesearchinput">
             <input
@@ -304,7 +304,7 @@ export default function Pages() {
             {/* THIS IS TO SHOW THE LIST OF EXISTING PAGES */}
             {filteredpages.length > 0 && filteredpages.map((page, index) => (
               <tr key={page._id} className="pageitem ">
-                <td data-label="Title:" className="underline">
+                <td data-label="Title:" className="tdpageslist poppinsSemiBold">
                   {multilingual && (
                     <Link key={page._id} href={`/dash/pages/${page._id}?pagetype=${pagetype}&schema=${page.schema}&language=${page.locale}`} className="">
                       <div>{page.title}</div></Link>
@@ -315,15 +315,16 @@ export default function Pages() {
                     </Link>
                   )}
                 </td>
-                <td data-label="Type:">
+                <td data-label="Type:"
+                  className="tdpageslist">
                   {page.schema}
                 </td>
                 {multilingual && (
-                  <td className="text-center" data-label="Language:">{page.locale}</td>
+                  <td className="tdpageslist text-center" data-label="Language:">{page.locale}</td>
                 )}
 
 
-                <td data-label="Modified:" className="">
+                <td data-label="Modified:" className="tdpageslist">
                   {page.lastModified && (
 
                     new Date(page.lastModified).toLocaleDateString('en-UK', {
@@ -347,7 +348,7 @@ export default function Pages() {
                 </td> */}
 
                 {(issuperadmin || pagetype === 'post') && (
-                  <td data-label="Delete:" className="">
+                  <td data-label="Delete:" className="tdpageslist">
                     <span><DeletePage pagetype={pagetype} pageid={page._id} pageindexinarray={filteredpages.findIndex(p => p._id === page._id)}
                       pagenumber={pagenumber}
                       totalpageindexes={filteredpages.length}
@@ -367,7 +368,7 @@ export default function Pages() {
         </table>
       </div>
 
-      <div>
+      <div id="pagination">
         {pageswenedArray.length > 1 && (
           <div className="flex flex-row  gap-2 mt-5">
             {pageswenedArray.map((page) => (

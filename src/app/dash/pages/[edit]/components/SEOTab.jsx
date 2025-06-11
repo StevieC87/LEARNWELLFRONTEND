@@ -424,7 +424,7 @@ export default function SEOTab(props) {
                 <option value="">none</option>
                 <option value="summary_large_image">summary_large_image</option>
                 <option value="summary">summary</option>
-                <option value="index, nofollow">index, nofollow</option>
+
                 <option value="player">player</option>
               </select>
             </div>
