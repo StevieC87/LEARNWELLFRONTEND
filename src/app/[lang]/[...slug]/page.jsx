@@ -5,6 +5,7 @@ import AboutPage from '@/multilangpages/AboutPage';
 import ArticlePage from '@/multilangpages/ArticlePage';
 //search params
 import { searchParams } from 'next/navigation';
+
 // import ContactPage from '@/components/pages/ContactPage';
 // import other shared components...
 export default async function Page({ params, searchParams }) {
@@ -91,8 +92,10 @@ export default async function Page({ params, searchParams }) {
       });
     }
     if (!response.ok) {
-      console.error("Failed to fetch page data");
+      // console.error("Failed to fetch page data");
       showerror = true;
+      notFound();
+      // return <div>404 Not Found</div>;
     }
     else {
       console.log('data fetched successfully')
@@ -113,6 +116,10 @@ export default async function Page({ params, searchParams }) {
 
   }
   catch (error) {
+    notFound();
+
+    //return <div>404 Not Found</div>;
+
     // console.error("Error fetching page data:");
     // showerror = true;
   }
