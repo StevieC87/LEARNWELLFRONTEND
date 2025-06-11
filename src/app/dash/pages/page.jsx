@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from 'react-redux';
 import Link from "next/link";
 import './pageslist.css'
-//import DeletePage from "./components/Deletepage";
+import DeletePage from "./components/Deletepage";
 import TrashPage from "./components/Trash";
 import { useSearchParams } from 'next/navigation';
 import Caret from "./components/caret";
@@ -367,15 +367,25 @@ export default function Pages() {
                 )}
 
                 {(issuperadmin || pagetype === 'post') && (
-                  <td data-label="Delete:" className="tdpageslist"
+                  <td data-label="Trash:" className="tdpageslist"
                     style={{ width: '60px' }}
                   >
-                    <span><TrashPage pagetype={pagetype} pageid={page._id} pageindexinarray={filteredpages.findIndex(p => p._id === page._id)}
-                      pagenumber={pagenumber}
-                      totalpageindexes={filteredpages.length}
-                      /*   changePagefunction={changePagefunction} */
-                      RefreshList1={Trashcallback}
-                    /></span>
+                    <span>
+                      {!trashedview ?
+                        <TrashPage pagetype={pagetype} pageid={page._id} pageindexinarray={filteredpages.findIndex(p => p._id === page._id)}
+                          pagenumber={pagenumber}
+                          totalpageindexes={filteredpages.length}
+                          /*   changePagefunction={changePagefunction} */
+                          RefreshList1={Trashcallback}
+                        />
+                        : <DeletePage pagetype={pagetype} pageid={page._id} pageindexinarray={filteredpages.findIndex(p => p._id === page._id)}
+                          pagenumber={pagenumber}
+                          totalpageindexes={filteredpages.length}
+                          /*   changePagefunction={changePagefunction} */
+                          RefreshList1={Trashcallback}
+                        />
+                      }
+                    </span>
                   </td>
 
                 )}
