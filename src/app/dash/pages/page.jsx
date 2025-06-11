@@ -46,7 +46,6 @@ export default function Pages() {
   const [trashedview, setTrashedView] = useState(false); // to store if trashed view is active
 
   useEffect(() => {
-
     console.log(userrole, "userroleinpageslist");
     if (userrole === "superadmin") {
       console.log("userrole is superadmin");
@@ -144,6 +143,23 @@ export default function Pages() {
       setSearchTerm(searchValue);
     }
 
+  }
+
+  const restorepage = async (pageid) => {
+    const response = await fetch(`http://localhost:3000/pagesposts/restorepage/${pageid}?pagetype=${pagetype}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include', // Include cookies in the request
+    });
+    if (!response.ok) {
+      console.error('Failed to restore page:', response.statusText);
+      return;
+    }
+    const data = await response.json();
+    console.log('Page restored:', data);
+    setRefreshList((prev) => prev + 1); // Refresh the list after restoring
   }
 
 
@@ -274,6 +290,12 @@ export default function Pages() {
                   }
                 </div>
               </th> */}
+              {trashedview && (
+                <th style={{ width: '40px' }}>
+                  Restore
+                </th>
+              )}
+
 
               {(issuperadmin || pagetype === 'post') && (
                 <th style={{ backgroundColor: !trashedview ? '' : 'red' }}>
@@ -333,6 +355,16 @@ export default function Pages() {
                     minute: '2-digit',
                   })}
                 </td> */}
+                {trashedview && (
+                  <td>
+                    <div className="flex justify-center">
+                      <svg onClick={() => restorepage(page._id)} xmlns="http://www.w3.org/2000/svg" width="24 " height="24" fill="currentColor" className="bi bi-arrow-clockwise cursor-pointer" viewBox="0 0 16 16">
+                        <path fillRule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z" />
+                        <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466" />
+                      </svg>
+                    </div>
+                  </td>
+                )}
 
                 {(issuperadmin || pagetype === 'post') && (
                   <td data-label="Delete:" className="tdpageslist"
@@ -362,7 +394,7 @@ export default function Pages() {
           {pageswenedArray.length > 1 && (
             <div className="flex flex-row  gap-2 mt-5">
               {pageswenedArray.map((page) => (
-                <button key={page} className={`button ${pagenumber === page ? 'button-primary' : 'button-secondary'}`} onClick={() => {
+                <button key={page} className={`button ${pagenumber === page ? 'button-primary' : 'button-outline'}`} onClick={() => {
                   setPageNumber(page);
                   setRefreshList((prev) => prev + 1);
                 }}>
@@ -374,7 +406,7 @@ export default function Pages() {
 
         </div>
         <div id="viewtrashed">
-          <button className="button button-primary"
+          <button className="button button-outline"
             onClick={() => {
               setTrashedView((prev) => !prev)
             }}
