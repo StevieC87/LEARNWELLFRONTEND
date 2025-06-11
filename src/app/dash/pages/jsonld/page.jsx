@@ -27,7 +27,7 @@ export default function JsonLDPage() {
     effectRan.current = true;
     dispatch(cleanBlocksandFields()); // Clear previous blocks and fields
     const getjsonldschema = async () => {
-      const response = await fetch(`http://localhost:3000/getjsonldschema?schema=${schema}`, {
+      const response = await fetch(`http://localhost:3000/seo/getjsonldschema?schema=${schema}`, {
         method: "GET",
         credentials: 'include', // Include cookies in the request
       });

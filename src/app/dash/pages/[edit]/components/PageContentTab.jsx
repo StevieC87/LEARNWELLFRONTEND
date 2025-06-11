@@ -174,7 +174,7 @@ export default function PageContentTab(props) {
 
     setPublishchange(true)
     setIsSaving(true);
-    let url = `${process.env.NEXT_PUBLIC_API_URL}/schema`;
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/pagesposts/schema`;
     let nochangesonlyundosave;
     if (nochangescozundonsave === 'nochangescozundonsave') {
       nochangesonlyundosave = true;
@@ -293,7 +293,7 @@ export default function PageContentTab(props) {
 
   //. ON PUBLISH FUNCTION ========================  
   const onPublish = async () => {
-    let url = `${process.env.NEXT_PUBLIC_API_URL}/publish`;
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/pagesposts/publish`;
     setIsPublishing(true);
     const response = await fetch(url, {
       method: "POST",
@@ -369,7 +369,7 @@ export default function PageContentTab(props) {
     //with previous thing
 
     console.log("change publish status");
-    let url = `${process.env.NEXT_PUBLIC_API_URL}/changepublishstatus`;
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/pagesposts/changepublishstatus`;
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -450,7 +450,7 @@ export default function PageContentTab(props) {
     // let currentdraftpagescreationdate = "";
     console.log(undoredo, "undoredo");
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/undoredo`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/pagesposts/undoredo`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

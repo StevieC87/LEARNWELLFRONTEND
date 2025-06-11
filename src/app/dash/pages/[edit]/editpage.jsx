@@ -1,14 +1,8 @@
 'use client';
 import './editpage.css'
-import { useEffect, useState } from 'react';
-import { ObjectId } from 'bson';
-import FieldRenderer from './FieldRenderer';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateField, setSlugDuplicateWarning, } from '../../../../redux/slices/PagesSlice';
-import { setSelectedLanguage, setMultilingualSharedId, setPageExistsThisLanguage } from '../../../../redux/slices/DashSlice';
 import { useRouter } from 'next/navigation';
-import { set } from 'react-hook-form';
-
 import PageContentTab from './components/PageContentTab';
 import SEOTab from './components/SEOTab';
 

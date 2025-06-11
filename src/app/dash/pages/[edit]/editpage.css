@@ -84,4 +84,7 @@
   .editpagecontainer {
     padding-left: 0px;
   }
+  .titleinput {
+    font-size: 2.5rem;
+  }
 }

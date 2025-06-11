@@ -17,7 +17,7 @@ export default function SlideMenu() {
 
   useEffect(() => {
     let getuserroleverify = async () => {
-      const response = await fetch('http://localhost:3000/getdataforredux', {
+      const response = await fetch('http://localhost:3000/settings/getdataforredux', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

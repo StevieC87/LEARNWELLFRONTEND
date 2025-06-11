@@ -52,7 +52,7 @@ export default function SEOTab(props) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/pagespecificseo?pageid=${pageid}`, {
+        const response = await fetch(`http://localhost:3000/seo/pagespecificseo?pageid=${pageid}`, {
           method: "GET",
           credentials: 'include',
         });
@@ -168,7 +168,7 @@ export default function SEOTab(props) {
 
     formData.append("pageid", pageid);
 
-    const response = await fetch("http://localhost:3000/savepagespecificSEO",
+    const response = await fetch("http://localhost:3000/seo/savepagespecificSEO",
       {
         method: "POST",
         credentials: 'include',

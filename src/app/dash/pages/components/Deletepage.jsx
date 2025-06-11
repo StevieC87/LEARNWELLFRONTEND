@@ -17,7 +17,7 @@ export default function DeletePage(props) {
     console.log(pagenumber, 'pagenumber');
     console.log(pageindexinarray, "pageindexinarray111111");
     console.log(typeof pageindexinarray, "typeof pageindexinarray");
-    const url = `${process.env.NEXT_PUBLIC_API_URL}/schema/${pageid}?pagetype=${pagetype}`;
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/pagesposts/schema/${pageid}?pagetype=${pagetype}`;
     const response = await fetch(url, {
       method: "DELETE",
       headers: {

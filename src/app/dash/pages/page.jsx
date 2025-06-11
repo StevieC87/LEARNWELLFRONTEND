@@ -40,6 +40,7 @@ export default function Pages() {
 
   const [sortdirection, setSortDirection] = useState('desc');
 
+  const [uniquenumberofschemas, setUniquenumberofschemas] = useState([]); // to store unique schemas from filtered pages
 
   useEffect(() => {
     console.log(userrole, "userroleinpageslist");
@@ -53,9 +54,9 @@ export default function Pages() {
          setPageNumber(1); // Reset to first page if total pages are less than or equal to 10
        } */
       if (pagetype === 'post') {
-        url = `http://localhost:3000/getpostslist?paginationlimit=${paginationlimit}&pagenumber=${pagenumber}&columnsorted=${columnsorted}&sortdirection=${sortdirection}`;
+        url = `http://localhost:3000/pagesposts/getpagespostslist?paginationlimit=${paginationlimit}&pagenumber=${pagenumber}&columnsorted=${columnsorted}&sortdirection=${sortdirection}&pagetype=${pagetype}`;
       } else if (pagetype === 'page') {
-        url = `http://localhost:3000/getpageslist?paginationlimit=${paginationlimit}&pagenumber=${pagenumber}&columnsorted=${columnsorted}&sortdirection=${sortdirection}`;
+        url = `http://localhost:3000/pagesposts/getpagespostslist?paginationlimit=${paginationlimit}&pagenumber=${pagenumber}&columnsorted=${columnsorted}&sortdirection=${sortdirection}&pagetype=${pagetype}`;
       }
       const response = await fetch(url, {
         method: "GET",
@@ -75,7 +76,7 @@ export default function Pages() {
         console.log('data22222222', data);
         setPagesList(data.pages);
         setTotalPostsPages(data.totalpostspages);
-
+        setUniquenumberofschemas(data.numberofschemas);
 
         //  setPagesWeNeed(data.pagesweneed); //number
         if (data.pagesweneed > 0) {
@@ -102,6 +103,10 @@ export default function Pages() {
   useEffect(() => {
     setFilteredPages(pageslist);
   }, [pageslist]);
+
+
+
+
 
   useEffect(() => {
 
@@ -246,16 +251,19 @@ export default function Pages() {
 
 
               </th>
-              <th className="cursor-pointer" onClick={() => sorttable('schema')} style={{ width: '70px' }}>
-                <div className="flex flex-row justify-between items-center">
-                  Type
-                  {columnsorted === 'schema' && (
-                    <Caret direction={sortdirection === 'asc' ? 'asc' : 'desc'} />
-                  )
+              {uniquenumberofschemas > 1 && (
 
-                  }
-                </div>
-              </th>
+                <th className="cursor-pointer" onClick={() => sorttable('schema')} style={{ width: '70px' }}>
+                  <div className="flex flex-row justify-between items-center">
+                    Type
+                    {columnsorted === 'schema' && (
+                      <Caret direction={sortdirection === 'asc' ? 'asc' : 'desc'} />
+                    )
+
+                    }
+                  </div>
+                </th>
+              )}
 
               {multilingual && (
                 <th className="cursor-pointer" onClick={() => sorttable('locale')} style={{ width: '58px' }}>
@@ -311,7 +319,7 @@ export default function Pages() {
             {/* THIS IS TO SHOW THE LIST OF EXISTING PAGES */}
             {filteredpages.length > 0 && filteredpages.map((page, index) => (
               <tr key={page._id} className="pageitem ">
-                <td data-label="Title:" className="tdpageslist poppinsSemiBold">
+                <td className="tdpageslist poppinsSemiBold">
                   {multilingual && (
                     <Link key={page._id} href={`/dash/pages/${page._id}?pagetype=${pagetype}&schema=${page.schema}&language=${page.locale}`} className="">
                       <div>{page.title}</div></Link>
@@ -322,10 +330,13 @@ export default function Pages() {
                     </Link>
                   )}
                 </td>
-                <td data-label="Type:"
-                  className="tdpageslist">
-                  {page.schema}
-                </td>
+                {uniquenumberofschemas > 1 && (
+
+                  <td data-label="Type:"
+                    className="tdpageslist">
+                    {page.schema}
+                  </td>
+                )}
                 {multilingual && (
                   <td className="tdpageslist text-center" data-label="Language:">{page.locale}</td>
                 )}

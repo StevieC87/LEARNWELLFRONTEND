@@ -37,7 +37,7 @@ export default function Settings() {
   //first I NEED TO POPULATE THE VALUES FROM THE DATABASE 
   useEffect(() => {
     const fetchSettings = async () => {
-      const response = await fetch('http://localhost:3000/settings', {
+      const response = await fetch('http://localhost:3000/settings/getsettings', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -81,7 +81,7 @@ export default function Settings() {
     console.log("multilingualvalue", multilingualvalue);
 
 
-    const response = await fetch('http://localhost:3000/settings', {
+    const response = await fetch('http://localhost:3000/savesettings', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

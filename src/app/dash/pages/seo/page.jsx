@@ -33,7 +33,7 @@ export default function PageSpecificSEO() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/pagespecificseo?pageid=${pageid}`, {
+        const response = await fetch(`http://localhost:3000/seo/pagespecificseo?pageid=${pageid}`, {
           method: "GET",
           credentials: 'include',
         });
