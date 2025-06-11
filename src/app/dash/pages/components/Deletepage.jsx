@@ -1,18 +1,36 @@
 'use client';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from 'next/navigation';
-
+import ModalYesNo from '@/components/global/ModalYesNo';
 
 export default function DeletePage(props) {
   const router = useRouter();
 
-  //we would need to know 
-
 
   const { pagetype, pageid, RefreshList1, pageindexinarray, pagenumber, totalpageindexes } = props;
-  //  console.log(pagetype, "pagetypeindeletepage");
-  //  console.log(pageid, "pageidindeletepage");
+
+  const [showModal, setShowModal] = useState(false);
+
+  const getModalAnswer = (answer) => {
+    if (answer) {
+      //IF YES, DO TRASH PAGE
+      doDeletePage()
+      setShowModal(false);
+    }
+    else {
+      //IF NO, CLOSE MODAL
+      setShowModal(false);
+    }
+  }
+
+
   const onclickDelete = async (e) => {
+    setShowModal(true);
+
+
+  }
+
+  const doDeletePage = async () => {
 
     console.log(pagenumber, 'pagenumber');
     console.log(pageindexinarray, "pageindexinarray111111");
@@ -48,7 +66,6 @@ export default function DeletePage(props) {
       // router.push(router.asPath);
       // router.push(urlredirectto);
     }
-
   }
 
   return (
@@ -60,14 +77,17 @@ export default function DeletePage(props) {
           <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
         </svg>
       </div>
+      <ModalYesNo
+        textchoice={`Are you sure you want to permanently delete this ${pagetype} to trash?`}
+        isOpen={showModal}
+        changeOpen={setShowModal}
+        getModalAnswer={getModalAnswer}
+        buttontextconfirm="Yes"
+        buttontextcancel="No"
+        context='delete'
+      />
     </>
-    /*  <div className="deletepage">
-       <h1>Delete Page</h1>
-       <p>Are you sure you want to delete this page?</p>
-       <p>Page ID: {pageid}</p>
-       <p>Page Type: {pagetype}</p>
-       <button className="button button-primary">Delete Page</button>
-     </div> */
+
   )
 
 }

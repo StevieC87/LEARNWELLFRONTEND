@@ -68,4 +68,10 @@
     opacity: 0.5;
     cursor: not-allowed;
   }
+
+  .button-danger {
+    background-color: #dc3545;
+    color: #ffffff;
+    border-color: #dc3545;
+  }
 }
