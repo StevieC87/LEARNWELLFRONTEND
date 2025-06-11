@@ -33,7 +33,6 @@ export default function Pages() {
 
   const [paginationlimit, setPaginationLimit] = useState(10); // default pagination limit
   const [pagenumber, setPageNumber] = useState(1); // default page number
-  const [totalpostpages, setTotalPostsPages] = useState(0); // total number of pages for pagination
   const [pageswenedArray, setPagesWeNeedArray] = useState([]); // array of pages we need
 
   const [columnsorted, setColumnSorted] = useState('lastModified');
@@ -41,6 +40,8 @@ export default function Pages() {
   const [sortdirection, setSortDirection] = useState('desc');
 
   const [uniquenumberofschemas, setUniquenumberofschemas] = useState([]); // to store unique schemas from filtered pages
+
+  const [searchterm, setSearchTerm] = useState(''); // to store search term
 
   useEffect(() => {
     console.log(userrole, "userroleinpageslist");
@@ -54,9 +55,9 @@ export default function Pages() {
          setPageNumber(1); // Reset to first page if total pages are less than or equal to 10
        } */
       if (pagetype === 'post') {
-        url = `http://localhost:3000/pagesposts/getpagespostslist?paginationlimit=${paginationlimit}&pagenumber=${pagenumber}&columnsorted=${columnsorted}&sortdirection=${sortdirection}&pagetype=${pagetype}`;
+        url = `http://localhost:3000/pagesposts/getpagespostslist?paginationlimit=${paginationlimit}&pagenumber=${pagenumber}&columnsorted=${columnsorted}&sortdirection=${sortdirection}&pagetype=${pagetype}&searchterm=${searchterm}`;
       } else if (pagetype === 'page') {
-        url = `http://localhost:3000/pagesposts/getpagespostslist?paginationlimit=${paginationlimit}&pagenumber=${pagenumber}&columnsorted=${columnsorted}&sortdirection=${sortdirection}&pagetype=${pagetype}`;
+        url = `http://localhost:3000/pagesposts/getpagespostslist?paginationlimit=${paginationlimit}&pagenumber=${pagenumber}&columnsorted=${columnsorted}&sortdirection=${sortdirection}&pagetype=${pagetype}&searchterm=${searchterm}`;
       }
       const response = await fetch(url, {
         method: "GET",
@@ -75,7 +76,6 @@ export default function Pages() {
         const data = await response.json();
         console.log('data22222222', data);
         setPagesList(data.pages);
-        setTotalPostsPages(data.totalpostspages);
         setUniquenumberofschemas(data.numberofschemas);
 
         //  setPagesWeNeed(data.pagesweneed); //number
@@ -98,20 +98,13 @@ export default function Pages() {
 
 
     //setPageLinkUrl
-  }, [userrole, pagetype, refreshlist]);
+  }, [userrole, pagetype, refreshlist, searchterm]);
 
   useEffect(() => {
     setFilteredPages(pageslist);
   }, [pageslist]);
 
 
-
-
-
-  useEffect(() => {
-
-    console.log('schemanopages44444444444', schemanopages);
-  }, [schemanopages]);
   const Deletecallback = (pagenumber) => {
     if (pagenumber) {
       setPageNumber(pagenumber); // Set the page number to the one passed from DeletePage component
@@ -119,8 +112,6 @@ export default function Pages() {
     console.log(pagenumber, "pagenumber in deletecallback");
     setRefreshList((prev) => prev + 1);
   }
-
-
 
   const sorttable = (column) => {
     //try this
@@ -141,11 +132,17 @@ export default function Pages() {
 
   }
 
+  const searchrecords = (searchValue) => {
+    if (searchValue === '') {
+      setSearchTerm(''); // Reset to original list if search is empty
+      return;
+    }
+    else if (searchValue.length > 0) {
+      setSearchTerm(searchValue);
+    }
 
-  useEffect(() => {
-    console.log('Columnsorted:', columnsorted);
+  }
 
-  }, [columnsorted])
 
   return (
     <div className="pageslistdiv">
@@ -195,25 +192,27 @@ export default function Pages() {
               type="text"
               placeholder="Search by title"
               className="input input-bordered w-full max-w-xs"
-              onChange={(e) => {
-                const searchValue = e.target.value.toLowerCase();
-                if (searchValue === '') {
-                  //alert('Search is empty');
-                  setFilteredPages(pageslist); // Reset to original list if search is empty
-                  return;
-                }
-                else {
-                  const filteredPages1 = pageslist.filter(page =>
-                    page.title.toLowerCase().includes(searchValue)
+              onChange={(e) => searchrecords(e.target.value)}
 
-                  );
-                  console.log(filteredPages1, "filteredPages in search input");
-                  setFilteredPages(filteredPages1);
-                }
+            // {
+            /*  const searchValue = e.target.value.toLowerCase();
+             if (searchValue === '') {
+               //alert('Search is empty');
+               setFilteredPages(pageslist); // Reset to original list if search is empty
+               return;
+             }
+             else {
+               const filteredPages1 = pageslist.filter(page =>
+                 page.title.toLowerCase().includes(searchValue)
+ 
+               );
+               console.log(filteredPages1, "filteredPages in search input");
+               setFilteredPages(filteredPages1);
+             }
+*/
 
 
-
-              }}
+            //}}
             />
           </div>
           <div className="ml-5">
