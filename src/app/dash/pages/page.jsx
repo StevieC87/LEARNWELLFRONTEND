@@ -246,7 +246,7 @@ export default function Pages() {
 
 
               </th>
-              <th className="cursor-pointer" onClick={() => sorttable('schema')}>
+              <th className="cursor-pointer" onClick={() => sorttable('schema')} style={{ width: '70px' }}>
                 <div className="flex flex-row justify-between items-center">
                   Type
                   {columnsorted === 'schema' && (
@@ -258,7 +258,7 @@ export default function Pages() {
               </th>
 
               {multilingual && (
-                <th className="cursor-pointer" onClick={() => sorttable('locale')} style={{ width: '40px' }}>
+                <th className="cursor-pointer" onClick={() => sorttable('locale')} style={{ width: '58px' }}>
                   <div className="flex flex-row justify-between items-center">
                     Lang
                     {columnsorted === 'locale' && (
@@ -270,9 +270,16 @@ export default function Pages() {
                 </th>
               )}
 
-              <th className="cursor-pointer" onClick={() => sorttable('lastModified')}>
-                <div className="flex flex-row justify-between items-center">
+              <th className="cursor-pointer" onClick={() => sorttable('lastModified')}
+                style={{ width: '140px' }}
+
+
+              >
+                <div className="flex flex-row justify-between items-center"
+                  style={{ textAlign: 'center' }}
+                >
                   Modified
+
                   {columnsorted === 'lastModified' && (
                     <Caret direction={sortdirection === 'asc' ? 'asc' : 'desc'} />
                   )
@@ -324,7 +331,7 @@ export default function Pages() {
                 )}
 
 
-                <td data-label="Modified:" className="tdpageslist">
+                <td data-label="Modified:" className="tdpageslist" style={{ fontSize: '1.2rem', textAlign: 'center' }}>
                   {page.lastModified && (
 
                     new Date(page.lastModified).toLocaleDateString('en-UK', {
@@ -348,7 +355,9 @@ export default function Pages() {
                 </td> */}
 
                 {(issuperadmin || pagetype === 'post') && (
-                  <td data-label="Delete:" className="tdpageslist">
+                  <td data-label="Delete:" className="tdpageslist"
+                    style={{ width: '60px' }}
+                  >
                     <span><DeletePage pagetype={pagetype} pageid={page._id} pageindexinarray={filteredpages.findIndex(p => p._id === page._id)}
                       pagenumber={pagenumber}
                       totalpageindexes={filteredpages.length}
