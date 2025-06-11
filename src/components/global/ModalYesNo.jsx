@@ -14,11 +14,16 @@ export default function ModalYesNo(props) {
     }
   }
 
+  const onClickoutside = (e) => {
+    if (e.target.className === 'modalouterdiv') {
+      changeOpen(false);
+    }
+  }
   //FUNISH FUNCTONALITY
   //ADD AN X BUTTON
 
   return (
-    <div className="modalouterdiv">
+    <div className="modalouterdiv" onClick={(e) => onClickoutside(e)}>
       <div className="modalinner">
         <div className="flex flex-row">
           <span>{textchoice}</span>
