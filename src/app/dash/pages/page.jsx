@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import { useSelector } from 'react-redux';
 import Link from "next/link";
 import './pageslist.css'
-import DeletePage from "./components/Deletepage";
+//import DeletePage from "./components/Deletepage";
+import TrashPage from "./components/Trash";
 import { useSearchParams } from 'next/navigation';
 import Caret from "./components/caret";
 import { set } from "react-hook-form";
@@ -42,7 +43,10 @@ export default function Pages() {
 
   const [searchterm, setSearchTerm] = useState(''); // to store search term
 
+  const [trashedview, setTrashedView] = useState(false); // to store if trashed view is active
+
   useEffect(() => {
+
     console.log(userrole, "userroleinpageslist");
     if (userrole === "superadmin") {
       console.log("userrole is superadmin");
@@ -54,9 +58,9 @@ export default function Pages() {
          setPageNumber(1); // Reset to first page if total pages are less than or equal to 10
        } */
       if (pagetype === 'post') {
-        url = `http://localhost:3000/pagesposts/getpagespostslist?paginationlimit=${paginationlimit}&pagenumber=${pagenumber}&columnsorted=${columnsorted}&sortdirection=${sortdirection}&pagetype=${pagetype}&searchterm=${searchterm}`;
+        url = `http://localhost:3000/pagesposts/getpagespostslist?paginationlimit=${paginationlimit}&pagenumber=${pagenumber}&columnsorted=${columnsorted}&sortdirection=${sortdirection}&pagetype=${pagetype}&searchterm=${searchterm}&trashedview=${trashedview}`;
       } else if (pagetype === 'page') {
-        url = `http://localhost:3000/pagesposts/getpagespostslist?paginationlimit=${paginationlimit}&pagenumber=${pagenumber}&columnsorted=${columnsorted}&sortdirection=${sortdirection}&pagetype=${pagetype}&searchterm=${searchterm}`;
+        url = `http://localhost:3000/pagesposts/getpagespostslist?paginationlimit=${paginationlimit}&pagenumber=${pagenumber}&columnsorted=${columnsorted}&sortdirection=${sortdirection}&pagetype=${pagetype}&searchterm=${searchterm}&trashedview=${trashedview}`;
       }
       const response = await fetch(url, {
         method: "GET",
@@ -97,14 +101,14 @@ export default function Pages() {
 
 
     //setPageLinkUrl
-  }, [userrole, pagetype, refreshlist, searchterm]);
+  }, [userrole, pagetype, refreshlist, searchterm, trashedview]);
 
   useEffect(() => {
     setFilteredPages(pageslist);
   }, [pageslist]);
 
 
-  const Deletecallback = (pagenumber) => {
+  const Trashcallback = (pagenumber) => {
     if (pagenumber) {
       setPageNumber(pagenumber); // Set the page number to the one passed from DeletePage component
     }
@@ -272,7 +276,9 @@ export default function Pages() {
               </th> */}
 
               {(issuperadmin || pagetype === 'post') && (
-                <th >Delete</th>
+                <th style={{ backgroundColor: !trashedview ? '' : 'red' }}>
+                  {!trashedview ? 'Trash' : 'Delete'}
+                </th>
               )}
 
 
@@ -332,11 +338,11 @@ export default function Pages() {
                   <td data-label="Delete:" className="tdpageslist"
                     style={{ width: '60px' }}
                   >
-                    <span><DeletePage pagetype={pagetype} pageid={page._id} pageindexinarray={filteredpages.findIndex(p => p._id === page._id)}
+                    <span><TrashPage pagetype={pagetype} pageid={page._id} pageindexinarray={filteredpages.findIndex(p => p._id === page._id)}
                       pagenumber={pagenumber}
                       totalpageindexes={filteredpages.length}
                       /*   changePagefunction={changePagefunction} */
-                      RefreshList1={Deletecallback}
+                      RefreshList1={Trashcallback}
                     /></span>
                   </td>
 
@@ -351,21 +357,32 @@ export default function Pages() {
         </table>
       </div>
 
-      <div id="pagination">
-        {pageswenedArray.length > 1 && (
-          <div className="flex flex-row  gap-2 mt-5">
-            {pageswenedArray.map((page) => (
-              <button key={page} className={`button ${pagenumber === page ? 'button-primary' : 'button-secondary'}`} onClick={() => {
-                setPageNumber(page);
-                setRefreshList((prev) => prev + 1);
-              }}>
-                {page}
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
+      <div className="flex flex-row justify-between items-end">
+        <div id="pagination ">
+          {pageswenedArray.length > 1 && (
+            <div className="flex flex-row  gap-2 mt-5">
+              {pageswenedArray.map((page) => (
+                <button key={page} className={`button ${pagenumber === page ? 'button-primary' : 'button-secondary'}`} onClick={() => {
+                  setPageNumber(page);
+                  setRefreshList((prev) => prev + 1);
+                }}>
+                  {page}
+                </button>
+              ))}
+            </div>
+          )}
 
+        </div>
+        <div id="viewtrashed">
+          <button className="button button-primary"
+            onClick={() => {
+              setTrashedView((prev) => !prev)
+            }}
+          >
+            {trashedview ? 'View Active' : 'View Trashed'}
+          </button>
+        </div>
+      </div>
 
 
 
