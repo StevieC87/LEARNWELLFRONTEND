@@ -12,7 +12,7 @@ export default function EditPageComp(props) {
   //.  GET DATA FROM PROPS  ------------------------
 
   const { schema, settings, pagefieldsdata, pagedata, neworexisting, pageid, pagetype, language, pagetitle, publishstatus, triggerrefreshonsavechild, frontendcomponent,
-    numberofdrafts, latestdraftcreationdate, remainingdraftsv, precedingdraftsv, totalnumberofdraftsv
+    numberofdrafts, latestdraftcreationdate, remainingdraftsv, precedingdraftsv, totalnumberofdraftsv, islatestversion
   } = props;
 
   const [pagecontent, setPageContent] = useState(true);
@@ -68,6 +68,7 @@ export default function EditPageComp(props) {
               remainingdraftsv={remainingdraftsv}
               precedingdraftsv={precedingdraftsv}
               totalnumberofdraftsv={totalnumberofdraftsv}
+              islatestversion={islatestversion}
             />
           </div>
         </div>

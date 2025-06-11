@@ -15,7 +15,7 @@ export default function PageContentTab(props) {
   //.  GET DATA FROM PROPS  ------------------------
 
   const { schema, settings, pagefieldsdata, pagedata, neworexisting, pageid, pagetype, language, pagetitle, publishstatus, triggerrefreshonsavechild, frontendcomponent,
-    numberofdrafts, latestdraftcreationdate, remainingdraftsv, precedingdraftsv, totalnumberofdraftsv
+    numberofdrafts, latestdraftcreationdate, remainingdraftsv, precedingdraftsv, totalnumberofdraftsv, islatestversion
   } = props;
   //console.log('remainingdraftsv prop', remainingdraftsv);
   //console.log('precedingdraftsv prop', precedingdraftsv);
@@ -335,6 +335,7 @@ export default function PageContentTab(props) {
 
       }
       setPublishSwitchStatus(true);
+      triggerrefreshonsavechild()
       setTimeout(() => {
         setIsPublishing(false);
       }, 2000);
@@ -509,10 +510,8 @@ export default function PageContentTab(props) {
   return (
     <>
       <div className={`editpagecontainer fade-in2 ${isTransitioning ? '' : 'visible'} flex flex-column`}>
-
-
-
-
+        <span>{islatestversion ? 'islatestversion' : 'isnotlatestversion'
+        }</span>
         <form onSubmit={(e) => {
           if (!hasChanges & !allowsavewithoutchanges) {
             e.preventDefault();
@@ -531,88 +530,95 @@ export default function PageContentTab(props) {
 
           <div className="topbuttons">
             <div className="flex flex-row gap-5 ">
-              <div id="undoredo" className="undoredo flex gap-3 ">
-                <button onClick={(e) => undoredo(e, 'undo')} id="undobutton" className={precedingdrafts > 0 ? "" : "text-gray-400"}
-                  disabled={precedingdrafts <= 0 ? true : false}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
-                    <title>Undo</title>
-                    <path fillRule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z" />
-                    <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466" />
-                  </svg>
-                </button>
-                <button onClick={(e) => undoredo(e, 'redo')} id="redobutton" className={remainingdrafts > 0 ? "" : "text-gray-400"}
-                  disabled={remainingdrafts <= 0 ? true : false}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-arrow-clockwise" viewBox="0 0 16 16">
-                    <title>Redo</title>
-                    <path fillRule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z" />
-                    <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466" />
-                  </svg>
-                </button>
-              </div>
-              <div className="flex flex-row gap-5">
-                {/* onClick={(e) => onSave(e)} */}
-                <button onClick={() => preview()} >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
-                    <title>Preview draft</title>
-
-                    <path fillRule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5" />
-                    <path fillRule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z" />
-                  </svg>
-                </button>
-                <button type="submit" className={hasChanges ? "button button-primary" : "button button-outline"}>
-                  {issaving && (
-                    <span>Saving</span>
-                  )}
-
-                  {!issaving && !showsaved && (
-                    <span>Save Draft</span>
-                  )}
-                  {errorsave && (
-                    <span className="text-red-500">Error</span>
-                  )}
-                  {showsaved && !issaving && (
-                    <span className="text-green-500">Saved</span>
-                  )}
-
-                </button>
-
-                {neworexisting === 'existing' && (
-                  <button onClick={() => onPublish()}
-                  >
-                    <>
-                      {!ispublishing && (
-                        publishchanges ? 'Publish Changes' : 'Publish'
-                      )}
-                      {ispublishing && (
-                        <span> Published</span>
-                      )}
-                    </>
-                  </button>
+              <button type="submit" className={hasChanges ? "button button-primary" : "button button-outline"}>
+                {issaving && (
+                  <span>Saving</span>
                 )}
 
+                {!issaving && !showsaved && (
+                  <span>Save Draft</span>
+                )}
+                {errorsave && (
+                  <span className="text-red-500">Error</span>
+                )}
+                {showsaved && !issaving && (
+                  <span className="text-green-500">Saved</span>
+                )}
 
-                <a href={`${process.env.NEXT_PUBLIC_FRONTENDURL}/${slugpathfieldaR.content}`} target="_blank" rel="noopener noreferrer">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-globe" viewBox="0 0 16 16">
-                    <title>View Published Page live</title>
-                    <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m7.5-6.923c-.67.204-1.335.82-1.887 1.855A8 8 0 0 0 5.145 4H7.5zM4.09 4a9.3 9.3 0 0 1 .64-1.539 7 7 0 0 1 .597-.933A7.03 7.03 0 0 0 2.255 4zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a7 7 0 0 0-.656 2.5zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5zM8.5 5v2.5h2.99a12.5 12.5 0 0 0-.337-2.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5zM5.145 12q.208.58.468 1.068c.552 1.035 1.218 1.65 1.887 1.855V12zm.182 2.472a7 7 0 0 1-.597-.933A9.3 9.3 0 0 1 4.09 12H2.255a7 7 0 0 0 3.072 2.472M3.82 11a13.7 13.7 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5zm6.853 3.472A7 7 0 0 0 13.745 12H11.91a9.3 9.3 0 0 1-.64 1.539 7 7 0 0 1-.597.933M8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855q.26-.487.468-1.068zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.7 13.7 0 0 1-.312 2.5m2.802-3.5a7 7 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7 7 0 0 0-3.072-2.472c.218.284.418.598.597.933M10.855 4a8 8 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4z" />
-                  </svg>
-                </a>
-
-              </div>
+              </button>
               {neworexisting === 'existing' && (
-                <div className="switchbuttonmulti flex flex-row items-center">
+                <>
 
-                  <label htmlFor="">Published: </label>
-                  <label className="switch  ml-5">
-                    <input type="checkbox" onChange={() => changePublish()} checked={publishswitchstatus} disabled={pagetype === 'page' ? true : false} />
-                    <span className="slider round"></span>
-                  </label>
+                  <div id="undoredo" className="undoredo flex gap-3 ">
+                    <button onClick={(e) => undoredo(e, 'undo')} id="undobutton" className={precedingdrafts > 0 ? "" : "text-gray-400"}
+                      disabled={precedingdrafts <= 0 ? true : false}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+                        <title>Undo</title>
+                        <path fillRule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z" />
+                        <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466" />
+                      </svg>
+                    </button>
+                    <button onClick={(e) => undoredo(e, 'redo')} id="redobutton" className={remainingdrafts > 0 ? "" : "text-gray-400"}
+                      disabled={remainingdrafts <= 0 ? true : false}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                        <title>Redo</title>
+                        <path fillRule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z" />
+                        <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466" />
+                      </svg>
+                    </button>
+                  </div>
+                  <div className="flex flex-row gap-5">
+                    <button onClick={() => preview()} >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
+                        <title>Preview draft</title>
 
-                </div>
+                        <path fillRule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5" />
+                        <path fillRule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z" />
+                      </svg>
+                    </button>
+
+
+                    {neworexisting === 'existing' && (
+                      <button onClick={() => onPublish()}
+                      >
+                        <>
+                          {!ispublishing && (
+                            publishchanges ? 'Publish Changes' : 'Publish'
+                          )}
+                          {ispublishing && (
+                            <span> Published</span>
+                          )}
+                        </>
+                      </button>
+                    )}
+
+
+                    <a href={`${process.env.NEXT_PUBLIC_FRONTENDURL}/${slugpathfieldaR.content}`} target="_blank" rel="noopener noreferrer">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-globe" viewBox="0 0 16 16">
+                        <title>View Published Page live</title>
+                        <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m7.5-6.923c-.67.204-1.335.82-1.887 1.855A8 8 0 0 0 5.145 4H7.5zM4.09 4a9.3 9.3 0 0 1 .64-1.539 7 7 0 0 1 .597-.933A7.03 7.03 0 0 0 2.255 4zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a7 7 0 0 0-.656 2.5zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5zM8.5 5v2.5h2.99a12.5 12.5 0 0 0-.337-2.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5zM5.145 12q.208.58.468 1.068c.552 1.035 1.218 1.65 1.887 1.855V12zm.182 2.472a7 7 0 0 1-.597-.933A9.3 9.3 0 0 1 4.09 12H2.255a7 7 0 0 0 3.072 2.472M3.82 11a13.7 13.7 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5zm6.853 3.472A7 7 0 0 0 13.745 12H11.91a9.3 9.3 0 0 1-.64 1.539 7 7 0 0 1-.597.933M8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855q.26-.487.468-1.068zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.7 13.7 0 0 1-.312 2.5m2.802-3.5a7 7 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7 7 0 0 0-3.072-2.472c.218.284.418.598.597.933M10.855 4a8 8 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4z" />
+                      </svg>
+                    </a>
+
+                  </div>
+
+                  <div className="switchbuttonmulti flex flex-row items-center">
+
+                    <label htmlFor="">Published: </label>
+                    <label className="switch  ml-5">
+                      <input type="checkbox" onChange={() => changePublish()} checked={publishswitchstatus} disabled={pagetype === 'page' ? true : false} />
+                      <span className="slider round"></span>
+                    </label>
+
+                  </div>
+
+                </>
               )}
             </div>
+
+
 
           </div>
 

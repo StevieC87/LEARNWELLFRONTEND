@@ -47,7 +47,7 @@ export default function EditPage() {
   const [remainingdraftsv, setRemainingDrafts] = useState(0);
   const [precedingdraftsv, setPrecedingDrafts] = useState(0);
   const [totalnumberofdraftsv, setTotalNumberOfDrafts] = useState(0);
-
+  const [islatestversion, setIsLatestVersion] = useState(false);
   useEffect(() => {
     console.log(triggerrefresh, "triggerrefreshinuseEffect");
     const FetchPageData = async () => {
@@ -112,6 +112,7 @@ export default function EditPage() {
           console.log('precedingdraftsBEFORE', data.precedingdrafts);
           setPrecedingDrafts(data.precedingdrafts);
           setTotalNumberOfDrafts(data.totalnumberofdrafts);
+          setIsLatestVersion(data.islatestversion);
 
 
         }
@@ -150,6 +151,7 @@ export default function EditPage() {
             remainingdraftsv={remainingdraftsv}
             precedingdraftsv={precedingdraftsv}
             totalnumberofdraftsv={totalnumberofdraftsv}
+            islatestversion={islatestversion}
           />
 
 

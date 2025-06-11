@@ -31,7 +31,6 @@ export default function DeletePage(props) {
   }
 
   const doDeletePage = async () => {
-
     console.log(pagenumber, 'pagenumber');
     console.log(pageindexinarray, "pageindexinarray111111");
     console.log(typeof pageindexinarray, "typeof pageindexinarray");

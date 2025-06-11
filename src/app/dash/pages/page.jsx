@@ -183,10 +183,10 @@ export default function Pages() {
       </div>
       <h1 className="text-2xl pt-10">
         {pagetype === "page" && (
-          <span>Pages List</span>
+          trashedview ? <span>Trashed Pages </span> : <span>Pages List</span>
         )}
         {pagetype === "post" && (
-          <span>Posts List</span>
+          trashedview ? <span>Trashed Posts </span> : <span>Posts List</span>
         )}
       </h1>
 
