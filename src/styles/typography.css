@@ -72,6 +72,11 @@
   }
 
   /* Text Utilities */
+
+  .fontprimarycolor {
+    color: var(--primary-color-light);
+  }
+
   .text-center {
     text-align: center;
   }

@@ -55,6 +55,12 @@
     color: #5bcaec;
     border-color: #5bcaec;
   }
+  .button-thin {
+    border: 1px solid #5bcaec;
+  }
+  .button-noborder {
+    border: none;
+  }
   .button-outline:hover {
     background-color: #5bcaec;
     color: #ffffff;

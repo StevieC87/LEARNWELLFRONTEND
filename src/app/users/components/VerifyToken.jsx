@@ -29,7 +29,7 @@ export default function VerifyToken() {
     const currentUrl = pathname + '?' + searchParams.toString();
     if (lastUrl.current === currentUrl) return;
     else {
-      alert('URL changed: ');
+      // alert('URL changed: ');
       setUrlChanged(prev => prev + 1); // Increment the state to trigger useEffect
       lastUrl.current = currentUrl; // Update the lastUrl reference
     }
@@ -45,7 +45,7 @@ export default function VerifyToken() {
 
 
     const verifyToken = async () => {
-      alert('trying to verify token');
+      // alert('trying to verify token');
 
       const fetchverifyjwttoken = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/verifyjwttoken`, {
         method: 'GET',
@@ -58,10 +58,10 @@ export default function VerifyToken() {
       let response = await fetchverifyjwttoken.json();
 
       if (fetchverifyjwttoken.ok) {
-        alert('fetch worked');
+        //  alert('fetch worked');
         console.log('ok fetch worked')
         // userrole = response.role;
-        //  getuserroleverify();
+        getuserroleverify();
         if (response.message === "tokenvalid") {
           console.log('token is valid');
 
@@ -69,7 +69,7 @@ export default function VerifyToken() {
           setShouldRefresh(false);
         }
         else if (response.message === "refreshtrue") {
-          alert('token expired, refreshing token');
+          // alert('token expired, refreshing token');
           console.log('token expired, refreshing token');
           let refreshit = await fetch('http://localhost:3000/users/refresh-token', {
             method: 'POST',

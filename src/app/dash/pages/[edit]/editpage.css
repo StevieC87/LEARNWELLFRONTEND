@@ -13,7 +13,7 @@
   flex-direction: row;
   flex-wrap: wrap-reverse;
   align-items: start;
-  justify-content: end;
+  /*  justify-content: end; */
   /* width: 100%; */
 }
 
@@ -72,6 +72,10 @@
 
 .formtabs {
   border-bottom: 1px solid lightgray;
+}
+
+.undoredo {
+  color: var(--primary-color-light);
 }
 
 @media screen and (max-width: 768px) {
