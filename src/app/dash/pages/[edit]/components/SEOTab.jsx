@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from 'next/navigation';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateField, setSlugDuplicateWarning, setTriggerSEORefresh } from '@/redux/slices/PagesSlice';
-
+import Popupicon from "./Popupicon";
+import Popup from "./Popup";
 
 export default function SEOTab(props) {
   // const searchParams = useSearchParams();
@@ -270,6 +271,7 @@ export default function SEOTab(props) {
 
   return (
     <>
+      <Popup />
       <form className="seoform" onSubmit={handleSubmit(onSubmit)} style={{ marginBottom: 24 }}>
         <div className="flex flex-row justify-between items-center mb-4">
           <h1>Page SEO</h1>
@@ -284,6 +286,7 @@ export default function SEOTab(props) {
         <div id="metatagscontent" >
           <div className="flex flex-row">
             <div className="formlabelvertical">
+              <Popupicon field="metaTitle" />
               <label>
                 Meta Title - <span className="labeltip1">Shown in browser tab and search results.</span>
                 <p className="labeltip2">Tip: Keep under 60–64 characters. Keep it concise and unique per page.</p>
@@ -300,6 +303,7 @@ export default function SEOTab(props) {
                   onChange={(e) => undoredocheckboxchange(e)}
                 />
 
+
               </div>
 
             )}
@@ -307,11 +311,13 @@ export default function SEOTab(props) {
           <div className="flex flex-row">
 
             <div className="formlabelvertical">
+              <Popupicon field="metaDescription" />
               <label>
                 Meta Description - <span className="labeltip1">Displayed in search engine results.</span>
                 <p className="labeltip2">Tip: Keep under 155–160 characters.</p>
               </label>
               <textarea type="textarea"{...register("metaDescription")} onChange={(e) => checkifdefaultchanged(e)} />
+
             </div>
             {changeddefaultmetadescription && (
               <div className="formlabelvertical">

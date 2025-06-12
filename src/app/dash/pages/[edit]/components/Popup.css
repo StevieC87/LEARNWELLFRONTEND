@@ -1,0 +1,9 @@
+.popupinfodiv {
+  width: 50%;
+  height: auto;
+  position: absolute;
+
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  z-index: 400;
+}
