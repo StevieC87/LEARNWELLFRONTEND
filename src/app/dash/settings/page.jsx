@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import './settings.css'
 //redirect refrech roter
 import { useRouter } from 'next/navigation';
+import { set } from 'react-hook-form';
 //! KEEP IT SIMPLE, IM STARTING WITHA NEW BOLERPLATE EVERYT IME, 
 //!I CAN ADAPT THE CODE EASILY TO ADD NEW LANGUAGES 
 //! WE NEED THIS FOR: IN ORDER TO SET LANGUAGES PROBABLY IN THE BEGINNING, DECIDE IF MULTILINGAUL OR NOT, AND SET LANGUAGES FOR LATER 
@@ -33,6 +34,12 @@ export default function Settings() {
   const [additionalanguagetoadd, setAdditionalLanguageToAdd] = useState('');
   const [addedlanguage, setAddedLanguage] = useState(0); // This will hold the language to be added
 
+  const [langlocales, setLangLocales] = useState({}); // This will hold the locales for each language
+  //example: { 
+  // en: 'en-US',
+  //  fr: 'fr-FR', 
+  // e: 'de-DE' 
+
 
   //first I NEED TO POPULATE THE VALUES FROM THE DATABASE 
   useEffect(() => {
@@ -60,11 +67,22 @@ export default function Settings() {
         console.log('default lang db', data.defaultlanguage);
         setDefaultLanguage(data.defaultlanguage);
       }
+      let object11 = {};
       if (data.languages && Array.isArray(data.languages)) {
         console.log("languages from db", data.languages);
         setLanguages(data.languages);
         setLanguageSelectionFromDb(true);
         setSelectedLanguages(data.languages); // or data.selectedLanguages if 
+        data.languages.map((lang) => {
+          console.log('langlocaleslanglocaleslanglocales', lang);
+
+          // setLangLocales(prev => ({ ...prev, [lang]: data.langlocales[lang] }));
+          object11[lang] = '123';
+          /* else {
+         setLangLocales(prev => ({ ...prev, [lang]: `${lang}-${lang.toUpperCase()}` })); // Default locale format
+       } */
+        })
+        console.log(object11, " langlocaleslanglocaleslanglocales object11object11object11");
 
       }
       // setMultilingualValue(data.multilingual);
@@ -75,13 +93,17 @@ export default function Settings() {
 
   }, [addedlanguage]);
 
+  useEffect(() => {
+    console.log(langlocales, 'langlocaleslanglocaleslanglocales');
+  }, [langlocales])
+
   const onSave = async () => {
     console.log(selectedLanguages, "selectedLanguages");
     console.log("defaultLanguage", defaultLanguage);
     console.log("multilingualvalue", multilingualvalue);
 
 
-    const response = await fetch('http://localhost:3000/savesettings', {
+    const response = await fetch('http://localhost:3000/settings/savesettings', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -145,13 +167,22 @@ export default function Settings() {
 
   }
 
-  useEffect(() => {
-    //alert(`You are adding the language: ${additionalanguagetoadd}`);
-  }, [additionalanguagetoadd]);
+  const addlanglocale = (e) => {
+    //get id of inputfield
+    const id = e.target.id; // Get the id of the input field
+    const fieldname = e.target.name; // Get the name of the input field
+    const value = e.target.value; // Get the value of the input field
+    const language = e.target.dataset.lang; // Get the language from the data attribute
+    // const { name, value } = e.target;
+    const lang = e.target.dataset.lang; // Get the language from the data attribute
+
+    setLangLocales(prev => ({
+      ...prev,
+      [lang]: value // Update the locale for the specific language
+    }));
+  }
 
   return (
-
-
     <>
       <div className="titlebuttons">
         <h1 className="">Settings</h1>
@@ -179,32 +210,46 @@ export default function Settings() {
                 <option key={index} value={language}>{language}</option>
               ))}
             </select>
-          </div>
-
-          {multilingualvalue && (
-            <div className="languagesselect">
-              <span className="poppinsSemiBold">Selected Languages:</span>
-              <div className="langchoosediv">
-                {languages.length > 0 && languages.map((language, index) => (
-                  console.log(language, "language44444444"),
-                  <div key={index} className="languageoption">
-                    <label htmlFor={language} className="chooselanglang">{language}</label>
-                    <input type="checkbox" id={language} name='languagecheckbox'
-                      checked={selectedLanguages.includes(language)}
-                      onChange={() => {
-                        setSelectedLanguages(prev =>
-                          prev.includes(language)
-                            ? prev.filter(l => l !== language)
-                            : [...prev, language]
-                        );
-                      }}
-                    />
+            {multilingualvalue && (
+              <>
+                <div className="languagesselect">
+                  <span className="poppinsSemiBold">Selected Languages:</span>
+                  <div className="langchoosediv">
+                    {languages.length > 0 && languages.map((language, index) => (
+                      console.log(language, "language44444444"),
+                      <div key={index} className="languageoption">
+                        <label htmlFor={language} className="chooselanglang">{language}</label>
+                        <input type="checkbox" id={language} name='languagecheckbox'
+                          checked={selectedLanguages.includes(language)}
+                          onChange={() => {
+                            setSelectedLanguages(prev =>
+                              prev.includes(language)
+                                ? prev.filter(l => l !== language)
+                                : [...prev, language]
+                            );
+                          }}
+                        />
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </div>
-          )}
+                </div>
+                <div className="flex flex-col" style={{ maxWidth: '400px' }}>
+                  {selectedLanguages.length > 0 && (
+                    < span > Preferred Locale e.g. fr-FR</span>
+                  )}
+                  {selectedLanguages.map((language, index) => (
+                    <div key={language}>
+                      <label htmlFor="">Preferred Locale for {language} </label>
+                      <input data-lang={language} type="text" name={`locale-${language}`}
+                        onChange={(e) => addlanglocale(e)}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </>
 
+            )}
+          </div>
 
         </form>
 
@@ -228,7 +273,7 @@ export default function Settings() {
 
           </div>
         )}
-      </div>
+      </div >
 
 
     </>
