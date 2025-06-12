@@ -23,6 +23,10 @@
   color: white;
 }
 
+.formlabelvertical {
+  /*  padding-top: 0px; */
+}
+
 .fielddivblock {
   /*  mb-4 mt-10 border-2 border-gray-300 p-4 rounded-md w-200 */
   /* margin-bottom: 1rem;

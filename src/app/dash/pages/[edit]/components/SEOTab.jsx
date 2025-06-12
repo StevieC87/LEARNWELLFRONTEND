@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { updateField, setSlugDuplicateWarning, setTriggerSEORefresh } from '@/redux/slices/PagesSlice';
 import Popupicon from "./Popupicon";
 import Popup from "./Popup";
+import { setIsPopupInfoOpen } from "@/redux/slices/UISlice";
 
 export default function SEOTab(props) {
   // const searchParams = useSearchParams();
@@ -268,224 +269,239 @@ export default function SEOTab(props) {
     }
   }
 
+  const closePopup = (e) => {
+    let targetid = e.target.id;
+    console.log(targetid, "targetididididid");
 
+    if (e.target.id !== "popupicondiv" && e.target.id !== "popupsvg" && e.target.id !== "popupinfodiv" && e.target.id === '') {
+
+      dispatch(setIsPopupInfoOpen(false));
+    }
+  }
   return (
     <>
-      <Popup />
-      <form className="seoform" onSubmit={handleSubmit(onSubmit)} style={{ marginBottom: 24 }}>
-        <div className="flex flex-row justify-between items-center mb-4">
-          <h1>Page SEO</h1>
-          {showsuccess && <div className="alert alert-success">SEO settings saved.</div>}
-          {showerror && <div className="alert alert-danger">Error saving SEO settings.</div>}
+      <div onClick={(e) => closePopup(e)}>
+        <Popup />
+
+        <form className="seoform" onSubmit={handleSubmit(onSubmit)} style={{ marginBottom: 24 }}>
+          <div className="flex flex-row justify-between items-center mb-4">
+            <h1>Page SEO</h1>
+            {showsuccess && <div className="alert alert-success">SEO settings saved.</div>}
+            {showerror && <div className="alert alert-danger">Error saving SEO settings.</div>}
 
 
-          <div className="flex justify-end">
-            <button className="button button-primary" type="submit">Save SEO Settings</button>
-          </div>
-        </div>
-        <div id="metatagscontent" >
-          <div className="flex flex-row">
-            <div className="formlabelvertical">
-              <Popupicon field="metaTitle" />
-              <label>
-                Meta Title - <span className="labeltip1">Shown in browser tab and search results.</span>
-                <p className="labeltip2">Tip: Keep under 60–64 characters. Keep it concise and unique per page.</p>
-              </label>
-              <input {...register("metaTitle")} onChange={(e) => checkifdefaultchanged(e)} />
+            <div className="flex justify-end">
+              <button className="button button-primary" type="submit">Save SEO Settings</button>
             </div>
-            {changeddefaultmetatitle && (
-              <div className="formlabelvertical">
-                <label>
-                  Custom Meta Title - <span className="labeltip1">Override default meta title.</span>
-                  <p className="labeltip2">Tip: If you want to override default which is based on page title</p>
-                </label>
-                <input type="checkbox" {...register("custommetaTitle")} checked={changeddefaultmetatitle}
-                  onChange={(e) => undoredocheckboxchange(e)}
-                />
-
-
-              </div>
-
-            )}
           </div>
-          <div className="flex flex-row">
-
-            <div className="formlabelvertical">
-              <Popupicon field="metaDescription" />
-              <label>
-                Meta Description - <span className="labeltip1">Displayed in search engine results.</span>
-                <p className="labeltip2">Tip: Keep under 155–160 characters.</p>
-              </label>
-              <textarea type="textarea"{...register("metaDescription")} onChange={(e) => checkifdefaultchanged(e)} />
-
-            </div>
-            {changeddefaultmetadescription && (
+          <div id="metatagscontent" >
+            <div className="flex flex-row">
               <div className="formlabelvertical">
-                <label>
-                  Custom Meta Description - <span className="labeltip1">Override default meta title.</span>
-                  <p className="labeltip2">Tip: If you want to override default which is based on page title</p>
-                </label>
-                <input type="checkbox" {...register("custommetadescription")}
-                  onChange={(e) => undoredocheckboxchange(e)}
-                />
-                {/* 
-  const [changedefaultogtitle, setChangedDefaultOGTitle] = useState(false);
-  const [changedefaultofdescription, setChangedDefaultDescription] = useState(false); */}
-              </div>
-            )}
 
-          </div>
-
-          <div className="card transparent">
-            <div className="text-center font-bold poppinssemibold">Social Sharing Metadata</div>
-            <div id="ogtitle" className="flex flex-row">
-              <div className="formlabelvertical">
-                <label>
-                  OG Title - <span className="labeltip1">Title for Open Graph (social sharing).</span>
-                  <p className="labeltip2">Tip: Should match or complement Meta Title. Used by Facebook, LinkedIn, etc.</p>
+                <label className="flex flex-row gap-5 items-center">
+                  Meta Title
+                  <Popupicon field="metaTitle" />
                 </label>
-                <input {...register("ogTitle")} onChange={(e) => checkifdefaultchanged(e)} />
+                <input {...register("metaTitle")} onChange={(e) => checkifdefaultchanged(e)} />
               </div>
-              {changedefaultogtitle && (
+
+              {changeddefaultmetatitle && (
                 <div className="formlabelvertical">
                   <label>
-                    Custom OG Title - <span className="labeltip1">Override default Open Graph title.</span>
+                    Custom Meta Title - <span className="labeltip1">Override default meta title.</span>
                     <p className="labeltip2">Tip: If you want to override default which is based on page title</p>
                   </label>
-                  <input type="checkbox" {...register("customOGTitle")}
+                  <input type="checkbox" {...register("custommetaTitle")} checked={changeddefaultmetatitle}
                     onChange={(e) => undoredocheckboxchange(e)}
                   />
+
+
                 </div>
+
               )}
             </div>
+            <div className="flex flex-row">
 
-
-            <div id="ogdescription" className="flex flex-row">
               <div className="formlabelvertical">
-                <label>
-                  OG Description - <span className="labeltip1">Description for Open Graph.</span>
-                  <p className="labeltip2">Tip: Should match or complement Meta Description. Used by social platforms.</p>
+                <label className="flex flex-row gap-5 items-center">
+                  Meta Description
+                  <Popupicon field="metaDescription" />
+
                 </label>
-                <textarea {...register("ogDescription")} onChange={e => checkifdefaultchanged(e)} />
+                <textarea type="textarea"{...register("metaDescription")} onChange={(e) => checkifdefaultchanged(e)} />
+
               </div>
-              {changedefaultofdescription && (
+              {changeddefaultmetadescription && (
                 <div className="formlabelvertical">
                   <label>
-                    Custom OG Description - <span className="labeltip1">Override default Open Graph description.</span>
-                    <p className="labeltip2">Tip: If you want to override default which is based on meta description</p>
+                    Custom Meta Description - <span className="labeltip1">Override default meta title.</span>
+                    <p className="labeltip2">Tip: If you want to override default which is based on page title</p>
                   </label>
-                  <input type="checkbox" {...register("customOGdescription")}
+                  <input type="checkbox" {...register("custommetadescription")}
                     onChange={(e) => undoredocheckboxchange(e)}
                   />
+                  {/* 
+  const [changedefaultogtitle, setChangedDefaultOGTitle] = useState(false);
+  const [changedefaultofdescription, setChangedDefaultDescription] = useState(false); */}
                 </div>
               )}
+
             </div>
 
-            <div id="ogimage" className="formlabelvertical">
-              <label>
-                OG Image - <span className="labeltip1">Image for social sharing.</span>
-                <p className="labeltip2">Tip: Recommended size: 1200x630px. Use JPG/PNG. Should be visually appealing, not text-heavy.
-                </p>
-              </label>
+            <div className="card transparent">
+              <div className="text-center font-bold poppinssemibold">Social Sharing Metadata</div>
+              <div id="ogtitle" className="flex flex-row">
+                <div className="formlabelvertical">
+                  <label className="flex flex-row gap-5 items-center">
+                    OG Title
+                    <Popupicon field="ogTitle" />
 
-              {defaultimg && (
-                <>
-                  <p>Selected Default Image: {defaultimg.name}</p>
-                  <img src={`${process.env.NEXT_PUBLIC_API_URL}/${defaultimg}`} alt="Current Logo" width="200" />
-                </>
-
-              )}
-              <div className="flex justify-between">
-                <input {...register("ogImage")} name="ogImage" type="file" accept="image/*"
-                  onChange={(e) => {
-                    setChangedDefaultImage(true);
-                    const file = e.target.files[0];
-                    console.log(file); // should log a File object
-                    setDefaultImage(file);
-                    //  setDefaultImage(e.target.files[0]);
-                    /*  const file = e.target.files[0];
-                     if (file) {
-                       setDefaultImage(URL.createObjectURL(file));
-                     } else {
-                       setDefaultImage(null);
-                     } */
-                  }
-                  } />
-                <button onClick={() => {
-                  setDefaultImage(null);
-                  setChangedDefaultImage(false);
-                  document.querySelector('input[name="ogImage"]').value = ""; // Clear the file input
-                }}>Remove Image</button>
+                  </label>
+                  <input {...register("ogTitle")} onChange={(e) => checkifdefaultchanged(e)} />
+                </div>
+                {changedefaultogtitle && (
+                  <div className="formlabelvertical">
+                    <label>
+                      Custom OG Title - <span className="labeltip1">Override default Open Graph title.</span>
+                      <p className="labeltip2">Tip: If you want to override default which is based on page title</p>
+                    </label>
+                    <input type="checkbox" {...register("customOGTitle")}
+                      onChange={(e) => undoredocheckboxchange(e)}
+                    />
+                  </div>
+                )}
               </div>
+
+
+              <div id="ogdescription" className="flex flex-row">
+                <div className="formlabelvertical">
+                  <label className="flex flex-row gap-5 items-center">
+                    OG Description
+                    <Popupicon field="ogDescription" />
+
+                  </label>
+                  <textarea {...register("ogDescription")} onChange={e => checkifdefaultchanged(e)} />
+                </div>
+                {changedefaultofdescription && (
+                  <div className="formlabelvertical">
+                    <label>
+                      Custom OG Description - <span className="labeltip1">Override default Open Graph description.</span>
+                      <p className="labeltip2">Tip: If you want to override default which is based on meta description</p>
+                    </label>
+                    <input type="checkbox" {...register("customOGdescription")}
+                      onChange={(e) => undoredocheckboxchange(e)}
+                    />
+                  </div>
+                )}
+              </div>
+
+              <div id="ogimage" className="formlabelvertical">
+                <label className="flex flex-row gap-5 items-center">
+                  OG Image
+                  <Popupicon field="ogImage" />
+
+                </label>
+
+                {defaultimg && (
+                  <>
+                    <p>Selected Default Image: {defaultimg.name}</p>
+                    <img src={`${process.env.NEXT_PUBLIC_API_URL}/${defaultimg}`} alt="Current Logo" width="200" />
+                  </>
+
+                )}
+                <div className="flex justify-between">
+                  <input {...register("ogImage")} name="ogImage" type="file" accept="image/*"
+                    onChange={(e) => {
+                      setChangedDefaultImage(true);
+                      const file = e.target.files[0];
+                      console.log(file); // should log a File object
+                      setDefaultImage(file);
+                      //  setDefaultImage(e.target.files[0]);
+                      /*  const file = e.target.files[0];
+                       if (file) {
+                         setDefaultImage(URL.createObjectURL(file));
+                       } else {
+                         setDefaultImage(null);
+                       } */
+                    }
+                    } />
+                  <button onClick={() => {
+                    setDefaultImage(null);
+                    setChangedDefaultImage(false);
+                    document.querySelector('input[name="ogImage"]').value = ""; // Clear the file input
+                  }}>Remove Image</button>
+                </div>
+              </div>
+
+              <div id="twittercardtype" className="formlabelvertical">
+                <label className="flex flex-row gap-5 items-center">
+                  Twitter Card Type
+                  <Popupicon field="twitterCardType" />
+
+                </label>
+                <select {...register("twitterCardType")}>
+                  <option value="">none</option>
+                  <option value="summary_large_image">summary_large_image</option>
+                  <option value="summary">summary</option>
+
+                  <option value="player">player</option>
+                </select>
+              </div>
+
+              <div id="ogsitename" className="formlabelvertical">
+                <label className="flex flex-row gap-5 items-center">
+                  OG Site Name
+                  <Popupicon field="OGSitename" />
+
+                </label>
+                <input {...register("ogSitename")} />
+              </div>
+
             </div>
+            <div id="robots" className="formlabelvertical">
+              <label className="flex flex-row gap-5 items-center">
+                Robots
+                <Popupicon field="robots" />
 
-            <div id="twittercardtype" className="formlabelvertical">
-              <label>
-                Twitter Card Type - <span className="labeltip1">Type of Twitter card.</span>
-                <p className="labeltip2">Use summary_large_image for rich previews. Set explicitly.
-
-                </p>
               </label>
-              <select {...register("twitterCardType")}>
-                <option value="">none</option>
-                <option value="summary_large_image">summary_large_image</option>
-                <option value="summary">summary</option>
-
-                <option value="player">player</option>
+              <select {...register("robots")}>
+                <option value="index, follow">index, follow</option>
+                <option value="noindex, follow">noindex, follow</option>
+                <option value="index, nofollow">index, nofollow</option>
+                <option value="noindex, nofollow">noindex, nofollow</option>
               </select>
             </div>
 
-            <div id="ogsitename" className="formlabelvertical">
-              <label>
-                OG Site Name - <span className="labeltip1">Name of your website for Open Graph.</span>
-                <p className="labeltip2">Tip: Example: Your Brand Name. Used by Facebook, LinkedIn, etc.</p>
+            <div id="hreflang" className="formlabelvertical">
+              <label className="flex flex-row gap-5 items-center">
+                Hreflang
+                <Popupicon field="hreflang" />
+
               </label>
-              <input {...register("ogSitename")} />
+              <input {...register("hreflang")} />
+            </div>
+            <div id="canonical" className="formlabelvertical">
+              <label className="flex flex-row gap-5 items-center">
+                Canonical URL
+                <Popupicon field="canonicalUrl" />
+
+              </label>
+              <input {...register("canonicalUrl")} disabled className="cursor-not-allowed" />
             </div>
 
-          </div>
-          <div id="robots" className="formlabelvertical">
-            <label>
-              Robots - <span className="labeltip1">Controls search engine indexing.</span>
-              <p className="labeltip2">Tip: Example: index, follow. Use noindex for drafts or private pages</p>
-            </label>
-            <select {...register("robots")}>
-              <option value="index, follow">index, follow</option>
-              <option value="noindex, follow">noindex, follow</option>
-              <option value="index, nofollow">index, nofollow</option>
-              <option value="noindex, nofollow">noindex, nofollow</option>
-            </select>
+
+            <div id="ogtype" className="formlabelvertical">
+              <label className="flex flex-row gap-5 items-center">
+                OG Type
+                <Popupicon field="ogType" />
+
+              </label>
+              <input {...register("ogType")} disabled className="cursor-not-allowed" />
+            </div>
           </div>
 
-          <div id="hreflang" className="formlabelvertical">
-            <label>
-              Hreflang - <span className="labeltip1">Language/region alternate URLs.</span>
-              <p className="labeltip2">Required for multilingual SEO. Matches language and regional versions. Use ISO codes.
-                Tip: Format: en:/en, fr:/fr</p>
-            </label>
-            <input {...register("hreflang")} />
-          </div>
-          <div id="canonical" className="formlabelvertical">
-            <label>
-              Canonical URL - <span className="labeltip1">Preferred URL for this page.</span>
-              <p className="labeltip2">Avoids duplicate content issues. One per page.
-                .             Tip: Use absolute URL (e.g. https://example.com/page)</p>
-            </label>
-            <input {...register("canonicalUrl")} disabled className="cursor-not-allowed" />
-          </div>
-
-
-          <div id="ogtype" className="formlabelvertical">
-            <label>
-              OG Type - <span className="labeltip1">Open Graph object type.</span>
-              <p className="labeltip2">Tip: Example: website, article, product. Required by OG. Select based on content type.
-              </p>
-            </label>
-            <input {...register("ogType")} disabled className="cursor-not-allowed" />
-          </div>
-        </div>
-
-      </form>
+        </form>
+      </div>
     </>
   );
 }

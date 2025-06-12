@@ -3,10 +3,10 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setIsPopupInfoOpen, setPopupInfo, setPopupInfoPosition } from "@/redux/slices/UISlice";
 
+
 export default function (props) {
   const dispatch = useDispatch();
   const { field } = props
-
   const Arraymetafieldsinfo = [
     {
       field: "metaTitle",
@@ -75,12 +75,31 @@ export default function (props) {
 
   }
 
+  //get browser size
+  const [browserWidth, setBrowserWidth] = useState(window.innerWidth);
+
+
+
+
+  useEffect(() => {
+    const handleResize = () => setBrowserWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
 
   //function get x and y position of the svg icon
   const getPosition = (e) => {
     const rect = e.target.getBoundingClientRect();
-    let x = rect.left + window.scrollX;
-    let y = rect.top + window.scrollY;
+    let x
+    if (browserWidth < 768) {
+      x = rect.left + window.scrollX
+    }
+    else if (browserWidth >= 768) {
+      x = rect.left + window.scrollX - 290; // add 20px to the left position
+    }
+
+    let y = rect.top + window.scrollY + 20;
 
     return {
       positions: {
@@ -95,11 +114,12 @@ export default function (props) {
   return (
     <>
 
-      {ispopupinfoopen ? 'isopentrue : ' : 'isopenfalse : '}
-      <svg onClick={(e) => openPopup(e)} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-info-circle" viewBox="0 0 16 16">
-        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-        <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
-      </svg>
+      <div id="popupicondiv" className="popupicondiv">
+        <svg id="popupsvg" onClick={(e) => openPopup(e)} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-info-circle cursor-pointer" viewBox="0 0 16 16">
+          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+          <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+        </svg>
+      </div>
     </>
   )
 }

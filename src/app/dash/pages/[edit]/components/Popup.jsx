@@ -24,7 +24,7 @@ export default function Popupinfo(props) {
         <>
 
 
-          <div id="popupinfodiv" className="popupinfodiv" style={{ left: positionx, top: positiony }}>
+          <div id="popupinfodiv" className="popupinfodiv p-3" style={{ left: positionx, top: positiony }}>
 
             {popupinfo.info}
 
