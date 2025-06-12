@@ -8,6 +8,8 @@ import { useSearchParams } from 'next/navigation';
 export default function PageSpecificSEO() {
   const searchParams = useSearchParams();
 
+
+
   const pageid = searchParams.get('pageid');
   const [showsuccess, setShowSuccess] = useState(false);
   const [showerror, setShowError] = useState(false);
@@ -111,7 +113,53 @@ export default function PageSpecificSEO() {
     </div>
   );
 
+  const Arraymetafieldsinfo = [
+    {
+      field: "metaTitle",
+      info: "Shown in browser tab and search results. Keep under 60–64 characters. Keep it concise and unique per page. By default, it uses the page title but you can edit it and make it 'custom'. After you make it 'custom', it will not change automatically if you change the page title, until you make it 'default' again and save",
+    },
+    {
+      field: "metaDescription",
+      info: "Displayed in search engine results. Keep under 155–160 characters. By default, it uses the page summary but you can edit it and make it 'custom'. After you make it 'custom', it will not change automatically if you change the page summary, until you make it 'default' again and save",
+    },
+    {
+      field: "ogTitle",
+      info: "This is the title that will be shown when the page is shared on social media platforms like Facebook, Twitter, LinkedIn, etc. By default it uses the page title but you can edit it and make it 'custom'. After you make it 'custom', it will not change automatically if you change the Ppage title, until you make it 'default' again and save",
+    },
+    {
+      field: "ogDescription",
+      info: "Description for Open Graph. Should match or complement Meta Description. Used by social platforms. By default, it uses the 'summary' field but you can edit it and make it 'custom'. After you make it 'custom', it will not change automatically if you change the 'summary' field, until you make it 'default' again and save",
+    },
+    {
+      field: "ogImage",
+      info: "Image for social sharing. This is what will be shown when the page is shared on social media platforms like Facebook, Twitter, LinkedIn, etc. Recommended size: 1200x630px. Minimum recommended image size: 300×157 pixels. Use JPG/ PNG/WEBP format. By default will use the default image set in the Site Details section."
+    },
+    {
+      field: "twitterCardType",
+      info: "This is for sharing on X (former Twitter). If the OG Image is size: 1200x630px, then you can use 'summary_large_image'. If the image is smaller, then select 'summary'. "
+    },
+    {
+      field: "OGSitename",
+      info: "Name of your website  This is what will be shown when the page is shared on social media platforms like Facebook, Twitter, LinkedIn, etc. By default, it uses the site name set in the Site Details section."
+    },
+    {
+      field: "robots",
+      info: "This is for search engines. The default is index,follow which means search engines can index this page and follow links on it. You can change it to noindex, nofollow to prevent search engines, for drafts or private pages."
+    },
+    {
+      field: "canonicalUrl",
+      info: "Preferred URL for this page. Avoids duplicate content issues. One per page."
+    },
+    {
+      field: "hreflang",
+      info: "This is for multilingual SEO. Matches language and regional versions. Use ISO codes. Example: en:/en, fr:/fr. Required for multilingual sites to indicate language/region alternate URLs."
+    },
+    {
+      field: "ogType",
+      info: "Open Graph object type. Example: website, article, product. Required by Open Graph protocol. Select based on content type."
+    }
 
+  ]
 
   return (
     <>
