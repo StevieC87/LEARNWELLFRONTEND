@@ -50,6 +50,7 @@ export default function Pages() {
 
   const [trashedview, setTrashedView] = useState(false); // to store if trashed view is active
 
+  //THIS IS TO GET OUT OF THE TRASH VIEW if e.g. clicks on 'pages' which in 'posts' and in trash view 
   useEffect(() => {
     const currentUrl = pathname + '?' + searchParams.toString();
     if (lastUrl.current === currentUrl) return;
