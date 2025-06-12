@@ -79,6 +79,7 @@ export default function TrashPage(props) {
         getModalAnswer={getModalAnswer}
         buttontextconfirm="Yes"
         buttontextcancel="No"
+
       />
     </>
 

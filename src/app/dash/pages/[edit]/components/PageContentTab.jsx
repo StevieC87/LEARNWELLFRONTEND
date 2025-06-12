@@ -510,8 +510,7 @@ export default function PageContentTab(props) {
   return (
     <>
       <div className={`editpagecontainer fade-in2 ${isTransitioning ? '' : 'visible'} flex flex-column`}>
-        <span>{islatestversion ? 'islatestversion' : 'isnotlatestversion'
-        }</span>
+
         <form onSubmit={(e) => {
           if (!hasChanges & !allowsavewithoutchanges) {
             e.preventDefault();
@@ -530,6 +529,8 @@ export default function PageContentTab(props) {
 
           <div className="topbuttons">
             <div className="flex flex-row gap-5 ">
+              <span>{islatestversion ? 'islatestversion' : 'isnotlatestversion'
+              }</span>
               <button type="submit" className={hasChanges ? "button button-primary" : "button button-outline"}>
                 {issaving && (
                   <span>Saving</span>

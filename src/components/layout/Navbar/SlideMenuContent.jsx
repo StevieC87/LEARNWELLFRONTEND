@@ -3,60 +3,26 @@ import './css/slidemenu.css';
 import Link from 'next/link';
 import LogoutButton from '@/app/users/components/Logout.jsx';
 import Image from 'next/image'; // Import Image from next/image
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUserRole, setSettings } from '@/redux/slices/DashSlice'; // Import the action to set user role
 //refresh next smooth
 import { useRouter } from 'next/navigation'; // Import useRouter for navigation
+import { usePathname } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
+import { useRef } from 'react';
+
 
 
 export default function SlideMenu() {
+
+  const pathname = usePathname();
+  const searchParams = useSearchParams()
+
   const router = useRouter();
   const dispatch = useDispatch();
+
   const userrole = useSelector((state) => state.DashSlice.userrole);
-
-  useEffect(() => {
-    let getuserroleverify = async () => {
-      const response = await fetch('http://localhost:3000/settings/getdataforredux', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include', // this is what sends/receives cookie
-      });
-      if (!response.ok) {
-        console.log("Failed to fetch user role");
-        console.log(response, "response");
-        const failmessage = await response.json();
-        console.log(failmessage, "failmessage");
-        if (response.status === 403) {
-          console.log("Forbidden: You are not authorized to access this resource.");
-          if (failmessage.action === 'redirecttologin') {
-            // Handle redirection to login page
-            window.location.href = '/users/login'; // Redirect to login page
-          }
-          else if (failmessage.action === 'refreshpage') {
-            // Handle refreshing the page
-            router.refresh(); // Use Next.js router to refresh the page
-            // window.location.reload(); // Refresh the current page
-          }
-
-          // Handle unauthorized access, e.g., redirect to login page
-          // window.location.href = '/users/login'; // Redirect to login page
-        }
-        return;
-      }
-      const data = await response.json();
-      console.log("User role fetched successfully:", data);
-      dispatch(setUserRole(data.role)); // Dispatch the action to set user role in 
-      dispatch(setSettings(data.settings)); // Dispatch the action to set settings in the Redux store
-      // Redux store
-      // You can use the user role data here if needed
-    }
-    getuserroleverify();
-
-
-  }, []);
 
   return (
     <div >
