@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSelector } from 'react-redux';
 import Link from "next/link";
 import './pageslist.css'
@@ -9,13 +9,18 @@ import { useSearchParams } from 'next/navigation';
 import Caret from "./components/caret";
 import { set } from "react-hook-form";
 import Showschemasnopages from "./components/Showschemasnopages";
-
-// import LexicalField from '../uicomponents/customfields/Lexical/LexicalField';
+import { usePathname } from 'next/navigation'
 
 export default function Pages() {
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const pagetype = searchParams.get('pagetype');
   console.log('pagetype', pagetype);
+
+
+  const lastUrl = useRef('');
+  const [urlchanged, setUrlChanged] = useState(0); // State to trigger useEffect when URL changes
+
 
   const multilingual = useSelector((state) => state.DashSlice.settings.multilingual);
   const userrole = useSelector((state) => state.DashSlice.userrole);
@@ -44,6 +49,21 @@ export default function Pages() {
   const [searchterm, setSearchTerm] = useState(''); // to store search term
 
   const [trashedview, setTrashedView] = useState(false); // to store if trashed view is active
+
+  useEffect(() => {
+    const currentUrl = pathname + '?' + searchParams.toString();
+    if (lastUrl.current === currentUrl) return;
+    else {
+      // alert('URL changed: ');
+      setUrlChanged(prev => prev + 1); // Increment the state to trigger useEffect
+      lastUrl.current = currentUrl; // Update the lastUrl reference
+      setTrashedView(false); // Reset trashed view when URL changes`
+    }
+
+    // lastUrl.current = currentUrl;
+    // your fetch logic here
+  }, [pathname, searchParams]);
+  // import LexicalField from '../uicomponents/customfields/Lexical/LexicalField';
 
   useEffect(() => {
     console.log(userrole, "userroleinpageslist");
