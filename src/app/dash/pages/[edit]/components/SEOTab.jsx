@@ -124,11 +124,11 @@ export default function SEOTab(props) {
             let filetype = defaultimg.split('.').pop();
             console.log(filetype, "filetype");
             //! ALSO CHANGE NAME FOR EACH PAGE
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${defaultimg}`);
-            const blob = await response.blob();
-            const file = new File([blob], `${pageid}.${filetype}`, { type: blob.type });
-            console.log(file, "defaultimgfileobject");
-            formData.append("ogImage", file);
+            /*   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${defaultimg}`);
+              const blob = await response.blob();
+              const file = new File([blob], `${pageid}.${filetype}`, { type: blob.type });
+              console.log(file, "defaultimgfileobject");
+              formData.append("ogImage", file); */
           }
           else {
             console.log('11111111111111b')
@@ -169,6 +169,8 @@ export default function SEOTab(props) {
     console.log(formData, "formData");
 
     formData.append("pageid", pageid);
+    formData.append("changeddefaultimage", changeddefaultimg);
+    // formData.append("defaultimgurl", `${process.env.NEXT_PUBLIC_API_URL}/media/ogimage`);
 
     const response = await fetch("http://localhost:3000/seo/savepagespecificSEO",
       {
