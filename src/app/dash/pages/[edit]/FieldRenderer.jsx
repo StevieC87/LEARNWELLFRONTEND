@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateField } from '@/redux/slices/PagesSlice';
 import { useState } from 'react';
 import SummernoteField from '../../uicomponents/customfields/Summernote/SummernoteField';
-
+import MediaButton from '../../uicomponents/customfields/MediaButton';
 
 //! ADD ID OF THE FIELD  - PASS TO REDUX 
 
@@ -144,7 +144,19 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
           />
         </div>
       );
-
+    case "medialibrary":
+      return (
+        <MediaButton
+          name={name}
+          id={fielddata.id}
+          locale={fielddata.locale}
+          schema={fielddata.schema}
+          type={type}
+          value={value}
+          placeholder={placeholder}
+          required={required || false}
+        />
+      )
     default:
       return null;
   }

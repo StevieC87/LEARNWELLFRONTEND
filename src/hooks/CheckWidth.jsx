@@ -48,7 +48,7 @@ export default function CheckWidth() {
                 //      setmaxpixelsnow(1025);
               }
 
-            console.log(label, 'label');
+            //   console.log(label, 'label');
 
             //dispatch(setActiveSize(label));
             //return; // Exit loop after first match

@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 
 export default function BottomBar() {
   const maxpixelsnow = CheckWidth();
-  console.log(maxpixelsnow, 'maxpixelsnow');
+  // console.log(maxpixelsnow, 'maxpixelsnow');
   const isOpen = true;
   const [ismobile, setIsMobile] = useState(false);
   useEffect(() => {

@@ -59,11 +59,11 @@ export default function VerifyToken() {
 
       if (fetchverifyjwttoken.ok) {
         //  alert('fetch worked');
-        console.log('ok fetch worked')
+        // console.log('ok fetch worked')
         // userrole = response.role;
         getuserroleverify();
         if (response.message === "tokenvalid") {
-          console.log('token is valid');
+          //  console.log('token is valid');
 
           //SET THESE MAYBE REDUX 
           setShouldRefresh(false);
@@ -143,7 +143,7 @@ export default function VerifyToken() {
       return;
     }
     const data = await response.json();
-    console.log("User role fetched successfully:", data);
+    //   console.log("User role fetched successfully:", data);
     dispatch(setUserRole(data.role)); // Dispatch the action to set user role in 
     dispatch(setSettings(data.settings)); // Dispatch the action to set settings in the Redux store
     // Redux store

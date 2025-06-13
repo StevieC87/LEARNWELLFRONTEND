@@ -10,6 +10,7 @@ const UISlice = createSlice({
       x: 0,
       y: 0,
     },
+    showImageSelected: "",
   },
 
   reducers: {
@@ -22,13 +23,17 @@ const UISlice = createSlice({
     setPopupInfoPosition: (state, action) => {
       state.popupinfoposition = action.payload;
     },
-    /*  setIsModalTrashOpen: (state, action) => {
-      state.isModalTrashopen = action.payload;
-    }, */
+    setShowImageSelected: (state, action) => {
+      state.showImageSelected = action.payload;
+    },
   },
 });
 
-export const { setIsPopupInfoOpen, setPopupInfo, setPopupInfoPosition } =
-  UISlice.actions;
+export const {
+  setIsPopupInfoOpen,
+  setPopupInfo,
+  setPopupInfoPosition,
+  setShowImageSelected,
+} = UISlice.actions;
 
 export default UISlice.reducer;
