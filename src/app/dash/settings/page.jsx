@@ -73,16 +73,18 @@ export default function Settings() {
         setLanguages(data.languages);
         setLanguageSelectionFromDb(true);
         setSelectedLanguages(data.languages); // or data.selectedLanguages if 
-        data.languages.map((lang) => {
-          console.log('langlocaleslanglocaleslanglocales', lang);
+        setLangLocales(data.langlocales)
 
-          // setLangLocales(prev => ({ ...prev, [lang]: data.langlocales[lang] }));
-          object11[lang] = '123';
-          /* else {
-         setLangLocales(prev => ({ ...prev, [lang]: `${lang}-${lang.toUpperCase()}` })); // Default locale format
-       } */
-        })
-        console.log(object11, " langlocaleslanglocaleslanglocales object11object11object11");
+        /*   data.languages.map((lang) => {
+            console.log('langlocaleslanglocaleslanglocales', lang);
+            
+                // setLangLocales(prev => ({ ...prev, [lang]: data.langlocales[lang] }));
+                object11[lang] = '123';
+              // else {
+              // setLangLocales(prev => ({ ...prev, [lang]: `$ // {lang}-${lang.toUpperCase()}` })); // Default //locale format
+          //  } 
+          }) */
+        // console.log(object11, " langlocaleslanglocaleslanglocales object11object11object11");
 
       }
       // setMultilingualValue(data.multilingual);
@@ -111,7 +113,8 @@ export default function Settings() {
       body: JSON.stringify({
         multilingual: multilingualvalue,
         defaultlanguage: defaultLanguage,
-        languages: selectedLanguages, // Use selectedLanguages instead of languages
+        languages: selectedLanguages,
+        langlocales: langlocales, // Send the locales for each language
 
       }),
       credentials: 'include', // this is what sends/receives cookie
@@ -176,10 +179,33 @@ export default function Settings() {
     // const { name, value } = e.target;
     const lang = e.target.dataset.lang; // Get the language from the data attribute
 
+    //Check if language exists alreafy
+
+    //   let exists = langlocales[lang]; 
+
     setLangLocales(prev => ({
       ...prev,
       [lang]: value // Update the locale for the specific language
     }));
+
+  }
+
+  const changeSelectedlangs = (e, language) => {
+    const checked = e.target.checked;
+    //console.log(checked, 'valuevaluevalue111111')
+    setSelectedLanguages(prev =>
+      prev.includes(language)
+        ? prev.filter(l => l !== language)
+        : [...prev, language]
+    );
+    if (!checked) {
+      let newlanglocales = Object.fromEntries(
+        Object.entries(langlocales).filter(([key]) => key !== language)
+      );
+      console.log(newlanglocales, 'newlanglocalesnewlanglocalesnewlanglocales')
+      setLangLocales(newlanglocales)
+    }
+
   }
 
   return (
@@ -221,13 +247,7 @@ export default function Settings() {
                         <label htmlFor={language} className="chooselanglang">{language}</label>
                         <input type="checkbox" id={language} name='languagecheckbox'
                           checked={selectedLanguages.includes(language)}
-                          onChange={() => {
-                            setSelectedLanguages(prev =>
-                              prev.includes(language)
-                                ? prev.filter(l => l !== language)
-                                : [...prev, language]
-                            );
-                          }}
+                          onChange={(e) => changeSelectedlangs(e, language)}
                         />
                       </div>
                     ))}
@@ -237,10 +257,15 @@ export default function Settings() {
                   {selectedLanguages.length > 0 && (
                     < span > Preferred Locale e.g. fr-FR</span>
                   )}
+
                   {selectedLanguages.map((language, index) => (
                     <div key={language}>
-                      <label htmlFor="">Preferred Locale for {language} </label>
+                      <label htmlFor=""
+                        style={{ width: '185px', display: 'inline-block' }}
+                      >Preferred Locale for {language}   </label>
                       <input data-lang={language} type="text" name={`locale-${language}`}
+                        value={langlocales[language] || ""}
+                        style={{ maxWidth: '100px' }}
                         onChange={(e) => addlanglocale(e)}
                       />
                     </div>
