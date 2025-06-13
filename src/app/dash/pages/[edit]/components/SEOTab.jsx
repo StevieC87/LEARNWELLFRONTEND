@@ -50,6 +50,10 @@ export default function SEOTab(props) {
   // 
   const [changeddefaultimg, setChangedDefaultImage] = useState(false);
 
+  useEffect(() => {
+    console.log(defaultimg, "defaultimginSEOTab");
+  }, [defaultimg]);
+
   //FETCH SEO SETTINGS
   useEffect(() => {
     const fetchData = async () => {
