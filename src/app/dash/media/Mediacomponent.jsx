@@ -2,12 +2,12 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import './media.css';
-
+import { useDispatch, useSelector } from 'react-redux'
+import { setShowMediaLibraryModal, setSelectedImagefromGalleryModal } from '@/redux/slices/UISlice';
 export default function MediaComponent(props) {
+  const dispatch = useDispatch();
 
-  const { visibility } = props; // here we pass string 'visible' or 'hidden'
-
-  const [isVisible, setIsVisible] = useState(visibility || "visible"); // State to control visibility
+  const showMediaLibraryModal = useSelector((state) => state.UISlice.showMediaLibraryModal);
 
   const [basefiles, setBaseFiles] = useState([]);
   const [basefolders, setBaseFolders] = useState([]);
@@ -93,12 +93,19 @@ export default function MediaComponent(props) {
       }
     }
   }
+  //
+  const clickonImage = (index, file) => {
 
-  const showImagelarge = (index, file) => {
-    setImageShow(true);
-    setImageShowIndex(index);
-    console.log('show image large', index);
-    setImageShowFile(`${currentpathforimage}/${file}`)
+    if (showMediaLibraryModal) {
+      dispatch(setSelectedImagefromGalleryModal(`public/media${currentpath}/${file}`));
+      dispatch(setShowMediaLibraryModal(false))
+    }
+    else if (!showMediaLibraryModal) {
+      setImageShow(true);
+      setImageShowIndex(index);
+      console.log('show image large', index);
+      setImageShowFile(`${currentpathforimage}/${file}`)
+    }
   }
 
   const clickevent = (e) => {
@@ -127,59 +134,60 @@ export default function MediaComponent(props) {
 
   return (
     <>
-      {isVisible === 'visible' && (
-        <div className="mediaouterdiv" onClick={(e) => clickevent(e)}>
+      <div className="mediaouterdiv" onClick={(e) => clickevent(e)}>
 
-          {imageshow && (
-            <div id="showimagediv" className="showimagediv">
-              <button className="showimagecaret" id="imagecaretleft" onClick={() => prevnextimage('previous')}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-left" viewBox="0 0 16 16">
-                  <path d="M10 12.796V3.204L4.519 8zm-.659.753-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753" />
-                </svg>
-              </button>
-              <img id="showimageimage" src={imageshowfile} alt={`Image ${imageshowindex}`} className="w-full h-full object-contain" />
-              <button className="showimagecaret" id="imagecaretright" onClick={() => prevnextimage('next')}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-right" viewBox="0 0 16 16">
-                  <path d="M6 12.796V3.204L11.481 8zm.659.753 5.48-4.796a1 1 0 0 0 0-1.506L6.66 2.451C6.011 1.885 5 2.345 5 3.204v9.592a1 1 0 0 0 1.659.753" />
-                </svg>
-              </button>
-            </div>
-          )}
-          <div className="flex flex-col ">
+        {imageshow && (
+          <div id="showimagediv" className="showimagediv">
+            <button className="showimagecaret" id="imagecaretleft" onClick={() => prevnextimage('previous')}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-left" viewBox="0 0 16 16">
+                <path d="M10 12.796V3.204L4.519 8zm-.659.753-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753" />
+              </svg>
+            </button>
+            <img id="showimageimage" src={imageshowfile} alt={`Image ${imageshowindex}`} className="w-full h-full object-contain" />
+            <button className="showimagecaret" id="imagecaretright" onClick={() => prevnextimage('next')}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-right" viewBox="0 0 16 16">
+                <path d="M6 12.796V3.204L11.481 8zm.659.753 5.48-4.796a1 1 0 0 0 0-1.506L6.66 2.451C6.011 1.885 5 2.345 5 3.204v9.592a1 1 0 0 0 1.659.753" />
+              </svg>
+            </button>
+          </div>
+        )}
+        <div className="flex flex-col ">
+          <div className="flex flex-row justify-between">
             <h1 className="">Media Page</h1>
+            <button onClick={() => dispatch(setShowMediaLibraryModal(false))}>Close Media Library</button>
+          </div>
 
-            <div className="mediaouterdiv">
-              {pathhistory.length > 1 && (
-                <button onClick={() => history('back')} className="mt-5 mb-5 button button-primary button-outline">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-90deg-left" viewBox="0 0 16 16">
-                    <path fillRule="evenodd" d="M1.146 4.854a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H12.5A2.5 2.5 0 0 1 15 6.5v8a.5.5 0 0 1-1 0v-8A1.5 1.5 0 0 0 12.5 5H2.707l3.147 3.146a.5.5 0 1 1-.708.708z" />
-                  </svg>
-                </button>
-              )}
-              {basefolders.length > 0 && (
-                <div className="folderslistdiv mb-10">
-                  {basefolders.map((folder, index) => (
-                    <button key={index} className="folderitem" onClick={() => changeFolder(folder)}>
-                      <Image src="/images/folder-cyan.svg" width={60} height={60} alt="folder"></Image>
-                      <span>{folder}</span>
-                    </button>
-                  ))}
-                </div>
-              )}
-              {basefiles.length > 0 && (
-                <div className="fileslistdiv">
-                  {basefiles.map((file, index) => (
-                    <div id="fileimagediv" key={index} className="fileitem" onClick={() => showImagelarge(index, file)}>
-                      <img className="fileimage" src={`${currentpathforimage}/${file}`} width={60} height={60} />
-                      <span>{file}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+          <div className="mediaouterdiv">
+            {pathhistory.length > 1 && (
+              <button onClick={() => history('back')} className="mt-5 mb-5 button button-primary button-outline">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-90deg-left" viewBox="0 0 16 16">
+                  <path fillRule="evenodd" d="M1.146 4.854a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H12.5A2.5 2.5 0 0 1 15 6.5v8a.5.5 0 0 1-1 0v-8A1.5 1.5 0 0 0 12.5 5H2.707l3.147 3.146a.5.5 0 1 1-.708.708z" />
+                </svg>
+              </button>
+            )}
+            {basefolders.length > 0 && (
+              <div className="folderslistdiv mb-10">
+                {basefolders.map((folder, index) => (
+                  <button key={index} className="folderitem" onClick={() => changeFolder(folder)}>
+                    <Image src="/images/folder-cyan.svg" width={60} height={60} alt="folder"></Image>
+                    <span>{folder}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+            {basefiles.length > 0 && (
+              <div className="fileslistdiv">
+                {basefiles.map((file, index) => (
+                  <div id="fileimagediv" key={index} className="fileitem" onClick={() => clickonImage(index, file)}>
+                    <img className="fileimage" src={`${currentpathforimage}/${file}`} width={60} height={60} />
+                    <span>{file}</span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
-      )}
+      </div>
     </>
   )
 }

@@ -2,27 +2,25 @@
 'use client';
 
 import { useState } from 'react';
-
+import { useDispatch, useSelector } from 'react-redux'
+import { setShowMediaLibraryModal, setSelectedImagefromGalleryModal } from '@/redux/slices/UISlice';
 import MediaComponent from '@/app/dash/media/Mediacomponent';
 import './mediabutton.css';
 
 export default function MediaButton(props) {
 
-  const [mediaLibVisibility, setMediaLibVisibility] = useState("hidden");
-  /*   name={name}
-            id={fielddata.id}
-            locale={fielddata.locale}
-            schema={fielddata.schema}
-            type={type}
-            value={value}
-            placeholder={placeholder}
-            required={required || false} */
+  const dispatch = useDispatch();
 
   const { name, id, locale, schema, type, value, placeholder, required } = props;
 
+  const showMediaLibraryModal = useSelector((state) => state.UISlice.showMediaLibraryModal);
+  const selectedImagefromGalleryModal = useSelector((state) => state.UISlice.selectedImagefromGalleryModal);
+
 
   const openMediaLibrary = () => {
-    setMediaLibVisibility(prevValue => prevValue === "visible" ? "hidden" : "visible")
+
+    dispatch(setShowMediaLibraryModal(!showMediaLibraryModal));
+    //  setMediaLibVisibility(prevValue => prevValue === "visible" ? "hidden" : "visible")
 
     {
       // setMediaLibVisibility("visible");
@@ -30,28 +28,36 @@ export default function MediaButton(props) {
     // setMediaLibVisibility("visible");
   }
 
+
   return (
     <>
-      {mediaLibVisibility === 'visible' ? 'visible' : 'hidden'}
-      <button onClick={() => openMediaLibrary()} className="btn btn-primary">
+
+      <button onClick={() => openMediaLibrary()} className="button  button-outline">
         Choose from Media Library
       </button>
-      <input type="text" />
+      <input type="text" value={selectedImagefromGalleryModal} onChange={(e) => dispatch(setSelectedImagefromGalleryModal(e.target.value))} />
 
-      {/*   <div id="medialibrarymodal" visibility={mediaLibVisibility} >
-        <MediaComponent visibility={mediaLibVisibility} />
 
-      </div> */}
-      <div id="medialibrarymodal" className="medialibrarymodal" style={{ visibility: mediaLibVisibility }}>
-        {mediaLibVisibility === "visible" && <MediaComponent visibility={mediaLibVisibility} />}
-      </div>
+
+      {showMediaLibraryModal === true &&
+        <div className="medialibrarymodal">
+          <MediaComponent />
+        </div>
+      }
+      {/* visibility={showMediaLibraryModal} */}
+
 
     </>
   )
 
 }
 
+{/*   <div id="medialibrarymodal" visibility={mediaLibVisibility} >
+        <MediaComponent visibility={mediaLibVisibility} />
 
+      </div> */}
+{/*  <div id="medialibrarymodal"  style={{ visibility: showMediaLibraryModal }}> */ }
+{/*  </div> */ }
 /* WHAT THIS DOES 
 -opens a modal with media library
 -user selects a preexisting image

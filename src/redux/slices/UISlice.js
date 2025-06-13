@@ -11,6 +11,8 @@ const UISlice = createSlice({
       y: 0,
     },
     showImageSelected: "",
+    showMediaLibraryModal: false, // Added to control media library modal visibility
+    selectedImagefromGalleryModal: "",
   },
 
   reducers: {
@@ -26,6 +28,12 @@ const UISlice = createSlice({
     setShowImageSelected: (state, action) => {
       state.showImageSelected = action.payload;
     },
+    setShowMediaLibraryModal: (state, action) => {
+      state.showMediaLibraryModal = action.payload;
+    },
+    setSelectedImagefromGalleryModal: (state, action) => {
+      state.selectedImagefromGalleryModal = action.payload;
+    },
   },
 });
 
@@ -34,6 +42,8 @@ export const {
   setPopupInfo,
   setPopupInfoPosition,
   setShowImageSelected,
+  setShowMediaLibraryModal,
+  setSelectedImagefromGalleryModal,
 } = UISlice.actions;
 
 export default UISlice.reducer;
