@@ -34,7 +34,11 @@ export default function Settings() {
   const [additionalanguagetoadd, setAdditionalLanguageToAdd] = useState('');
   const [addedlanguage, setAddedLanguage] = useState(0); // This will hold the language to be added
 
-  const [langlocales, setLangLocales] = useState({}); // This will hold the locales for each language
+  const [langlocales, setLangLocales] = useState({}); // This will hold the locales for 
+
+  const [defaultlanglocalemonol, setDefaultLangLocaleMonol] = useState('')
+
+  // each language
   //example: { 
   // en: 'en-US',
   //  fr: 'fr-FR', 
@@ -74,6 +78,7 @@ export default function Settings() {
         setLanguageSelectionFromDb(true);
         setSelectedLanguages(data.languages); // or data.selectedLanguages if 
         setLangLocales(data.langlocales)
+        setDefaultLangLocaleMonol(data.defaultlanglocalemonol || ''); // Set the default language locale for monolingual mode
 
         /*   data.languages.map((lang) => {
             console.log('langlocaleslanglocaleslanglocales', lang);
@@ -115,6 +120,7 @@ export default function Settings() {
         defaultlanguage: defaultLanguage,
         languages: selectedLanguages,
         langlocales: langlocales, // Send the locales for each language
+        defaultlanglocalemonol: defaultlanglocalemonol, // Send the default language locale for monolingual mode
 
       }),
       credentials: 'include', // this is what sends/receives cookie
@@ -135,6 +141,7 @@ export default function Settings() {
     "en", "fr", "de", "es", "it", "pt", "ru", "zh", "ja", "ko" // Add more languages as needed
   ]
   const [otherlanguages, setOtherLanguages] = useState([]);
+
   useEffect(() => {
     const filterothers = includelanguagesarray.filter(lang => !languages.includes(lang));
     console.log("filterothers", filterothers);
@@ -207,7 +214,9 @@ export default function Settings() {
     }
 
   }
-
+  const addDefaultLangLocale = (e) => {
+    setDefaultLangLocaleMonol(e.target.value);
+  }
   return (
     <>
       <div className="titlebuttons">
@@ -236,6 +245,15 @@ export default function Settings() {
                 <option key={index} value={language}>{language}</option>
               ))}
             </select>
+
+            {!multilingualvalue && (
+              <div>
+                <label htmlFor="defaultlanglocale">Defaul language locale</label>
+                <input type="text" name="defaultlanglocale" style={{ display: 'inline-block', width: '80px', marginLeft: '10px' }} onChange={(e) => addDefaultLangLocale(e)} value={defaultlanglocalemonol} />
+
+              </div>
+            )}
+
             {multilingualvalue && (
               <>
                 <div className="languagesselect">
