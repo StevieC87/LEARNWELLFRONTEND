@@ -224,7 +224,7 @@ export default function MediaComponent(props) {
         )}
         <div className="flex flex-col ">
           <div className="flex flex-row justify-between">
-            <h1 className="">Media Page</h1>
+            <h1 className="">Media Library</h1>
             {showMediaLibraryModal && (
               <button onClick={() => dispatch(setShowMediaLibraryModal(false))}>Close Media Library</button>
             )}
@@ -295,10 +295,25 @@ export default function MediaComponent(props) {
             {basefiles.length > 0 && (
               <div className="fileslistdiv">
                 {basefiles.map((file, index) => (
-                  <div id="fileimagediv" key={index} className="fileitem" onClick={() => clickonImage(index, file)}>
-                    <img className="fileimage" src={`${currentpathforimage}/${file}`} width={60} height={60} />
-                    <span>{file}</span>
+                  <div key={index} className="fileitemdiv2">
+                    <div className="fileimagetextdiv2">
+                      <img className="fileimage" src={`${currentpathforimage}/${file}`} width={60} height={60} />
+                      <span className="filefilename2">{file}</span>
+                    </div>
+                    <div className="folderfileVelipsis">⋮
+                      <Popupmenu
+                        type={'image'} filepath={currentpathforimage}
+                        filename={file}
+                        currentfolder={currentfolder} currentpath={currentpath}
+                        refreshfetch={() => setRefreshfetch((prevValue) => prevValue + 1)}
+                      />
+                    </div>
                   </div>
+
+                  /*    <div id="fileimagediv" key={index} className="fileitem" onClick={() => clickonImage(index, file)}>
+                       <img className="fileimage" src={`${currentpathforimage}/${file}`} width={60} height={60} />
+                       <span>{file}</span>
+                     </div> */
                 ))}
               </div>
             )}
