@@ -38,6 +38,8 @@ export default function MultiFileUpload(props) {
         console.log("Upload failed:", result.error || "Unknown error");
       }
       else {
+        setSelectedFiles([]);
+        document.querySelector(".uploadmultipleinput").value = ""; // Clear the file input
         refreshcallback()
       }
 
