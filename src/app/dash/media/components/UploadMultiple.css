@@ -1,0 +1,15 @@
+.uploadmultipleinput {
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+
+.uploadmultipleform {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  margin: 30px;
+  padding: 10px;
+  border: 1px dashed gray;
+}

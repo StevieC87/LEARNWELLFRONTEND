@@ -5,7 +5,8 @@ import './media.css';
 import { useDispatch, useSelector } from 'react-redux'
 import { setShowMediaLibraryModal, setSelectedImagefromGalleryModal } from '@/redux/slices/UISlice';
 import ModalCreateFolder from './components/ModalCreateFolder.jsx';
-
+import Popupmenu from './components/Popupmenu.jsx';
+import UploadMultiple from './components/UploadMultiple.jsx';
 
 export default function MediaComponent(props) {
   const dispatch = useDispatch();
@@ -27,7 +28,9 @@ export default function MediaComponent(props) {
   const [shownewfolderinputModal, setShowNewFolderInputModal] = useState(false); // State to track if the new folder input modal is shown
   const [newfolderinputvalue, setNewFolderInputValue] = useState(''); // State to track the new folder input value
 
+  const [showmultipleupload, setShowMultipleUpload] = useState(false); // State to track if the multiple upload is shown
 
+  const [refreshfetch, setRefreshfetch] = useState(0); // State to trigger re-fetching of datac
   useEffect(() => {
     const fetchbasefilesandfolders = async () => {
       try {
@@ -61,7 +64,7 @@ export default function MediaComponent(props) {
     }
     fetchbasefilesandfolders();
   }
-    , [currentfolder]);
+    , [currentfolder, refreshfetch]);
 
   const changeFolder = (folderName) => {
     if (!currentpath) {
@@ -195,6 +198,8 @@ export default function MediaComponent(props) {
   return (
     <>
       <div className="mediaouterdiv" onClick={(e) => clickevent(e)}>
+
+
         {shownewfolderinputModal && (
           <ModalCreateFolder
             /*   isOpen={shownewfolderinputModal} */
@@ -227,6 +232,7 @@ export default function MediaComponent(props) {
 
           <div className="mediaouterdiv">
             <>
+
               {pathhistory.length > 1 && (
 
                 <button onClick={() => history('back')} className="mt-5 mb-5 button button-primary button-outline">
@@ -236,29 +242,53 @@ export default function MediaComponent(props) {
                 </button>
 
               )}
-              <div className="flex flex-row justify-end">
-                <button className="justify-self-end button button-outline button-thin"
-                  onClick={() => setShowNewFolderInputModal(true)}
-                >
-                  <div className="flex flex-row gap-3 items-center">
-                    <span> Create Folder</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-folder-plus" viewBox="0 0 16 16">
-                      <path d="m.5 3 .04.87a2 2 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2m5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19q-.362.002-.683.12L1.5 2.98a1 1 0 0 1 1-.98z" />
-                      <path d="M13.5 9a.5.5 0 0 1 .5.5V11h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V12h-1.5a.5.5 0 0 1 0-1H13V9.5a.5.5 0 0 1 .5-.5" />
-                    </svg>
-                  </div>
-                </button>
+              <div className="topmediabuttons flex flex-row  justify-end gap-3 mb-5">
+                <div className="flex flex-row justify-end">
+                  <button className="justify-self-end button button-outline button-thin"
+                    onClick={() => setShowMultipleUpload(prevValue => !prevValue)}
+                  >
+                    <div className="flex flex-row gap-3 items-center">
+                      <span>Upload</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-cloud-upload" viewBox="0 0 16 16">
+                        <path fillRule="evenodd" d="M4.406 1.342A5.53 5.53 0 0 1 8 0c2.69 0 4.923 2 5.166 4.579C14.758 4.804 16 6.137 16 7.773 16 9.569 14.502 11 12.687 11H10a.5.5 0 0 1 0-1h2.688C13.979 10 15 8.988 15 7.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 2.825 10.328 1 8 1a4.53 4.53 0 0 0-2.941 1.1c-.757.652-1.153 1.438-1.153 2.055v.448l-.445.049C2.064 4.805 1 5.952 1 7.318 1 8.785 2.23 10 3.781 10H6a.5.5 0 0 1 0 1H3.781C1.708 11 0 9.366 0 7.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383" />
+                        <path fillRule="evenodd" d="M7.646 4.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V14.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708z" />
+                      </svg>
+                    </div>
+                  </button>
 
+                </div>
+                <div className="flex flex-row justify-end">
+                  <button className="justify-self-end button button-outline button-thin"
+                    onClick={() => setShowNewFolderInputModal(true)}
+                  >
+                    <div className="flex flex-row gap-3 items-center">
+                      <span> Create Folder</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-folder-plus" viewBox="0 0 16 16">
+                        <path d="m.5 3 .04.87a2 2 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2m5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19q-.362.002-.683.12L1.5 2.98a1 1 0 0 1 1-.98z" />
+                        <path d="M13.5 9a.5.5 0 0 1 .5.5V11h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V12h-1.5a.5.5 0 0 1 0-1H13V9.5a.5.5 0 0 1 .5-.5" />
+                      </svg>
+                    </div>
+                  </button>
+
+                </div>
               </div>
-
             </>
+            {showmultipleupload && (
+              <UploadMultiple refreshcallback={() => setRefreshfetch((prevValue) => prevValue + 1)} currentpath={currentpath} currentfolder={currentfolder} />
+
+            )}
             {basefolders.length > 0 && (
               <div className="folderslistdiv mb-10">
                 {basefolders.map((folder, index) => (
-                  <button key={index} className="folderitem" onClick={() => changeFolder(folder)}>
-                    <Image src="/images/folder-cyan.svg" width={60} height={60} alt="folder"></Image>
-                    <span>{folder}</span>
-                  </button>
+                  <div key={index} className="folderitemdiv">
+                    <div className="folderimagetextdiv">
+                      <Image className=" folderimage" onClick={() => changeFolder(folder)} src="/images/folder-cyan.svg" width={60} height={60} alt="folder"></Image>
+                      <span className="folderfilename">{folder}</span>
+                    </div>
+                    {/*   <div className="folderfileVelipsis">⋮
+                      <Popupmenu />
+                    </div> */}
+                  </div>
                 ))}
               </div>
             )}
@@ -275,6 +305,7 @@ export default function MediaComponent(props) {
           </div>
         </div>
       </div >
+
     </>
   )
 }
