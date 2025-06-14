@@ -4,6 +4,9 @@ import Image from 'next/image';
 import './media.css';
 import { useDispatch, useSelector } from 'react-redux'
 import { setShowMediaLibraryModal, setSelectedImagefromGalleryModal } from '@/redux/slices/UISlice';
+import ModalCreateFolder from './components/ModalCreateFolder.jsx';
+
+
 export default function MediaComponent(props) {
   const dispatch = useDispatch();
 
@@ -21,6 +24,10 @@ export default function MediaComponent(props) {
   const [imageshowindex, setImageShowIndex] = useState(0); // State to track the index of the image being shown
   const [imageshowfile, setImageShowFile] = useState(''); // State to track the file of the image being shown
 
+  const [shownewfolderinputModal, setShowNewFolderInputModal] = useState(false); // State to track if the new folder input modal is shown
+  const [newfolderinputvalue, setNewFolderInputValue] = useState(''); // State to track the new folder input value
+
+
   useEffect(() => {
     const fetchbasefilesandfolders = async () => {
       try {
@@ -34,6 +41,8 @@ export default function MediaComponent(props) {
               folderName: currentfolder,
               currentpath: currentpath, // Send the current path if needed
             }) // Send the current folder name if needed
+            ,
+            credentials: 'include', // Include credentials for session management
           }
         );
         if (!response.ok) {
@@ -132,10 +141,56 @@ export default function MediaComponent(props) {
   }
 
 
+  const createfolderCallback = async (value) => {
+    console.log(value, "valuefromcreatefolderCallback");
+    setShowNewFolderInputModal(false);
+    setNewFolderInputValue(value);
+
+    let createfolderbackend = await createnewfolderfetch(
+      value,
+    )
+  }
+
+  async function createnewfolderfetch(newfoldername) {
+    //also we need current folder before cahnge and current path 
+    console.log('newfoldername', newfoldername);
+    console.log('currentfolder', currentfolder);
+    //if current folder is empty it means we are in the root folder 
+    const response = fetch(`${process.env.NEXT_PUBLIC_API_URL}/media/createfolder`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        folderName: newfoldername,
+        currentpath: currentpath, // Send the current path if needed
+      }),
+      credentials: 'include', // Include credentials for session management
+    });
+    if (!response.ok) {
+      console.error('Failed to create folder');
+      return;
+    }
+    else {
+      console.log('Folder created successfully');
+      // Optionally, you can refresh the folder contents after creating a new folder
+      setCurrentFolder(currentfolder);
+      setCurrentPathForImage(`${process.env.NEXT_PUBLIC_API_URL}/public/media/${currentpath}`);
+      // You might want to re-fetch the folders and files here
+      // fetchbasefilesandfolders();
+    }
+
+  }
   return (
     <>
       <div className="mediaouterdiv" onClick={(e) => clickevent(e)}>
-
+        {shownewfolderinputModal && (
+          <ModalCreateFolder
+            /*   isOpen={shownewfolderinputModal} */
+            getnewfolderinputvalue={(value) => createfolderCallback(value)}
+            changeOpen={(value) => setShowNewFolderInputModal(value)}
+          />
+        )}
         {imageshow && (
           <div id="showimagediv" className="showimagediv">
             <button className="showimagecaret" id="imagecaretleft" onClick={() => prevnextimage('previous')}>
@@ -154,17 +209,38 @@ export default function MediaComponent(props) {
         <div className="flex flex-col ">
           <div className="flex flex-row justify-between">
             <h1 className="">Media Page</h1>
-            <button onClick={() => dispatch(setShowMediaLibraryModal(false))}>Close Media Library</button>
+            {showMediaLibraryModal && (
+              <button onClick={() => dispatch(setShowMediaLibraryModal(false))}>Close Media Library</button>
+            )}
           </div>
 
           <div className="mediaouterdiv">
-            {pathhistory.length > 1 && (
-              <button onClick={() => history('back')} className="mt-5 mb-5 button button-primary button-outline">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-90deg-left" viewBox="0 0 16 16">
-                  <path fillRule="evenodd" d="M1.146 4.854a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H12.5A2.5 2.5 0 0 1 15 6.5v8a.5.5 0 0 1-1 0v-8A1.5 1.5 0 0 0 12.5 5H2.707l3.147 3.146a.5.5 0 1 1-.708.708z" />
-                </svg>
-              </button>
-            )}
+            <>
+              {pathhistory.length > 1 && (
+
+                <button onClick={() => history('back')} className="mt-5 mb-5 button button-primary button-outline">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-90deg-left" viewBox="0 0 16 16">
+                    <path fillRule="evenodd" d="M1.146 4.854a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H12.5A2.5 2.5 0 0 1 15 6.5v8a.5.5 0 0 1-1 0v-8A1.5 1.5 0 0 0 12.5 5H2.707l3.147 3.146a.5.5 0 1 1-.708.708z" />
+                  </svg>
+                </button>
+
+              )}
+              <div className="flex flex-row justify-end">
+                <button className="justify-self-end button button-outline button-thin"
+                  onClick={() => setShowNewFolderInputModal(true)}
+                >
+                  <div className="flex flex-row gap-3 items-center">
+                    <span> Create Folder</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-folder-plus" viewBox="0 0 16 16">
+                      <path d="m.5 3 .04.87a2 2 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2m5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19q-.362.002-.683.12L1.5 2.98a1 1 0 0 1 1-.98z" />
+                      <path d="M13.5 9a.5.5 0 0 1 .5.5V11h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V12h-1.5a.5.5 0 0 1 0-1H13V9.5a.5.5 0 0 1 .5-.5" />
+                    </svg>
+                  </div>
+                </button>
+
+              </div>
+
+            </>
             {basefolders.length > 0 && (
               <div className="folderslistdiv mb-10">
                 {basefolders.map((folder, index) => (
@@ -187,7 +263,7 @@ export default function MediaComponent(props) {
             )}
           </div>
         </div>
-      </div>
+      </div >
     </>
   )
 }
