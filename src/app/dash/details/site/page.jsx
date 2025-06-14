@@ -118,9 +118,9 @@ export default function WebsiteDetailsForm() {
         </div> */}
         <div className="formlabelvertical">
           <label>
-            Default Image
-            <span className="labeltip1"> Used as the default preview image.</span>
-            <p className="labeltip2"> Tip: Use a clear, high-quality image.</p>
+            Default OG Image
+            <span className="labeltip1"> Used as the default preview image when social sharing.</span>
+            <p className="labeltip2"> Tip: Use a clear, high-quality image wiht dimensions: 1600 x </p>
           </label>
           <img src={`${process.env.NEXT_PUBLIC_API_URL}/${defaultImageFile}`} alt="Current Default Image" width="200" />
 

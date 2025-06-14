@@ -149,6 +149,15 @@ export default function MediaComponent(props) {
     let createfolderbackend = await createnewfolderfetch(
       value,
     )
+    if (createfolderbackend) {
+      console.log('Folder created successfully');
+      // Optionally, you can refresh the folder contents after creating a new folder
+      setCurrentFolder(createfolderbackend.currentfolder);
+      setCurrentPath(createfolderbackend.currentpath);
+      setCurrentPathForImage(`${process.env.NEXT_PUBLIC_API_URL}/public/media/${createfolderbackend.currentpath}`);
+      // You might want to re-fetch the folders and files here
+      // fetchbasefilesandfolders();
+    }
   }
 
   async function createnewfolderfetch(newfoldername) {
@@ -156,7 +165,7 @@ export default function MediaComponent(props) {
     console.log('newfoldername', newfoldername);
     console.log('currentfolder', currentfolder);
     //if current folder is empty it means we are in the root folder 
-    const response = fetch(`${process.env.NEXT_PUBLIC_API_URL}/media/createfolder`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/media/createfolder`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -173,9 +182,11 @@ export default function MediaComponent(props) {
     }
     else {
       console.log('Folder created successfully');
+      let data = await response.json();
+      return data;
       // Optionally, you can refresh the folder contents after creating a new folder
-      setCurrentFolder(currentfolder);
-      setCurrentPathForImage(`${process.env.NEXT_PUBLIC_API_URL}/public/media/${currentpath}`);
+      //  setCurrentFolder(currentfolder);
+      //   setCurrentPathForImage(`${process.env.NEXT_PUBLIC_API_URL}/public/media/${currentpath}`);
       // You might want to re-fetch the folders and files here
       // fetchbasefilesandfolders();
     }
