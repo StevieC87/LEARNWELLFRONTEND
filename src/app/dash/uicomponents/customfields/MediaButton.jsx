@@ -44,7 +44,7 @@ export default function MediaButton(props) {
         </button>
         <input type="text"
           onChange={() => onChangehandler()}
-          value={thisfieldvalue?.content || ''}
+          value={thisfieldvalue?.content.imageidstring || ''}
           name={name}
           id={id}
           locale={locale}

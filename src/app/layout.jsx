@@ -28,7 +28,7 @@ if (process.env.NEXT_PUBLIC_NODE_ENV === "development") {
 
   // override warning
 }
-console.log("hello");
+//console.log("hello");
 
 
 /* export async function generateMetadata({ params }) {

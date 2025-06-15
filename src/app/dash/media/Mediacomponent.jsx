@@ -124,13 +124,18 @@ export default function MediaComponent(props) {
 
           dispatch(updateField({
             name: fieldname,
-            content: imageidstring,
+            //  content: imageidstring,
+            content: {
+              imageidstring: imageidstring,
+              imagepath: pathclean,
+            },
             id: id,
             locale: locale,
             schema: schema,
             type: type,
             placeholder: placeholder,
-            required: required
+            required: required,
+
 
           }));
           dispatch(setHasChanges(true))
