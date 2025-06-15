@@ -33,6 +33,7 @@ export default function MediaComponent(props) {
   const [refreshfetch, setRefreshfetch] = useState(0); // State to trigger re-fetching of datac
 
   const [showelipsispopup, setShowElipsisPopup] = useState(false); // State to track if the elipsis popup is shown
+  //const deletefilefolderpopupopen = useSelector((state) => state.UISlice.deletefilefolderpopupopen); // State to track if the delete file/folder popup is open
 
   useEffect(() => {
     const fetchbasefilesandfolders = async () => {
@@ -123,6 +124,8 @@ export default function MediaComponent(props) {
     }
   }
 
+
+
   const clickevent = (e) => {
     if (
       imageshow &&
@@ -131,12 +134,12 @@ export default function MediaComponent(props) {
     ) {
       setImageShow(false)
     }
-    if (
-      showelipsispopup &&
-      !document.querySelector('.popupmenudiv')?.contains(e.target) &&
+
+    document.querySelector('.popupmenudiv')?.contains(e.target) &&
       !e.target.classList.contains('popupmenudiv')
-    ) {
-      setShowElipsisPopup(false);
+    setShowElipsisPopup(false)
+    {
+      // dispatch(setDeleteFileFolderPopupOpen(false))
     }
   }
 
@@ -206,10 +209,15 @@ export default function MediaComponent(props) {
 
   }
 
-  const clickElipsisHideShow = () => {
-    setShowElipsisPopup((prevValue) => !prevValue);
+  const protectedfolders = [
+    'ogimages',
+    'sitedefault',
+    'thumbnails',
+    'pages',
+    'posts',
 
-  }
+  ]
+
 
   return (
     <>
@@ -301,9 +309,14 @@ export default function MediaComponent(props) {
                       <Image className=" folderimage" onClick={() => changeFolder(folder)} src="/images/folder-cyan.svg" width={60} height={60} alt="folder"></Image>
                       <span className="folderfilename">{folder}</span>
                     </div>
-                    {/*   <div className="folderfileVelipsis">⋮
-                      <Popupmenu />
-                    </div> */}
+                    {!protectedfolders.includes(folder) && (
+                      <Elipsis type={'folder'} filepath={currentpathforimage}
+                        foldername={folder}
+                        currentfolder={currentfolder} currentpath={currentpath}
+                        refreshfetch={() => setRefreshfetch((prevValue) => prevValue + 1)}
+                      />
+                    )}
+
                   </div>
                 ))}
               </div>
@@ -313,16 +326,15 @@ export default function MediaComponent(props) {
                 {basefiles.map((file, index) => (
                   <div key={index} className="fileitemdiv2">
                     <div className="fileimagetextdiv2">
-                      <img className="fileimage" src={`${currentpathforimage}/${file}`} width={60} height={60} />
-                      <span className="filefilename2">{file}</span>
+                      <img className="fileimage" src={`${currentpathforimage}/${file}`} width={60} height={60} onClick={() => clickonImage(index, file)} />
+                      <span className="filefilename2">{file} </span>
                     </div>
 
-                    <Elipsis type={'image'} filepath={currentpathforimage}
+                    <Elipsis type={'file'} filepath={currentpathforimage}
                       filename={file}
                       currentfolder={currentfolder} currentpath={currentpath}
                       refreshfetch={() => setRefreshfetch((prevValue) => prevValue + 1)}
-                      elipsisopen={showelipsispopup}
-                      clickElipsisHideShow={clickElipsisHideShow}
+
                     />
                   </div>
 

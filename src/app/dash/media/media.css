@@ -13,7 +13,7 @@
 .folderitemdiv {
   display: flex;
   flex-direction: row;
-  width: 150px;
+  width: 110px;
   /*   align-items: center; */
   /*   justify-content: center; */
 }
@@ -70,7 +70,7 @@
 .folderfileVelipsis {
   height: 30px;
   width: 20px;
-  font-size: 1.5rem;
+  font-size: 2rem;
   cursor: pointer;
 }
 .fileslistdiv {

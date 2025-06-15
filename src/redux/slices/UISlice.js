@@ -13,6 +13,7 @@ const UISlice = createSlice({
     showImageSelected: "",
     showMediaLibraryModal: false, // Added to control media library modal visibility
     selectedImagefromGalleryModal: "",
+    deletefilefolderpopupopen: false, // Added to control delete file/folder popup visibility
   },
 
   reducers: {
@@ -34,6 +35,9 @@ const UISlice = createSlice({
     setSelectedImagefromGalleryModal: (state, action) => {
       state.selectedImagefromGalleryModal = action.payload;
     },
+    setDeleteFileFolderPopupOpen: (state, action) => {
+      state.deletefilefolderpopupopen = action.payload;
+    },
   },
 });
 
@@ -44,6 +48,7 @@ export const {
   setShowImageSelected,
   setShowMediaLibraryModal,
   setSelectedImagefromGalleryModal,
+  setDeleteFileFolderPopupOpen,
 } = UISlice.actions;
 
 export default UISlice.reducer;
