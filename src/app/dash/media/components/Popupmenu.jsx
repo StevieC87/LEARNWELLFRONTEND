@@ -7,7 +7,7 @@ import './Popupmenu.css'
 export default function Popupinfo(props) {
 
   const { type, filepath, filename, currentfolder, currentpath, refreshfetch } = props;
-  const [isOpen, setIsOpen] = useState(true);
+  /* const [isOpen, setIsOpen] = useState(true); */
   /* const dispatch = useDispatch();
   const ispopupinfoopen = useSelector((state) => state.UISlice.ispopupinfoopen);
   const popupinfo = useSelector((state) => state.UISlice.popupinfo);
@@ -46,6 +46,11 @@ export default function Popupinfo(props) {
     }
 
     try {
+      if (type === "folder") {
+        //WE NEED TO EXCLUDE DEFAULT FOLDERS FROM DELETEIONS
+        return
+      }
+
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/media/deletefilefolder`, {
         method: "POST",
         headers: {
@@ -61,7 +66,7 @@ export default function Popupinfo(props) {
 
       const result = await response.json();
       console.log("File deleted successfully:", result);
-      setIsOpen(false); // Close the popup after deletion
+      //  setIsOpen(false); // Close the popup after deletion
       refreshfetch()
     } catch (error) {
       console.error("Error deleting file:", error);
@@ -71,29 +76,29 @@ export default function Popupinfo(props) {
 
   return (
     <>
-      {isOpen && (
-        <>
-          <div id="popupmenudiv" className="popupmenudiv p-3" /* style={{ left: positionx, top: positiony }} */>
-            <div className="popupmenuitemsdiv">
-              {type === "folder" && (
-                <button className="popupmenuitemitem"> Rename</button>
-              )}
-              <button className="popupmenuitemitem"
-                onClick={() => {
-                  deletefilefolder(filepath);
-                }}
-              >Delete</button>
-
-
-            </div>
-
+      {/* {isOpen && ( */}
+      <>
+        <div id="popupmenudiv" className="popupmenudiv p-3" /* style={{ left: positionx, top: positiony }} */>
+          <div className="popupmenuitemsdiv">
+            {type === "folder" && (
+              <button className="popupmenuitemitem"> Rename</button>
+            )}
+            <button className="popupmenuitemitem"
+              onClick={() => {
+                deletefilefolder(filepath, type);
+              }}
+            >Delete</button>
 
 
           </div>
-        </>
-      )
 
-      }
+
+
+        </div>
+      </>
+      {/*     )
+
+      } */}
     </>
   );
 }

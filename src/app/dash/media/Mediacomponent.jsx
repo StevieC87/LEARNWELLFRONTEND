@@ -5,8 +5,8 @@ import './media.css';
 import { useDispatch, useSelector } from 'react-redux'
 import { setShowMediaLibraryModal, setSelectedImagefromGalleryModal } from '@/redux/slices/UISlice';
 import ModalCreateFolder from './components/ModalCreateFolder.jsx';
-import Popupmenu from './components/Popupmenu.jsx';
 import UploadMultiple from './components/UploadMultiple.jsx';
+import Elipsis from './components/Elipsis.jsx';
 
 export default function MediaComponent(props) {
   const dispatch = useDispatch();
@@ -31,6 +31,9 @@ export default function MediaComponent(props) {
   const [showmultipleupload, setShowMultipleUpload] = useState(false); // State to track if the multiple upload is shown
 
   const [refreshfetch, setRefreshfetch] = useState(0); // State to trigger re-fetching of datac
+
+  const [showelipsispopup, setShowElipsisPopup] = useState(false); // State to track if the elipsis popup is shown
+
   useEffect(() => {
     const fetchbasefilesandfolders = async () => {
       try {
@@ -128,6 +131,13 @@ export default function MediaComponent(props) {
     ) {
       setImageShow(false)
     }
+    if (
+      showelipsispopup &&
+      !document.querySelector('.popupmenudiv')?.contains(e.target) &&
+      !e.target.classList.contains('popupmenudiv')
+    ) {
+      setShowElipsisPopup(false);
+    }
   }
 
   const prevnextimage = (direction) => {
@@ -195,6 +205,12 @@ export default function MediaComponent(props) {
     }
 
   }
+
+  const clickElipsisHideShow = () => {
+    setShowElipsisPopup((prevValue) => !prevValue);
+
+  }
+
   return (
     <>
       <div className="mediaouterdiv" onClick={(e) => clickevent(e)}>
@@ -300,14 +316,14 @@ export default function MediaComponent(props) {
                       <img className="fileimage" src={`${currentpathforimage}/${file}`} width={60} height={60} />
                       <span className="filefilename2">{file}</span>
                     </div>
-                    <div className="folderfileVelipsis">⋮
-                      <Popupmenu
-                        type={'image'} filepath={currentpathforimage}
-                        filename={file}
-                        currentfolder={currentfolder} currentpath={currentpath}
-                        refreshfetch={() => setRefreshfetch((prevValue) => prevValue + 1)}
-                      />
-                    </div>
+
+                    <Elipsis type={'image'} filepath={currentpathforimage}
+                      filename={file}
+                      currentfolder={currentfolder} currentpath={currentpath}
+                      refreshfetch={() => setRefreshfetch((prevValue) => prevValue + 1)}
+                      elipsisopen={showelipsispopup}
+                      clickElipsisHideShow={clickElipsisHideShow}
+                    />
                   </div>
 
                   /*    <div id="fileimagediv" key={index} className="fileitem" onClick={() => clickonImage(index, file)}>
@@ -317,6 +333,14 @@ export default function MediaComponent(props) {
                 ))}
               </div>
             )}
+
+            {(basefiles.length === 0 && basefolders.length === 0) && (
+              <div className="emptyfolderdiv">
+                <h4 className="text-center">This folder is empty</h4>
+                <p className="text-center">You can create a new folder or upload files.</p>
+              </div>
+            )
+            }
           </div>
         </div>
       </div >
