@@ -72,6 +72,11 @@ export default function PageContentTab(props) {
   //LEAVE MAYBE REDUX LATER if logic turns oout we need it
   /*   const currentdraftpagecreationdate = useSelector((state) => state.PagesSlice.currentdraftpagescreationdate) || ''; */
 
+
+  //field from medialibarary
+  // const selectedImagefromGalleryModal = useSelector((state) => state.UISlice.selectedImagefromGalleryModal) || '';
+
+
   const slugpathfieldaR = useSelector((state) => state.PagesSlice.fields?.slugpath) || '';
   //,set multilingual state from props + depedency
   useEffect(() => {
@@ -213,6 +218,7 @@ export default function PageContentTab(props) {
         currentdraftcreationdate: currentdraftcreationdate, //this is so we can delete any later drafts (assuming user did undo and changed stuff)
         haschanges: hasChanges, //this is so we can delete any later drafts (assuming user did undo and changed stuff)
         nochangesonlyundosave: nochangesonlyundosave
+
 
       }),
     })

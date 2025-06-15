@@ -7,9 +7,12 @@ import { setShowMediaLibraryModal, setSelectedImagefromGalleryModal } from '@/re
 import ModalCreateFolder from './components/ModalCreateFolder.jsx';
 import UploadMultiple from './components/UploadMultiple.jsx';
 import Elipsis from './components/Elipsis.jsx';
+import { updateField } from '@/redux/slices/PagesSlice';
 
 export default function MediaComponent(props) {
   const dispatch = useDispatch();
+
+  const { fieldname } = props; // Destructure fieldname from props if needed
 
   const showMediaLibraryModal = useSelector((state) => state.UISlice.showMediaLibraryModal);
 
@@ -32,8 +35,6 @@ export default function MediaComponent(props) {
 
   const [refreshfetch, setRefreshfetch] = useState(0); // State to trigger re-fetching of datac
 
-  const [showelipsispopup, setShowElipsisPopup] = useState(false); // State to track if the elipsis popup is shown
-  //const deletefilefolderpopupopen = useSelector((state) => state.UISlice.deletefilefolderpopupopen); // State to track if the delete file/folder popup is open
 
   useEffect(() => {
     const fetchbasefilesandfolders = async () => {
@@ -68,27 +69,8 @@ export default function MediaComponent(props) {
     }
     fetchbasefilesandfolders();
   }
-    , [currentfolder, refreshfetch]);
+    , [currentfolder, refreshfetch, currentpath]);
 
-  const changeFolder = (folderName) => {
-    if (!currentpath) {
-      console.log('currentpathno');
-      setCurrentPath(`/${folderName}`)
-      setCurrentPathForImage(`${process.env.NEXT_PUBLIC_API_URL}/public/media/${folderName}`);
-      setPathHistory((prevHistory) => [...prevHistory, folderName]); // Update the path history
-
-    }
-    else {
-      console.log('currentpathyes')
-      console.log(currentpath, "currentpathinchangeFolder");
-      setCurrentPath((prevPath) => `${prevPath}/${folderName}`);
-      setCurrentPathForImage(`${process.env.NEXT_PUBLIC_API_URL}/public/media/${currentpath}`);
-      setPathHistory((prevHistory) => [...prevHistory, folderName]); // Update the path history
-    }
-
-    setCurrentFolder(folderName);
-
-  }
 
   useEffect(() => {
     console.log('Path history:', pathhistory);
@@ -111,12 +93,58 @@ export default function MediaComponent(props) {
     }
   }
   //
-  const clickonImage = (index, file) => {
-
+  const clickonImage = async (index, file) => {
     if (showMediaLibraryModal) {
-      dispatch(setSelectedImagefromGalleryModal(`public/media${currentpath}/${file}`));
+      // dispatch(setSelectedImagefromGalleryModal(`public/media${currentpath}/${file}`));
+      alert('111')
+      let pathclean = `${currentpath}/${file}`;
+      console.log(pathclean, 'pathclean')
+
+      let imageidstring;
+      try {
+        const fetchimagedetails = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/media/getimagebypath`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            filepath: pathclean, // Send the current path if needed
+          }),
+          credentials: 'include', // Include credentials for session management
+        });
+        if (!fetchimagedetails.ok) {
+          alert('fail')
+          //  throw new Error('Network response was not ok');
+          console.log('Failed to fetch image details');
+        }
+        else {
+          alert('success')
+          let data = await fetchimagedetails.json();
+          console.log('successful')
+          // console.log(fetchimagedetails.imageid, 'fetchimagedetails.imageid');
+          console.log(data, 'fetchimagedetails from clickonImage');
+          imageidstring = data.imageid; // Assuming _id is the image ID
+          //  dispatch(setSelectedImagefromGalleryModal(imageidstring));
+
+          dispatch(updateField({
+            name: fieldname,
+            content: imageidstring,
+
+          }));
+        }
+
+      }
+      catch (error) {
+        //  console.error('Error fetching image details:', error);
+      }
       dispatch(setShowMediaLibraryModal(false))
     }
+
+
+    //or maybe fetch the IMAGEID from the DATABASE - so we can include alt text and what have u - choice
+
+
+
     else if (!showMediaLibraryModal) {
       setImageShow(true);
       setImageShowIndex(index);
@@ -125,7 +153,34 @@ export default function MediaComponent(props) {
     }
   }
 
+  const changeFolder = (folderName) => {
+    if (!currentpath) {
+      console.log('currentpathno');
+      console.log(folderName, "folderNameinchangeFolder");
+      setCurrentPath(`/${folderName}`)
+      setCurrentPathForImage(`${process.env.NEXT_PUBLIC_API_URL}/public/media/${folderName}`);
+      setPathHistory((prevHistory) => [...prevHistory, folderName]); // Update the path history
+    }
+    else {
+      console.log('currentpathyes')
+      //  console.log(currentpath, "currentpathinchangeFolder");
+      setCurrentPath((prevPath) => `${prevPath}/${folderName}`);
 
+      setPathHistory((prevHistory) => [...prevHistory, folderName]); // Update the path history
+    }
+
+    setCurrentFolder(folderName);
+
+  }
+  /* check currentpath quickly */
+  useEffect(() => {
+    console.log('Currentpathchanged:', currentpath);
+    setCurrentPathForImage(`${process.env.NEXT_PUBLIC_API_URL}/public/media/${currentpath}`);
+  }, [currentpath]);
+
+  useEffect(() => {
+    console.log('Pathhistorychanged:', pathhistory);
+  }, [pathhistory])
 
   const clickevent = (e) => {
     if (
@@ -138,7 +193,6 @@ export default function MediaComponent(props) {
 
     document.querySelector('.popupmenudiv')?.contains(e.target) &&
       !e.target.classList.contains('popupmenudiv')
-    setShowElipsisPopup(false)
     {
       // dispatch(setDeleteFileFolderPopupOpen(false))
     }

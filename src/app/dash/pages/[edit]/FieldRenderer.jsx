@@ -145,17 +145,21 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
         </div>
       );
     case "medialibrary":
+      console.log('medialibraryLABEL', label)
       return (
-        <MediaButton
-          name={name}
-          id={fielddata.id}
-          locale={fielddata.locale}
-          schema={fielddata.schema}
-          type={type}
-          value={value}
-          placeholder={placeholder}
-          required={required || false}
-        />
+        <div className="fielddivblock">
+          <label htmlFor={name} className="block text-sm font-medium text-gray-700">{label}</label>
+          <MediaButton
+            name={name}
+            id={fielddata.id}
+            locale={fielddata.locale}
+            schema={fielddata.schema}
+            type={type}
+            value={value}
+            placeholder={placeholder}
+            required={required || false}
+          />
+        </div>
       )
     default:
       return null;

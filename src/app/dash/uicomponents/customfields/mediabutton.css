@@ -9,3 +9,7 @@
   background-color: white;
   z-index: 1000;
 }
+
+.mediabuttondiv {
+  max-width: 400px;
+}

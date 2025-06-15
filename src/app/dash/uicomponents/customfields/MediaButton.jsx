@@ -1,11 +1,13 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { setShowMediaLibraryModal, setSelectedImagefromGalleryModal } from '@/redux/slices/UISlice';
 import MediaComponent from '@/app/dash/media/Mediacomponent';
 import './mediabutton.css';
+import { updateField } from '@/redux/slices/PagesSlice';
+
 
 export default function MediaButton(props) {
 
@@ -16,9 +18,18 @@ export default function MediaButton(props) {
   const showMediaLibraryModal = useSelector((state) => state.UISlice.showMediaLibraryModal);
   const selectedImagefromGalleryModal = useSelector((state) => state.UISlice.selectedImagefromGalleryModal);
 
+  const thisfieldvalue = useSelector((state) => state.PagesSlice.fields[name]) || {};
 
-  const openMediaLibrary = () => {
+  const onChange1 = (e) => {
+    alert('hello')
 
+    // const newValue = e.target.value;
+    /*  */
+
+    // onChange2();
+  }
+
+  const openMediaLibrary = (fieldname) => {
     dispatch(setShowMediaLibraryModal(!showMediaLibraryModal));
     //  setMediaLibVisibility(prevValue => prevValue === "visible" ? "hidden" : "visible")
 
@@ -28,20 +39,49 @@ export default function MediaButton(props) {
     // setMediaLibVisibility("visible");
   }
 
+  /*   useEffect(() => {
+      dispatch(updateField({
+        name: name,
+        //content: newValue,
+        id: id,
+        locale: locale,
+        schema: schema,
+        type: type,
+        placeholder: placeholder
+      }));
+    }, [selectedImagefromGalleryModal]); */
+
+  const hello = () => {
+    alert('hello222');
+  }
 
   return (
     <>
+      <div className="mediabuttondiv">
+        <button onClick={() => openMediaLibrary(name)}
+          //we pass the field name to the MediaComponent so we can dispatch the selected image to the correct field
+          className="button  button-outline">
+          Choosea
+        </button>
+        <input type="text"
+          //  onChange={() => hello()}
+          // onChange={(e) => onChange1(e)}
+          // onChange={(e) => dispatch(setSelectedImagefromGalleryModal(e.target.value))}
+          value={thisfieldvalue?.content || ''}
+          name={name}
+          id={id}
+          locale={locale}
+          schema={schema}
+          placeholder={placeholder}
+          required={required || false}
 
-      <button onClick={() => openMediaLibrary()} className="button  button-outline">
-        Choose from Media Library
-      </button>
-      <input type="text" value={selectedImagefromGalleryModal} onChange={(e) => dispatch(setSelectedImagefromGalleryModal(e.target.value))} />
-
+        />
+      </div>
 
 
       {showMediaLibraryModal === true &&
         <div className="medialibrarymodal">
-          <MediaComponent />
+          <MediaComponent fieldname={name} />
         </div>
       }
       {/* visibility={showMediaLibraryModal} */}
@@ -51,19 +91,3 @@ export default function MediaButton(props) {
   )
 
 }
-
-{/*   <div id="medialibrarymodal" visibility={mediaLibVisibility} >
-        <MediaComponent visibility={mediaLibVisibility} />
-
-      </div> */}
-{/*  <div id="medialibrarymodal"  style={{ visibility: showMediaLibraryModal }}> */ }
-{/*  </div> */ }
-/* WHAT THIS DOES 
--opens a modal with media library
--user selects a preexisting image
--we need an input field to hold the image path and filename 
-
--What if already has image - e.g. when load - then we hold the value of the path 
-
- BUT WE CAN KEEP THE INPUT PATH HIDDEN - and just display the path 
-*/
