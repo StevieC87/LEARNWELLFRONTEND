@@ -8,6 +8,7 @@ import './summernote/summernote-lite.js';
 import $ from 'jquery';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateField } from '../../../../../redux/slices/PagesSlice.js';
+import { setHasChanges } from '@/redux/slices/PagesSlice.js'; // Import the action to set hasChanges
 
 // optional if you want consistent styling
 
@@ -40,6 +41,7 @@ export default function Summernote(props) {
             schema: schema, // replace with actual schema if needed
             type: 'wysi' // or whatever type you need
           }));
+          dispatch(setHasChanges(true))
           console.log('Content changed:', contents);
           console.log(contents.length, 'datacontent.length');      // logs character count
         }
@@ -50,6 +52,11 @@ export default function Summernote(props) {
     };
   }, []);
 
+  const handleChange = (e) => {
+    alert('123123')
+  }
+
   return <textarea ref={editorRef} defaultValue={value} />;
+
 
 }

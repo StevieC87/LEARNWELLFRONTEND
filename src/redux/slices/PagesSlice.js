@@ -6,6 +6,7 @@ const PagesSlice = createSlice({
     fields: {},
     slugduplicatewarning: false,
     triggerSEOrefresh: 0,
+    hasChanges: false,
   },
 
   reducers: {
@@ -52,10 +53,17 @@ const PagesSlice = createSlice({
     setTriggerSEORefresh(state, action) {
       state.triggerSEOrefresh = action.payload;
     },
+    setHasChanges(state, action) {
+      state.hasChanges = action.payload;
+    },
   },
 });
 
-export const { updateField, setSlugDuplicateWarning, setTriggerSEORefresh } =
-  PagesSlice.actions;
+export const {
+  updateField,
+  setSlugDuplicateWarning,
+  setTriggerSEORefresh,
+  setHasChanges,
+} = PagesSlice.actions;
 
 export default PagesSlice.reducer;

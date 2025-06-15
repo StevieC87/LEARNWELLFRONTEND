@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { ObjectId } from 'bson';
 import FieldRenderer from '../FieldRenderer';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateField, setSlugDuplicateWarning, setTriggerSEORefresh } from '../../../../../redux/slices/PagesSlice';
+import { updateField, setSlugDuplicateWarning, setTriggerSEORefresh, setHasChanges } from '../../../../../redux/slices/PagesSlice';
 import { setSelectedLanguage, setMultilingualSharedId, setPageExistsThisLanguage } from '../../../../../redux/slices/DashSlice';
 import { useRouter } from 'next/navigation';
 import { set } from 'react-hook-form';
@@ -47,7 +47,8 @@ export default function PageContentTab(props) {
   const reduxslugfield = useSelector((state) => state.PagesSlice.fields?.slug) || '';
   const reduxslugpathfield = useSelector((state) => state.PagesSlice.fields?.slugpath) || '';
   console.log(reduxslugpathfield, "reduxslugpathfieldreduxslugpathfieldreduxslugpathfieldreduxslugpathfield");
-  const [hasChanges, setHasChanges] = useState(false);
+  const hasChanges = useSelector((state) => state.PagesSlice.hasChanges) || false;
+  //  const [hasChanges, setHasChanges] = useState(false);
   const [issaving, setIsSaving] = useState(false);
   const [showsaved, setShowSaved] = useState(false);
   const [ispublishing, setIsPublishing] = useState(false);
@@ -291,7 +292,8 @@ export default function PageContentTab(props) {
       // Trigger refresh in parent component
 
     }
-    setHasChanges(false);
+    //  setHasChanges(false);
+    dispatch(setHasChanges(false)); // Reset hasChanges state in Redux
     // Trigger SEO refresh in parent component
     return true;
 
@@ -657,7 +659,8 @@ export default function PageContentTab(props) {
               placeholder="Add title"
               value={reduxtitlefield.content || ""}
               onChange2={(e) => {
-                setHasChanges(true);
+                //setHasChanges(true);
+                dispatch(setHasChanges(true));
                 setIsPublishing(false); // Reset publishing state when title changes
               }}
               inputcssclass="titleinput"
@@ -722,7 +725,8 @@ export default function PageContentTab(props) {
             placeholder={reduxslugfield.placeholder || "Add slug"}
             value={reduxslugfield.content || ""}
             onChange2={(e) => {
-              setHasChanges(true);
+              // setHasChanges(true);
+              dispatch(setHasChanges(true));
               setIsPublishing(false);
             }}
           />
@@ -737,7 +741,8 @@ export default function PageContentTab(props) {
             placeholder={reduxslugpathfield.placeholder || "Add slug path e.g: /articles/webdesign/myarticletitle) (leave empty for default: /articles/myarticletitle)"}
             value={reduxslugpathfield.content || ""}
             onChange2={(e) => {
-              setHasChanges(true);
+              //setHasChanges(true);
+              dispatch(setHasChanges(true));
               setIsPublishing(false);
             }}
           />
@@ -758,7 +763,8 @@ export default function PageContentTab(props) {
                 placeholder={field.placeholder || ""}
                 value={fieldData1.content || ""}
                 onChange2={(e) => {
-                  setHasChanges(true);
+                  dispatch(setHasChanges(true));
+                  //setHasChanges(true);
                   setIsPublishing(false);
                 }}
                 required={field.required || false}

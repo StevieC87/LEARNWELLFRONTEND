@@ -7,13 +7,12 @@ import { setShowMediaLibraryModal, setSelectedImagefromGalleryModal } from '@/re
 import ModalCreateFolder from './components/ModalCreateFolder.jsx';
 import UploadMultiple from './components/UploadMultiple.jsx';
 import Elipsis from './components/Elipsis.jsx';
-import { updateField } from '@/redux/slices/PagesSlice';
+import { updateField, setHasChanges } from '@/redux/slices/PagesSlice';
 
 export default function MediaComponent(props) {
   const dispatch = useDispatch();
 
-  const { fieldname } = props; // Destructure fieldname from props if needed
-
+  const { fieldname, id, locale, schema, type, placeholder, required } = props;
   const showMediaLibraryModal = useSelector((state) => state.UISlice.showMediaLibraryModal);
 
   const [basefiles, setBaseFiles] = useState([]);
@@ -96,7 +95,6 @@ export default function MediaComponent(props) {
   const clickonImage = async (index, file) => {
     if (showMediaLibraryModal) {
       // dispatch(setSelectedImagefromGalleryModal(`public/media${currentpath}/${file}`));
-      alert('111')
       let pathclean = `${currentpath}/${file}`;
       console.log(pathclean, 'pathclean')
 
@@ -113,12 +111,10 @@ export default function MediaComponent(props) {
           credentials: 'include', // Include credentials for session management
         });
         if (!fetchimagedetails.ok) {
-          alert('fail')
           //  throw new Error('Network response was not ok');
           console.log('Failed to fetch image details');
         }
         else {
-          alert('success')
           let data = await fetchimagedetails.json();
           console.log('successful')
           // console.log(fetchimagedetails.imageid, 'fetchimagedetails.imageid');
@@ -129,8 +125,15 @@ export default function MediaComponent(props) {
           dispatch(updateField({
             name: fieldname,
             content: imageidstring,
+            id: id,
+            locale: locale,
+            schema: schema,
+            type: type,
+            placeholder: placeholder,
+            required: required
 
           }));
+          dispatch(setHasChanges(true))
         }
 
       }
