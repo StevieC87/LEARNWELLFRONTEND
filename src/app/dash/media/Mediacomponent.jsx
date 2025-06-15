@@ -80,6 +80,7 @@ export default function MediaComponent(props) {
     }
     else {
       console.log('currentpathyes')
+      console.log(currentpath, "currentpathinchangeFolder");
       setCurrentPath((prevPath) => `${prevPath}/${folderName}`);
       setCurrentPathForImage(`${process.env.NEXT_PUBLIC_API_URL}/public/media/${currentpath}`);
       setPathHistory((prevHistory) => [...prevHistory, folderName]); // Update the path history
@@ -167,10 +168,12 @@ export default function MediaComponent(props) {
     )
     if (createfolderbackend) {
       console.log('Folder created successfully');
+      console.log(createfolderbackend)
+      setRefreshfetch((prevValue) => prevValue + 1); // Trigger re-fetching of data
       // Optionally, you can refresh the folder contents after creating a new folder
-      setCurrentFolder(createfolderbackend.currentfolder);
-      setCurrentPath(createfolderbackend.currentpath);
-      setCurrentPathForImage(`${process.env.NEXT_PUBLIC_API_URL}/public/media/${createfolderbackend.currentpath}`);
+      /*  setCurrentFolder(createfolderbackend.currentfolder);
+       setCurrentPath(createfolderbackend.currentpath);
+       setCurrentPathForImage(`${process.env.NEXT_PUBLIC_API_URL}/public/media/${createfolderbackend.currentpath}`); */
       // You might want to re-fetch the folders and files here
       // fetchbasefilesandfolders();
     }
@@ -326,7 +329,9 @@ export default function MediaComponent(props) {
                 {basefiles.map((file, index) => (
                   <div key={index} className="fileitemdiv2">
                     <div className="fileimagetextdiv2">
-                      <img className="fileimage" src={`${currentpathforimage}/${file}`} width={60} height={60} onClick={() => clickonImage(index, file)} />
+                      <img className="fileimage" src={`${currentpathforimage}/${file}`} width={60} height={60} onClick={() => clickonImage(index, file)}
+                        data-test={currentpathforimage}
+                      />
                       <span className="filefilename2">{file} </span>
                     </div>
 

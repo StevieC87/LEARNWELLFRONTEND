@@ -4,10 +4,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { setIsPopupInfoOpen, setPopupInfo } from "@/redux/slices/UISlice";
 import './Popupmenu.css'
 import { current } from "@reduxjs/toolkit";
-
+import ModalYesNo from '@/components/global/ModalYesNo';
 export default function Popupinfo(props) {
 
   const { type, filepath, filename, foldername, currentfolder, currentpath, refreshfetch, elipsisOpen } = props;
+
+  const [showModal, setShowModal] = useState(false);
   /* const [isOpen, setIsOpen] = useState(true); */
   /* const dispatch = useDispatch();
   const ispopupinfoopen = useSelector((state) => state.UISlice.ispopupinfoopen);
@@ -24,6 +26,11 @@ export default function Popupinfo(props) {
 
   console.log(currentfolder, "currentfolderfromPopupinfo");
   console.log(currentpath, "currentpathfromPopupinfo");
+
+  const onclickDelete = async (e) => {
+    setShowModal(true);
+  }
+
 
   const deletefilefolder = async () => {
     // console.log(currentpath, "currentpath from Popupinfo");
@@ -70,7 +77,7 @@ export default function Popupinfo(props) {
         type: 'file',
         currentpath: currentpath,
         currentfolder: currentfolder,
-        filepath: filepath2, //this is without the filename
+        // filepath: filepath2, //this is without the filename
         filename: filename,
 
       }
@@ -100,19 +107,41 @@ export default function Popupinfo(props) {
 
   };
 
+  const getModalAnswer = (answer) => {
+    if (answer) {
+      //IF YES, DO TRASH PAGE
+      deletefilefolder();
+      setShowModal(false);
+    }
+    else {
+      //IF NO, CLOSE MODAL
+      setShowModal(false);
+    }
+  }
+
+
 
   return (
     <>
+      <ModalYesNo
+        textchoice={`${type === 'folder' ? 'Are you sure you want to permanently delete this folder and all its contents?' : 'Are you sure you want to permanently delete this file?'}`}
+        isOpen={showModal}
+        changeOpen={setShowModal}
+        getModalAnswer={getModalAnswer}
+        buttontextconfirm="Yes"
+        buttontextcancel="No"
+
+      />
       {elipsisOpen && (
         <>
           <div id="popupmenudiv" className="popupmenudiv p-3" /* style={{ left: positionx, top: positiony }} */>
             <div className="popupmenuitemsdiv">
-              {type === "folder" && (
+              {/* {type === "folder" && (
                 <button className="popupmenuitemitem"> Rename</button>
-              )}
+              )} */}
               <button className="popupmenuitemitem"
                 onClick={() => {
-                  deletefilefolder(filepath, type);
+                  onclickDelete();
                 }}
               >Delete</button>
 

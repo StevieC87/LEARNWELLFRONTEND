@@ -53,8 +53,10 @@ export default function MultiFileUpload(props) {
   return (
     <form onSubmit={handleSubmit} encType="multipart/form-data"
       className="uploadmultipleform">
-      <input className="uploadmultipleinput cursor-pointer" type="file" multiple onChange={handleFileChange} />
-      <button type="submit" className="button button-primary ml-3">Upload</button>
+      <div className="uploadmultipleformdiv">
+        <input className="uploadmultipleinput cursor-pointer" type="file" multiple onChange={handleFileChange} />
+        <button type="submit" className="button button-primary ml-3">Upload</button>
+      </div>
 
       <div>
         {selectedFiles.map((file, idx) => (
