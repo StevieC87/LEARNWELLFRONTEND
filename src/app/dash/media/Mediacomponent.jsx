@@ -5,6 +5,7 @@ import './media.css';
 import { useDispatch, useSelector } from 'react-redux'
 import { setShowMediaLibraryModal, setSelectedImagefromGalleryModal } from '@/redux/slices/UISlice';
 import ModalCreateFolder from './components/ModalCreateFolder.jsx';
+import { createPortal } from 'react-dom';
 import UploadMultiple from './components/UploadMultiple.jsx';
 import Elipsis from './components/Elipsis.jsx';
 import { updateField, setHasChanges } from '@/redux/slices/PagesSlice';
@@ -363,6 +364,7 @@ export default function MediaComponent(props) {
               </div>
             </>
             {showmultipleupload && (
+
               <UploadMultiple refreshcallback={() => setRefreshfetch((prevValue) => prevValue + 1)} currentpath={currentpath} currentfolder={currentfolder} />
 
             )}
