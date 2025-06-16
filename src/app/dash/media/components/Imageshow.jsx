@@ -26,6 +26,7 @@ export default function Imageshow(props) {
   const [filesize, setFilesize] = useState('');
   const [alttext, setAlttext] = useState('');
   const [caption, setCaption] = useState('');
+  const [imagedimensions, setImagedimensions] = useState({ width: 0, height: 0 });
   //get photo details from db 
   useEffect(() => {
     console.log(currentimagepathcleanwfilename, 'currentimagepathcleanwfilenamecurrentimagepathcleanwfilename')
@@ -91,6 +92,30 @@ export default function Imageshow(props) {
     });
   }
 
+
+  useEffect(() => {
+    const imgElement = document.getElementById('showimageimage')
+    if (imgElement) {
+      if (imgElement.complete) {
+        setImagedimensions({
+          width: imgElement.naturalWidth,
+          height: imgElement.naturalHeight
+        })
+        console.log('Width:', imgElement.naturalWidth)
+        console.log('Height:', imgElement.naturalHeight)
+      } else {
+        imgElement.onload = () => {
+          setImagedimensions({
+            width: imgElement.naturalWidth,
+            height: imgElement.naturalHeight
+          })
+          console.log('Width:', imgElement.naturalWidth)
+          console.log('Height:', imgElement.naturalHeight)
+        }
+      }
+    }
+  }, [imageshowfile, imageshowindex, imageshowarray, currentimagepathcleanwfilename])
+
   return (
     <div id="showimagediv" className="showimagediv">
       <div className="imageshowinnerdiv">
@@ -121,6 +146,7 @@ export default function Imageshow(props) {
               <span>Filename: {filename}</span>
               <span>Filetype: {filetype}</span>
               <span>Filesize: {filesize}</span>
+              <span>Image Dimensions: {imagedimensions.width} x {imagedimensions.height} </span>
             </div>
             <div className="alttext flex flex-col">
 
