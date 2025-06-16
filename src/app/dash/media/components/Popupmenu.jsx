@@ -7,7 +7,7 @@ import { current } from "@reduxjs/toolkit";
 import ModalYesNo from '@/components/global/ModalYesNo';
 export default function Popupinfo(props) {
 
-  const { type, filepath, filename, foldername, currentfolder, currentpath, refreshfetch, elipsisOpen } = props;
+  const { type, filepath, filename, foldername, currentfolder, currentpath, refreshfetch, elipsisOpen, clickelipsis } = props;
 
   const [showModal, setShowModal] = useState(false);
   /* const [isOpen, setIsOpen] = useState(true); */
@@ -112,6 +112,7 @@ export default function Popupinfo(props) {
       //IF YES, DO TRASH PAGE
       deletefilefolder();
       setShowModal(false);
+      clickelipsis()
     }
     else {
       //IF NO, CLOSE MODAL

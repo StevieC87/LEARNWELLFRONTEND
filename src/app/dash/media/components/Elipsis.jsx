@@ -38,6 +38,7 @@ export default function Elipsis(props) {
           currentpath={currentpath}
           refreshfetch={refreshfetch}
           elipsisOpen={elipsisOpen}
+          clickelipsis={clickelipsis}
 
         />
 
