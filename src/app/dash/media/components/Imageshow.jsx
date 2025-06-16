@@ -49,6 +49,12 @@ export default function Imageshow(props) {
         // You can now use imagedata to display image details
         console.log('Imagedetails:', imagedata);
         let uploadedonv = new Date(imagedata.createdAt).toLocaleDateString();
+        //in this format : January 12, 2021
+        uploadedonv = new Date(uploadedonv).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
         setUploadedon(uploadedonv);
         setFilename(imagedata.filename);
         setFiletype(imagedata.mimetype);
@@ -142,10 +148,14 @@ export default function Imageshow(props) {
           <img id="showimageimage" src={imageshowfile} alt={`Image ${imageshowindex}`} className="w-full h-full object-contain" />
           <div className="imageshowbelowimg">
             <div className="imageshowfiledetailslist">
-              <span>Uploaded on {uploadedon}</span>
-              <span>Filename: {filename}</span>
-              <span>Filetype: {filetype}</span>
-              <span>Filesize: {filesize}</span>
+              <div><span className="imageshowfiletailstlistlabel">Uploaded on:</span><span>{uploadedon}</span></div>
+              <div><span className="imageshowfiletailstlistlabel">Filename:</span> <span>{filename}</span></div>
+              <div><span className="imageshowfiletailstlistlabel">Filetype:</span> <span>{filetype}</span></div>
+              <div><span className="imageshowfiletailstlistlabel">Filesize:</span> <span>{filesize ? `${(filesize / 1024).toFixed(2)} KB` : 'N/A'}</span></div>
+
+
+
+
               <span>Image Dimensions: {imagedimensions.width} x {imagedimensions.height} </span>
             </div>
             <div className="alttext flex flex-col">
@@ -166,7 +176,10 @@ export default function Imageshow(props) {
             <label htmlFor="imgurl">File URL:</label>
             <input name="imgurl" value={`${process.env.NEXT_PUBLIC_API_URL}/public/media${currentimagepathcleanwfilename}`} onChange={() => donothing()} />
           </div>
-          <button className="button button-primary" onClick={() => submitchanges()}>Save changes</button>
+          <div className="imageshowsubmitbuttondiv">
+            <button className="button button-primary " onClick={() => submitchanges()}>Save changes</button>
+
+          </div>
         </div>
       </div>
 

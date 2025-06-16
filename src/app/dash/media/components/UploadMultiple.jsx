@@ -58,7 +58,7 @@ export default function MultiFileUpload(props) {
         <button type="button" className="button button-primary ml-3" onClick={(e) => handleSubmit(e)}>Upload </button>
       </div>
 
-      <div>
+      <div className="selectedfileslistdiv">
         {selectedFiles.map((file, idx) => (
           <div key={idx}>
             {file.name} ({Math.round(file.size / 1024)} KB)

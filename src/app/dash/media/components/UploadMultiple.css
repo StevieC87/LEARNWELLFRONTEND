@@ -1,6 +1,7 @@
 .uploadmultipleinput {
   margin-bottom: 0px;
   padding-bottom: 0px;
+  max-width: 300px;
 }
 
 .uploadmultipleform {
@@ -9,7 +10,14 @@
   align-items: center;
   justify-content: center;
   width: auto;
-  margin: 30px;
+  margin: 20px;
   padding: 10px;
   border: 1px dashed gray;
+}
+
+.selectedfileslistdiv {
+  max-width: 300px;
+  /* word-break: break-all; */
+  word-wrap: break-word;
+  padding: 5px;
 }
