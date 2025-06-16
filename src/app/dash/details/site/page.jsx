@@ -1,11 +1,12 @@
 "use client";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import MediaButtonogimage from "./MediaButtonogimage";
 import MediaButtonlogo from "./MediaButtonlogo";
-// 
+import { setDefaultOGImage, setLogo } from '@/redux/slices/UISlice';
 export default function WebsiteDetailsForm() {
+  const dispatch = useDispatch();
   const defaultlanguage = useSelector((state) => state.DashSlice.settings.defaultlanguage);
   const { register, handleSubmit, reset, watch } = useForm({
     defaultValues: {
@@ -43,6 +44,9 @@ export default function WebsiteDetailsForm() {
           method: "GET",
           credentials: 'include', // Include cookies in the request
         });
+        if (!response.ok) {
+          console.error("Failed to fetch site details");
+        }
         if (response.ok) {
           const data = await response.json();
           console.log("Fetched site details:", data);
@@ -53,10 +57,12 @@ export default function WebsiteDetailsForm() {
             defaultImage: data.defaultImage || "",
             logo: data.logo || "",
           });
+
           setDefaultImageFile(data.defaultImage || "");
           setLogoFile(data.logo || "");
-        } else {
-          console.error("Failed to fetch site details");
+          dispatch(setDefaultOGImage({ imagepath: data.defaultImage || "" }));
+          dispatch(setLogo({ imagepath: data.logo || "" }));
+
         }
       } catch (error) {
         console.error("Error fetching site details:", error);
@@ -138,7 +144,7 @@ export default function WebsiteDetailsForm() {
             <p className="labeltip2"> Tip: Use a clear, high-quality image wiht dimensions: 1600 x </p>
           </label>
 
-          <img src={`${process.env.NEXT_PUBLIC_API_URL}/${defaultogimagethumb}`} alt="Current Default Image" width="200" />
+          <img src={`${process.env.NEXT_PUBLIC_API_URL}/public/media/${defaultImageFile}`} alt="Current Default Image" width="200" />
 
           <MediaButtonogimage
             name="defaultogimage"
@@ -159,8 +165,8 @@ export default function WebsiteDetailsForm() {
             <p className="labeltip2"> Tip: Use a transparent PNG or SVG for best results.</p>
           </label>
 
-          <img src={`${process.env.NEXT_PUBLIC_API_URL}/${defaultlogothumbnail}`} alt="Logo" width="200" />
-          {/*    */}
+          <img src={`${process.env.NEXT_PUBLIC_API_URL}/public/media/${logoFile}`} alt="Logo" width="200" />
+
           <MediaButtonlogo
             name="logo"
             id="logo"
