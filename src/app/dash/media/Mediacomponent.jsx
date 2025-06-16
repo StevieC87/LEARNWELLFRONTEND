@@ -34,7 +34,7 @@ export default function MediaComponent(props) {
   const [showmultipleupload, setShowMultipleUpload] = useState(false); // State to track if the multiple upload is shown
 
   const [refreshfetch, setRefreshfetch] = useState(0); // State to trigger re-fetching of datac
-
+  const [imagesdbarray, setImagesDBArray] = useState([]); // State to store images from the database
 
   useEffect(() => {
     const fetchbasefilesandfolders = async () => {
@@ -63,6 +63,7 @@ export default function MediaComponent(props) {
         setCurrentPath(data.currentpath); // Update the current path state
         console.log(data.currentpath, "currentpath from media page");
         console.log(data.folders, "folders from media page");
+        setImagesDBArray(data.imagesdbarray); // Set the images from the database
       } catch (error) {
         console.error('Error fetching base files and folders:', error);
       }
@@ -284,6 +285,15 @@ export default function MediaComponent(props) {
     'posts',
   ]
 
+  const getimagesrcfromarray = (file) => {
+    // Find the image in the imagesdbarray based on the filename
+    const image = imagesdbarray.find(img => img.filename === file);
+    if (image) {
+      return `${process.env.NEXT_PUBLIC_API_URL}/${image.thumbnailpath}`;
+    }
+    return `${process.env.NEXT_PUBLIC_API_URL}/public/media${currentpath}/${file}`;
+  }
+
 
   return (
     <>
@@ -393,8 +403,12 @@ export default function MediaComponent(props) {
                 {basefiles.map((file, index) => (
                   <div key={index} className="fileitemdiv2">
                     <div className="fileimagetextdiv2">
-                      <img className="fileimage" src={`${currentpathforimage}/${file}`} width={60} height={60} onClick={() => clickonImage(index, file)}
-                        data-test={currentpathforimage}
+                      <img className="fileimage"
+                        /*  src={`${currentpathforimage}/${file}`} */
+                        src={getimagesrcfromarray(file)}
+
+                        width={60} height={60} onClick={() => clickonImage(index, file)}
+                      /*   data-test={currentpathforimage} */
                       />
                       <span className="filefilename2">{file} </span>
                     </div>
