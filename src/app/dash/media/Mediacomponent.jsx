@@ -9,6 +9,8 @@ import { createPortal } from 'react-dom';
 import UploadMultiple from './components/UploadMultiple.jsx';
 import Elipsis from './components/Elipsis.jsx';
 import { updateField, setHasChanges } from '@/redux/slices/PagesSlice';
+import Imageshow from './components/Imageshow.jsx';
+import { current } from '@reduxjs/toolkit';
 
 export default function MediaComponent(props) {
   const dispatch = useDispatch();
@@ -35,6 +37,8 @@ export default function MediaComponent(props) {
 
   const [refreshfetch, setRefreshfetch] = useState(0); // State to trigger re-fetching of datac
   const [imagesdbarray, setImagesDBArray] = useState([]); // State to store images from the database
+
+  const [currentimagepathcleanwfilename, setCurrentImagePathCleanwFilename] = useState(''); // State to store the cleaned current image path
 
   useEffect(() => {
     const fetchbasefilesandfolders = async () => {
@@ -95,10 +99,16 @@ export default function MediaComponent(props) {
   }
   //
   const clickonImage = async (index, file) => {
+
+    let pathclean = `${currentpath}/${file}`;
+    console.log(pathclean, 'pathclean')
+
+    let pathandfname = `${currentpath}/${file}`;
+
+    setCurrentImagePathCleanwFilename(pathandfname); // Set the cleaned current image path
     if (showMediaLibraryModal) {
+
       // dispatch(setSelectedImagefromGalleryModal(`public/media${currentpath}/${file}`));
-      let pathclean = `${currentpath}/${file}`;
-      console.log(pathclean, 'pathclean')
 
       let imageidstring;
       try {
@@ -151,17 +161,17 @@ export default function MediaComponent(props) {
       dispatch(setShowMediaLibraryModal(false))
     }
 
-
-    //or maybe fetch the IMAGEID from the DATABASE - so we can include alt text and what have u - choice
-
-
-
     else if (!showMediaLibraryModal) {
       setImageShow(true);
       setImageShowIndex(index);
       console.log('show image large', index);
       setImageShowFile(`${currentpathforimage}/${file}`)
     }
+  }
+  const closeImagemodal = () => {
+    setImageShow(false);
+    setImageShowIndex(0);
+    setImageShowFile('');
   }
 
   const changeFolder = (folderName) => {
@@ -186,7 +196,7 @@ export default function MediaComponent(props) {
   /* check currentpath quickly */
   useEffect(() => {
     console.log('Currentpathchanged:', currentpath);
-    setCurrentPathForImage(`${process.env.NEXT_PUBLIC_API_URL}/public/media/${currentpath}`);
+    setCurrentPathForImage(`${process.env.NEXT_PUBLIC_API_URL}/public/media${currentpath}`);
   }, [currentpath]);
 
   useEffect(() => {
@@ -213,10 +223,26 @@ export default function MediaComponent(props) {
     if (direction === 'previous') {
 
       setImageShowIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : basefiles.length - 1));
+      let filename = basefiles[(imageshowindex - 1 + basefiles.length) % basefiles.length];
+      console.log(filename, 'filenameinprevnextimage');
+      console.log(currentpathforimage, 'currentpathforimageinprevnextimage');
+      console.log(currentpath, 'currentpathinprevnextimage');
+      let pathwfilename = `${currentpath}/${filename}`;
+      setCurrentImagePathCleanwFilename(pathwfilename); // Set the cleaned current image path with filename
+
+
+      // ! i need to get the cleanpathfile for the image 
+      //we should know the current path, folder , and we have the image name we can find it from the index in the basefiles - for this setCurrentImagePathClean - SO I CAN GET ALL THE INFO FROM THE DATABASE - COZ WE QUERY VIA OPATH LIKE test/myimage.png
+
 
       setImageShowFile(`${currentpathforimage}/${basefiles[(imageshowindex - 1 + basefiles.length) % basefiles.length]}`);
     }
     else if (direction === 'next') {
+
+      let filename = basefiles[(imageshowindex + 1) % basefiles.length];
+      let pathwfilename = `${currentpath}/${filename}`;
+      setCurrentImagePathCleanwFilename(pathwfilename); // Set the cleaned current image path with filename
+
       setImageShowIndex((prevIndex) => (prevIndex < basefiles.length - 1 ? prevIndex + 1 : 0));
       setImageShowFile(`${currentpathforimage}/${basefiles[(imageshowindex + 1) % basefiles.length]}`);
     }
@@ -308,19 +334,11 @@ export default function MediaComponent(props) {
           />
         )}
         {imageshow && (
-          <div id="showimagediv" className="showimagediv">
-            <button className="showimagecaret" id="imagecaretleft" onClick={() => prevnextimage('previous')}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-left" viewBox="0 0 16 16">
-                <path d="M10 12.796V3.204L4.519 8zm-.659.753-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753" />
-              </svg>
-            </button>
-            <img id="showimageimage" src={imageshowfile} alt={`Image ${imageshowindex}`} className="w-full h-full object-contain" />
-            <button className="showimagecaret" id="imagecaretright" onClick={() => prevnextimage('next')}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-right" viewBox="0 0 16 16">
-                <path d="M6 12.796V3.204L11.481 8zm.659.753 5.48-4.796a1 1 0 0 0 0-1.506L6.66 2.451C6.011 1.885 5 2.345 5 3.204v9.592a1 1 0 0 0 1.659.753" />
-              </svg>
-            </button>
-          </div>
+          <Imageshow prevnextimage={prevnextimage} imageshowindex={imageshowindex} imageshowfile={imageshowfile} setImageShow={setImageShow} closeImagemodal={closeImagemodal}
+
+            currentimagepathcleanwfilename={currentimagepathcleanwfilename}
+          />
+
         )}
         <div className="flex flex-col ">
           <div className="flex flex-row justify-between">

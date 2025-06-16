@@ -96,21 +96,3 @@
 .fileimage {
   align-self: center;
 }
-
-.showimagediv {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  width: 70%;
-  height: 70%;
-  background-color: rgba(0, 0, 0, 0.8);
-  z-index: 9999;
-  transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: row;
-}
-
-.showimagecaret {
-  width: 35px;
-  background-color: white;
-}
