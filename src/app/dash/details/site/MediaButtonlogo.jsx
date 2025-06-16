@@ -63,7 +63,7 @@ export default function MediaButtonlogo(props) {
 
   return (
     <>
-      {name}
+
       <div className="mediabuttondiv">
         {/*   {thisfieldvalue?.content?.imagepath && (
           <>

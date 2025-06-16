@@ -153,9 +153,9 @@ export default function WebsiteDetailsForm() {
           //   sendbackimagecallback={image => sendbackimagecallback(image, 'defaultogimage')}
           //  sendbackimagecallback={sendbackimagecallback}
           />
-          {defaultImageFile && (
+          {/*   {defaultImageFile && (
             <p>Selected Default Image: {defaultImageFile}. Leave file input empty to keep</p>
-          )}
+          )} */}
 
         </div>
         <div className="formlabelvertical">

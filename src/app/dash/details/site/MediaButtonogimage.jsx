@@ -64,7 +64,7 @@ export default function MediaButtonogimage(props) {
 
   return (
     <>
-      {name}
+
       <div className="mediabuttondiv">
         {/*   {thisfieldvalue?.content?.imagepath && (
           <>
