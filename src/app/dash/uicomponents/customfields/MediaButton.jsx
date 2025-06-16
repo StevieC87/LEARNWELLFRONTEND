@@ -19,7 +19,7 @@ export default function MediaButton(props) {
   const selectedImagefromGalleryModal = useSelector((state) => state.UISlice.selectedImagefromGalleryModal);
 
   const thisfieldvalue = useSelector((state) => state.PagesSlice.fields[name]) || {};
-
+  console.log(thisfieldvalue, "thisfieldvalueinmediabutton");
 
   const openMediaLibrary = () => {
     dispatch(setShowMediaLibraryModal(!showMediaLibraryModal));
@@ -34,25 +34,56 @@ export default function MediaButton(props) {
 
   }
 
+  const removeimage = () => {
+    dispatch(updateField({
+      name: name,
+      id: id,
+      locale: locale,
+      content: {
+        imageidstring: '',
+        imagepath: '',
+        thumbnail: ''
+      },
+      schema: schema,
+      type: type,
+      placeholder: placeholder,
+      required: required
+    }));
+  }
+
   return (
     <>
+      {name}
       <div className="mediabuttondiv">
-        <button onClick={() => openMediaLibrary()}
-          //we pass the field name to the MediaComponent so we can dispatch the selected image to the correct field
-          className="button  button-outline">
-          Choosea
-        </button>
-        <input type="text"
-          onChange={() => onChangehandler()}
-          value={thisfieldvalue?.content.imageidstring || ''}
-          name={name}
-          id={id}
-          locale={locale}
-          schema={schema}
-          placeholder={placeholder}
-          required={required || false}
+        {thisfieldvalue?.content?.imagepath && (
+          <>
+            {/*  <img src={`${process.env.NEXT_PUBLIC_API_URL}/public/media${thisfieldvalue?.content?.imagepath}`} alt="" /> */}
+            <img src={`${process.env.NEXT_PUBLIC_API_URL}/${thisfieldvalue?.content?.thumbnail}`} alt="11" />
 
-        />
+          </>
+        )}
+        <div className="flex flex-row">
+          <button onClick={() => openMediaLibrary()}
+            //we pass the field name to the MediaComponent so we can dispatch the selected image to the correct field
+            className="button  button-outline">
+            Choose
+          </button>
+          <input type="text" style={{ width: '200px' }}
+            onChange={() => onChangehandler()}
+            value={thisfieldvalue?.content.imagepath || ''}
+            name={name}
+            id={id}
+            locale={locale}
+            schema={schema}
+            placeholder={placeholder}
+            required={required || false}
+
+          />
+          {thisfieldvalue?.content?.imagepath && (
+
+            <button className="button button-outline gray " onClick={() => removeimage()}>Remove</button>
+          )}
+        </div>
       </div>
 
 

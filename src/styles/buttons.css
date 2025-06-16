@@ -80,4 +80,9 @@
     color: #ffffff;
     border-color: #dc3545;
   }
+
+  .gray {
+    border-color: #d1d5db;
+    color: gray;
+  }
 }

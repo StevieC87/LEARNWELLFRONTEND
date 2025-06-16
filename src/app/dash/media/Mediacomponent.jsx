@@ -129,6 +129,7 @@ export default function MediaComponent(props) {
             content: {
               imageidstring: imageidstring,
               imagepath: pathclean,
+              thumbnail: `public/media/thumbnails/${data.thumbnailfilename}`,
             },
             id: id,
             locale: locale,
@@ -281,7 +282,6 @@ export default function MediaComponent(props) {
     'thumbnails',
     'pages',
     'posts',
-
   ]
 
 
