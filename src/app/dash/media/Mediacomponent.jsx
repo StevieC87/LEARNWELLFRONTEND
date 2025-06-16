@@ -3,7 +3,10 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import './media.css';
 import { useDispatch, useSelector } from 'react-redux'
-import { setShowMediaLibraryModal, setSelectedImagefromGalleryModal } from '@/redux/slices/UISlice';
+import {
+  setShowMediaLibraryModal, setSelectedImagefromGalleryModal, setDefaultOGImage,
+  setLogo,
+} from '@/redux/slices/UISlice';
 import ModalCreateFolder from './components/ModalCreateFolder.jsx';
 import { createPortal } from 'react-dom';
 import UploadMultiple from './components/UploadMultiple.jsx';
@@ -16,6 +19,8 @@ export default function MediaComponent(props) {
   const dispatch = useDispatch();
 
   const { fieldname, id, locale, schema, type, placeholder, required } = props;
+
+
   const showMediaLibraryModal = useSelector((state) => state.UISlice.showMediaLibraryModal);
 
   const [basefiles, setBaseFiles] = useState([]);
@@ -39,6 +44,8 @@ export default function MediaComponent(props) {
   const [imagesdbarray, setImagesDBArray] = useState([]); // State to store images from the database
 
   const [currentimagepathcleanwfilename, setCurrentImagePathCleanwFilename] = useState(''); // State to store the cleaned current image path
+
+  const callingfrom = useSelector((state) => state.UISlice.callingfrom); // Get the calling from state
 
   useEffect(() => {
     const fetchbasefilesandfolders = async () => {
@@ -134,24 +141,45 @@ export default function MediaComponent(props) {
           imageidstring = data.imageid; // Assuming _id is the image ID
           //  dispatch(setSelectedImagefromGalleryModal(imageidstring));
 
-          dispatch(updateField({
-            name: fieldname,
-            //  content: imageidstring,
-            content: {
-              imageidstring: imageidstring,
-              imagepath: pathclean,
-              thumbnail: `public/media/thumbnails/${data.thumbnailfilename}`,
-            },
-            id: id,
-            locale: locale,
-            schema: schema,
-            type: type,
-            placeholder: placeholder,
-            required: required,
+          //this is for when im NOT usign it in a schema - i.e. in the webstie details page 
+          if (callingfrom) {
+            if (callingfrom === 'defaultogimage') {
+              dispatch(setDefaultOGImage({
+                imageidstring: imageidstring,
+                imagepath: pathclean,
+                thumbnail: `public/media/thumbnails/${data.thumbnailfilename}`,
+              }))
+            }
+            else if (callingfrom === 'logo') {
+              dispatch(setLogo({
+                imageidstring: imageidstring,
+                imagepath: pathclean,
+                thumbnail: `public/media/thumbnails/${data.thumbnailfilename}`,
+              }))
+            }
+
+          }
+          //this is for standard in a schema as a field 
+          else {
+            dispatch(updateField({
+              name: fieldname,
+              //  content: imageidstring,
+              content: {
+                imageidstring: imageidstring,
+                imagepath: pathclean,
+                thumbnail: `public/media/thumbnails/${data.thumbnailfilename}`,
+              },
+              id: id,
+              locale: locale,
+              schema: schema,
+              type: type,
+              placeholder: placeholder,
+              required: required,
 
 
-          }));
-          dispatch(setHasChanges(true))
+            }));
+            dispatch(setHasChanges(true))
+          }
         }
 
       }

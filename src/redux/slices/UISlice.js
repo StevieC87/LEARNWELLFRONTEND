@@ -14,6 +14,10 @@ const UISlice = createSlice({
     showMediaLibraryModal: false, // Added to control media library modal visibility
     selectedImagefromGalleryModal: "",
     deletefilefolderpopupopen: false, // Added to control delete file/folder popup visibility
+    //FOR MEDIA - FOR SITE DETAILS PAGE
+    callingfrom: "",
+    defaultogimage: {},
+    logo: {},
   },
 
   reducers: {
@@ -38,6 +42,16 @@ const UISlice = createSlice({
     setDeleteFileFolderPopupOpen: (state, action) => {
       state.deletefilefolderpopupopen = action.payload;
     },
+    // FOR MEDIA - FOR SITE DETAILS PAGE`
+    setCallingFrom: (state, action) => {
+      state.callingfrom = action.payload;
+    },
+    setDefaultOGImage: (state, action) => {
+      state.defaultogimage = action.payload;
+    },
+    setLogo: (state, action) => {
+      state.logo = action.payload;
+    },
   },
 });
 
@@ -49,6 +63,10 @@ export const {
   setShowMediaLibraryModal,
   setSelectedImagefromGalleryModal,
   setDeleteFileFolderPopupOpen,
+  // FOR MEDIA - FOR SITE DETAILS PAGE
+  setCallingFrom,
+  setDefaultOGImage,
+  setLogo,
 } = UISlice.actions;
 
 export default UISlice.reducer;
