@@ -7,9 +7,12 @@ import { useState, useEffect } from 'react'
 import FieldRenderer from '../../pages/[edit]/FieldRenderer';
 import { updateSharedFields } from '@/redux/slices/SharedSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from 'next/navigation';
+
 
 export default function EditSharedComponent() {
   const dispatch = useDispatch();
+  const router = useRouter();
   //const sharedfields = useSelector((state) => state.SharedSlice.fields);
   const params = useParams();
   const sharedcomponentidis = params.edit
@@ -148,9 +151,21 @@ export default function EditSharedComponent() {
         fields: fieldsdataforsend,
         schema: schemais,
         locale: searchParams.get('locale') || 'en', // Default to 'en' if locale is not provided
-
       }),
     });
+    if (!sendtosave.ok) {
+      console.error('Failed to save shared component');
+      return;
+    }
+    const data = await sendtosave.json();
+    console.log(data, "result from save shared component");
+    let isnew = data.wasnewpage;
+    let createdpageid = data.sharedcomponentid;
+    if (isnew === 'true') {
+      //
+      router.push(`/dash/shared/${createdpageid}?schema=${schemais}&locale=${searchParams.get('locale') || 'en'}`);
+    }
+
 
     // You can dispatch an action or make an API call here
 
