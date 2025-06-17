@@ -1,6 +1,26 @@
-
+'use client';
+import { useState, useEffect } from 'react';
 
 export default function Shared() {
+
+  useEffect(() => {
+    const fetchSharedSchemas = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/shared/getschemas`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        console.log(data, "Shared Schemas Data");
+      } catch (error) {
+        console.error('Error fetching shared schemas:', error);
+      }
+    };
+
+    fetchSharedSchemas();
+
+  }, []);
+
 
   return (
     <div className="flex flex-col gap-4">

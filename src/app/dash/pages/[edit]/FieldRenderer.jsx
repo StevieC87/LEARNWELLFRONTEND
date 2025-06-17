@@ -1,14 +1,14 @@
 'use client'
 import { validateSlug } from './utilities/validation';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateField } from '@/redux/slices/PagesSlice';
+import { updateField, updateArrayField } from '@/redux/slices/PagesSlice';
 import { useState } from 'react';
 import SummernoteField from '../../uicomponents/customfields/Summernote/SummernoteField';
 import MediaButton from '../../uicomponents/customfields/MediaButton';
 
 //! ADD ID OF THE FIELD  - PASS TO REDUX 
 
-const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeholder, required, disabled, autofocus, inputcssclass, inputdivcssclass, labelcssclass, fields, onChange3, fieldarray }) => {
+const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeholder, required, disabled, autofocus, inputcssclass, inputdivcssclass, labelcssclass, fields, onChange3, fieldarray, fieldarrayparent, indexis, subfield }) => {
   // console.log(fielddata, "fielddata33333333");
 
   const dispatch = useDispatch();
@@ -17,14 +17,24 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
 
   //console.log(fielddata, "fielddata33333333");
 
-  const onChange = (e, arrayfield) => {
-    // alert('chagned')
-    alert(arrayfield);
+  const onChange = (e, arrayfield, arrayfieldparent, indexis, subfield) => {
+    //alert(arrayfield);
+
     /*     alert(arrayfield)
         if (arrayfield) {
           alert('arrayfield changed');
         } */
     const newValue = e.target.value;
+    /*  if (arrayfield === 'true') {
+       //   alert(subfield);
+       dispatch(updateArrayField({
+         parentField: arrayfieldparent,
+         index: indexis,
+ 
+         content: newValue,
+       }));
+     }
+     else {  } */
     dispatch(updateField({
       name: name,
       content: newValue,
@@ -36,6 +46,7 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
       required: required || false,
       fields: fields || null,
     }));
+
 
     onChange2();
   }
@@ -66,7 +77,8 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
             type="text"
             value={value}
             fieldarray={fieldarray || 'false'}
-            onChange={(e) => onChange(e, fieldarray)}
+            fieldarrayparent={fieldarrayparent || ''}
+            onChange={(e) => onChange(e, fieldarray, fieldarrayparent, indexis, subfield)}
             placeholder={placeholder}
             required={required || false}
             disabled={disabled || false}
@@ -194,9 +206,14 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
                   key={index}
                   type={fieldObj.type}
                   name={fieldObj.name}
-                  value={fieldObj.value || ''}
+                  /*  value={fieldObj.value || ''} */
+                  value={fieldObj.content || ""}
+
                   label={fieldObj.label || ''}
                   fieldarray={'true'}
+                  fieldarrayparent={name}
+                  indexis={index}
+                  subfield={fieldObj.name}
                   onChange2={onChange2}
                   fielddata={fielddata}
                   placeholder={fieldObj.placeholder || ''}

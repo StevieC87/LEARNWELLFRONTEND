@@ -56,6 +56,22 @@ const PagesSlice = createSlice({
     setHasChanges(state, action) {
       state.hasChanges = action.payload;
     },
+    /*  updateArrayField(state, action) {
+      const { parentField, index, subfield, value, content } = action.payload;
+
+      if (
+        state.fields[parentField] &&
+        Array.isArray(state.fields[parentField].fields) &&
+        state.fields[parentField].fields[index]
+      ) {
+        //  state.fields[parentField].fields[index][subfield] = value;
+        // state.fields[parentField].fields[index].content = content;
+        state.fields[parentField].fields[index] = {
+          ...state.fields[parentField].fields[index],
+          content,
+        };
+      }
+    }, */
   },
 });
 
@@ -64,6 +80,7 @@ export const {
   setSlugDuplicateWarning,
   setTriggerSEORefresh,
   setHasChanges,
+  updateArrayField,
 } = PagesSlice.actions;
 
 export default PagesSlice.reducer;
