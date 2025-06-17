@@ -12,13 +12,19 @@ export default function EditSharedComponent() {
   const dispatch = useDispatch();
   //const sharedfields = useSelector((state) => state.SharedSlice.fields);
   const params = useParams();
+  const sharedcomponentidis = params.edit
+  console.log(sharedcomponentidis, 'sharedcomponentidis')
   const sharedcomponentid = params.edit; // assuming your file is [slug]/page.js
   console.log(sharedcomponentid, "slug in EditSharedComponent")
   const searchParams = useSearchParams()
   console.log(searchParams, "searchParams in EditSharedComponent")
 
+  const schemais = searchParams.get('schema')
+
   const [schemafields, setSchemaFields] = useState(null);
   const [fieldsdata, setFieldsData] = useState(null);
+
+  const fieldsdatafromredux = useSelector((state) => state.SharedSlice.fields);
 
   const [fieldswithdataifany, setFieldsWithDataIfAny] = useState(null);
   useEffect(() => {
@@ -104,6 +110,41 @@ export default function EditSharedComponent() {
     console.log(fieldswithdataifany, "fieldswithdataifany")
   }, [fieldswithdataifany])
 
+  const [fieldsdataforsend, setFieldsDataForSend] = useState(null);
+  useEffect(() => {
+    // we will only keep the name and the contnet
+    let fieldswithdataifany2 = Object.values(fieldsdatafromredux).map((field) => {
+      return {
+        name: field.name,
+        content: field.content,
+      }
+    })
+    console.log(fieldswithdataifany2, "fieldswithdataifany2")
+    setFieldsDataForSend(fieldswithdataifany2);
+  }, [fieldsdatafromredux])
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+
+    // Handle form submission logic here
+    console.log('Form submitted with fields:', fieldsdatafromredux);
+
+    const sendtosave = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/shared/savesharedcomponent`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        sharedcomponentid: sharedcomponentidis,
+        fields: fieldsdataforsend,
+
+      }),
+    });
+
+    // You can dispatch an action or make an API call here
+
+  }
+
 
   return (
     <>
@@ -115,6 +156,7 @@ export default function EditSharedComponent() {
         <p className="text-gray-500">
           Please select a shared component to edit from the list.
         </p>
+        <button className="button button-primary " onClick={onSubmit}>Save</button>
       </div>
       {fieldswithdataifany && fieldswithdataifany.length > 0 ? (
         <div className="p-4 border rounded shadow">
