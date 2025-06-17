@@ -5,6 +5,7 @@ import PagesSlice from "../slices/PagesSlice";
 import DashSlice from "../slices/DashSlice";
 import JSONLDSlice from "../slices/JSONLDSlice";
 import UISlice from "../slices/UISlice";
+import SharedSlice from "../slices/SharedSlice";
 
 const rootReducer = combineReducers({
   SlideMenuSlice: SlideMenuSlice,
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
   DashSlice: DashSlice,
   JSONLDSlice: JSONLDSlice,
   UISlice: UISlice,
+  SharedSlice: SharedSlice,
 
   /* UtilsSlice: UtilsSlice, */
 });

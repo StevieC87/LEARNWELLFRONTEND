@@ -4,10 +4,13 @@ import { useParams } from 'next/navigation';
 
 import { useSearchParams } from 'next/navigation'
 import { useState, useEffect } from 'react'
-
+import FieldRenderer from '../../pages/[edit]/FieldRenderer';
+import { updateSharedFields } from '@/redux/slices/SharedSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function EditSharedComponent() {
-
+  const dispatch = useDispatch();
+  //const sharedfields = useSelector((state) => state.SharedSlice.fields);
   const params = useParams();
   const sharedcomponentid = params.edit; // assuming your file is [slug]/page.js
   console.log(sharedcomponentid, "slug in EditSharedComponent")
@@ -17,6 +20,7 @@ export default function EditSharedComponent() {
   const [schemafields, setSchemaFields] = useState(null);
   const [fieldsdata, setFieldsData] = useState(null);
 
+  const [fieldswithdataifany, setFieldsWithDataIfAny] = useState(null);
   useEffect(() => {
     const fetchfields = async () => {
       const schema = searchParams.get('schema')
@@ -54,45 +58,94 @@ export default function EditSharedComponent() {
 
     console.log(fieldsdata, "fieldsdata in EditSharedComponent")
     console.log(schemafields, "schemafields in EditSharedComponent")
+    const fieldswithdata = []
     const mergedinitial = schemafields.map((fieldObj) => {
       //  const match = fieldsdata.find((item) => item.name === fieldObj.name);
       let fieldObjname = fieldObj.name;
-      console.log(fieldObjname, "fieldObjname in EditSharedComponent")
+      //console.log(fieldObjname, "fieldObjname in EditSharedComponent")
       let nameinresultsifany = fieldsdata[fieldObjname] || null;
-      console.log(nameinresultsifany, "nameinresultsifany");
-      const match = fieldsdata.name === fieldObj.name;
-      console.log(match, "match3333333333");
+      // console.log(nameinresultsifany, "nameinresultsifany");
+      /*   const match = fieldsdata.name === fieldObj.name;
+        console.log(match, "match3333333333"); */
+      let object;
+      // if (nameinresultsifany) {
+      console.log('yesmatchyesmatch')
+      object = {
+        name: fieldObjname || null,
+        content: nameinresultsifany || null,
+        type: fieldObj.type || null,
+        required: fieldObj.required || null,
+        placeholder: fieldObj.placeholder || null,
+        label: fieldObj.label || fieldObjname || null,
 
-      //  let createID = new ObjectId().toString();
-      // return {
-      /* ...fieldObj,
-      content: match ? match.content : '',
-      id: match ? match._id : null, //createID
-      locale: match ? match.locale : languageui || defaultlanguage || null,
-      type: fieldObj.type,
-      name: fieldObj.name || match?.field || null,
-      schema: match ? match.schema : null,
-      belongsto: fieldObj.belongsto || pageid || null,
-      createdAt: fieldObj.createdAt || null,
-      required: fieldObj.required || null,
-      placeholder: fieldObj.placeholder || null,
-      label: fieldObj.label || match?.label || null, */
-      //  fields: fieldObj.fields || null,
-      //  pagename: match.pagename,
-      //   };
+      }
+
+      fieldswithdata.push(object);
+
+      //   }
+      //we need the type fo the field 
+    }
+
+    );
+    setFieldsWithDataIfAny(fieldswithdata);
+    console.log(fieldswithdata, "fieldswithdata in EditSharedComponent")
+
+    //, SET THE MERGED FIELDS TO REDUX STORE
+    fieldswithdata.forEach((item) => {
+      console.log(item, 'mergedinitialitem')
+      dispatch(updateSharedFields({
+        name: item.name, content: item.content, type: item.type, required: item.required, placeholder: item.placeholder, label: item.label, fields: item.fields
+      }));
     }
     );
   }, [schemafields, fieldsdata])
 
+  useEffect(() => {
+    console.log(fieldswithdataifany, "fieldswithdataifany")
+  }, [fieldswithdataifany])
+
+
   return (
-    <div className="flex flex-col gap-4">
-      <h1 className="text-2xl font-bold">Edit Shared Component</h1>
-      <p className="text-gray-600">
-        This section allows you to edit shared components across your application.
-      </p>
-      <p className="text-gray-500">
-        Please select a shared component to edit from the list.
-      </p>
-    </div>
+    <>
+      <div className="flex flex-col gap-4">
+        <h1 className="text-2xl font-bold">Edit Shared Component</h1>
+        <p className="text-gray-600">
+          This section allows you to edit shared components across your application.
+        </p>
+        <p className="text-gray-500">
+          Please select a shared component to edit from the list.
+        </p>
+      </div>
+      {fieldswithdataifany && fieldswithdataifany.length > 0 ? (
+        <div className="p-4 border rounded shadow">
+          <h2 className="text-xl font-semibold">Fields Data</h2>
+
+          <div className="flex flex-col">
+
+            {fieldswithdataifany.map((field, index) => (
+
+              <FieldRenderer
+                key={index}
+                name={field.name}
+                value={field.content || ''}
+                type={field.type}
+                required={field.required || ''}
+                placeholder={field.placeholder || ''}
+                label={field.label || field.name || ''}
+                source="shared"
+              />
+
+            ))}
+          </div>
+
+        </div>
+      ) : (
+        <p className="text-red-600">No fields data available for this component.</p>
+      )}
+    </>
   )
 }
+
+{/* <li key={index} className="mb-2">
+                <strong>{field.fieldname}:</strong> {field.fieldcontent || 'No data'}
+              </li> */}

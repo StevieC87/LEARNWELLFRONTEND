@@ -2,14 +2,32 @@
 import { validateSlug } from './utilities/validation';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateField, updateArrayField } from '@/redux/slices/PagesSlice';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SummernoteField from '../../uicomponents/customfields/Summernote/SummernoteField';
 import MediaButton from '../../uicomponents/customfields/MediaButton';
-
+import { updateSharedFields } from '@/redux/slices/SharedSlice';
 //! ADD ID OF THE FIELD  - PASS TO REDUX 
 
-const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeholder, required, disabled, autofocus, inputcssclass, inputdivcssclass, labelcssclass, fields, onChange3, fieldarray, fieldarrayparent, indexis, subfield }) => {
+const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeholder, required, disabled, autofocus, inputcssclass, inputdivcssclass, labelcssclass, fields, onChange3, fieldarray, fieldarrayparent, indexis, subfield, source }) => {
+  //note: source here refers to wher eit's called from e.g. from shared componetns specifically - to set state not in dispatch
   // console.log(fielddata, "fielddata33333333");
+
+  const [fieldValue, setFieldValue] = useState('');
+
+  let fieldvalue1 = useSelector(
+    (state) => state.SharedSlice.fields[name]?.content || '')
+
+  useEffect(() => {
+
+    if (source === 'shared') {
+      setFieldValue(fieldvalue1
+      );
+    } else {
+      setFieldValue(value)
+    }
+
+  }, [value, type]);
+
 
   const dispatch = useDispatch();
   const slugduplicatewarning = useSelector((state) => state.PagesSlice.slugduplicatewarning);
@@ -25,30 +43,45 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
           alert('arrayfield changed');
         } */
     const newValue = e.target.value;
-    /*  if (arrayfield === 'true') {
-       //   alert(subfield);
-       dispatch(updateArrayField({
-         parentField: arrayfieldparent,
-         index: indexis,
- 
-         content: newValue,
-       }));
-     }
-     else {  } */
-    dispatch(updateField({
-      name: name,
-      content: newValue,
-      id: fielddata.id,
-      locale: fielddata.locale,
-      schema: fielddata.schema,
-      type: type,
-      placeholder: placeholder,
-      required: required || false,
-      fields: fields || null,
-    }));
+
+    if (source === 'shared') {
+      // alert(newValue)
+      //
+      dispatch(updateSharedFields({
+        name: name,
+        content: newValue,
+        type: type,
+        placeholder: placeholder,
+        required: required || false,
+        fields: fields || null,
+      }));
+    }
+    else {
+      /*  if (arrayfield === 'true') {
+         //   alert(subfield);
+         dispatch(updateArrayField({
+           parentField: arrayfieldparent,
+           index: indexis,
+   
+           content: newValue,
+         }));
+       }
+       else {  } */
+      dispatch(updateField({
+        name: name,
+        content: newValue,
+        id: fielddata.id,
+        locale: fielddata.locale,
+        schema: fielddata.schema,
+        type: type,
+        placeholder: placeholder,
+        required: required || false,
+        fields: fields || null,
+      }));
 
 
-    onChange2();
+      onChange2();
+    }
   }
 
   const changeArrayfield = (e) => {
@@ -63,6 +96,9 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
      })); */
   }
 
+
+
+
   switch (type) {
     case "text":
 
@@ -75,7 +111,7 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
             key={name}
             name={name}
             type="text"
-            value={value}
+            value={fieldValue}
             fieldarray={fieldarray || 'false'}
             fieldarrayparent={fieldarrayparent || ''}
             onChange={(e) => onChange(e, fieldarray, fieldarrayparent, indexis, subfield)}
@@ -108,7 +144,6 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
           />
         </div>
       );
-
     case "wysi":
       return (
 
