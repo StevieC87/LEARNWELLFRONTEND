@@ -38,12 +38,12 @@ export default function Shared() {
       </p>
       {missingSchemas.map((schema) => (
         <div key={`${schema.schema}${schema.locale}`} className="p-4 border rounded shadow">
-          <Link href={`/dash/shared/newshared?schema=${schema.schema}&locale=${schema.locale}`} className="text-blue-600 hover:underline">
-            Create {schema.schema}
+          <Link href={`/dash/shared/newshared?schema=${schema.schema}&locale=${schema.locale}`} className="text-green-600 hover:underline">
+            Create {/* {schema.schema} */}
           </Link>
           <h2 className="text-xl font-semibold">{schema.schema}</h2>
           <p className="text-gray-500">Locale: {schema.locale}</p>
-          <p className="text-red-600">This schema is missing in the database.</p>
+          {/* <p className="text-red-600">This schema is missing in the database.</p> */}
         </div>
 
       ))}
@@ -51,11 +51,11 @@ export default function Shared() {
       {existingSchemas.map((schema) => (
         <div key={schema.id} className="p-4 border rounded shadow">
           <Link href={`/dash/shared/${schema.id}?schema=${schema.schema}&locale=${schema.locale}`} className="text-blue-600 hover:underline">
-            Edit {schema.schema}
+            Edit
           </Link>
           <h2 className="text-xl font-semibold">{schema.schema}</h2>
           <p className="text-gray-500">Locale: {schema.locale}</p>
-          <p className="text-gray-700">ID: {schema.id}</p>
+          {/*  <p className="text-gray-700">ID: {schema.id}</p> */}
         </div>
       ))}
 

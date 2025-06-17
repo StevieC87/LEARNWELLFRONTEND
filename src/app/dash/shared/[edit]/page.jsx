@@ -180,9 +180,7 @@ export default function EditSharedComponent() {
         <p className="text-gray-600">
           This section allows you to edit shared components across your application.
         </p>
-        <p className="text-gray-500">
-          Please select a shared component to edit from the list.
-        </p>
+
         <button className="button button-primary " onClick={onSubmit}>Save</button>
       </div>
       {fieldswithdataifany && fieldswithdataifany.length > 0 ? (
