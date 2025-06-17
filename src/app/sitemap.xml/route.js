@@ -27,17 +27,6 @@ export async function GET() {
   });
 
   console.log("changeDatetoYYYYMMDD:", changeDatetoYYYYMMDD);
-  /* 
-  const allEntries = [
-    ...posts.map((post) => ({
-      loc: `https://yourdomain.com/blog/${post.slug}`,
-      lastmod: post.updatedAt,
-    })),
-    ...pages.map((page) => ({
-      loc: `https://yourdomain.com/${page.slug}`,
-      lastmod: page.updatedAt,
-    })),
-  ]; */
 
   const body = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

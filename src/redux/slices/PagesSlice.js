@@ -25,8 +25,7 @@ const PagesSlice = createSlice({
         createdAt,
         required,
         placeholder,
-        label,
-        extra,
+        fields,
       } = action.payload;
 
       if (!state.fields[name]) {
@@ -45,8 +44,7 @@ const PagesSlice = createSlice({
         createdAt,
         required,
         placeholder,
-        label,
-        extra,
+        fields,
       };
     },
     setSlugDuplicateWarning(state, action) {

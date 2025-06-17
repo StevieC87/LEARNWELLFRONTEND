@@ -113,7 +113,7 @@ export default function PageContentTab(props) {
     console.log(pagefields, "pagefieldspagefields55");
     console.log(pagefieldsdataS, "pagefieldsdataSsasas");
     const mergedinitial = pagefields.map((fieldObj) => {
-      // console.log(fieldObj, 'fieldObj')
+      console.log(fieldObj, 'fieldObj')
       const match = pagefieldsdataS.find((item) => item.name === fieldObj.name);
       console.log(match, "match3333333333");
 
@@ -131,6 +131,7 @@ export default function PageContentTab(props) {
         required: fieldObj.required || null,
         placeholder: fieldObj.placeholder || null,
         label: fieldObj.label || match?.label || null,
+        fields: fieldObj.fields || null,
         //  pagename: match.pagename,
       };
     }
@@ -142,7 +143,7 @@ export default function PageContentTab(props) {
 
     //remove them from the array
     const removedstandardfields = mergedinitial.filter((field) => field.name !== 'title' && field.name !== 'slug' && field.name !== 'slugpath');
-
+    console.log(removedstandardfields, "removedstandardfields");
 
     setInitialMerge(removedstandardfields);
     setFilteredFieldsS(removedstandardfields);
@@ -151,7 +152,7 @@ export default function PageContentTab(props) {
     mergedinitial.forEach((item) => {
       console.log(item, 'mergedinitialitem')
       dispatch(updateField({
-        name: item.name, content: item.content, id: item.id, locale: item.locale, type: item.type, schema: item.schema, belongsto: item.belongsto, createdAt: item.createdAt, required: item.required, placeholder: item.placeholder, label: item.label
+        name: item.name, content: item.content, id: item.id, locale: item.locale, type: item.type, schema: item.schema, belongsto: item.belongsto, createdAt: item.createdAt, required: item.required, placeholder: item.placeholder, label: item.label, fields: item.fields
       }));
     }
     )
@@ -747,9 +748,10 @@ export default function PageContentTab(props) {
             }}
           />
           {(filteredFieldsS.length !== 0) && filteredFieldsS.map((field) => {
-            // const fieldData = useSelector((state) => state.PagesSlice.fields[field.name]) || {};
+            console.log(field, 'fieldfieldfield')  // const fieldData = useSelector((state) => state.PagesSlice.fields[field.name]) || {};
             //  console.log(field, 'field555555')
             //   console.log(field.name, "field.name111");
+
             let fieldData1 = fieldData[field.name] || {};
             console.log(fieldData1, "fieldData1");
             //console.log(fieldData1.id, "fieldData1.content");
@@ -770,6 +772,7 @@ export default function PageContentTab(props) {
                 required={field.required || false}
                 disabled={field.disabled || false}
                 autofocus={field.autofocus || false}
+                fields={field.fields || null}
 
               />
 
