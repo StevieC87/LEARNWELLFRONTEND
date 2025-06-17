@@ -20,13 +20,12 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
   useEffect(() => {
 
     if (source === 'shared') {
-      setFieldValue(fieldvalue1
-      );
+      setFieldValue(fieldvalue1);
     } else {
       setFieldValue(value)
     }
 
-  }, [value, type]);
+  }, [value, type, fieldvalue1]);
 
 
   const dispatch = useDispatch();
