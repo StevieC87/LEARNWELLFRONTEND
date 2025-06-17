@@ -136,7 +136,7 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
           <textarea
             key={name}
             name={name}
-            value={value}
+            value={fieldValue}
             required={required || false}
             onChange={onChange}
             placeholder={placeholder}
@@ -155,7 +155,7 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
             locale={fielddata.locale}
             schema={fielddata.schema}
             type={type}
-            value={value}
+            value={fieldValue}
             placeholder={placeholder}
             required={required || false}
           // onChange={onChange}
@@ -170,7 +170,7 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
             key={name}
             name={name}
             type="number"
-            value={value}
+            value={fieldValue}
             onChange={onChange}
             placeholder={placeholder}
 
@@ -202,7 +202,7 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
             key={name}
             name={name}
             type="date"
-            value={value}
+            value={fieldValue}
             onChange={onChange}
             placeholder={placeholder}
 
@@ -221,7 +221,7 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
             locale={fielddata.locale}
             schema={fielddata.schema}
             type={type}
-            value={value}
+            value={fieldValue}
             placeholder={placeholder}
             required={required || false}
           />

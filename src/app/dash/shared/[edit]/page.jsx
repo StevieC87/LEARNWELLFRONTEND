@@ -14,6 +14,14 @@ export default function EditSharedComponent() {
   const params = useParams();
   const sharedcomponentidis = params.edit
   console.log(sharedcomponentidis, 'sharedcomponentidis')
+  const [isneworedit, setIsNewOrEdit] = useState('');
+  useEffect(() => {
+    if (sharedcomponentidis === 'newshared') {
+      setIsNewOrEdit('new');
+    } else {
+      setIsNewOrEdit('edit');
+    }
+  }, [sharedcomponentidis]);
   const sharedcomponentid = params.edit; // assuming your file is [slug]/page.js
   console.log(sharedcomponentid, "slug in EditSharedComponent")
   const searchParams = useSearchParams()
@@ -25,6 +33,7 @@ export default function EditSharedComponent() {
   const [fieldsdata, setFieldsData] = useState(null);
 
   const fieldsdatafromredux = useSelector((state) => state.SharedSlice.fields);
+
 
   const [fieldswithdataifany, setFieldsWithDataIfAny] = useState(null);
   useEffect(() => {
@@ -137,6 +146,8 @@ export default function EditSharedComponent() {
       body: JSON.stringify({
         sharedcomponentid: sharedcomponentidis,
         fields: fieldsdataforsend,
+        schema: schemais,
+        locale: searchParams.get('locale') || 'en', // Default to 'en' if locale is not provided
 
       }),
     });
@@ -149,7 +160,8 @@ export default function EditSharedComponent() {
   return (
     <>
       <div className="flex flex-col gap-4">
-        <h1 className="text-2xl font-bold">Edit Shared Component</h1>
+        <h1 className="text-2xl font-bold">
+          {isneworedit === 'new' ? 'Create' : 'Edit'} Shared Component</h1>
         <p className="text-gray-600">
           This section allows you to edit shared components across your application.
         </p>
