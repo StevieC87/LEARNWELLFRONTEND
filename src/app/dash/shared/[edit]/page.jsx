@@ -18,6 +18,7 @@ export default function EditSharedComponent() {
   const sharedcomponentidis = params.edit
   console.log(sharedcomponentidis, 'sharedcomponentidis')
   const [isneworedit, setIsNewOrEdit] = useState('');
+  const [saved, setSaved] = useState(false);
   useEffect(() => {
     if (sharedcomponentidis === 'newshared') {
       setIsNewOrEdit('new');
@@ -166,6 +167,8 @@ export default function EditSharedComponent() {
       router.push(`/dash/shared/${createdpageid}?schema=${schemais}&locale=${searchParams.get('locale') || 'en'}`);
     }
 
+    setSaved(true);
+    setTimeout(() => setSaved(false), 1500);
 
     // You can dispatch an action or make an API call here
 
@@ -175,13 +178,16 @@ export default function EditSharedComponent() {
   return (
     <>
       <div className="flex flex-col gap-4">
+
         <h1 className="text-2xl font-bold">
           {isneworedit === 'new' ? 'Create' : 'Edit'} Shared Component</h1>
         <p className="text-gray-600">
           This section allows you to edit shared components across your application.
         </p>
 
-        <button className="button button-primary " onClick={onSubmit}>Save</button>
+        <button className="button button-primary " onClick={onSubmit}>
+          {saved ? 'Saved!' : 'Save'}</button>
+
       </div>
       {fieldswithdataifany && fieldswithdataifany.length > 0 ? (
         <div className="p-4 border rounded shadow">
