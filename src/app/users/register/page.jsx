@@ -5,14 +5,15 @@ import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image'; // Import Image from next/image
+import { useSearchParams } from 'next/navigation';
 
-import { Logo } from '@/components/design/Logo'; // Adjust the import path as necessary
 import QuizInput from './Quizinput'; // Adjust the import path as necessary
 import VerificationDigits from './Verificationdigits'; // Adjust the import path as necessary
 
 
 
 export default function LoginPage() {
+  const searchParams = useSearchParams();
   const router = useRouter();
   const { register, handleSubmit, watch, formState: { errors }, setError, clearErrors } = useForm();
   const [message, setMessage] = useState(null); // State for UI messages
@@ -24,7 +25,9 @@ export default function LoginPage() {
   const [captchaPassed, setCaptchaPassed] = useState(false);
   const [submitbuttonloading, setSubmitButtonLoading] = useState(false);
 
-  const [useremail, setUserEmail] = useState("");
+  const token = searchParams.get('token') || "";
+  const emailquery = searchParams.get('email');
+  const [useremail, setUserEmail] = useState(emailquery);
 
   useEffect(() => {
     setStartTime(Date.now());
@@ -83,7 +86,7 @@ export default function LoginPage() {
       return;
     }
 
-
+    data.token = token;
 
     console.log(data);
     try {
@@ -126,7 +129,13 @@ export default function LoginPage() {
         // Maybe show a timer on that sucker too
         //when expires 
         console.log('Register successful:  ');
-        setshowsixdigitsverify(true);
+        if (!token) {
+          setshowsixdigitsverify(true);
+        }
+        else {
+          //redirect to login page
+          router.push('/users/login');
+        }
         // router.push('/dash');
 
       }
@@ -185,6 +194,10 @@ export default function LoginPage() {
             <h4 className="cardh1">Create an account</h4>
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="fieldcombo">
+                <input type="hidden" value={token} onChange={() => {
+                  //do nothing
+                }} />
+
                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
                   Email
                 </label>
@@ -192,6 +205,7 @@ export default function LoginPage() {
                   type="email"
                   id="email"
                   placeholder="email"
+                  defaultValue={emailquery || ""}
                   className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.email ? 'border-red-500' : ''}`}
                   {...register("email", { required: "email is required" })}
                 />
