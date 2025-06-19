@@ -8,7 +8,7 @@ export default function Analytics() {
   useEffect(() => {
     const fetchCountriesData = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/testanalytics`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/analytics/testanalytics`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
