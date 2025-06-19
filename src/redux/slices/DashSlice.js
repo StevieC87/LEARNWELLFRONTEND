@@ -13,6 +13,8 @@ const DashSlice = createSlice({
       defaultlanguage: "",
       languages: [],
     },
+    userrole: "", // This is used to check if a page exists in the userrole
+    userid: "",
   },
 
   reducers: {
@@ -31,6 +33,9 @@ const DashSlice = createSlice({
     setSettings(state, action) {
       state.settings = action.payload; // This will set the entire settings object
     },
+    setUserId(state, action) {
+      state.userid = action.payload; // This will set the user ID
+    },
   },
 });
 
@@ -40,6 +45,7 @@ export const {
   setPageExistsThisLanguage,
   setUserRole,
   setSettings,
+  setUserId,
 } = DashSlice.actions;
 
 export default DashSlice.reducer;

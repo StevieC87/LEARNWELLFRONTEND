@@ -2,8 +2,8 @@
 import { useState, useEffect } from 'react';
 import './userspage.css'
 import Caret from '@/app/dash/pages/components/caret';
-
-
+import Deleteuser from './Deleteuser'
+import { useSelector } from 'react-redux';
 export default function UsersPage() {
 
   const [pagenumber, setPageNumber] = useState(1);
@@ -15,6 +15,8 @@ export default function UsersPage() {
   const [sortdirection, setSortDirection] = useState('desc');
 
   const [searchterm, setSearchTerm] = useState('');
+
+  const userid = useSelector((state) => state.DashSlice.userid); // Get the user ID from Redux store
 
   useEffect(() => {
     // Fetch users from the API
@@ -132,16 +134,25 @@ export default function UsersPage() {
                 }
               </div>
             </th>
-
+            <th className="cursor-pointer">
+              Delete
+            </th>
           </tr>
         </thead>
         <tbody>
           {/* THIS IS TO SHOW THE LIST OF EXISTING PAGES */}
-          {filteredusers.length > 0 && filteredusers.map((page, index) => (
+          {filteredusers.length > 0 && filteredusers.map((user, index) => (
             <tr key={index} className="hover:bg-gray-100">
-              <td className="px-4 py-2">{page.email}</td>
-              <td className="px-4 py-2" style={{ textAlign: 'center' }}>{page.role}</td>
-              <td className="px-4 py-2" style={{ textAlign: 'center' }}>{page.username}</td>
+              <td className="px-4 py-2">{user.email}</td>
+              <td className="px-4 py-2" style={{ textAlign: 'center' }}>{user.role}</td>
+              <td className="px-4 py-2" style={{ textAlign: 'center' }}>{user.username}</td>
+
+              <td className="tdpageslist"
+                style={{ width: '60px' }}>
+                {((user._id.toString() !== userid) || (user.role !== 'superadmin')) && (
+                  <Deleteuser userid={user._id} RefreshList1={() => setRefreshList((prev) => prev + 1)} pagenumber={pagenumber} pageindexinarray={index} totalpageindexes={filteredusers.length} />
+                )}
+              </td>
             </tr>
           ))}
 

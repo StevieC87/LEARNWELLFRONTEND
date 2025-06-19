@@ -2,7 +2,7 @@
 //import RefreshToken from './RefreshToken'
 import { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUserRole, setSettings } from '@/redux/slices/DashSlice'; // Import the action to set user role
+import { setUserRole, setSettings, setUserId } from '@/redux/slices/DashSlice'; // Import the action to set user role
 //refresh next smooth
 import { useRouter } from 'next/navigation'; // Import useRouter for navigation
 import { usePathname } from 'next/navigation'
@@ -145,7 +145,9 @@ export default function VerifyToken() {
     const data = await response.json();
     //   console.log("User role fetched successfully:", data);
     dispatch(setUserRole(data.role)); // Dispatch the action to set user role in 
-    dispatch(setSettings(data.settings)); // Dispatch the action to set settings in the Redux store
+    dispatch(setSettings(data.settings)); // Dispatch the 
+    dispatch(setUserId(data.userid))
+    // action to set settings in the Redux store
     // Redux store
     // You can use the user role data here if needed
   }
