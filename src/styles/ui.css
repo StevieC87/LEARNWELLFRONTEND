@@ -64,14 +64,17 @@
 
   th,
   td {
-    border: 1px solid #ddd;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
     /*  padding: 8px; */
     text-align: left;
     vertical-align: top;
+    padding: 10px;
   }
   th {
     background-color: var(--primary-color-light);
     color: white;
+    padding: 10px;
   }
   tr:nth-child(even) {
     background-color: #f2f2f2;

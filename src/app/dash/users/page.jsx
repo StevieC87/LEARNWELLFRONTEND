@@ -48,10 +48,16 @@ export default function UsersPage() {
       }
     }
     fetchasync();
-  }, [refreshList, pagenumber, paginationLimit, sortdirection]);
+  }, [refreshList, pagenumber, paginationLimit, sortdirection, searchterm]);
 
-  const searchrecords = (searchTerm) => {
-
+  const searchrecords = (searchValue) => {
+    if (searchValue === '') {
+      setSearchTerm(''); // Reset to original list if search is empty
+      return;
+    }
+    else if (searchValue.length > 0) {
+      setSearchTerm(searchValue);
+    }
   }
 
   const sorttable = (column) => {
@@ -67,6 +73,8 @@ export default function UsersPage() {
 
   return (
     <div id="tablediv" className="tablediv" >
+      <h1 >Users</h1>
+      <div className="pb-5">Manage users and their roles</div>
       <div id="filterdiv" className="flex flex-row" >
         <div id="searchdiv" className="postspagesearchinput">
           <input
@@ -97,17 +105,6 @@ export default function UsersPage() {
       <table>
         <thead>
           <tr>
-            <th className="cursor-pointer" onClick={() => sorttable('email')}
-            >
-              <div className="flex flex-row justify-between items-center">
-                email
-                {columnsorted === 'email' && (
-                  <Caret direction={sortdirection === 'asc' ? 'asc' : 'desc'} />
-                )
-                }
-              </div>
-            </th>
-
             <th className="cursor-pointer" onClick={() => sorttable('role')}
               style={{ width: '140px' }}
             >
@@ -121,6 +118,18 @@ export default function UsersPage() {
                 }
               </div>
             </th>
+            <th className="cursor-pointer" onClick={() => sorttable('email')}
+            >
+              <div className="flex flex-row justify-between items-center">
+                email
+                {columnsorted === 'email' && (
+                  <Caret direction={sortdirection === 'asc' ? 'asc' : 'desc'} />
+                )
+                }
+              </div>
+            </th>
+
+
             <th className="cursor-pointer" onClick={() => sorttable('username')}
               style={{ width: '140px' }}
             >
@@ -143,14 +152,19 @@ export default function UsersPage() {
           {/* THIS IS TO SHOW THE LIST OF EXISTING PAGES */}
           {filteredusers.length > 0 && filteredusers.map((user, index) => (
             <tr key={index} className="hover:bg-gray-100">
-              <td className="px-4 py-2">{user.email}</td>
-              <td className="px-4 py-2" style={{ textAlign: 'center' }}>{user.role}</td>
-              <td className="px-4 py-2" style={{ textAlign: 'center' }}>{user.username}</td>
+              <td className="" style={{}}>{user.role}</td>
+              <td className="">{user.email}</td>
+
+              <td className="" style={{ textAlign: 'center' }}>{user.username}</td>
 
               <td className="tdpageslist"
                 style={{ width: '60px' }}>
                 {((user._id.toString() !== userid) || (user.role !== 'superadmin')) && (
-                  <Deleteuser userid={user._id} RefreshList1={() => setRefreshList((prev) => prev + 1)} pagenumber={pagenumber} pageindexinarray={index} totalpageindexes={filteredusers.length} />
+                  <div>
+
+                    <Deleteuser userid={user._id.toString()} RefreshList1={() => setRefreshList((prev) => prev + 1)} pagenumber={pagenumber} pageindexinarray={index} totalpageindexes={filteredusers.length} />
+                  </div>
+
                 )}
               </td>
             </tr>

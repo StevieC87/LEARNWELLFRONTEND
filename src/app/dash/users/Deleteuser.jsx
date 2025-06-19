@@ -7,7 +7,7 @@ export default function DeletePage(props) {
   const router = useRouter();
 
 
-  const { pageid, RefreshList1, pageindexinarray, pagenumber, totalpageindexes } = props;
+  const { userid, RefreshList1, pageindexinarray, pagenumber, totalpageindexes } = props;
 
   const [showModal, setShowModal] = useState(false);
 
@@ -24,8 +24,6 @@ export default function DeletePage(props) {
   }
   const onclickDelete = async (e) => {
     setShowModal(true);
-
-
   }
 
   const doDeleteUser = async () => {
