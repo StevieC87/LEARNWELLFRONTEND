@@ -130,11 +130,18 @@ export default function MapAnalyticsComponent({ countriesdata }) {
           setHoverData({ countryID, countryname, flag, visitors: countryValues?.visitors ?? 0 });
         });
         el.addEventListener('mousemove', (e) => {
-          setCoords({ x: e.pageX, y: e.pageY });
+          const rect = mapContainerRef.current.getBoundingClientRect();
+          let x = e.clientX - rect.left; //e.pageX;
+          setCoords({
+            x: x,
+            y: e.pageY
+          });
         });
         el.addEventListener('pointerdown', (e) => {
           //  alert('clicked');
-          const x = e.pageX;
+          const rect = mapContainerRef.current.getBoundingClientRect();
+
+          const x = e.clientX - rect.left; //e.pageX;//e.pageX;
           const y = e.pageY;
 
           setCoords({ x, y });

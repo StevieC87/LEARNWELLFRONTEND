@@ -2,7 +2,8 @@
 import MapAnalyticsComponent from "./Map";
 import { useEffect, useState } from "react";
 import Datepicker from './datepicker/Datepicker.jsx';
-// 
+import ChartVisits from "./ChartVisits.jsx";
+
 import './datepicker/Datepicker.css'
 export default function Analytics() {
   const [countriesdata, setCountriesData] = useState(null);
@@ -11,6 +12,7 @@ export default function Analytics() {
   const [multiple, setMultiple] = useState('range'); //yes or range for range or  empty string for single date selection
   const [selecteddate, setSelecteddate] = useState('');
   const [selecteddatesMulti, setSelecteddatesMulti] = useState([]);
+  const [usersbymonth, setUsersByMonth] = useState([]);
   const handleDateChange = (newdate) => {
     console.log('newdate in handleDateChange', newdate)
     console.log(typeof newdate, 'typeof newdate')
@@ -50,6 +52,7 @@ export default function Analytics() {
         console.log(data.data, 'data.data');
         setCountriesData(data.data || {}); // Use data.data if it exists, 
         console.log(typeof countriesdata, 'typeof data.message');
+        setUsersByMonth(data.userByMonth || []); // Use data.userByMonth if it exists
 
       } catch (error) {
         console.error('Error fetching countries data:', error);
@@ -66,7 +69,7 @@ export default function Analytics() {
       <h1 className="text-4xl font-bold mb-4">Analytics</h1>
       <Datepicker onDateChange={handleDateChange}
         dateprop={multiple == 'yes' ? selecteddatesMulti : selecteddate}
-        multiple={multiple} /* format="MMDDYYYY" */ format="DDMMYYYY"
+        multiple={multiple} /* format="MMDDYYYY" */ format="YYYYMMDD"
         displaya=""
       />
       <div className="mt-8 fade-in mapsdiv">
@@ -77,7 +80,7 @@ export default function Analytics() {
             No data available for the map.
           </div>
         )}
-
+        <ChartVisits data={usersbymonth} />
       </div>
     </div>
   );

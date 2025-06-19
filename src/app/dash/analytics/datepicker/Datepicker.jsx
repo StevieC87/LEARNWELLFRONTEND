@@ -405,6 +405,7 @@ const Datepicker = React.forwardRef((props, ref) => {
 
         while (currentDate <= end) {
           //convert to mm-dd
+          console.log(currentDate, 'currentDatecurrentDatecurrentDatecurrentDate')
           if (format === 'DDMMYYYY') {
 
             dateArray.push(convertYMD2DMY(currentDate.toISOString().slice(0, 10))); // Format as DD-MM-YYYY
@@ -413,7 +414,10 @@ const Datepicker = React.forwardRef((props, ref) => {
             dateArray.push(convertYMD2MDY(currentDate.toISOString().slice(0, 10))); // Format as MM-DD-YYYY
           }
           else if (format === 'YYYYMMDD') {
+            // let datemodded = currentDate.toISOString().slice(0, 10);
+            //  console.log(datemodded, 'datemoddeddatemoddeddatemoddeddatemodded')
             dateArray.push(currentDate.toISOString().slice(0, 10)); // Format as YYYY-MM-DD
+
           }
           currentDate.setDate(currentDate.getDate() + 1);
         }
@@ -909,7 +913,7 @@ const Datepicker = React.forwardRef((props, ref) => {
                         ${day.monthname !== monthname ? 'grey' : ''} 
                         ${selecteddate2 === convertFormat(day.datetxt) ? 'activedatebadge' : ''} 
                         ${day.datetxt === actuallytoday ? 'todaycss' : ''} 
-                        ${selectedRANGEArray && selectedRANGEArray.find(item => item == day.datetxt) ? 'activedatebadge' : ''}
+                        ${selectedRANGEArray && selectedRANGEArray.find(item => item === day.datetxt) ? 'activedatebadge' : ''}
                         
                         ${selectedateArray &&
                           selectedateArray.find(item => item == convertFormat(day.datetxt)) ? 'activedatebadge' : ''} `}
