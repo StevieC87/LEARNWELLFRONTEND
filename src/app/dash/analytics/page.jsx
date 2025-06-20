@@ -3,13 +3,13 @@ import MapAnalyticsComponent from "./Map";
 import { useEffect, useState } from "react";
 import Datepicker from './datepicker/Datepicker.jsx';
 import ChartVisitsD from "./ChartVisitsD.jsx";
-
 import './datepicker/Datepicker.css'
+
 export default function Analytics() {
   const [countriesdata, setCountriesData] = useState(null);
 
   //. FOR DATEPICKER ----------------------
-  const [multiple, setMultiple] = useState(''); //yes or range for range or  empty string for single date selection
+  const [multiple, setMultiple] = useState('yes'); //yes or range for range or  empty string for single date selection
   const [selecteddate, setSelecteddate] = useState('');
   const [selecteddatesMulti, setSelecteddatesMulti] = useState([]);
   const [usersbymonth, setUsersByMonth] = useState([]);
@@ -98,17 +98,7 @@ export default function Analytics() {
 
   return (
     <>
-      {selecteddate}
-      {selecteddatesMulti.length > 0 && (
-        <div className="mt-8">
-          <h2 className="text-2xl font-semibold mb-4">Selected Dates:</h2>
-          <ul className="list-disc pl-5">
-            {selecteddatesMulti.map((date, index) => (
-              <li key={index} className="text-lg">{date}</li>
-            ))}
-          </ul>
-        </div>
-      )}
+     
       <div className="flex flex-col items-center  h-screen">
         <h1 className="text-4xl font-bold mb-4">Analytics</h1>
         <div className="datecontrols flex flex-row gap-2" >

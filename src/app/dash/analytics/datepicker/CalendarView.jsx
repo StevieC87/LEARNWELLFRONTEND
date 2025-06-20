@@ -14,7 +14,11 @@ export default function CalendarView({
   multipleprop,
   actuallytoday,
   format,
-  weekstartssunday
+  weekstartssunday,
+  rangestartDate,
+  rangeendDate,
+  setRangestartDate,
+  setRangeendDate
 }) {
 
   const onclickdate = (e, day) => {
@@ -36,13 +40,21 @@ export default function CalendarView({
         console.log('multiple');
         setSelecteddateArray([...selectedateArray, day]);
         onDateChange([...selectedateArray, day]);
-        setSelecteddate2(day); // i think this is just to show currently selected date in the daylong maybe - not sure
+       //  setSelecteddate2(day); // i think this is just to show currently selected date in the daylong maybe - not sure
       }
     } else if (multipleprop === 'range') {
+      if (selectedRANGEArray.length === 0) {
+        setRangestartDate(day)
+      }
       if (selectedRANGEArray.length < 2) {
         setSelectedRANGEArray([...selectedRANGEArray, day]);
       } else if (selectedRANGEArray.length >= 2) {
-        setSelectedRANGEArray([]);
+     /*   setSelectedRANGEArray([]); */
+        setRangestartDate(day)
+        setRangeendDate('')
+         setSelecteddateArray([]);
+        
+
         setSelectedRANGEArray([day]);
       }
     }
@@ -75,13 +87,16 @@ export default function CalendarView({
           className={
             `dpdatebox 
          ${day.monthname !== monthname ? 'grey' : ''} 
+     
          ${selecteddate2 === day.datetxt ? 'activedatebadge' : ''} 
          ${day.datetxt === actuallytoday ? 'todaycss' : ''} 
          ${selectedRANGEArray && selectedRANGEArray.find(item => item === day.datetxt) ? 'activedatebadge' : ''}
          ${selectedateArray &&
-              selectedateArray.find(item => item == day.datetxt) ? 'activedatebadge' : ''} `}
-
-        >
+              selectedateArray.find(item => item == day.datetxt) ? 'activedatebadge' : ''} 
+        ${day.datetxt === rangestartDate ? 'rangestart' : ''}
+        ${day.datetxt === rangeendDate ? 'rangeend' : ''}
+        
+        `}> 
           {day.datetxt.split('-')[2]}
         </div>
       ))}
