@@ -9,7 +9,7 @@ export default function Analytics() {
   const [countriesdata, setCountriesData] = useState(null);
 
   //. FOR DATEPICKER ----------------------
-  const [multiple, setMultiple] = useState('range'); //yes or range for range or  empty string for single date selection
+  const [multiple, setMultiple] = useState(''); //yes or range for range or  empty string for single date selection
   const [selecteddate, setSelecteddate] = useState('');
   const [selecteddatesMulti, setSelecteddatesMulti] = useState([]);
   const [usersbymonth, setUsersByMonth] = useState([]);
@@ -34,9 +34,7 @@ export default function Analytics() {
       setSelecteddate(newdate);
     }
   }
-  useEffect(() => {
-    console.log('selecteddatesMultichanged', selecteddatesMulti);
-  }, [selecteddatesMulti]);
+ 
   //. -------------------------------------
   //set default dates (7 days)
 
@@ -116,9 +114,10 @@ export default function Analytics() {
         <div className="datecontrols flex flex-row gap-2" >
           {/*     {selecteddatesMulti.length > 0 && ( */}
           <Datepicker onDateChange={handleDateChange}
-            /*  dateprop={(multiple === 'yes' || multiple === 'range') ? selecteddatesMulti : selecteddate} */
-            multipleprop={multiple} /* format="MMDDYYYY" */ format="DDMMYYYY"
+            dateprop={(multiple === 'yes' || multiple === 'range') ? selecteddatesMulti : selecteddate} 
+            multipleprop={multiple} format="DDMMYYYY"
             displaya=""
+            weekstartssunday={false}
 
           />
           {/*     )} */}
