@@ -26,20 +26,16 @@ export default function CalendarView({
       closedialog(false);
     }
     else if (multipleprop === 'yes') {
-      alert(day)
       if (selectedateArray.find(item => item == day)) {
-        alert('already selected');
         let newarray = selectedateArray.filter(item => item !== day);
         setSelecteddateArray(newarray);
         onDateChange(newarray);
       }
       else {
-        alert('selected');
         console.log('multiple');
         setSelecteddateArray([...selectedateArray, day]);
         onDateChange([...selectedateArray, day]);
-
-        setSelecteddate2(day);
+        setSelecteddate2(day); // i think this is just to show currently selected date in the daylong maybe - not sure
       }
     } else if (multipleprop === 'range') {
       if (selectedRANGEArray.length < 2) {
@@ -63,7 +59,7 @@ export default function CalendarView({
       {allweeksdates && allweeksdates.map((day, index) => (
         //! allweeksdates is in default system format yyyy-mm-dd
         <div
-          key={day.datetxt}
+          key={`${day.datetxt}+${index}`}
           data-date={day.datetxt} data-monthname={day.monthname} data-monthnumber={day.monthnumber}
           onClick={(e) => onclickdate(e, day.datetxt)}
         /*  className={

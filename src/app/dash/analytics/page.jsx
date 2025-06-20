@@ -18,7 +18,6 @@ export default function Analytics() {
   const [enddate, setEndDate] = useState('');
 
   const handleDateChange = (newdate) => {
-    alert(newdate)
     console.log('newdate in handleDateChange', newdate)
     console.log(typeof newdate, 'typeof newdate')
     if (typeof newdate === 'object') {

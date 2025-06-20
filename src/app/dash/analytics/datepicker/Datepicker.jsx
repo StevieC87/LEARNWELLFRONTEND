@@ -200,7 +200,7 @@ const Datepicker = React.forwardRef((props, ref) => {
 
 
 
-  /* 
+  /*
   
     const onchangeinput = (e) => {
       let proceed = false;
@@ -230,6 +230,43 @@ const Datepicker = React.forwardRef((props, ref) => {
     } */
 
   //| -----------------------------------------------------------
+
+  const selectedarrayformattedforuserpreferences = (datesarray) => {
+
+    let newarray = [];
+    let formatit = datesarray.map(date => {
+      console.log(date, 'date123123')
+      let converted = convertFromSystemFormattodesiredformat(format, date)
+      newarray.push(converted);
+      //console.log(converted, 'convertedconverted')
+
+    })
+    console.log(formatit, 'formatitformatit')
+    return newarray;
+  }
+
+  const Whattoshow = () => {
+    console.log(selectedateArray, 'selectedateArrayselectedateArray')
+    if (!multipleprop) {
+      return selecteddate2 ? convertFromSystemFormattodesiredformat(format, selecteddate2) : '';
+    }
+    else if (multipleprop === 'yes') {
+
+      if (selectedateArray && selectedateArray.length > 0) {
+        let formattearray = selectedarrayformattedforuserpreferences(selectedateArray);
+        console.log(formattearray, 'formattearray')
+        return formattearray.join(', ');
+      }
+
+    }
+    else if (multipleprop === 'range') {
+      if (selectedateArray && selectedateArray.length > 0) {
+        //   ? `${selectedateArray[0]}-${selectedateArray[selectedateArray.length - 1]}`
+        //  : '';
+      }
+    }
+  }
+
   return (
     <>
       {/* THIS IS THE INPUT FIELD  */}
@@ -243,13 +280,7 @@ const Datepicker = React.forwardRef((props, ref) => {
             name="datepicker"
             id="datepickerinput"
             value={
-              multipleprop === 'range'
-                ? (selectedateArray && selectedateArray.length > 0
-                  ? `${selectedateArray[0]}-${selectedateArray[selectedateArray.length - 1]}`
-                  : '')
-                : (selectedateArray && selectedateArray.length > 0
-                  ? selectedateArray.join(', ')
-                  : (selecteddate2 ? convertFromSystemFormattodesiredformat(format, selecteddate2) : ''))
+              Whattoshow()
             }
             /* convertYMD2DMY(selecteddate2) convertYMD2DMYarray(selectedateArray)   */
             aria-label="Datepicker" onClick={() => setIsOpen(true)}

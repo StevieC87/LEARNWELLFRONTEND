@@ -350,7 +350,7 @@ export const convertFromSystemFormattodesiredformat = (
       return convertYMD2MDY(date);
     }
   }
-  return "";
+  // return "";
 };
 
 export function convertYMD2DMY(date: string): string {
@@ -360,6 +360,7 @@ export function convertYMD2DMY(date: string): string {
     let month = datearray[1];
     let day = datearray[2];
     let newdate = `${day}-${month}-${year}`;
+    console.log(newdate, "newdatenewdate123");
     return newdate;
   } else {
     return "";
