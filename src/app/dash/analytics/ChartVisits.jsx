@@ -1,95 +1,47 @@
 import Chart from 'chart.js/auto';
-import { useEffect, useRef, useState } from 'react';
 
-export default function ChartVisits(props) {
-  const canvasRef = useRef();
-  const { data } = props;
-  const [datatoshow, setDatatoshow] = useState([]);
-  let dataonlynomonth = [];
+export default function ChartVisits() {
 
-  //only use once ref 
-  const loadonce = useRef(false);
+  Chart.defaults.interaction.mode = 'nearest';
 
-  useEffect(() => {
+  // Interaction mode is set to nearest because it was not overridden here
+  // const labels = Utils.months({ count: 7 });
+  const data = {
+    labels: labels,
+    datasets: [{
+      label: 'My First Dataset',
+      data: [65, 59, 80, 81, 56, 55, 40],
+      fill: false,
+      borderColor: 'rgb(75, 192, 192)',
+      tension: 0.1
+    }]
+  };
 
-    if (data.length === 0) {
-      return
-    }
-    const monthsarray = [
-      ['01', 'January', 'Jan'],
-      ['02', 'February', 'Feb'],
-      ['03', 'March', 'Mar'],
-      ['04', 'April', 'Apr'],
-      ['05', 'May', 'May'],
-      ['06', 'June', 'Jun'],
-      ['07', 'July', 'Jul'],
-      ['08', 'August', 'Aug'],
-      ['09', 'September', 'Sep'],
-      ['10', 'October', 'Oct'],
-      ['11', 'November', 'Nov'],
-      ['12', 'December', 'Dec']
-    ]
+  const chartInteractionModeNearest = new Chart(ctx, {
+    type: 'line',
+    data: data
+  });
 
-    //find position in monthsarray of first entry in data 
-    let firstmonth = data[0].month;
-    console.log(firstmonth, 'firstmonth');
-
-    let firstmonthindex = monthsarray.findIndex(month => month[2] === firstmonth);
-    console.log(firstmonthindex, 'firstmonthindex');
-
-    let missingmonths = firstmonthindex;
-    console.log(missingmonths, 'missingmonths');
-
-    console.log('datainchartVisits', data);
-
-    //let add two arrays to data
-    for (let i = 0; i < missingmonths; i++) {
-      //add month and totalUsers to data
-      let objecttoadd = {
-        month: monthsarray[i][2],
-        totalUsers: 0
+  // This chart would have the interaction mode that was passed in
+  const chartDifferentInteractionMode = new Chart(ctx, {
+    type: 'line',
+    data: data,
+    options: {
+      interaction: {
+        // Overrides the global setting
+        mode: 'index'
       }
-      data.unshift(objecttoadd);
     }
+  });
 
-    dataonlynomonth = data.map(item => item.totalUsers);
-    //   setDatatoshow(dataonlynomonth);
-
-    console.log('dataonlynomonth', dataonlynomonth);
-  }, [data]); // Re-run effect when data changes
-
-
-
-  useEffect(() => {
-    //MAKE SURE ONLY LOADS ONE 
-    if (loadonce.current) {
-      return;
-    }
-    //make sure window has loaded and document
-    if (typeof window === 'undefined' || typeof document === 'undefined') {
-      return;
-    }
-    if (dataonlynomonth.length > 0) {
-      console.log(dataonlynomonth, 'dataonlynomonthdataonlynomonth')
-      const ctx = canvasRef.current.getContext('2d');
-      new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-          datasets: [{
-            label: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-            data: dataonlynomonth, //,
-            borderColor: 'rgb(75,192,192)',
-            tension: 0.2
-          }] //dataonlynomonth
-        }
-      });
-    }
-  }, [dataonlynomonth]);
 
   return (
-    <div>
-      <canvas ref={canvasRef} width={400} height={200} />
-    </div>
-  );
+    <>
+      <div>i am the chart</div>
+
+
+    </>
+
+
+  )
 }
