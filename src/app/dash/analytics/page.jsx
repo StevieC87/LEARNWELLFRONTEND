@@ -9,7 +9,7 @@ export default function Analytics() {
   const [countriesdata, setCountriesData] = useState(null);
 
   //. FOR DATEPICKER ----------------------
-  const [multiple, setMultiple] = useState('yes'); //yes or range for range or  empty string for single date selection
+  const [multiple, setMultiple] = useState('range'); //yes or range for range or  empty string for single date selection
   const [selecteddate, setSelecteddate] = useState('');
   const [selecteddatesMulti, setSelecteddatesMulti] = useState([]);
   const [usersbymonth, setUsersByMonth] = useState([]);

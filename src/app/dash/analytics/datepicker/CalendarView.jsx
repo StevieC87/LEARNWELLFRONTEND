@@ -62,15 +62,15 @@ export default function CalendarView({
           key={`${day.datetxt}+${index}`}
           data-date={day.datetxt} data-monthname={day.monthname} data-monthnumber={day.monthnumber}
           onClick={(e) => onclickdate(e, day.datetxt)}
-        /*  className={
-           `dpdatebox 
+          className={
+            `dpdatebox 
          ${day.monthname !== monthname ? 'grey' : ''} 
-         ${selecteddate2 === convertFormat(format, day.datetxt) ? 'activedatebadge' : ''} 
+         ${selecteddate2 === day.datetxt ? 'activedatebadge' : ''} 
          ${day.datetxt === actuallytoday ? 'todaycss' : ''} 
          ${selectedRANGEArray && selectedRANGEArray.find(item => item === day.datetxt) ? 'activedatebadge' : ''}
          ${selectedateArray &&
-             selectedateArray.find(item => item == convertFormat(format, day.datetxt)) ? 'activedatebadge' : ''} `}
-          */
+              selectedateArray.find(item => item == day.datetxt) ? 'activedatebadge' : ''} `}
+
         >
           {day.datetxt.split('-')[2]}
         </div>

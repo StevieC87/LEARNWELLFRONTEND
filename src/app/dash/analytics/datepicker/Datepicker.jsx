@@ -157,46 +157,37 @@ const Datepicker = React.forwardRef((props, ref) => {
   //, ============= RANGE PICKER ==================
 
   //.THIS FOR RANGE PICKER
-  /*  useEffect(() => {
-     if (selectedRANGEArray.length === 2) {
-       let firstdate = selectedRANGEArray[0];
-       let enddate = selectedRANGEArray[1];
- 
-       let geteverydaybetween = (startDate, endDate) => {
-         let start = new Date(startDate);
-         let end = new Date(endDate);
-         let dateArray = [];
-         let currentDate = start;
- 
-         while (currentDate <= end) {
-           //convert to mm-dd
-           console.log(currentDate, 'currentDatecurrentDatecurrentDatecurrentDate')
-           if (format === 'DDMMYYYY') {
- 
-             dateArray.push(convertYMD2DMY(currentDate.toISOString().slice(0, 10))); // Format as DD-MM-YYYY
-           }
-           else if (format === 'MMDDYYYY') {
-             dateArray.push(convertYMD2MDY(currentDate.toISOString().slice(0, 10))); // Format as MM-DD-YYYY
-           }
-           else if (format === 'YYYYMMDD') {
-             // let datemodded = currentDate.toISOString().slice(0, 10);
-             //  console.log(datemodded, 'datemoddeddatemoddeddatemoddeddatemodded')
-             dateArray.push(currentDate.toISOString().slice(0, 10)); // Format as YYYY-MM-DD
- 
-           }
-           currentDate.setDate(currentDate.getDate() + 1);
-         }
-         return dateArray;
-       }
-       let alldatesbetween = geteverydaybetween(firstdate, enddate);
-       console.log(alldatesbetween, 'alldatesbetween')
-       setSelecteddateArray(alldatesbetween);
-       onDateChange(alldatesbetween);
- 
-     }
- 
-   }, [selectedRANGEArray])
-  */
+  useEffect(() => {
+    if (selectedRANGEArray.length === 2) {
+      let firstdate = selectedRANGEArray[0];
+      let enddate = selectedRANGEArray[1];
+
+      let geteverydaybetween = (startDate, endDate) => {
+        let start = new Date(startDate);
+        let end = new Date(endDate);
+        let dateArray = [];
+        let currentDate = start;
+
+        while (currentDate <= end) {
+
+          // let datemodded = currentDate.toISOString().slice(0, 10);
+          //  console.log(datemodded, 'datemoddeddatemoddeddatemoddeddatemodded')
+          dateArray.push(currentDate.toISOString().slice(0, 10)); // Format as YYYY-MM-DD
+
+
+          currentDate.setDate(currentDate.getDate() + 1);
+        }
+        return dateArray;
+      }
+      let alldatesbetween = geteverydaybetween(firstdate, enddate);
+      console.log(alldatesbetween, 'alldatesbetween')
+      setSelecteddateArray(alldatesbetween);
+      onDateChange(alldatesbetween);
+
+    }
+
+  }, [selectedRANGEArray])
+
 
 
 
@@ -232,19 +223,15 @@ const Datepicker = React.forwardRef((props, ref) => {
   //| -----------------------------------------------------------
 
   const selectedarrayformattedforuserpreferences = (datesarray) => {
-
-    let newarray = [];
     let formatit = datesarray.map(date => {
       console.log(date, 'date123123')
-      let converted = convertFromSystemFormattodesiredformat(format, date)
-      newarray.push(converted);
-      //console.log(converted, 'convertedconverted')
+      return convertFromSystemFormattodesiredformat(format, date);
+    });
 
-    })
-    console.log(formatit, 'formatitformatit')
-    return newarray;
+    return formatit;
   }
 
+  //, this is for the INPUT - for display according to user prefrences - but statea always stays system format yyyy-mm-dd
   const Whattoshow = () => {
     console.log(selectedateArray, 'selectedateArrayselectedateArray')
     if (!multipleprop) {
@@ -261,8 +248,14 @@ const Datepicker = React.forwardRef((props, ref) => {
     }
     else if (multipleprop === 'range') {
       if (selectedateArray && selectedateArray.length > 0) {
-        //   ? `${selectedateArray[0]}-${selectedateArray[selectedateArray.length - 1]}`
-        //  : '';
+        /*    let formattearray = selectedarrayformattedforuserpreferences(selectedateArray);
+           console.log(formattearray, 'formattearray')
+           return formattearray.join(','); */
+        let getfirstdate = selectedateArray[0];
+        let getlastdate = selectedateArray[selectedateArray.length - 1];
+        let formattedfirstdate = convertFromSystemFormattodesiredformat(format, getfirstdate);
+        let formattedlastdate = convertFromSystemFormattodesiredformat(format, getlastdate);
+        return `${formattedfirstdate} - ${formattedlastdate}`;
       }
     }
   }
@@ -280,7 +273,7 @@ const Datepicker = React.forwardRef((props, ref) => {
             name="datepicker"
             id="datepickerinput"
             value={
-              Whattoshow()
+              Whattoshow() ?? ""
             }
             /* convertYMD2DMY(selecteddate2) convertYMD2DMYarray(selectedateArray)   */
             aria-label="Datepicker" onClick={() => setIsOpen(true)}
