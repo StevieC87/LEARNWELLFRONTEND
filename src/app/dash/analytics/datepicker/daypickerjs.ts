@@ -265,18 +265,6 @@ function getDateFromWeekNumber(year: number, weekNumber: number): Date {
   return januaryFirst;
 }
 
-export function convertYMD2DMY(date: string): string {
-  if (date) {
-    let datearray = date.split("-");
-    let year = datearray[0];
-    let month = datearray[1];
-    let day = datearray[2];
-    let newdate = `${day}-${month}-${year}`;
-    return newdate;
-  } else {
-    return "";
-  }
-}
 export function convertDMY2YMD(date: string): string {
   if (date) {
     let datearray = date.split("-");
@@ -334,7 +322,8 @@ export function convertMDY2YMDarray(datearray: string[]): string[] {
   }
 }
 
-export function convertFormat(format: string, date: string): string {
+//! THIS CONVERTS EVERYTHING TO YYYY-MM-DD - to system
+export function convertTOSYSTEMFormat(format: string, date: string): string {
   if (date) {
     if (format === "DDMMYYYY") {
       return convertDMY2YMD(date);
@@ -343,6 +332,47 @@ export function convertFormat(format: string, date: string): string {
     } else if (format === "MMDDYYYY") {
       return convertMDY2YMD(date);
     }
+  }
+}
+
+//! CONVERT FROM SYSTEM FORMAT TO DMY OR MDY
+
+export const convertFromSystemFormattodesiredformat = (
+  format: string,
+  date: string
+): string => {
+  if (date) {
+    if (format === "DDMMYYYY") {
+      return convertYMD2DMY(date);
+    } else if (format === "YYYYMMDD") {
+      return date;
+    } else if (format === "MMDDYYYY") {
+      return convertYMD2MDY(date);
+    }
+  }
+  return "";
+};
+
+export function convertYMD2DMY(date: string): string {
+  if (date) {
+    let datearray = date.split("-");
+    let year = datearray[0];
+    let month = datearray[1];
+    let day = datearray[2];
+    let newdate = `${day}-${month}-${year}`;
+    return newdate;
+  } else {
+    return "";
+  }
+}
+export function convertYMD2MDY(date: string) {
+  if (date) {
+    let datearray = date.split("-");
+    let year = datearray[0];
+    let month = datearray[1];
+    let day = datearray[2];
+    let newdate = `${month}-${day}-${year}`;
+    return newdate;
   }
 }
 
@@ -386,17 +416,6 @@ export function convertFormat(format: string, date: string): string {
     }
   } */
 
-export const convertFormatArray = (datearray) => {
-  let formatis = formata;
-  if (formata === "DDMMYYYY") {
-    return convertDMY2YMDarray(datearray);
-  } else if (formata === "YYYYMMDD") {
-    return datearray;
-  } else if (formata === "MMDDYYYY") {
-    return convertMDY2YMDarray(datearray);
-  }
-};
-
 export const validatedate = (date) => {
   let validORnot;
   //  let datePattern = /^(((0)[0-9])|((1)[0-2]))(-)([0-2][0-9]|(3)[0-1])(-)\d{4}$/;
@@ -430,83 +449,3 @@ export const validatedateArray = (datearray) => {
     }
   }
 };
-
-//MAYBE DETECT DATE
-//ENFORCE DATE VALIDATION
-//WHEN CHANGE DATE - DONT DO ANYTHING , UNTIL DATE IS VALID
-
-//OLD STUFF CRAP
-/* export function convertFormatArray(format:string, datearray: string[], format: string): string[] {
-    
-    if(format === 'DDMMYYYY') {
-      return convertDMY2YMDarray(datearray)
-    }
-    else if(format === 'YYYYMMDD') {
-      return(datearray)
-
-    }
-    else if (format === 'MMDDYYYY') {
-      return convertMDY2YMDarray(datearray)
-    }
-} */
-
-/* export function loopmonthdays(daysinmonth2: number, date2) {
-    console.log(date2, 'date2 in loopmonthdays')
-    console.log(typeof date2, 'typeof date2 in loopmonthdays')
-    //CREATE OBJECT FOR EACH DATE OF MONTH
-    let array = [];
-    for (let i = 1; i <= daysinmonth2; i++) {
-        let monthfromdate2 = date2.slice(5, 7);
-        let year = date2.slice(0, 4);
-        let daynumber = i;
-        let datefull = `${year}-${monthfromdate2}-${daynumber}`;
-
-        let dayofweek = getdayofweek(datefull);
-      //  console.log(dayofweek, 'dayofweek in loopmonthdays2')
-      //  console.log(datefull, 'datefull in loopmonthdays2')
-        let dayofweektxt = getdayname(dayofweek);
-        let month2 = getmonthnumber(datefull);
-        
-        let dateobject = {
-            daynumber: daynumber,
-            dayofweek: dayofweek,
-            dayofweektxt: dayofweektxt,
-            month2: month2,
-            datefull: datefull,
-        }
-        array.push(dateobject);
-    }
-    return array;
-
-} */
-
-/* UNUSED
-
-
-const convertYMD2DMYarray = (datearray) => {  //date is string,  return string
-          //convert to dd-mm-yyyy
-          if(
-            datearray.length > 0
-          ) {
-            let count = datearray.length;
-            let newdatearray = [];
-
-            for(let i = 0; i < count; i++) {
-              let date = datearray[i];
-              let converted = convertYMD2DMY(date);
-              newdatearray.push(converted);
-            }
-            return newdatearray;
-          }
-          else {
-            return '';
-          }
-        }*/
-
-/* const validatedate = (date) => { 
-            let validORnot;
-          //  let datePattern = /^(((0)[0-9])|((1)[0-2]))(-)([0-2][0-9]|(3)[0-1])(-)\d{4}$/;
-            let datePattern =  /^\d{4}-(0[1-9]|1[0-2])-([0-2][0-9]|3[0-1])$/;
-            validORnot = datePattern.test(date);
-            return validORnot;
-          } */

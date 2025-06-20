@@ -9,7 +9,7 @@ export default function Analytics() {
   const [countriesdata, setCountriesData] = useState(null);
 
   //. FOR DATEPICKER ----------------------
-  const [multiple, setMultiple] = useState(''); //yes or range for range or  empty string for single date selection
+  const [multiple, setMultiple] = useState('yes'); //yes or range for range or  empty string for single date selection
   const [selecteddate, setSelecteddate] = useState('');
   const [selecteddatesMulti, setSelecteddatesMulti] = useState([]);
   const [usersbymonth, setUsersByMonth] = useState([]);
@@ -18,7 +18,7 @@ export default function Analytics() {
   const [enddate, setEndDate] = useState('');
 
   const handleDateChange = (newdate) => {
-
+    alert(newdate)
     console.log('newdate in handleDateChange', newdate)
     console.log(typeof newdate, 'typeof newdate')
     if (typeof newdate === 'object') {
@@ -61,7 +61,7 @@ export default function Analytics() {
       geteverydaybetweenandincluding.push(formattedDate);
     }
     console.log(geteverydaybetweenandincluding, 'geteverydaybetweenandincluding');
-    setSelecteddatesMulti(geteverydaybetweenandincluding); // Set the initial state with the last 7 days
+    //  setSelecteddatesMulti(geteverydaybetweenandincluding); // Set the initial state with the last 7 days
 
   }, []);
 
@@ -115,14 +115,14 @@ export default function Analytics() {
       <div className="flex flex-col items-center  h-screen">
         <h1 className="text-4xl font-bold mb-4">Analytics</h1>
         <div className="datecontrols flex flex-row gap-2" >
-          {selecteddatesMulti.length > 0 && (
-            <Datepicker onDateChange={handleDateChange}
-              dateprop={(multiple === 'yes' || multiple === 'range') ? selecteddatesMulti : selecteddate}
-              multipleprop={multiple} /* format="MMDDYYYY" */ format="DDMMYYYY"
-              displaya=""
+          {/*     {selecteddatesMulti.length > 0 && ( */}
+          <Datepicker onDateChange={handleDateChange}
+            /*  dateprop={(multiple === 'yes' || multiple === 'range') ? selecteddatesMulti : selecteddate} */
+            multipleprop={multiple} /* format="MMDDYYYY" */ format="DDMMYYYY"
+            displaya=""
 
-            />
-          )}
+          />
+          {/*     )} */}
           <button className="button button-primary">Last 7 days</button>
           <button className="button button-outline">Last 30 days</button>
           <button className="button button-outline">All time</button>

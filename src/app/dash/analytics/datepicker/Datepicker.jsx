@@ -2,7 +2,7 @@ import React from 'react';
 import { useEffect, useState, useRef } from 'react';
 
 //import 'bootstrap-icons/font/bootstrap-icons.css';
-import { getmonthnumber, getmonthname, daysinmonth2, getdayofweek, getdayname, getWeeksInMonth, makearrayofdatesfromWeek, convertYMD2DMY, convertDMY2YMD, convertDMY2YMDarray, convertMDY2YMDarray, convertFormat } from './daypickerjs';
+import { getmonthnumber, getmonthname, daysinmonth2, getdayofweek, getdayname, getWeeksInMonth, makearrayofdatesfromWeek, convertYMD2DMY, convertDMY2YMD, convertDMY2YMDarray, convertMDY2YMDarray, convertFromSystemFormattodesiredformat } from './daypickerjs';
 
 import Dialog from './Dialog.jsx'
 
@@ -11,7 +11,6 @@ import Dialog from './Dialog.jsx'
 const Datepicker = React.forwardRef((props, ref) => {
 
   const [selectedateArray, setSelecteddateArray] = useState([]);
-
   //this is for initial 
   const [selectedRANGEArray, setSelectedRANGEArray] = useState([]);
   const { dateprop, onDateChange, closedialogCallback, multipleprop, format } = props;
@@ -46,7 +45,9 @@ const Datepicker = React.forwardRef((props, ref) => {
   }, [])
 
   //. IF PROPS PASSED -> SET Month, year, and set prop values to state
+  //also triggered when date changes 
   useEffect(() => {
+
     let monthfromdate1;
     let yearfromdate1;
     let getdayofweekV;
@@ -91,7 +92,9 @@ const Datepicker = React.forwardRef((props, ref) => {
       console.warn('no dateprop')
       if (selecteddate2) {
         console.log('selecteddate2HEREHERE', selecteddate2)
-        let unformatdate = '';
+
+        //! DATE IS ALWAYS SYSTEM FORMAT YYYY-MM-DD
+        /* let unformatdate = '';
         if (format === 'DDMMYYYY') {
           console.log('HEREYO')
           unformatdate = convertDMY2YMD(selecteddate2)
@@ -107,13 +110,12 @@ const Datepicker = React.forwardRef((props, ref) => {
           console.log(unformatdate, 'unformatdate2')
         }
 
-        datetouse = unformatdate;
+        datetouse = unformatdate; */
+        datetouse = selecteddate2
       }
       else if (!selecteddate2) {
         let todaydate1 = new Date(); //example: 2021-05-05T10:00:00.000Z
         let todaydateforsure = todaydate1.toISOString().slice(0, 10); // example: 2021-05-05
-
-
         console.log(todaydateforsure, 'todaydateforsurexx');
         datetouse = todaydateforsure;
       }
@@ -155,77 +157,77 @@ const Datepicker = React.forwardRef((props, ref) => {
   //, ============= RANGE PICKER ==================
 
   //.THIS FOR RANGE PICKER
-  useEffect(() => {
-    if (selectedRANGEArray.length === 2) {
-      let firstdate = selectedRANGEArray[0];
-      let enddate = selectedRANGEArray[1];
-
-      let geteverydaybetween = (startDate, endDate) => {
-        let start = new Date(startDate);
-        let end = new Date(endDate);
-        let dateArray = [];
-        let currentDate = start;
-
-        while (currentDate <= end) {
-          //convert to mm-dd
-          console.log(currentDate, 'currentDatecurrentDatecurrentDatecurrentDate')
-          if (format === 'DDMMYYYY') {
-
-            dateArray.push(convertYMD2DMY(currentDate.toISOString().slice(0, 10))); // Format as DD-MM-YYYY
-          }
-          else if (format === 'MMDDYYYY') {
-            dateArray.push(convertYMD2MDY(currentDate.toISOString().slice(0, 10))); // Format as MM-DD-YYYY
-          }
-          else if (format === 'YYYYMMDD') {
-            // let datemodded = currentDate.toISOString().slice(0, 10);
-            //  console.log(datemodded, 'datemoddeddatemoddeddatemoddeddatemodded')
-            dateArray.push(currentDate.toISOString().slice(0, 10)); // Format as YYYY-MM-DD
-
-          }
-          currentDate.setDate(currentDate.getDate() + 1);
-        }
-        return dateArray;
-      }
-      let alldatesbetween = geteverydaybetween(firstdate, enddate);
-      console.log(alldatesbetween, 'alldatesbetween')
-      setSelecteddateArray(alldatesbetween);
-      onDateChange(alldatesbetween);
-
-    }
-
-  }, [selectedRANGEArray])
-
-
-
-  //. CHANGE DATE ON CLICK CALLBACK
-
-
-  const onchangeinput = (e) => {
-    let proceed = false;
-    if (selectedateArray && selectedateArray.length > 0) {
-      //validate dates before setting them - OTHERWISE BUGGY if date not finished
-      //alert('arry changed')
-
-      /*  proceed = true;
-       let valueinput = dateinputref.current.value;
-       let valueinputarray = valueinput.split(',');
-       console.log(valueinputarray, 'valueinputarray')
-       //back to string with the comma 
+  /*  useEffect(() => {
+     if (selectedRANGEArray.length === 2) {
+       let firstdate = selectedRANGEArray[0];
+       let enddate = selectedRANGEArray[1];
  
-       console.log(valueinput, 'valueinput')
-       // setSelecteddateArray([valueinput]);
-       setSelecteddateArray(valueinputarray);
-       //  setMultipledatearray(valueinputarray);
+       let geteverydaybetween = (startDate, endDate) => {
+         let start = new Date(startDate);
+         let end = new Date(endDate);
+         let dateArray = [];
+         let currentDate = start;
+ 
+         while (currentDate <= end) {
+           //convert to mm-dd
+           console.log(currentDate, 'currentDatecurrentDatecurrentDatecurrentDate')
+           if (format === 'DDMMYYYY') {
+ 
+             dateArray.push(convertYMD2DMY(currentDate.toISOString().slice(0, 10))); // Format as DD-MM-YYYY
+           }
+           else if (format === 'MMDDYYYY') {
+             dateArray.push(convertYMD2MDY(currentDate.toISOString().slice(0, 10))); // Format as MM-DD-YYYY
+           }
+           else if (format === 'YYYYMMDD') {
+             // let datemodded = currentDate.toISOString().slice(0, 10);
+             //  console.log(datemodded, 'datemoddeddatemoddeddatemoddeddatemodded')
+             dateArray.push(currentDate.toISOString().slice(0, 10)); // Format as YYYY-MM-DD
+ 
+           }
+           currentDate.setDate(currentDate.getDate() + 1);
+         }
+         return dateArray;
+       }
+       let alldatesbetween = geteverydaybetween(firstdate, enddate);
+       console.log(alldatesbetween, 'alldatesbetween')
+       setSelecteddateArray(alldatesbetween);
+       onDateChange(alldatesbetween);
+ 
+     }
+ 
+   }, [selectedRANGEArray])
   */
 
-    }
-    else {
-      let validdateis = validatedate(e.target.value)
-      console.log(validdateis, 'validdateis')
-      proceed = true;
-      setSelecteddate2(e.target.value);
-    }
-  }
+
+
+  /* 
+  
+    const onchangeinput = (e) => {
+      let proceed = false;
+      if (selectedateArray && selectedateArray.length > 0) {
+        //validate dates before setting them - OTHERWISE BUGGY if date not finished
+        //alert('arry changed')
+  
+          proceed = true;
+         let valueinput = dateinputref.current.value;
+         let valueinputarray = valueinput.split(',');
+         console.log(valueinputarray, 'valueinputarray')
+         //back to string with the comma 
+   
+         console.log(valueinput, 'valueinput')
+         // setSelecteddateArray([valueinput]);
+         setSelecteddateArray(valueinputarray);
+         //  setMultipledatearray(valueinputarray);
+    
+  
+      }
+      else {
+        let validdateis = validatedate(e.target.value)
+        console.log(validdateis, 'validdateis')
+        proceed = true;
+        setSelecteddate2(e.target.value);
+      }
+    } */
 
   //| -----------------------------------------------------------
   return (
@@ -247,15 +249,15 @@ const Datepicker = React.forwardRef((props, ref) => {
                   : '')
                 : (selectedateArray && selectedateArray.length > 0
                   ? selectedateArray.join(', ')
-                  : (selecteddate2 ? selecteddate2 : ''))
+                  : (selecteddate2 ? convertFromSystemFormattodesiredformat(format, selecteddate2) : ''))
             }
             /* convertYMD2DMY(selecteddate2) convertYMD2DMYarray(selectedateArray)   */
             aria-label="Datepicker" onClick={() => setIsOpen(true)}
-            onChange={e => onchangeinput(e)}
-
-
+            // onChange={e => onchangeinput(e)}
+            onChange={() => {
+              console.log('donothign')
+            }}
           />
-
           <svg
             style={{ zIndex: '200', width: '20px', height: '20px', backgroundColor: 'white' }} id="calendaricon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-calendar3 bi inputicon" viewBox="0 0 16 16">
             <path d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857z" />
