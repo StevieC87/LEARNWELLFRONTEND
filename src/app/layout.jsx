@@ -2,12 +2,13 @@
 import { Providers } from "@/redux/ReduxWrapper";
 import { headers } from 'next/headers'
 import "./globals.css";
-import "../styles/ui.css";
+
 import "../styles/typography.css";
 import "../styles/variables.css";
 import "../styles/layout.css";
 import "../styles/base.css";
 import "../styles/buttons.css";
+import "../styles/ui.css";
 import "../styles/extra/animations.css";
 import "../styles/extra/effects.css";
 import "../styles/extra/states.css";

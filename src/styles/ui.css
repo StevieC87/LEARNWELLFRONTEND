@@ -55,6 +55,25 @@
     /*  gap: 20px; */
   }
 
+  /* TABS */
+  .tabbutton {
+    border: 1px solid;
+    border-bottom: 0px;
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+    margin-right: 4px;
+  }
+
+  .formtabs {
+    border-bottom: 1px solid lightgray;
+  }
+
+  .activetab {
+    background-color: var(--primary-color-light);
+    border-bottom: 2px solid #2563eb;
+    color: white;
+  }
+
   /* TABLES */
   table {
     width: 100%;

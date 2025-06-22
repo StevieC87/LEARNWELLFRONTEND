@@ -17,6 +17,47 @@ export default function ChartVisitsD(props) {
     if (data.length === 0) {
       return
     }
+    const monthsarray = [
+      ['01', 'January', 'Jan'],
+      ['02', 'February', 'Feb'],
+      ['03', 'March', 'Mar'],
+      ['04', 'April', 'Apr'],
+      ['05', 'May', 'May'],
+      ['06', 'June', 'Jun'],
+      ['07', 'July', 'Jul'],
+      ['08', 'August', 'Aug'],
+      ['09', 'September', 'Sep'],
+      ['10', 'October', 'Oct'],
+      ['11', 'November', 'Nov'],
+      ['12', 'December', 'Dec']
+    ]
+
+    //find position in monthsarray of first entry in data 
+    let firstmonth = data[0].month;
+    console.log(firstmonth, 'firstmonth');
+
+    let firstmonthindex = monthsarray.findIndex(month => month[2] === firstmonth);
+    console.log(firstmonthindex, 'firstmonthindex');
+
+    let missingmonths = firstmonthindex;
+    console.log(missingmonths, 'missingmonths');
+
+    console.log('datainchartVisits', data);
+
+    //let add two arrays to data
+    for (let i = 0; i < missingmonths; i++) {
+      //add month and totalUsers to data
+      let objecttoadd = {
+        month: monthsarray[i][2],
+        totalUsers: 0
+      }
+      data.unshift(objecttoadd);
+    }
+
+    dataonlynomonth = data.map(item => item.totalUsers);
+    //   setDatatoshow(dataonlynomonth);
+
+    console.log('dataonlynomonth', dataonlynomonth);
 
 
   }, [data]); // Re-run effect when data changes
@@ -52,7 +93,7 @@ export default function ChartVisitsD(props) {
 
   return (
     <div>
-      <canvas ref={canvasRef} width={400} height={200} />
+      <canvas ref={canvasRef} width={100} height={50} className="linechartcanvas1" />
     </div>
   );
 }
