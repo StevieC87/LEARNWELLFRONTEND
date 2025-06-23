@@ -56,6 +56,9 @@ export default function GDPR() {
         fsetConsentLS(false);
       }
     }
+    localStorage.setItem('sessionStart', Date.now());
+    localStorage.setItem('endedAt', Date.now());
+
   }, [langslug, pathname, searchParams]);
   //2 =============================================================
 
@@ -76,6 +79,39 @@ export default function GDPR() {
     localStorage.setItem("AnalyticsConsent", JSON.stringify(consentData));
 
   }
+  useEffect(() => {
+    const updateEndedAt = () => {
+      localStorage.setItem('endedAt', Date.now());
+    };
+
+    ['click', 'scroll', 'keydown'].forEach(event => {
+      window.addEventListener(event, updateEndedAt, { passive: true });
+    });
+
+    // Send session data every minute
+    const interval = setInterval(() => {
+      const sessionStart = localStorage.getItem('sessionStart');
+      const endedAt = localStorage.getItem('endedAt');
+      const useranalyticsID = localStorage.getItem('analyticsID') ? localStorage.getItem('analyticsID') : sessionStorage.getItem('analyticsID');
+      if (sessionStart && endedAt) {
+        fetch('/analytics/session-update', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            sessionStart: Number(sessionStart),
+            endedAt: Number(endedAt),
+            useranalyticsID: useranalyticsID,
+          }),
+        });
+      }
+    }, 60 * 1000); // every 1 minute
+
+    return () => {
+      ['click', 'scroll', 'keydown'].forEach(event => {
+        window.removeEventListener(event, updateEndedAt);
+      });
+    };
+  }, []);
 
   if (!isVisible) return null;
 

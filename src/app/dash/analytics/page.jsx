@@ -17,6 +17,11 @@ export default function Analytics() {
 
   const [startdate, setStartDate] = useState(new Date()); // Set initial start date to today
   const [enddate, setEndDate] = useState('');
+  const [totalnumberofsessions, setTotalNumberOfSessions] = useState(0);
+  const [totalnumberofpageviews, setTotalNumberOfPageViews] = useState(0);
+  const [averagesessionduration, setAverageSessionDuration] = useState(0);
+  const [pagespersession, setPagesPerSession] = useState(0);
+  const [bouncerate, setBounceRate] = useState(0);
 
   const handleDateChange = (newdate) => {
     console.log('newdate in handleDateChange', newdate)
@@ -91,6 +96,11 @@ export default function Analytics() {
         setUsersByMonth(data.userByMonth || []); // Use data.userByMonth if it exists
         console.log(data.userByMonth, 'data.userByMonth');
         setTotalUsersDataRange(data.visitorseachday || []); // Use data.visitorseachday if it exists
+        setTotalNumberOfSessions(data.totalnumberofsessions || 0); // Use data.totalnumberofsessions if it exists
+        setTotalNumberOfPageViews(data.totalnumberofpageviews || 0); // Use data.totalnumberofpageviews if it exists
+        setAverageSessionDuration(data.averagesessionduration || 0); // Use data.averagesessionduration if it exists
+        setPagesPerSession(data.pagespersession || 0); // Use data.pagespersession if it exists
+        setBounceRate(data.bouncerate || 0); // Use data.bouncerate if it exists
       } catch (error) {
         console.error('Error fetching countries data:', error);
       }
@@ -140,7 +150,32 @@ export default function Analytics() {
           <button className="button button-outline">Last 30 days</button>
           <button className="button button-outline">All time</button>
         </div>
+
         <ChartVisitsFilter data={totalusersdatarange} />
+        <div id="analyticsquickdatadiv" className="analyticsquickdatadiv">
+          <div className="analyticsquickdatabox flex flex-col">
+            <span className="analyticsquickdataboxlabel">Sessions</span>
+            <span className="analyticsquickdataboxdata text-2xl font-bold">{totalnumberofsessions}</span>
+          </div>
+          <div className="analyticsquickdatabox flex flex-col">
+            <span className="analyticsquickdataboxlabel">Page Views</span>
+            <span className="analyticsquickdataboxdata text-2xl font-bold">{totalnumberofpageviews}</span>
+          </div>
+          <div className="analyticsquickdatabox flex flex-col">
+            <span className="analyticsquickdataboxlabel">Avg. Session Duration</span>
+            <span className="analyticsquickdataboxdata text-2xl font-bold">{averagesessionduration} sec</span>
+          </div>
+          <div className="analyticsquickdatabox flex flex-col">
+            <span className="analyticsquickdataboxlabel">Pages per Session</span>
+            <span className="analyticsquickdataboxdata text-2xl font-bold">{pagespersession}</span>
+          </div>
+          <div className="analyticsquickdatabox flex flex-col">
+            <span className="analyticsquickdataboxlabel">Bounce Rate</span>
+            <span className="analyticsquickdataboxdata text-2xl font-bold
+">{bouncerate}</span>
+          </div>
+
+        </div>
         <div className="mt-8 fade-in mapsdiv">
           {countriesdata && Object.keys(countriesdata).length > 0 ? (
             <MapAnalyticsComponent countriesdata={countriesdata} />
