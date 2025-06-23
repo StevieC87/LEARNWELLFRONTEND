@@ -102,7 +102,9 @@ export default function Analytics() {
         setTotalNumberOfSessions(data.totalnumberofsessions || 0); // Use data.totalnumberofsessions if it exists
         setTotalNumberOfPageViews(data.totalnumberofpageviews || 0); // Use data.totalnumberofpageviews if it exists
         setAverageSessionDuration(data.averagesessionduration || 0); // Use data.averagesessionduration if it exists
-        setPagesPerSession(data.pagespersession || 0); // Use data.pagespersession if it exists
+        //
+        let roundedpagespersessiontoTWOdecimals = Math.round((data.pagespersession || 0) * 100) / 100; // Round to two decimal places
+        setPagesPerSession(roundedpagespersessiontoTWOdecimals || 0); // Use data.pagespersession if it exists
         setBounceRate(data.bouncerate || 0); // Use data.bouncerate if it exists
         setNewReturningTotalPie(data.totalvisitorsthatperiodv || {}); // Use data.newreturningtotalPie if it exists
       } catch (error) {
@@ -241,15 +243,18 @@ export default function Analytics() {
 
 
         </div>
-        <div className="mt-8 fade-in mapsdiv">
-          {countriesdata && Object.keys(countriesdata).length > 0 ? (
-            <MapAnalyticsComponent countriesdata={countriesdata} />
-          ) : (
-            <div className="text-red-500">
-              No data available for the map.
-            </div>
-          )}
+        <div className="flex flex-row">
+          <div className="mt-8 fade-in mapsdiv">
+            {countriesdata && Object.keys(countriesdata).length > 0 ? (
+              <MapAnalyticsComponent countriesdata={countriesdata} />
+            ) : (
+              <div className="text-red-500">
+                No data available for the map.
+              </div>
+            )}
 
+          </div>
+          <div>country data</div>
         </div>
       </div>
 
