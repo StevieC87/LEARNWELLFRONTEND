@@ -3,6 +3,7 @@ import MapAnalyticsComponent from "./Map";
 import { useEffect, useState } from "react";
 import Datepicker from './datepicker/Datepicker.jsx';
 import ChartVisitsFilter from "./ChartVisitsFilter.jsx";
+import Pie from './PieChart.jsx';
 import './datepicker/Datepicker.css'
 import './analytics.css';
 
@@ -22,6 +23,8 @@ export default function Analytics() {
   const [averagesessionduration, setAverageSessionDuration] = useState(0);
   const [pagespersession, setPagesPerSession] = useState(0);
   const [bouncerate, setBounceRate] = useState(0);
+
+  const [newreturningtotalPie, setNewReturningTotalPie] = useState({});
 
   const handleDateChange = (newdate) => {
     console.log('newdate in handleDateChange', newdate)
@@ -93,14 +96,15 @@ export default function Analytics() {
         console.log(data.data, 'data.data');
         setCountriesData(data.data || {}); // Use data.data if it exists, 
         console.log(typeof countriesdata, 'typeof data.message');
-        setUsersByMonth(data.userByMonth || []); // Use data.userByMonth if it exists
-        console.log(data.userByMonth, 'data.userByMonth');
+        setUsersByMonth(data.visitorseachday || []); // Use data.userByMonth if it exists
+        console.log(data.visitorseachday, 'data.visitorseachday');
         setTotalUsersDataRange(data.visitorseachday || []); // Use data.visitorseachday if it exists
         setTotalNumberOfSessions(data.totalnumberofsessions || 0); // Use data.totalnumberofsessions if it exists
         setTotalNumberOfPageViews(data.totalnumberofpageviews || 0); // Use data.totalnumberofpageviews if it exists
         setAverageSessionDuration(data.averagesessionduration || 0); // Use data.averagesessionduration if it exists
         setPagesPerSession(data.pagespersession || 0); // Use data.pagespersession if it exists
         setBounceRate(data.bouncerate || 0); // Use data.bouncerate if it exists
+        setNewReturningTotalPie(data.totalvisitorsthatperiodv || {}); // Use data.newreturningtotalPie if it exists
       } catch (error) {
         console.error('Error fetching countries data:', error);
       }
@@ -116,6 +120,55 @@ export default function Analytics() {
   const [schematype, setSchemaType] = useState('Blog'); // Default schema type
 
   const [totalusersdatarange, setTotalUsersDataRange] = useState([]);
+
+
+  const selectchangefilterdates = (e) => {
+    const value = e.target.value;
+    console.log(value, 'value in selectchangefilterdates');
+    if (value === '7days') {
+      const today = new Date();
+      const sevenDaysAgo = new Date(today);
+      sevenDaysAgo.setDate(today.getDate() - 7);
+      setStartDate(sevenDaysAgo);
+      setEndDate(today);
+      //get dates in between
+      let geteverydaybetweenandincluding = [];
+      let i = 0;
+      for (i == 0; i <= 7; i++) {
+        const d = new Date(sevenDaysAgo);
+        d.setDate(d.getDate() + i);
+        console.log(d, 'dddddddddddddddddddddddd222');
+        const formattedDate = d.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+        geteverydaybetweenandincluding.push(formattedDate);
+      }
+      console.log(geteverydaybetweenandincluding, 'geteverydaybetweenandincluding');
+      setSelecteddatesMulti(geteverydaybetweenandincluding); // Set the initial state with the last 7 days
+    }
+    else if (value === '30days') {
+      const today = new Date();
+      const thirtyDaysAgo = new Date(today);
+      thirtyDaysAgo.setDate(today.getDate() - 30);
+      setStartDate(thirtyDaysAgo);
+      setEndDate(today);
+      //get dates in between
+      let geteverydaybetweenandincluding = [];
+      let i = 0;
+      for (i == 0; i <= 30; i++) {
+        const d = new Date(thirtyDaysAgo);
+        d.setDate(d.getDate() + i);
+        console.log(d, 'dddddddddddddddddddddddd222');
+        const formattedDate = d.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+        geteverydaybetweenandincluding.push(formattedDate);
+      }
+      console.log(geteverydaybetweenandincluding, 'geteverydaybetweenandincluding');
+      setSelecteddatesMulti(geteverydaybetweenandincluding); // Set the initial state with the last 30 days
+    }
+    else if (value === 'alltime') {
+      setStartDate(new Date('2000-01-01')); // Set a very old date for all time
+      setEndDate(new Date());
+    }
+  }
+
 
   return (
     <>
@@ -146,34 +199,46 @@ export default function Analytics() {
 
           />
           {/*     )} */}
-          <button className="button button-primary">Last 7 days</button>
+          <select name="" id="" onChange={(e) => selectchangefilterdates(e)}>
+            <option value="7days">7 days</option>
+            <option value="30days">30 days</option>
+            <option value="alltime">All time</option>
+          </select>
+          {/* <button className="button button-primary">Last 7 days</button>
           <button className="button button-outline">Last 30 days</button>
-          <button className="button button-outline">All time</button>
+          <button className="button button-outline">All time</button> */}
         </div>
 
         <ChartVisitsFilter data={totalusersdatarange} />
         <div id="analyticsquickdatadiv" className="analyticsquickdatadiv">
-          <div className="analyticsquickdatabox flex flex-col">
-            <span className="analyticsquickdataboxlabel">Sessions</span>
-            <span className="analyticsquickdataboxdata text-2xl font-bold">{totalnumberofsessions}</span>
-          </div>
-          <div className="analyticsquickdatabox flex flex-col">
-            <span className="analyticsquickdataboxlabel">Page Views</span>
-            <span className="analyticsquickdataboxdata text-2xl font-bold">{totalnumberofpageviews}</span>
-          </div>
-          <div className="analyticsquickdatabox flex flex-col">
-            <span className="analyticsquickdataboxlabel">Avg. Session Duration</span>
-            <span className="analyticsquickdataboxdata text-2xl font-bold">{averagesessionduration} sec</span>
-          </div>
-          <div className="analyticsquickdatabox flex flex-col">
-            <span className="analyticsquickdataboxlabel">Pages per Session</span>
-            <span className="analyticsquickdataboxdata text-2xl font-bold">{pagespersession}</span>
-          </div>
-          <div className="analyticsquickdatabox flex flex-col">
-            <span className="analyticsquickdataboxlabel">Bounce Rate</span>
-            <span className="analyticsquickdataboxdata text-2xl font-bold
+          <div className="analyticsquickdataboxes flex flex-row gap-4">
+            <div className="analyticsquickdatabox flex flex-col">
+              <span className="analyticsquickdataboxlabel">Sessions</span>
+              <span className="analyticsquickdataboxdata text-2xl font-bold">{totalnumberofsessions}</span>
+            </div>
+            <div className="analyticsquickdatabox flex flex-col">
+              <span className="analyticsquickdataboxlabel">Page Views</span>
+              <span className="analyticsquickdataboxdata text-2xl font-bold">{totalnumberofpageviews}</span>
+            </div>
+            <div className="analyticsquickdatabox flex flex-col">
+              <span className="analyticsquickdataboxlabel">Avg. Session Duration</span>
+              <span className="analyticsquickdataboxdata text-2xl font-bold">{averagesessionduration} sec</span>
+            </div>
+            <div className="analyticsquickdatabox flex flex-col">
+              <span className="analyticsquickdataboxlabel">Pages per Session</span>
+              <span className="analyticsquickdataboxdata text-2xl font-bold">{pagespersession}</span>
+            </div>
+            <div className="analyticsquickdatabox flex flex-col">
+              <span className="analyticsquickdataboxlabel">Bounce Rate</span>
+              <span className="analyticsquickdataboxdata text-2xl font-bold
 ">{bouncerate}</span>
+            </div>
           </div>
+          <div className="analyticsquickdataboxpie flex flex-col">
+            <Pie data={newreturningtotalPie} />
+
+          </div>
+
 
         </div>
         <div className="mt-8 fade-in mapsdiv">
