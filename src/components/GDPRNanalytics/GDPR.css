@@ -3,12 +3,14 @@
   flex-direction: row;
   justify-content: center;
   /*   align-items: center; */
-  width: 100vw;
+  max-width: 500px;
   min-height: 60px;
   position: fixed;
   bottom: 0;
   z-index: 1010;
   background-color: #ccc !important;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .gdpr-inner {

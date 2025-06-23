@@ -1,21 +1,9 @@
-// import { baseURLapi } from "../utilities/utils";
-
-const PostAnalytics = async (
-  useranalyticsID,
-  neworreturning,
-  difficultylevel
-) => {
-  if (!baseURLapi) {
-    console.error("baseURLapi is not defined");
-    return;
-  }
-
+const PostAnalytics = async (useranalyticsID, neworreturning) => {
   let timestartedinhuman = new Date(Date.now()).toLocaleString(); // e.g., "2023-10-01 12:00:00"
   let dateonly = new Date(Date.now()).toLocaleDateString(); // e.g., "2023-10-01"
 
   try {
     let objectostringify = {
-      currentdifficulty: difficultylevel,
       neworreturning1: neworreturning,
       useranalyticsIDis: useranalyticsID,
       url: typeof window !== "undefined" ? window.location.pathname : "",
@@ -37,7 +25,7 @@ const PostAnalytics = async (
     //  console.log("hello");
     try {
       //console.log("attempting fetcgh");
-      let url = `${process.env.NEXT_PUBLIC_API_URL}/analytics`;
+      let url = `${process.env.NEXT_PUBLIC_API_URL}/analytics/postanalytics`;
       // console.log("url", url);
       let response = await fetch(url, {
         method: "POST",

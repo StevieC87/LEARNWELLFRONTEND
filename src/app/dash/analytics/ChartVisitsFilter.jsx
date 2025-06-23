@@ -13,6 +13,8 @@ export default function ChartVisitsFilter(props) {
 
   const [dataonly, setDataonly] = useState([]);
   const [labels, setLabels] = useState([])
+  const [returningUsers, setReturningUsers] = useState([]);
+  const [newUsers, setNewUsers] = useState([]);
   useEffect(() => {
     if (data.length === 0) {
       return
@@ -22,6 +24,8 @@ export default function ChartVisitsFilter(props) {
 
     let dataonlyv = []
     let labelsv = [];
+    let returningUsersv = [];
+    let newUsersv = [];
 
     let loopoverdata = data.map(item => {
       let datelabel = item.date;
@@ -31,15 +35,19 @@ export default function ChartVisitsFilter(props) {
 
       dataonlyv.push(totalusers);
       labelsv.push(datelabel);
+      returningUsersv.push(returnignusers);
+      newUsersv.push(newusers);
     })
     console.log('dataonlyv', dataonlyv);
     console.log('labelsv', labelsv);
     setDataonly(dataonlyv);
     setLabels(labelsv);
+    setReturningUsers(returningUsersv);
+    setNewUsers(newUsersv);
 
   }, [data]); // Re-run effect when data changes
 
-
+  ////returningUsers newUsers
 
   useEffect(() => {
     //MAKE SURE ONLY LOADS ONE 
@@ -59,11 +67,25 @@ export default function ChartVisitsFilter(props) {
         data: {
           labels: labels,
           datasets: [{
-            label: dataonly,
+            label: 'Total Users',
             data: dataonly, //,
             borderColor: 'rgb(75,192,192)',
             tension: 0.2
-          }] //dataonlynomonth
+          }, //dataonlynomonth
+          {
+            label: 'New Users',
+            data: newUsers, //,
+            borderColor: 'rgb(178, 241, 60)',
+            tension: 0.2
+          },
+
+          {
+            label: 'Returning Users',
+            data: returningUsers, //,
+            borderColor: 'rgb(157, 11, 255)',
+            tension: 0.2
+          }]
+          //dataon
         }
       });
     }

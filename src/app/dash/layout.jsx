@@ -12,6 +12,7 @@ import { verify } from 'jsonwebtoken';
 import BottomBar from '@/components/layout/Navbar/BottomBar';
 import SlideMenuDesktop from '@/components/layout/Navbar/SlideMenuDesktop';
 import VerifyToken from '../users/components/VerifyToken';
+import GDPR from '../../components/GDPRNanalytics/GDPR';
 //import './layout.css';
 export default async function Layout({ children }) {
 
@@ -35,7 +36,7 @@ export default async function Layout({ children }) {
           <VerifyToken />
           <SlideMenuDesktop />
           <MainContent children1={children} />
-
+          <GDPR />
         </div>
         <BottomBar />
       </div>
