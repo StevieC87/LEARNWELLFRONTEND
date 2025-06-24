@@ -243,7 +243,7 @@ export default function MapAnalyticsComponent({ countriesdata }) {
       {/*   <div id="svgMap" className="mapdiv" ref={mapContainerRef} />
 
       </div> */}
-      <div className="svgMapwrapper">
+      <div className="svgMapwrapper card">
         <div className="mapsection">
           <select className="filtervisitortypeselect" name="" id="" value={visitorfilter} onChange={(e) => {
             setVisitorfilter(e.target.value);

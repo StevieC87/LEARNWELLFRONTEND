@@ -96,7 +96,7 @@ export default function PieChart(props) {
   }, [newUsers, returningUsers]); // Re-run effect when data changes
 
   return (
-    <div className="piechartdiv">
+    <div className="piechartdiv card">
       <div>
         {/*   New v Returning Visitors */}
         <span style={{ color: 'rgb(36, 175, 255)' }}>New Visitors: {newUsers}% <br /></span>

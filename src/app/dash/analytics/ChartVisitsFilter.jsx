@@ -92,7 +92,7 @@ export default function ChartVisitsFilter(props) {
   }, [dataonly]);
 
   return (
-    <div>
+    <div className="card">
       <canvas ref={canvasRef} width={100} height={50} className="linechartcanvas1" />
     </div>
   );

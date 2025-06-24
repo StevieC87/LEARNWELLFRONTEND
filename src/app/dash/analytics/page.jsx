@@ -30,9 +30,13 @@ export default function Analytics() {
   const [solodate, setSoloDate] = useState(false); // For single date selection
   const [solodatedate, setSoloDateDate] = useState(''); // For single date selection
 
+  const [customdates, setCustomDates] = useState(false); // For custom date range selection
+
   const handleDateChange = (newdate) => {
     console.log('newdate in handleDateChange', newdate)
     console.log(typeof newdate, 'typeof newdate')
+    setCustomDates(true); // Reset custom dates state
+
     if (typeof newdate === 'object') {
       console.log('newdate is object');
       //  alert('newdate is object')
@@ -143,11 +147,15 @@ export default function Analytics() {
 
   const [totalusersdatarange, setTotalUsersDataRange] = useState([]);
 
+  const [opendatepickercustom, setOpenDatePickerCustom] = useState(false);
+  const [selectedValue, setSelectedValue] = useState("7days");
 
   const selectchangefilterdates = (e) => {
     const value = e.target.value;
     console.log(value, 'value in selectchangefilterdates');
+
     if (value === '7days') {
+      setCustomDates(false);
       const today = new Date();
       const sevenDaysAgo = new Date(today);
       sevenDaysAgo.setDate(today.getDate() - 7);
@@ -165,8 +173,11 @@ export default function Analytics() {
       }
       console.log(geteverydaybetweenandincluding, 'geteverydaybetweenandincluding');
       setSelecteddatesMulti(geteverydaybetweenandincluding); // Set the initial state with the last 7 days
+      setSelectedValue('7days'); // Update selected value
     }
     else if (value === '30days') {
+      setCustomDates(false);
+
       const today = new Date();
       const thirtyDaysAgo = new Date(today);
       thirtyDaysAgo.setDate(today.getDate() - 30);
@@ -184,10 +195,21 @@ export default function Analytics() {
       }
       console.log(geteverydaybetweenandincluding, 'geteverydaybetweenandincluding');
       setSelecteddatesMulti(geteverydaybetweenandincluding); // Set the initial state with the last 30 days
+      setSelectedValue('30days'); // Update selected value
     }
     else if (value === 'alltime') {
+      setCustomDates(false);
+
       setStartDate(new Date('2000-01-01')); // Set a very old date for all time
       setEndDate(new Date());
+      setSelectedValue('alltime'); // Update selected value
+    }
+    else if (value === 'custom') {
+      //open modal
+      console.log('open custom date range modal');
+      setOpenDatePickerCustom(true);
+      setCustomDates(true); // Set custom dates state to true
+
     }
   }
 
@@ -198,6 +220,7 @@ export default function Analytics() {
         <span key={date}>{date}</span>
       ))} */}
       <div className="flex flex-col h-screen">
+        {customdates ? 'true' : 'false'}
         <h1 className="text-4xl font-bold mb-4">Analytics</h1>
         <div /* className={`editpagecontainer fade-in2 `} */>
           <div className="formtabs flex flex-row">
@@ -218,11 +241,14 @@ export default function Analytics() {
             multipleprop={multiple} format="DDMMYYYY"
             displaya=""
             weekstartssunday={false}
+            open={opendatepickercustom}
 
           />
           {/*     )} */}
           <select name="" id="" onChange={(e) => selectchangefilterdates(e)}
-            defaultValue={"7days"}>
+
+            value={customdates ? "custom" : selectedValue}
+          >
             {/*   <option value="today">Today</option>
             <option value="yesterday">Yesterday</option> */}
             <option value="7days" >Last 7 days</option>
@@ -231,6 +257,7 @@ export default function Analytics() {
             {/* NEED TO SO THAT E.G. END DAY AND START DAY - midnight to midnight not beginning of the day */}
             <option value="30days">Last 30 days</option>
             <option value="alltime">All time</option>
+            <option value="custom">Custom Date Range</option>
           </select>
           {/* <button className="button button-primary">Last 7 days</button>
           <button className="button button-outline">Last 30 days</button>
@@ -238,8 +265,8 @@ export default function Analytics() {
         </div>
 
         <ChartVisitsFilter data={totalusersdatarange} />
-        <div id="analyticsquickdatadiv" className="analyticsquickdatadiv">
-          <div className="analyticsquickdataboxes flex flex-row gap-4">
+        <div id="analyticsquickdatadiv card" className="analyticsquickdatadiv">
+          <div className="analyticsquickdataboxes flex flex-row gap-4 card">
             <div className="analyticsquickdatabox flex flex-col">
               <span className="analyticsquickdataboxlabel">Sessions</span>
               <span className="analyticsquickdataboxdata text-2xl font-bold">{totalnumberofsessions}</span>

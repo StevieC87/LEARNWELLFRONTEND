@@ -15,7 +15,6 @@
   align-items: center;
   max-width: var(--maxwidthcontent);
   padding: 20px 0px;
-  border-bottom: 1px solid var(--primary-color-light);
 }
 
 .analyticsquickdatabox {

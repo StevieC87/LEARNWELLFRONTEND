@@ -13,11 +13,15 @@ const Datepicker = React.forwardRef((props, ref) => {
   const [selectedateArray, setSelecteddateArray] = useState([]);
   //this is for initial 
   const [selectedRANGEArray, setSelectedRANGEArray] = useState([]);
-  const { dateprop, onDateChange, closedialogCallback, multipleprop, format, weekstartssunday } = props;
-  const [isOpen, setIsOpen] = useState(false);
+  const { dateprop, onDateChange, closedialogCallback, multipleprop, format, weekstartssunday, open } = props;
+  const [isOpen, setIsOpen] = useState(open || false); // open prop to control dialog visibility
   const dateinputref = useRef();
   //const dialogref = useRef();
-
+  useEffect(() => {
+    //alert(open)
+    // alert(isOpen)
+    setIsOpen(open);
+  }, [open]);
   const [selecteddate2, setSelecteddate2] = useState('');
   //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
