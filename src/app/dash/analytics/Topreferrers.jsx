@@ -24,7 +24,8 @@ export default function TopReferrers({ referrals }) {
         </div>
         <div className="referralstuff">
           {referrals && referrals.map((referrer, index) => (
-            <div key={index} className="referrer-item">
+            <div key={index}
+              className={`referrer-item ${index % 2 === 0 ? 'even' : 'odd'}`}>
 
               <span className="referrer-name">{referrer._id}</span>
               <span className="referrer-visits"> {referrer.totalUsers} </span>
@@ -60,6 +61,12 @@ export default function TopReferrers({ referrals }) {
         flex: 1;
         text-align: center;
         }
+         .referrer-item.even {
+            background-color: #f0f0f0;
+          }
+          .referrer-item.odd {
+            background-color: #ffffff;
+          }
     `}</style>
       </div>
 

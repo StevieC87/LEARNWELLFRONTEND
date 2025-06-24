@@ -128,6 +128,7 @@ export default function Analytics() {
         //
         let roundedpagespersessiontoTWOdecimals = Math.round((data.pagespersession || 0) * 100) / 100; // Round to two decimal places
         setPagesPerSession(roundedpagespersessiontoTWOdecimals || 0); // Use data.pagespersession if it exists
+        console.log(data.bouncerate, 'data.bouncerate');
         setBounceRate(data.bouncerate || 0); // Use data.bouncerate if it exists
         setNewReturningTotalPie(data.totalvisitorsthatperiodv || {}); // Use data.newreturningtotalPie if it exists
         setReferrals(data.referrals || []); // Use data.referrals if it exists 
@@ -331,7 +332,7 @@ export default function Analytics() {
       ))} */}
       <div className="flex flex-col h-screen">
         <h1 className="text-4xl font-bold mb-4">Analytics</h1>
-        <div /* className={`editpagecontainer fade-in2 `} */>
+        {/*   <div >
           <div className="formtabs flex flex-row">
             <button onClick={(e) => toggleTabs('pagecontent')} className={`${initialpage ? 'activetab' : ''} button button-outline tabbutton`}>Analytics</button>
             <button onClick={(e) => toggleTabs('seocontent')} className={`${secondtab ? 'activetab' : ''} button button-outline tabbutton`}>Charts</button>
@@ -342,7 +343,7 @@ export default function Analytics() {
 
           <div id="pagecontent" className={`pagecontent ${initialpage ? 'visible' : 'hidden'}`}>
           </div>
-        </div>
+        </div> */}
         <div className="datecontrols flex flex-row gap-2" >
           {/*     {selecteddatesMulti.length > 0 && ( */}
           <Datepicker onDateChange={handleDateChange}
@@ -392,7 +393,7 @@ export default function Analytics() {
               <span className="analyticsquickdataboxdata text-2xl font-bold">{averagesessionduration} sec</span>
             </div>
             <div className="analyticsquickdatabox flex flex-col">
-              <span className="analyticsquickdataboxlabel">Pages per Session</span>
+              <span className="analyticsquickdataboxlabel">Pages / Session</span>
               <span className="analyticsquickdataboxdata text-2xl font-bold">{pagespersession}</span>
             </div>
             <div className="analyticsquickdatabox flex flex-col">
@@ -428,7 +429,7 @@ export default function Analytics() {
           <TopReferrers referrals={referrals} />
         </div>
 
-        <div className="card">
+        <div className="card mt-4">
           <TopVisitedPages mostvisitedpages={mostvisitedpages} />
         </div>
       </div>

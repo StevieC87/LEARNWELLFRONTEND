@@ -23,16 +23,17 @@ select {
 
 .analyticsquickdatabox {
   padding: 10px;
-  border: 1px solid var(--primary-color-light);
+  /*  border: 1px solid var(--primary-color-light); */
   border-radius: 5px;
 }
 .analyticsquickdataboxes {
   flex-wrap: wrap;
   flex: 3;
+  height: 220px;
 }
 
 .analyticsquickdataboxpie {
-  flex: 2;
+  flex: 1;
 }
 
 .analyticsquickdataboxlabel {
