@@ -211,9 +211,15 @@ export default function Analytics() {
 
           />
           {/*     )} */}
-          <select name="" id="" onChange={(e) => selectchangefilterdates(e)}>
-            <option value="7days">7 days</option>
-            <option value="30days">30 days</option>
+          <select name="" id="" onChange={(e) => selectchangefilterdates(e)}
+            defaultValue={"7days"}>
+            {/*   <option value="today">Today</option>
+            <option value="yesterday">Yesterday</option> */}
+            <option value="7days" >Last 7 days</option>
+            {/*          <option value="14days">Last 14 days</option> */}
+
+            {/* NEED TO SO THAT E.G. END DAY AND START DAY - midnight to midnight not beginning of the day */}
+            <option value="30days">Last 30 days</option>
             <option value="alltime">All time</option>
           </select>
           {/* <button className="button button-primary">Last 7 days</button>

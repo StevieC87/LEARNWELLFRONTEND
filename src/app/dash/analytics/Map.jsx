@@ -5,7 +5,7 @@ import './styles/svgMapcustom.css'
 import './styles/morecustomsvgmap.css'
 import { useEffect, useRef, useState } from 'react';
 import { countryandcode, flags } from './styles/countrystuff.js'
-
+import LineAnalyticsPerc from './LineAnalyticsPerc.jsx';
 export default function MapAnalyticsComponent({ countriesdata }) {
   const [mapReady, setMapReady] = useState(false);
   const mapInstance = useRef(null);
@@ -18,6 +18,7 @@ export default function MapAnalyticsComponent({ countriesdata }) {
 
   const [filteredDataS, setFilteredDataS] = useState({});
   const [topcountries, setTopCountries] = useState([]); // Initialize topcountries state
+  const [topcountriestotalvisits, setTopCountriesTotalVisits] = useState({}); // Initialize topcountriestotalvisits state
 
   //default values - no filtering
   useEffect(() => {
@@ -56,6 +57,11 @@ export default function MapAnalyticsComponent({ countriesdata }) {
 
     const top10Countries = sortedCountries.slice(0, 10);
     setTopCountries(top10Countries); // Set the top 10 countries
+    const top10countrietotalvisits = top10Countries.reduce((acc, [_, data]) => {
+      return acc + (data[visitorfilter] || 0);
+    }, 0);
+
+    setTopCountriesTotalVisits(top10countrietotalvisits); // Set the total visits for top 10 countries
 
   }, [countriesdata, visitorfilter]);
 
@@ -214,6 +220,11 @@ export default function MapAnalyticsComponent({ countriesdata }) {
     return countryName || code;
   }
 
+  const matchcodetoflag = (code) => {
+    const flag = flags[code];
+    return flag || code;
+  }
+
   return (
     <>
       <style jsx>{`
@@ -247,17 +258,31 @@ export default function MapAnalyticsComponent({ countriesdata }) {
         {/* setvisitorfilter, setVisitorfilter */}
 
         <div className="topcountries">
+          {/*   <ul className="topcountrieslist">  </ul> */}
+
+          <div className="topcountryitemtoptop">
+            <strong>Country</strong>
+            <strong>{/* {visitorfilter} */}Visitors</strong>
+          </div>
           {topcountries && topcountries.length > 0 ? (
-            <ul className="topcountrieslist">
-              <strong>Top Countries</strong>
-              {topcountries.map(([countryCode, data]) => (
-                <li key={countryCode} className="topcountryitem">
-                  <span className="countryflag">{data.flag}</span>
-                  <span className="countryname">{matchcodetocountry(countryCode)}</span>
-                  <span className="visitorscount">: {data[visitorfilter]}</span>
-                </li>
-              ))}
-            </ul>
+            topcountries.map(([countryCode, data]) => (
+              <div key={countryCode} className="topcountryitem">
+                <div className="topcountryitemcountrynnumbersdiv">
+                  <div>
+                    <span className="countryflag">{matchcodetoflag(countryCode)}</span>
+                    <span className="countryname ml-2">{matchcodetocountry(countryCode)}</span>
+                  </div>
+
+                  <span className="visitorscount">{data[visitorfilter]}</span>
+                </div>
+                <LineAnalyticsPerc topcountriestotalvisits={topcountriestotalvisits} thiscountryvisits={data[visitorfilter]}
+                  thiscountryname={matchcodetocountry(countryCode)}
+                />
+              </div>
+
+
+            ))
+
           ) : (
             <div className="text-red-500">
               No top countries data available.

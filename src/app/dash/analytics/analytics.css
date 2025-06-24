@@ -44,3 +44,30 @@
   font-weight: bold;
   text-align: center;
 }
+
+.topcountries {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px 0px;
+}
+.topcountryitemtoptop {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.topcountryitem {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* align-items: center; */
+  /*   padding: 10px;
+  border: 1px solid var(--primary-color-light);
+  border-radius: 5px; */
+}
+.topcountryitemcountrynnumbersdiv {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
