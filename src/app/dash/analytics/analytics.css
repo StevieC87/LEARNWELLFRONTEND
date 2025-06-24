@@ -1,3 +1,7 @@
+input,
+select {
+  background-color: #f5f5f5 !important;
+}
 .linechartcanvas1 {
   max-width: 700px;
   max-height: 250px;

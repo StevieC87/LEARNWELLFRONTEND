@@ -57,9 +57,6 @@ export default function Analytics() {
     }
   }
 
-  //. -------------------------------------
-
-
   useEffect(() => {
     const today = new Date();
 
@@ -175,6 +172,97 @@ export default function Analytics() {
       setSelecteddatesMulti(geteverydaybetweenandincluding); // Set the initial state with the last 7 days
       setSelectedValue('7days'); // Update selected value
     }
+    //today yesterday  14days 60days 90days
+    else if (value === 'yesterday') {
+      setCustomDates(false);
+      const today = new Date();
+      const yesterday = new Date(today);
+      yesterday.setDate(today.getDate() - 1);
+      setStartDate(yesterday);
+      setEndDate(yesterday);
+      setSelecteddatesMulti([yesterday.toISOString().split('T')[0]]);
+      setSelectedValue('yesterday'); // Update selected value
+    }
+    else if (value === 'today') {
+      setCustomDates(false);
+      const today = new Date();
+      setStartDate(today);
+      setEndDate(today);
+      setSelecteddatesMulti([today.toISOString().split('T')[0]]);
+      setSelectedValue('today'); // Update selected value
+    }
+    else if (value === '14days') {
+      setCustomDates(false);
+
+      const today = new Date();
+      const fourteenDaysAgo = new Date(today);
+      fourteenDaysAgo.setDate(today.getDate() - 14);
+      setStartDate(fourteenDaysAgo);
+      setEndDate(today);
+      //get dates in between
+      let geteverydaybetweenandincluding = [];
+      let i = 0;
+      for (i == 0; i <= 14; i++) {
+        const d = new Date(fourteenDaysAgo);
+        d.setDate(d.getDate() + i);
+        console.log(d, 'dddd  dddddddddddddddddddddddd222');
+        const formattedDate = d.toISOString().split('T')[0]; // Format as YYYY  -MM-DD  
+        geteverydaybetweenandincluding.push(formattedDate);
+      }
+      console.log(geteverydaybetweenandincluding, 'geteverydaybetweenandincluding');
+      setSelecteddatesMulti(geteverydaybetweenandincluding);
+      setSelectedValue('14days'); // Update selected value
+    }
+    else if (value === '60days') {
+      setCustomDates(false);
+
+      const today = new Date();
+
+      const sixtyDaysAgo = new Date(today);
+      sixtyDaysAgo.setDate(today.getDate() - 60);
+      setStartDate(sixtyDaysAgo);
+      setEndDate(today);
+      //get dates in between
+      let geteverydaybetweenandincluding = [];
+      let i = 0;
+      for (i == 0; i <= 60; i++) {
+        const d = new Date(sixtyDaysAgo);
+        d.setDate(d.getDate() + i);
+        console.log(d, 'dddddddddddddddddddddddd222');
+        const formattedDate = d.toISOString().split('T')[0];
+        // Format as YYYY-MM-DD
+        geteverydaybetweenandincluding.push(formattedDate);
+      }
+      console.log(geteverydaybetweenandincluding, 'geteverydaybetweenandincluding');
+      setSelecteddatesMulti(geteverydaybetweenandincluding);
+      setSelectedValue('60days'); // Update selected value
+    }
+    else if (value === '90days') {
+      setCustomDates(false);
+
+      const today = new Date();
+      const ninetyDaysAgo = new Date(today);
+      ninetyDaysAgo.setDate(today.getDate() - 90);
+      setStartDate(ninetyDaysAgo);
+      setEndDate(today);
+      //get dates in between
+      let geteverydaybetweenandincluding = [];
+      let i = 0;
+      for (i == 0; i <= 90; i++) {
+        const d = new Date(ninetyDaysAgo);
+        d.setDate(d.getDate() + i);
+        console.log(d, 'dddddddddddddddddddddddd222');
+        const formattedDate = d.toISOString().split('T')[0];
+        // Format as YYYY-MM-DD
+        geteverydaybetweenandincluding.push(formattedDate);
+      }
+      console.log(geteverydaybetweenandincluding, 'geteverydaybetweenandincluding');
+      setSelecteddatesMulti(geteverydaybetweenandincluding);
+      setSelectedValue('90days'); // Update selected value
+    }
+
+
+
     else if (value === '30days') {
       setCustomDates(false);
 
@@ -199,9 +287,24 @@ export default function Analytics() {
     }
     else if (value === 'alltime') {
       setCustomDates(false);
-
-      setStartDate(new Date('2000-01-01')); // Set a very old date for all time
-      setEndDate(new Date());
+      let startdatealltime = new Date('2025-01-01');
+      let enddate = new Date(); // Set end date to today
+      let geteverydaybetweenandincluding = [];
+      //let countday today since startdate 
+      let daysdifference = Math.floor((enddate - startdatealltime) / (1000 * 60 * 60 * 24));
+      let i = 0;
+      for (i == 0; i <= daysdifference; i++) {
+        const d = new Date(startdatealltime);
+        d.setDate(d.getDate() + i);
+        console.log(d, 'dddddddddddddddddddddddd222');
+        const formattedDate = d.toISOString().split('T')[0];
+        // Format as YYYY-MM-DD
+        geteverydaybetweenandincluding.push(formattedDate);
+      }
+      console.log(geteverydaybetweenandincluding, 'geteverydaybetweenandincluding');
+      setSelecteddatesMulti(geteverydaybetweenandincluding);
+      setStartDate(startdatealltime);
+      setEndDate(enddate);
       setSelectedValue('alltime'); // Update selected value
     }
     else if (value === 'custom') {
@@ -220,7 +323,6 @@ export default function Analytics() {
         <span key={date}>{date}</span>
       ))} */}
       <div className="flex flex-col h-screen">
-        {customdates ? 'true' : 'false'}
         <h1 className="text-4xl font-bold mb-4">Analytics</h1>
         <div /* className={`editpagecontainer fade-in2 `} */>
           <div className="formtabs flex flex-row">
@@ -249,13 +351,16 @@ export default function Analytics() {
 
             value={customdates ? "custom" : selectedValue}
           >
-            {/*   <option value="today">Today</option>
-            <option value="yesterday">Yesterday</option> */}
+
+            <option value="today">Today</option>
+            <option value="yesterday">Yesterday</option>
             <option value="7days" >Last 7 days</option>
-            {/*          <option value="14days">Last 14 days</option> */}
+            <option value="14days">Last 14 days</option>
 
             {/* NEED TO SO THAT E.G. END DAY AND START DAY - midnight to midnight not beginning of the day */}
             <option value="30days">Last 30 days</option>
+            <option value="60days">Last 60 days</option>
+            <option value="90days">Last 90 days</option>
             <option value="alltime">All time</option>
             <option value="custom">Custom Date Range</option>
           </select>

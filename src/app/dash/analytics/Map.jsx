@@ -252,8 +252,11 @@ export default function MapAnalyticsComponent({ countriesdata }) {
             <option value="returningvisitors">Returning Visitors</option>
             <option value="newvisitors">New Visitors</option>
           </select>
-          <div id="svgMap" className="mapdiv" ref={mapContainerRef} >
+          <div key={visitorfilter + JSON.stringify(filteredDataS)} className="fade-in05">
+            <div id="svgMap" className="mapdiv" ref={mapContainerRef}></div>
           </div>
+          {/*  <div id="svgMap" className="mapdiv fade-in" ref={mapContainerRef} >
+          </div> */}
         </div>
         {/* setvisitorfilter, setVisitorfilter */}
 
