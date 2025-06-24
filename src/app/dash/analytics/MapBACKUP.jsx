@@ -6,7 +6,7 @@ import './styles/morecustomsvgmap.css'
 import { useEffect, useRef, useState } from 'react';
 import { countryandcode, flags } from './styles/countrystuff.js'
 
-export default function MapAnalyticsComponent({ countriesdata }) {
+export default function MapAnalyticsComponentBackup({ countriesdata }) {
   const [mapReady, setMapReady] = useState(false);
   if (!countriesdata) {
     return;

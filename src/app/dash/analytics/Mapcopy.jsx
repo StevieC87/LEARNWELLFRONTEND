@@ -6,7 +6,7 @@ import './styles/morecustomsvgmap.css'
 import { useEffect, useRef, useState } from 'react';
 import { countryandcode, flags } from './styles/countrystuff.js'
 
-export default function MapAnalyticsComponent({ visitorsbycountry }) {
+export default function MapAnalyticsComponentCopy({ visitorsbycountry }) {
   const [mapReady, setMapReady] = useState(false);
   if (!visitorsbycountry) {
     return;
@@ -15,11 +15,10 @@ export default function MapAnalyticsComponent({ visitorsbycountry }) {
 
   //default values - no filtering
   useEffect(() => {
-
     function calculateUserTotals(visitorsbycountry) {
       const result = {};
       console.log(visitorsbycountry, 'visitorsbycountry111')
-      countriesdata.forEach(entry => {
+      visitorsbycountry.forEach(entry => {
         for (const [countryCode, stats] of Object.entries(entry.countries)) {
           if (!result[countryCode]) {
             result[countryCode] = {
@@ -31,12 +30,12 @@ export default function MapAnalyticsComponent({ visitorsbycountry }) {
 
           result[countryCode].newUsers += stats.newUsers;
           result[countryCode].returningUsers += stats.returningUsers;
-          result[countryCode].visitors += stats.totalUsers
+          result[countryCode].visitors += stats.totalUsers;
         }
+        console.log(result, 'result');
       });
 
       return result;
-      return visitorsbycountry;
     }
     bycountrydefault = calculateUserTotals(visitorsbycountry);
     console.log(bycountrydefault, 'bycountrydefault')

@@ -7,7 +7,9 @@ import Pie from './PieChart.jsx';
 import './datepicker/Datepicker.css'
 import './analytics.css';
 import { set } from "react-hook-form";
-
+// import MapAnalyticsComponentBackup from "./MapBACKUP.jsx";
+import MapAnalyticsComponentCopy from "./Mapcopy.jsx";
+import MapAnalyticsComponentNoColor from "./MapWORKSNOCLLORDIF.jsx";
 export default function Analytics() {
 
   //. FOR DATEPICKER ----------------------
@@ -73,6 +75,7 @@ export default function Analytics() {
 
   }, []);
 
+  const [mapbackupcountries, setMapBackupCountries] = useState([]); // Initialize mapbackupcountries state
 
   useEffect(() => {
     const fetchCountriesData = async () => {
@@ -97,7 +100,9 @@ export default function Analytics() {
         console.log(data, 'data');
         //         setCountriesData(data.data)
         setCountriesData(data.visitorsbycountry)
+        console.log(data.visitorsbycountry, 'data.visitorsbycountry');
         console.log(data.data, 'data.dat1111a');
+        setMapBackupCountries(data.data || []); // Use data.data if it exists
         //setVisitorsByCountry(data.visitorsbycountry || {}); // Use data.data if it exists
         console.log(data.visitorsbycountry, 'data.visitorsbycountry');
         setUsersByMonth(data.visitorseachday || []); // Use data.userByMonth if it exists
@@ -249,8 +254,12 @@ export default function Analytics() {
         </div>
         <div className="flex flex-row">
           <div className="mt-8 fade-in mapsdiv">
+            {/*    <MapAnalyticsComponentCopy visitorsbycountry={mapbackupcountries} /> */}
             {countriesdata && Object.keys(countriesdata).length > 0 ? (
-              <MapAnalyticsComponent countriesdata={countriesdata} />
+              <>
+                {/*  <MapAnalyticsComponent countriesdata={countriesdata} /> */}
+                <MapAnalyticsComponentNoColor countriesdata={countriesdata} />
+              </>
             ) : (
               <div className="text-red-500">
                 No data available for the map.
@@ -258,9 +267,11 @@ export default function Analytics() {
             )}
             {/* visitorsbycountry */}
           </div>
+          {/*   <MapAnalyticsComponentBackup countriesdata={mapbackupcountries} /> */}
           <div>country data</div>
         </div>
       </div>
+
 
 
     </>
