@@ -27,6 +27,9 @@ export default function Analytics() {
 
   const [newreturningtotalPie, setNewReturningTotalPie] = useState({});
 
+  const [solodate, setSoloDate] = useState(false); // For single date selection
+  const [solodatedate, setSoloDateDate] = useState(''); // For single date selection
+
   const handleDateChange = (newdate) => {
     console.log('newdate in handleDateChange', newdate)
     console.log(typeof newdate, 'typeof newdate')
@@ -35,6 +38,11 @@ export default function Analytics() {
       //  alert('newdate is object')
       //setSelecteddate(newdate);
       //setSelecteddatesMulti(prevState => [...prevState, newdate]);
+      if (newdate.length === 1) {
+
+        setSoloDate(true); // Set solo date mode
+        setSoloDateDate(newdate[0]); // Set the solo date
+      }
       setSelecteddatesMulti(newdate);
     }
     else {
@@ -84,7 +92,9 @@ export default function Analytics() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            daterange: selecteddatesMulti
+            daterange: selecteddatesMulti,
+            solodate: solodate,
+            solodatedate: solodatedate,
           }),
           credentials: 'include', // Include cookies in the request
         });
