@@ -7,9 +7,6 @@ import Pie from './PieChart.jsx';
 import './datepicker/Datepicker.css'
 import './analytics.css';
 import { set } from "react-hook-form";
-// import MapAnalyticsComponentBackup from "./MapBACKUP.jsx";
-import MapAnalyticsComponentCopy from "./Mapcopy.jsx";
-import MapAnalyticsComponentNoColor from "./MapWORKSNOCLLORDIF.jsx";
 export default function Analytics() {
 
   //. FOR DATEPICKER ----------------------
@@ -77,6 +74,7 @@ export default function Analytics() {
 
   const [mapbackupcountries, setMapBackupCountries] = useState([]); // Initialize mapbackupcountries state
 
+
   useEffect(() => {
     const fetchCountriesData = async () => {
       try {
@@ -116,6 +114,9 @@ export default function Analytics() {
         setPagesPerSession(roundedpagespersessiontoTWOdecimals || 0); // Use data.pagespersession if it exists
         setBounceRate(data.bouncerate || 0); // Use data.bouncerate if it exists
         setNewReturningTotalPie(data.totalvisitorsthatperiodv || {}); // Use data.newreturningtotalPie if it exists
+
+
+
       } catch (error) {
         console.error('Error fetching countries data:', error);
       }
@@ -252,24 +253,23 @@ export default function Analytics() {
 
 
         </div>
-        <div className="flex flex-row">
-          <div className="mt-8 fade-in mapsdiv">
-            {/*    <MapAnalyticsComponentCopy visitorsbycountry={mapbackupcountries} /> */}
-            {countriesdata && Object.keys(countriesdata).length > 0 ? (
-              <>
-                {/*  <MapAnalyticsComponent countriesdata={countriesdata} /> */}
-                <MapAnalyticsComponentNoColor countriesdata={countriesdata} />
-              </>
-            ) : (
-              <div className="text-red-500">
-                No data available for the map.
-              </div>
-            )}
-            {/* visitorsbycountry */}
-          </div>
-          {/*   <MapAnalyticsComponentBackup countriesdata={mapbackupcountries} /> */}
-          <div>country data</div>
+
+        <div className="mt-8 fade-in mapsdiv">
+          {/*    <MapAnalyticsComponentCopy visitorsbycountry={mapbackupcountries} /> */}
+          {countriesdata && Object.keys(countriesdata).length > 0 ? (
+            <>
+              {/*  <MapAnalyticsComponent countriesdata={countriesdata} /> */}
+              <MapAnalyticsComponent countriesdata={countriesdata} />
+            </>
+          ) : (
+            <div className="text-red-500">
+              No data available for the map.
+            </div>
+          )}
+          {/* visitorsbycountry */}
         </div>
+
+
       </div>
 
 

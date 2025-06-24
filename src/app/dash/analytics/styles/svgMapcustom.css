@@ -11,9 +11,12 @@
 
 .svgMapwrapper {
   display: flex;
+  flex-direction: row;
+}
+.mapsection {
+  display: flex;
   flex-direction: column;
 }
-
 .filtervisitortypeselect {
   max-width: 200px;
 }
