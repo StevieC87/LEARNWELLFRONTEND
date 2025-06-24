@@ -392,14 +392,15 @@ export default function Analytics() {
               <span className="analyticsquickdataboxlabel">Avg. Session Duration</span>
               <span className="analyticsquickdataboxdata text-2xl font-bold">{averagesessionduration} sec</span>
             </div>
-            <div className="analyticsquickdatabox flex flex-col">
-              <span className="analyticsquickdataboxlabel">Pages / Session</span>
-              <span className="analyticsquickdataboxdata text-2xl font-bold">{pagespersession}</span>
-            </div>
+
             <div className="analyticsquickdatabox flex flex-col">
               <span className="analyticsquickdataboxlabel">Bounce Rate</span>
               <span className="analyticsquickdataboxdata text-2xl font-bold
 ">{bouncerate}</span>
+            </div>
+            <div className="analyticsquickdatabox flex flex-col">
+              <span className="analyticsquickdataboxlabel">Pages / Session</span>
+              <span className="analyticsquickdataboxdata text-2xl font-bold">{pagespersession}</span>
             </div>
           </div>
           <div className="analyticsquickdataboxpie flex flex-col">
@@ -433,9 +434,6 @@ export default function Analytics() {
           <TopVisitedPages mostvisitedpages={mostvisitedpages} />
         </div>
       </div>
-
-
-
 
     </>
 

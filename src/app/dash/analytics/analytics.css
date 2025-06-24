@@ -6,6 +6,11 @@ select {
   max-width: 700px;
   max-height: 250px;
 }
+@media screen and (max-width: 920px) {
+  .linechartcanvas1 {
+    max-width: 100%;
+  }
+}
 
 .datecontrols {
   margin: 20px 0px;
@@ -14,7 +19,7 @@ select {
 .analyticsquickdatadiv {
   display: flex;
   flex-direction: row;
-
+  flex-wrap: wrap;
   gap: 20px;
   align-items: center;
   max-width: var(--maxwidthcontent);
@@ -29,7 +34,7 @@ select {
 .analyticsquickdataboxes {
   flex-wrap: wrap;
   flex: 3;
-  height: 220px;
+  min-height: 220px;
 }
 
 .analyticsquickdataboxpie {
@@ -55,6 +60,7 @@ select {
   flex-direction: column;
   gap: 10px;
   padding: 20px 0px;
+  justify-content: center;
 }
 .topcountryitemtoptop {
   display: flex;

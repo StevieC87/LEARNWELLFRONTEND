@@ -67,6 +67,10 @@ export default function TopVisitedPages({ mostvisitedpages }) {
           .topvisitedpage-visits {
             flex: 1;
           }
+            @media (max-width: 600px) {
+          .topvisitedpage-name {
+            font-size: 1.2rem;   
+        };
         `}</style>
 
     </>

@@ -67,6 +67,10 @@ export default function TopReferrers({ referrals }) {
           .referrer-item.odd {
             background-color: #ffffff;
           }
+        @media (max-width: 600px) {
+          .referrer-name {
+            font-size: 1.2rem;   
+        };
     `}</style>
       </div>
 

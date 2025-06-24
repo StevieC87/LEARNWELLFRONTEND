@@ -1,5 +1,6 @@
 :root {
-  --adminwrapperflexiblegridtcolumns: 200px 1fr;
+  /* --adminwrapperflexiblegridtcolumns: 200px 1fr; */
+  --adminwrapperflexiblegridtcolumns: 200px calc(100vw - 200px);
 }
 
 .outerlayoutdiv {

@@ -229,12 +229,20 @@ export default function MapAnalyticsComponent({ countriesdata }) {
     <>
       <style jsx>{`
         .mapdiv {
-          width: 500px;
-          height: 300px;
+          width: 375px;
+          height: 260px;
         }
           .showdata {
           height: 200px;
           font-size: 1rem}
+
+        @media (min-width: 600px) {
+          .mapdiv {
+            width: 450px;
+            height: 320px;
+          }
+     
+      }
       `}</style>
 
 

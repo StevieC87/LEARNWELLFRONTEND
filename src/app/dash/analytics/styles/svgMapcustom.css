@@ -12,13 +12,22 @@
 .svgMapwrapper {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 .mapsection {
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 .filtervisitortypeselect {
   max-width: 200px;
+}
+
+@media screen and (max-width: 600px) {
+  .filtervisitortypeselect {
+    margin: 0 auto;
+  }
 }
 
 .svgMap-container,
