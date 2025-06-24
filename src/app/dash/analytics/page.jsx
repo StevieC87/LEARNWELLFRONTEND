@@ -7,6 +7,8 @@ import Pie from './PieChart.jsx';
 import './datepicker/Datepicker.css'
 import './analytics.css';
 import { set } from "react-hook-form";
+import TopReferrers from "./Topreferrers.jsx";
+
 export default function Analytics() {
 
   //. FOR DATEPICKER ----------------------
@@ -31,6 +33,8 @@ export default function Analytics() {
   const [solodatedate, setSoloDateDate] = useState(''); // For single date selection
 
   const [customdates, setCustomDates] = useState(false); // For custom date range selection
+
+  const [referrals, setReferrals] = useState([]); // For referrals data
 
   const handleDateChange = (newdate) => {
     console.log('newdate in handleDateChange', newdate)
@@ -125,7 +129,7 @@ export default function Analytics() {
         setPagesPerSession(roundedpagespersessiontoTWOdecimals || 0); // Use data.pagespersession if it exists
         setBounceRate(data.bouncerate || 0); // Use data.bouncerate if it exists
         setNewReturningTotalPie(data.totalvisitorsthatperiodv || {}); // Use data.newreturningtotalPie if it exists
-
+        setReferrals(data.referrals || []); // Use data.referrals if it exists 
 
 
       } catch (error) {
@@ -417,8 +421,12 @@ export default function Analytics() {
           {/* visitorsbycountry */}
         </div>
 
+        <div className="topreferrersouterdiv mt-4 card">
+          <TopReferrers referrals={referrals} />
 
+        </div>
       </div>
+
 
 
 
