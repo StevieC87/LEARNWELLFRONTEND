@@ -6,9 +6,9 @@ import ChartVisitsFilter from "./ChartVisitsFilter.jsx";
 import Pie from './PieChart.jsx';
 import './datepicker/Datepicker.css'
 import './analytics.css';
+import { set } from "react-hook-form";
 
 export default function Analytics() {
-  const [countriesdata, setCountriesData] = useState(null);
 
   //. FOR DATEPICKER ----------------------
   const [multiple, setMultiple] = useState('range'); //yes or range for range or  empty string for single date selection
@@ -18,6 +18,8 @@ export default function Analytics() {
 
   const [startdate, setStartDate] = useState(new Date()); // Set initial start date to today
   const [enddate, setEndDate] = useState('');
+  const [countriesdata, setCountriesData] = useState([]); // Initialize countriesdata state
+  const [visitorsbycountry, setVisitorsByCountry] = useState([]);
   const [totalnumberofsessions, setTotalNumberOfSessions] = useState(0);
   const [totalnumberofpageviews, setTotalNumberOfPageViews] = useState(0);
   const [averagesessionduration, setAverageSessionDuration] = useState(0);
@@ -45,7 +47,7 @@ export default function Analytics() {
   }
 
   //. -------------------------------------
-  //set default dates (7 days)
+
 
   useEffect(() => {
     const today = new Date();
@@ -93,9 +95,11 @@ export default function Analytics() {
 
         const data = await response.json();
         console.log(data, 'data');
-        console.log(data.data, 'data.data');
-        setCountriesData(data.data || {}); // Use data.data if it exists, 
-        console.log(typeof countriesdata, 'typeof data.message');
+        //         setCountriesData(data.data)
+        setCountriesData(data.visitorsbycountry)
+        console.log(data.data, 'data.dat1111a');
+        //setVisitorsByCountry(data.visitorsbycountry || {}); // Use data.data if it exists
+        console.log(data.visitorsbycountry, 'data.visitorsbycountry');
         setUsersByMonth(data.visitorseachday || []); // Use data.userByMonth if it exists
         console.log(data.visitorseachday, 'data.visitorseachday');
         setTotalUsersDataRange(data.visitorseachday || []); // Use data.visitorseachday if it exists
@@ -252,7 +256,7 @@ export default function Analytics() {
                 No data available for the map.
               </div>
             )}
-
+            {/* visitorsbycountry */}
           </div>
           <div>country data</div>
         </div>

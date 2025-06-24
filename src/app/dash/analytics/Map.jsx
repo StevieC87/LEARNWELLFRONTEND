@@ -8,48 +8,20 @@ import { countryandcode, flags } from './styles/countrystuff.js'
 
 export default function MapAnalyticsComponent({ countriesdata }) {
   const [mapReady, setMapReady] = useState(false);
+  const mapInstance = useRef(null);
+
   if (!countriesdata) {
     return;
   }
-  // console.log(countriesdata, 'countriesdata')
   let bycountrydefault;
 
   //default values - no filtering
   useEffect(() => {
 
-    function calculateUserTotals(countriesdata) {
-      const result = {};
-
-      countriesdata.forEach(entry => {
-        for (const [countryCode, stats] of Object.entries(entry.countries)) {
-          if (!result[countryCode]) {
-            result[countryCode] = {
-              newUsers: 0,
-              returningUsers: 0,
-              visitors: 0
-            };
-          }
-
-          result[countryCode].newUsers += stats.newUsers;
-          result[countryCode].returningUsers += stats.returningUsers;
-          result[countryCode].visitors += stats.totalUsers
-        }
-      });
-
-      return result;
-    }
-    bycountrydefault = calculateUserTotals(countriesdata);
+    bycountrydefault = countriesdata
     console.log(bycountrydefault, 'bycountrydefault')
 
-    /* function convertToArray(obj) {
-      return Object.entries(obj).map(([country, values]) => ({
-        country,
-        ...values
-      }));
-    }
 
-    let converttoarray = convertToArray(bycountrydefault);
-    console.log(converttoarray, 'converttoarray') */
 
   }, [countriesdata]);
 
@@ -68,13 +40,15 @@ export default function MapAnalyticsComponent({ countriesdata }) {
   let currentcountryid = '';
 
   useEffect(() => {
-    if (hasRun.current) {
-      // alert('already run');
+    /*  if (hasRun.current) {
+       // alert('already run');
+       return;
+     }
+     hasRun.current = true; */
+
+    if (!countriesdata || Object.keys(countriesdata).length === 0) {
       return;
     }
-    hasRun.current = true;
-
-    if (typeof window === 'undefined') return;
     /* if (mapContainerRef.current) {
       mapContainerRef.current.innerHTML = ''; // <- this line prevents duplicates
     } */
@@ -82,7 +56,21 @@ export default function MapAnalyticsComponent({ countriesdata }) {
     // Dynamically import on client side only
     // import('svgmap').then(({ default: svgMap }) => {
     import('./svgMap.js').then(({ default: svgMap }) => {
-      const map = new svgMap({
+      //  if (!mapInstance.current) {
+      if (mapInstance.current) {
+        if (typeof mapInstance.current.remove === 'function') {
+          mapInstance.current.remove();
+        } else if (typeof mapInstance.current.destroy === 'function') {
+          mapInstance.current.destroy();
+        }
+        mapInstance.current = null;
+      }
+      if (mapContainerRef.current) {
+        mapContainerRef.current.innerHTML = '';
+      }
+
+
+      mapInstance.current = new svgMap({
         targetElementID: mapContainerRef.current.id,
         disableDefaultFill: true,
         data: {
@@ -96,33 +84,24 @@ export default function MapAnalyticsComponent({ countriesdata }) {
             }
           },
           applyData: 'visitors',
-          values: bycountrydefault,
+          values: countriesdata,
           /*  values: {
              AT: { visitors: 2000 },
              DE: { visitors: 1500 },
              US: { visitors: 3000 }
            } */
         },
-        /* onGetTooltip: function (tooltipDiv, countryID, countryValues) {
-          console.log('Tooltip for:', countryID, countryValues)
-          const visitors = countryValues?.visitors || 0;
 
-          tooltipDiv.innerHTML = `
-            <div class="svgMap-tooltip  svgMap-tooltip-content-container">
-              <strong>Country:</strong> ${countryID}<br/>
-              <strong>Visitors:</strong> ${visitors}
-            </div>
-          `;
-          return tooltipDiv;
-        }
-      }); */
 
       })
+
+
       document.querySelectorAll('.svgMap-country').forEach(el => {
         el.addEventListener('mouseenter', (e) => {
           const countryID = e.target.getAttribute('data-id');
           const countryname = getCountryName(countryID)
-          const countryValues = map.options.data.values[countryID];
+          //const countryValues = map.options.data.values[countryID];
+          const countryValues = mapInstance.current.options.data.values[countryID];
           const flag = getFlag(countryID)
           console.log(flag, 'flag2')
           // setCurrentCountryid(countryID)
@@ -164,6 +143,14 @@ export default function MapAnalyticsComponent({ countriesdata }) {
         });
       })
       setMapReady(true); // show map now
+      /*  }
+       else {
+         mapInstance.current.options.data.values = countriesdata;
+         //  mapInstance.current.updateChoropleth && mapInstance.current.updateChoropleth();
+         if (typeof mapInstance.current.updateChoropleth === 'function') {
+           mapInstance.current.updateChoropleth();
+         }
+       } */
     });
     // });
     document.addEventListener('pointerdown', (e) => {
@@ -193,7 +180,7 @@ export default function MapAnalyticsComponent({ countriesdata }) {
         setHoverData(null);
       }
     });
-  }, []);
+  }, [countriesdata]);
 
   function getCountryName(countryCode) {
     const countryName = countryandcode[countryCode];
@@ -263,3 +250,17 @@ export default function MapAnalyticsComponent({ countriesdata }) {
   );
 
 }
+
+/* onGetTooltip: function (tooltipDiv, countryID, countryValues) {
+        console.log('Tooltip for:', countryID, countryValues)
+        const visitors = countryValues?.visitors || 0;
+ 
+        tooltipDiv.innerHTML = `
+          <div class="svgMap-tooltip  svgMap-tooltip-content-container">
+            <strong>Country:</strong> ${countryID}<br/>
+            <strong>Visitors:</strong> ${visitors}
+          </div>
+        `;
+        return tooltipDiv;
+      }
+    }); */
