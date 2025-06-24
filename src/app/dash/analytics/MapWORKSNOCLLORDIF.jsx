@@ -17,7 +17,6 @@ export default function MapAnalyticsComponentNoColor({ countriesdata }) {
 
 
   const [filteredDataS, setFilteredDataS] = useState({});
-
   //default values - no filtering
   useEffect(() => {
     console.log(visitorfilter, 'visitorfilter in MapAnalyticsComponent')
@@ -104,8 +103,8 @@ export default function MapAnalyticsComponentNoColor({ countriesdata }) {
               // thresholdMin: 0
             }
           },
-          // applyData: visitorfilter,
-          applyData: 'allvisitors',
+          applyData: visitorfilter,
+          // applyData: 'allvisitors',
           values: filteredDataS,
 
         },
@@ -119,7 +118,7 @@ export default function MapAnalyticsComponentNoColor({ countriesdata }) {
           const countryID = e.target.getAttribute('data-id');
           const countryname = getCountryName(countryID)
           //const countryValues = map.options.data.values[countryID];
-          const countryValues = mapInstance.current.options.data.values[countryID];
+          const countryValues = mapInstance.current.options.data.values[countryID] || {};
           console.log(countryValues, 'countryValues23www')
           // let valuesvalues = countryValues?.visitors ?? 0;
           const flag = getFlag(countryID)
@@ -127,7 +126,8 @@ export default function MapAnalyticsComponentNoColor({ countriesdata }) {
           // setCurrentCountryid(countryID)
           currentcountryid = countryID
           //  setHoverData({ countryID, countryname, flag, visitors: countryValues?.visitors ?? 0 });
-          let users = countryValues?.visitors ?? 0;
+          let users = countryValues[visitorfilter] ?? 0;
+          console.log(users, 'usersinMapAnalyticsComponent')
           let tostring = users.toString();
           //  setHoverData({ countryID, countryname, flag, users: countryValues?.visitors ?? 0 });
           setHoverData({ countryID, countryname, flag, users: tostring });
