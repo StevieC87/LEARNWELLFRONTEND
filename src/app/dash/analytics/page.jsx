@@ -8,6 +8,7 @@ import './datepicker/Datepicker.css'
 import './analytics.css';
 import { set } from "react-hook-form";
 import TopReferrers from "./Topreferrers.jsx";
+import TopVisitedPages from "./TopVisitedPages.jsx";
 
 export default function Analytics() {
 
@@ -130,7 +131,7 @@ export default function Analytics() {
         setBounceRate(data.bouncerate || 0); // Use data.bouncerate if it exists
         setNewReturningTotalPie(data.totalvisitorsthatperiodv || {}); // Use data.newreturningtotalPie if it exists
         setReferrals(data.referrals || []); // Use data.referrals if it exists 
-
+        setMostVisitedPages(data.mostvisitedpages || []); // Use data.mostvisitedpages if it exists
 
       } catch (error) {
         console.error('Error fetching countries data:', error);
@@ -150,6 +151,8 @@ export default function Analytics() {
 
   const [opendatepickercustom, setOpenDatePickerCustom] = useState(false);
   const [selectedValue, setSelectedValue] = useState("7days");
+
+  const [mostvisitedpages, setMostVisitedPages] = useState([]);
 
   const selectchangefilterdates = (e) => {
     const value = e.target.value;
@@ -423,7 +426,10 @@ export default function Analytics() {
 
         <div className="topreferrersouterdiv mt-4 card">
           <TopReferrers referrals={referrals} />
+        </div>
 
+        <div className="card">
+          <TopVisitedPages mostvisitedpages={mostvisitedpages} />
         </div>
       </div>
 
