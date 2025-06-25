@@ -6,7 +6,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setShowMediaLibraryModal, setSelectedImagefromGalleryModal } from '@/redux/slices/UISlice';
 import MediaComponent from '@/app/dash/media/Mediacomponent';
 import './mediabutton.css';
-import { updateField } from '@/redux/slices/PagesSlice';
+import { updateField, setCurrentImageField } from '@/redux/slices/PagesSlice';
+
 
 
 export default function MediaButton(props) {
@@ -22,13 +23,19 @@ export default function MediaButton(props) {
   console.log(thisfieldvalue, "thisfieldvalueinmediabutton");
 
   const openMediaLibrary = () => {
+    dispatch(setCurrentImageField({
+      name: name,
+      id: id,
+      locale: locale,
+      content: thisfieldvalue?.content || {},
+      schema: schema,
+      type: type,
+      placeholder: placeholder,
+      required: required || false
+    }));
     dispatch(setShowMediaLibraryModal(!showMediaLibraryModal));
-    //  setMediaLibVisibility(prevValue => prevValue === "visible" ? "hidden" : "visible")
-
     {
-      // setMediaLibVisibility("visible");
     }
-    // setMediaLibVisibility("visible");
   }
   const onChangehandler = (e) => {
 
@@ -97,9 +104,6 @@ export default function MediaButton(props) {
             placeholder={placeholder}
             id={id}
             required={required}
-
-
-
           />
         </div>
       }

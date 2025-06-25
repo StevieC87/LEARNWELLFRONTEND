@@ -33,8 +33,8 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
   // const fieldData1 = useSelector((state) => state.PagesSlice.fields[name]);
 
   //console.log(fielddata, "fielddata33333333");
-
-  const onChange = (e, arrayfield, arrayfieldparent, indexis, subfield) => {
+  // onChange(e, name,id)}
+  const onChange = (e, name, id, arrayfield, arrayfieldparent, indexis, subfield) => {
     //alert(arrayfield);
 
     /*     alert(arrayfield)
@@ -43,6 +43,16 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
         } */
     const newValue = e.target.value;
 
+    alert(name)
+
+    /*         name={name}
+            id={fielddata.id}
+            locale={fielddata.locale}
+            schema={fielddata.schema}
+            type={type}
+            value={fieldValue}
+            placeholder={placeholder}
+            required={required || false} */
     if (source === 'shared') {
       // alert(newValue)
       //
@@ -224,6 +234,7 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
             value={fieldValue}
             placeholder={placeholder}
             required={required || false}
+            onChange={(e) => onChange(e, name, id)}
           />
         </div>
       );

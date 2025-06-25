@@ -47,6 +47,8 @@ export default function MediaComponent(props) {
 
   const callingfrom = useSelector((state) => state.UISlice.callingfrom); // Get the calling from state
 
+  const currentimagefield = useSelector((state) => state.PagesSlice.currentimagefield); // Get the current image field from the PagesSlice
+
   useEffect(() => {
     const fetchbasefilesandfolders = async () => {
       try {
@@ -114,9 +116,7 @@ export default function MediaComponent(props) {
 
     setCurrentImagePathCleanwFilename(pathandfname); // Set the cleaned current image path
     if (showMediaLibraryModal) {
-
       // dispatch(setSelectedImagefromGalleryModal(`public/media${currentpath}/${file}`));
-
       let imageidstring;
       try {
         const fetchimagedetails = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/media/getimagebypath`, {
@@ -161,21 +161,28 @@ export default function MediaComponent(props) {
           }
           //this is for standard in a schema as a field 
           else {
+            let fieldnameyes = currentimagefield.name;
+            let idyes = currentimagefield.id;
+            let locale = currentimagefield.locale;
+            let schema = currentimagefield.schema;
+            let type = currentimagefield.type;
+            let placeholder = currentimagefield.placeholder;
+            let required = currentimagefield.required;
+            //  alert(fieldnameyes)
             dispatch(updateField({
-              name: fieldname,
+              name: fieldnameyes,
               //  content: imageidstring,
               content: {
                 imageidstring: imageidstring,
                 imagepath: pathclean,
                 thumbnail: `public/media/thumbnails/${data.thumbnailfilename}`,
               },
-              id: id,
+              id: idyes,
               locale: locale,
               schema: schema,
               type: type,
               placeholder: placeholder,
-              required: required,
-
+              required: required || false,
 
             }));
             dispatch(setHasChanges(true))

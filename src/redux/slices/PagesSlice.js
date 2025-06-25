@@ -7,6 +7,7 @@ const PagesSlice = createSlice({
     slugduplicatewarning: false,
     triggerSEOrefresh: 0,
     hasChanges: false,
+    currentimagefield: null,
   },
 
   reducers: {
@@ -56,6 +57,22 @@ const PagesSlice = createSlice({
     setHasChanges(state, action) {
       state.hasChanges = action.payload;
     },
+    setCurrentImageField(state, action) {
+      state.currentimagefield = action.payload;
+      /*  const { name, id, locale, content, type, placeholder, required } =
+        action.payload;
+
+      state.currentimagefield = {
+        name,
+        id,
+        locale,
+        content,
+        type,
+        placeholder,
+        required,
+      }; */
+    },
+
     /*  updateArrayField(state, action) {
       const { parentField, index, subfield, value, content } = action.payload;
 
@@ -81,6 +98,7 @@ export const {
   setTriggerSEORefresh,
   setHasChanges,
   updateArrayField,
+  setCurrentImageField,
 } = PagesSlice.actions;
 
 export default PagesSlice.reducer;
