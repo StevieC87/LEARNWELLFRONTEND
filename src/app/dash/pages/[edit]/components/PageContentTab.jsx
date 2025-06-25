@@ -66,6 +66,9 @@ export default function PageContentTab(props) {
   //we allow set ont he front end - not on the backend 
 
   const [currentdraftcreationdate, setCurrentDraftCreationDate] = useState(latestdraftcreationdate);
+
+  // const [clickedundo, setClickedUndo] = useState(false);
+
   useEffect(() => {
     console.log(currentdraftcreationdate, "currentdraftcreationdatefromuseeffect");
   }, [currentdraftcreationdate])
@@ -470,7 +473,8 @@ export default function PageContentTab(props) {
         pageid: pageid,
         undoorredo: undoredo, // 'undo' or 'redo'
         currentdraftpagecreationdate: currentdraftcreationdate,
-        haschangesforundo: haschangesforundo
+        haschangesforundo: haschangesforundo,
+        pagetype: pagetype,
       }),
     });
     if (!response.ok) {

@@ -33,14 +33,7 @@ export default function SlideMenu() {
           <Image className="logocolor" src="/images/logo/logocolor.svg" alt="Logo" width={30} height={30} />
           <span className="poppinsSemiBold  text-black text-xl">Alpine<span className="logocolortest">Web</span></span>
         </div>
-        {/*   <div className="sidebarlinkforicon">
 
-
-
-          <Link href="#home" className="sidebartext sidebarlinkforicon">
-            Home
-          </Link>
-        </div> */}
         {(userrole === 'superadmin' || userrole === 'admin') && (
           <div className="sidebarlinkforicon">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-graph-up" viewBox="0 0 16 16">
