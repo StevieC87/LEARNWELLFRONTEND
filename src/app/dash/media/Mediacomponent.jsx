@@ -161,6 +161,7 @@ export default function MediaComponent(props) {
           }
           //this is for standard in a schema as a field 
           else {
+            //, we specified earlier which field we want to update 
             let fieldnameyes = currentimagefield.name;
             let idyes = currentimagefield.id;
             let locale = currentimagefield.locale;

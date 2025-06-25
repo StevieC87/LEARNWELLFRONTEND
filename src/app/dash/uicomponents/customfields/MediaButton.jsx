@@ -23,6 +23,7 @@ export default function MediaButton(props) {
   console.log(thisfieldvalue, "thisfieldvalueinmediabutton");
 
   const openMediaLibrary = () => {
+    //, Here we specify in a separate field in redux WHICH media field we are currently working with - because otherwise would just put image in the last media field 
     dispatch(setCurrentImageField({
       name: name,
       id: id,
@@ -77,7 +78,7 @@ export default function MediaButton(props) {
           </button>
           <input type="text" style={{ width: '200px' }}
             onChange={() => onChangehandler()}
-            value={thisfieldvalue?.content.imagepath || ''}
+            value={thisfieldvalue?.content?.imagepath || ''}
             name={name}
             id={id}
             locale={locale}

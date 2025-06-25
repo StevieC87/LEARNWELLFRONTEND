@@ -3,6 +3,7 @@ import { headers } from 'next/headers'
 // import AboutPage from '@/multilangpags/AboutPage';
 import AboutPage from '@/multilangpages/AboutPage';
 import ArticlePage from '@/multilangpages/ArticlePage';
+import WebdesignPage from '@/multilangpages/WebdesignPage';
 //search params
 import { searchParams } from 'next/navigation';
 
@@ -12,7 +13,8 @@ export default async function Page({ params, searchParams }) {
   //HERE I INCLUDE !ALL! THE PAGE COMPONENTS (about, contact, what have you)
   const componentMap = {
     AboutPage,
-    ArticlePage
+    ArticlePage,
+    WebdesignPage,
     //ContactPage,
     // ServicesPage,
   };

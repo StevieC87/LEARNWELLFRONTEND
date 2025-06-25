@@ -34,7 +34,7 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
 
   //console.log(fielddata, "fielddata33333333");
   // onChange(e, name,id)}
-  const onChange = (e, name, id, arrayfield, arrayfieldparent, indexis, subfield) => {
+  const onChange = (e, arrayfield, arrayfieldparent, indexis, subfield) => {
     //alert(arrayfield);
 
     /*     alert(arrayfield)
@@ -42,8 +42,6 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
           alert('arrayfield changed');
         } */
     const newValue = e.target.value;
-
-    alert(name)
 
     /*         name={name}
             id={fielddata.id}
@@ -53,9 +51,13 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
             value={fieldValue}
             placeholder={placeholder}
             required={required || false} */
+    //! ISSUE IS: BECAUSE I ADDED NAME PARAMETER -> IT DOEST GET IT FROM THE PAGE STATE, ONYL FROM FUNCITON - which i dont pass 
+
     if (source === 'shared') {
       // alert(newValue)
       //
+
+
       dispatch(updateSharedFields({
         name: name,
         content: newValue,
@@ -234,7 +236,7 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
             value={fieldValue}
             placeholder={placeholder}
             required={required || false}
-            onChange={(e) => onChange(e, name, id)}
+
           />
         </div>
       );
