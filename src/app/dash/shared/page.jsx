@@ -34,7 +34,7 @@ export default function Shared() {
     <div className="flex flex-col gap-4">
       <h1 className="text-2xl font-bold">Shared Components</h1>
       <p className="text-gray-600">
-        This section allows you to manage shared settings across your application.
+        This section allows you to manage components that can appear across your application.
       </p>
       {missingSchemas.map((schema) => (
         <div key={`${schema.schema}${schema.locale}`} className="p-4 border rounded shadow">

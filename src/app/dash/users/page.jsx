@@ -85,7 +85,7 @@ export default function UsersPage() {
             <div id="searchdiv" className="postspagesearchinput">
               <input
                 type="text"
-                placeholder="Search by title"
+                placeholder="Search by email"
                 className="input input-bordered w-full max-w-xs"
                 onChange={(e) => searchrecords(e.target.value)}
               />
