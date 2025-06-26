@@ -67,6 +67,8 @@ export default function PageContentTab(props) {
 
   const [currentdraftcreationdate, setCurrentDraftCreationDate] = useState(latestdraftcreationdate);
 
+  const userrole = useSelector((state) => state.DashSlice.userrole) || '';
+
   // const [clickedundo, setClickedUndo] = useState(false);
 
   useEffect(() => {
@@ -235,7 +237,6 @@ export default function PageContentTab(props) {
       const errorData = await response.json();
       console.log(errorData, "errorData");
       if (errorData.errorthing === "titlemissing") {
-        alert("Please add a field with name 'title' to the schema of the page");
       }
       setIsSaving(false);
 
@@ -363,7 +364,7 @@ export default function PageContentTab(props) {
       const errorData = await response.json();
       console.log(errorData, "errorData");
       if (errorData.errorthing === "titlemissing") {
-        alert("Please add a field with name 'title' to the schema of the page");
+
       }
       //setIsSaving(false);
       // setErrorSave(true);
@@ -380,7 +381,9 @@ export default function PageContentTab(props) {
   //publishswitchstatus, setPublishSwitchStatus]
   const changePublish = async () => {
     //with previous thing
-
+    if (!publishswitchstatus) {
+      onPublish()
+    }
     console.log("change publish status");
     let url = `${process.env.NEXT_PUBLIC_API_URL}/pagesposts/changepublishstatus`;
     const response = await fetch(url, {
@@ -392,15 +395,18 @@ export default function PageContentTab(props) {
       body: JSON.stringify({
         pageid: pageid,
         published: !publishswitchstatus, //toggle the publish status
+        pagetype: pagetype, // 'page' or 'post'
         //!change this 
       }),
 
     });
-    setPublishSwitchStatus(setPublishSwitchStatus => !setPublishSwitchStatus);
+
 
     if (response.ok) {
       const data = await response.json();
       console.log(data, "data from change publish status");
+      let responsepublihsed = data.published;
+      setPublishSwitchStatus(responsepublihsed);
     }
   }
 
@@ -597,21 +603,23 @@ export default function PageContentTab(props) {
                 <>
                   <div className="flex flex-row gap-5">
 
+                    {userrole !== 'contributor' && (
+                      <button className={`${publishchanges ? 'button' : 'button button-outline button-noborder'}`}
+                        style={{ width: '180px', paddingLeft: '2px', paddingRight: '2px' }} onClick={() => onPublish()}
+                      >
+                        <>
+                          {!ispublishing && (
+                            publishchanges ? 'Publish Changes' : 'Publish'
+                          )}
+                          {ispublishing && (
+                            <span> Published</span>
+                          )}
 
-                    <button className={`${publishchanges ? 'button' : 'button button-outline button-noborder'}`}
-                      style={{ width: '180px', paddingLeft: '2px', paddingRight: '2px' }} onClick={() => onPublish()}
-                    >
-                      <>
-                        {!ispublishing && (
-                          publishchanges ? 'Publish Changes' : 'Publish'
-                        )}
-                        {ispublishing && (
-                          <span> Published</span>
-                        )}
+                        </>
 
-                      </>
+                      </button>
+                    )}
 
-                    </button>
 
 
 
@@ -629,8 +637,13 @@ export default function PageContentTab(props) {
 
                       <label htmlFor="">Published: </label>
                       <label className="switch  ml-5">
-                        <input type="checkbox" onChange={() => changePublish()} checked={publishswitchstatus} disabled={pagetype === 'page' ? true : false} />
-                        <span className="slider round"></span>
+                        <input type="checkbox" onChange={() => changePublish()} checked={publishswitchstatus} disabled={
+                          pagetype === 'page' ? true : false || userrole === 'contributor' ? true : false
+
+                        }
+
+                        />
+                        <span className="slider round" style={{ cursor: userrole === 'contributor' ? 'not-allowed' : 'pointer' }}></span>
 
                       </label>
 
