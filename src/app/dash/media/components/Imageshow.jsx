@@ -27,6 +27,8 @@ export default function Imageshow(props) {
   const [alttext, setAlttext] = useState('');
   const [caption, setCaption] = useState('');
   const [imagedimensions, setImagedimensions] = useState({ width: 0, height: 0 });
+  const [saved, setSaved] = useState(false);
+  const [errorsaved, setErrorsaved] = useState(false);
   //get photo details from db 
   useEffect(() => {
     console.log(currentimagepathcleanwfilename, 'currentimagepathcleanwfilenamecurrentimagepathcleanwfilename')
@@ -57,6 +59,7 @@ export default function Imageshow(props) {
         setUploadedon(uploadedonv);
         setFilename(imagedata.filename);
         setFiletype(imagedata.mimetype);
+        console.log(imagedata.size, 'imagedatasizeimagedatasizeimagedatasize');
         setFilesize(imagedata.size);
         setAlttext(imagedata.alttext || '');
         setCaption(imagedata.caption || '');
@@ -95,6 +98,22 @@ export default function Imageshow(props) {
       }),
       credentials: 'include',
     });
+    if (response.ok) {
+      const data = await response.json();
+      console.log('Changes saved successfully:', data);
+      setSaved(true);
+      setErrorsaved(false);
+
+      setTimeout(() => {
+        setSaved(false);
+      }, 2000); // Reset saved state after 2 seconds
+
+      // Optionally, you can close the modal or show a success message
+    } else {
+      setErrorsaved(true);
+      setSaved(false);
+      console.error('Failed to save changes:', response.statusText);
+    }
   }
 
 
@@ -176,7 +195,10 @@ export default function Imageshow(props) {
             <input name="imgurl" value={`${process.env.NEXT_PUBLIC_API_URL}/public/media${currentimagepathcleanwfilename}`} onChange={() => donothing()} />
           </div>
           <div className="imageshowsubmitbuttondiv">
-            <button className="button button-primary " onClick={() => submitchanges()}>Save changes</button>
+            <button className="button button-primary " onClick={() => submitchanges()}>
+              {saved ? 'Changes saved!' : errorsaved ? 'Error saving changes' : 'Save changes'}
+
+            </button>
 
           </div>
         </div>
