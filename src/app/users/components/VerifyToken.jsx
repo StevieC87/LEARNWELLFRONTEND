@@ -25,7 +25,6 @@ export default function VerifyToken() {
 
 
   useEffect(() => {
-
     const currentUrl = pathname + '?' + searchParams.toString();
     if (lastUrl.current === currentUrl) return;
     else {
@@ -56,8 +55,14 @@ export default function VerifyToken() {
       }
       );
       let response = await fetchverifyjwttoken.json();
-
-      if (fetchverifyjwttoken.ok) {
+      if (!fetchverifyjwttoken.ok) {
+        console.log('token is invalid or expired');
+        if (response.message === "Unauthorizedaaa") {
+          //redirect to login 
+          router.push('/users/login'); // Redirect to login page
+        }
+      }
+      else if (fetchverifyjwttoken.ok) {
         //  alert('fetch worked');
         // console.log('ok fetch worked')
         // userrole = response.role;
@@ -94,12 +99,11 @@ export default function VerifyToken() {
           //  console.log('Token expired, redirecting to login');
         }
 
-      }
-      else if (!fetchverifyjwttoken.ok) {
-        console.log('token is invalid or expired');
-
 
       }
+
+
+
     }
     verifyToken();
 
