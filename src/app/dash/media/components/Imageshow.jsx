@@ -169,7 +169,7 @@ export default function Imageshow(props) {
               <div><span className="imageshowfiletailstlistlabel">Uploaded on:</span><span>{uploadedon}</span></div>
               <div><span className="imageshowfiletailstlistlabel">Filename:</span> <span>{filename}</span></div>
               <div><span className="imageshowfiletailstlistlabel">Filetype:</span> <span>{filetype}</span></div>
-              <div><span className="imageshowfiletailstlistlabel">Filesize:</span> <span>{filesize ? `${(filesize / 1024).toFixed(2)} KB` : 'N/A'}</span></div>
+              <div><span className="imageshowfiletailstlistlabel">Filesize:</span> <span>{/* {filesize ? `${(filesize / 1024).toFixed(2)} KB` : 'N/A'} */}{filesize}</span></div>
 
 
 

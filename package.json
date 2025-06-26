@@ -20,7 +20,7 @@
     "next": "15.3.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-hook-form": "^7.56.4",
+    "react-hook-form": "^7.58.1",
     "react-redux": "^9.2.0",
     "svgmap": "^2.12.2"
   },
