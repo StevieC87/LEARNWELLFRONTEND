@@ -16,16 +16,20 @@ export default function Summernote(props) {
   const { key, name, value, id, locale, schema, type } = props;
   console.log('Summernote props:', props);
   const dispatch = useDispatch();
-
+  console.log(value, "valueinSummernoteEditorSummernoteEditor");
   const editorRef = useRef(null);
   const [content, setContent] = useState('');
 
   useEffect(() => {
+    if (!value && value.length == 0) {
+      return
+    }
     console.log('Summernote exists?', typeof $.fn.summernote);
 
     if (typeof window !== 'undefined') {
       window.$ = window.jQuery = $;
     }
+
 
     $(editorRef.current).summernote({
       height: 300,
@@ -50,13 +54,22 @@ export default function Summernote(props) {
     return () => {
       $(editorRef.current).summernote('destroy');
     };
-  }, []);
+
+  }, [value]);
 
   const handleChange = (e) => {
     alert('123123')
   }
 
-  return <textarea ref={editorRef} defaultValue={value} />;
+  return (
+    <>
+      {/*  {value && value.length > 0 ? ( */}
+      <textarea ref={editorRef} defaultValue={value.length > 0 ? value : ''} />
+
+
+
+    </>
+  )
 
 
 }
