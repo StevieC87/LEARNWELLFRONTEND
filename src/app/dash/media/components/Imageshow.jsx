@@ -39,11 +39,10 @@ export default function Imageshow(props) {
         body: JSON.stringify({
           filepath: currentimagepathcleanwfilename
         }),
+        credentials: 'include',
       });
       if (response.ok) {
         const data = await response.json();
-
-
         // Assuming data.imagedata contains the image details
         const imagedata = data.imagedata;
         // You can now use imagedata to display image details
