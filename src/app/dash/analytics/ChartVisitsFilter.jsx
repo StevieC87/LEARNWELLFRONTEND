@@ -92,7 +92,7 @@ export default function ChartVisitsFilter(props) {
   }, [dataonly]);
 
   return (
-    <div className="card">
+    <div className="card flex flex-row items-center justify-center">
       <canvas ref={canvasRef} width={100} height={50} className="linechartcanvas1" />
     </div>
   );

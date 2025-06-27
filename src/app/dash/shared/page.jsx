@@ -10,7 +10,13 @@ export default function Shared() {
     let datais;
     const fetchSharedSchemas = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/shared/getschemas`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/shared/getschemas`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include', // This is important for cookies to be sent
+        });
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }

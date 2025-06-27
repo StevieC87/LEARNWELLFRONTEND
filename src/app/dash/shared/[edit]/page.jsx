@@ -51,7 +51,15 @@ export default function EditSharedComponent() {
       }
 
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/shared/getschemafields?schema=${schema}&locale=${locale}&sharedcomponentid=${sharedcomponentid}`)
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/shared/getschemafields?schema=${schema}&locale=${locale}&sharedcomponentid=${sharedcomponentid}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include', // This is important for cookies to be sent
+          }
+        )
 
         if (!response.ok) {
           throw new Error('Network response was not ok')
