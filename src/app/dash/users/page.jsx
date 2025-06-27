@@ -5,6 +5,8 @@ import Caret from '@/app/dash/pages/components/caret';
 import Deleteuser from './Deleteuser'
 import { useSelector } from 'react-redux';
 import ModalInvite from './ModalInvite';
+import Link from 'next/link';
+
 export default function UsersPage() {
 
   const [pagenumber, setPageNumber] = useState(1);
@@ -17,6 +19,7 @@ export default function UsersPage() {
 
   const [searchterm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
+
   const userid = useSelector((state) => state.DashSlice.userid); // Get the user ID from Redux store
 
   useEffect(() => {
@@ -163,7 +166,7 @@ export default function UsersPage() {
             {/* THIS IS TO SHOW THE LIST OF EXISTING PAGES */}
             {filteredusers.length > 0 && filteredusers.map((user, index) => (
               <tr key={index} className="hover:bg-gray-100">
-                <td className="" style={{}}>{user.role}</td>
+                <Link href={`/dash/users/profile?userid=${user._id}`}><td className="" >{user.role} </td></Link>
                 <td className="">{user.email}</td>
 
                 <td className="" style={{ textAlign: 'center' }}>{user.username}</td>

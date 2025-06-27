@@ -19,7 +19,7 @@ export default function ResetPassword() {
   const token = searchParams.get('token');
   const [passnotmatch, setpassnotmatch] = useState(false);
   const [errormessage, setErrormessage] = useState(null);
-  const [successmessage, setSuccessmessage] = useState('Your password has been reset successfully. Redirecting to login page...');
+  const [successmessage, setSuccessmessage] = useState('');
   //redirect
 
 
@@ -46,7 +46,7 @@ export default function ResetPassword() {
 
 
     const data = {
-      email: 'thestevieme@gmail.com',
+      email: email,
       password: newpasswordref.current.value,
       token: token,
       //passwordconfirm: newpasswordconfirmref.current.value,
@@ -64,6 +64,7 @@ export default function ResetPassword() {
     });
     const result = await response.json();
     if (result.success) {
+
       console.log('New password request sent successfully');
       setSuccessmessage('Your password has been reset successfully. Redirecting to login page...');
       //timeout
@@ -106,7 +107,9 @@ export default function ResetPassword() {
               {successmessage.length > 0 && <p style={{ color: 'green', marginBottom: '5px' }} className="text-base">{successmessage}</p>}
               {passnotmatch && <p style={{ color: 'red', marginBottom: '5px' }}>{errormessage}</p>}
             </div>
-            <button onClick={onSubmit} type="submit">Reset Password</button>
+            <div className="flex flex-row justify-center">
+              <button className="button button-primary mt-8 " onClick={(e) => onSubmit(e)} type="submit">Reset Password</button>
+            </div>
           </div>
         </div>
       </div>
