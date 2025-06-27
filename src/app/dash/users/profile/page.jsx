@@ -122,7 +122,7 @@ export default function UserProfile() {
     <>
 
 
-      <form onSubmit={handleSubmit(onSubmit)} className="userprofileform">
+      <form onSubmit={handleSubmit(onSubmit)} className="userprofileform card">
         <div className="flex flex-row justify-between items-center align-center">
           <h1 className="pb-10"> User profile</h1>
           <button className="button button-primary " type="submit">
