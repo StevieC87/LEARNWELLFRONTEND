@@ -45,6 +45,11 @@ export default function Settings() {
 
   const [publicuserregistration, setPublicUserRegistration] = useState(false); // This will hold the public user registration setting
 
+  const [saved, setSaved] = useState(false); // This will hold the saved state
+  const [errorsave, setErrorSave] = useState(''); // This will hold the error save state
+
+
+
   // each language
   //example: { 
   // en: 'en-US',
@@ -135,6 +140,11 @@ export default function Settings() {
       console.error("Failed to save settings");
       const data = await response.json();
       console.error(data);
+      setErrorSave('Failed to save settings. Please try again.'); // Set the error save state
+      setSaved(false); // Set the saved state to false
+      setTimeout(() => {
+        setErrorSave(''); // Reset error save state after 3 seconds
+      }, 3000);
       return;
     }
     const data = await response.json();
@@ -143,6 +153,11 @@ export default function Settings() {
     dispatch(setSelectedLanguage(defaultLanguage)); // Dispatch the action to set selected language
     dispatch(setMultilingualSharedId(multilingualvalue ? 'multilingual' : 'monolingual')); // Dispatch the action to set multilingual shared ID
     dispatch(setPageExistsThisLanguage(selectedLanguages.includes(defaultLanguage))); // Dispatch the action to set page exists this language
+    setSaved(true); // Set the saved state to true
+    setTimeout(() => {
+      setSaved(false); // Reset saved state after 3 seconds
+    }, 3000);
+    setErrorSave(''); // Reset error save state
 
   };
 
@@ -232,7 +247,10 @@ export default function Settings() {
     <>
       <div className="titlebuttons">
         <h1 className="">Settings</h1>
-        <button type="button" className="button button-primary" onClick={() => onSave()}>Save Settings</button>
+        <button type="button" className="button button-primary" onClick={() => onSave()}>
+          {saved ? 'Saved!' : 'Save Settings'}
+          {errorsave && <span className="text-red-500">{errorsave}</span>}
+        </button>
       </div>
       <div className="card mt-10">
         <form >

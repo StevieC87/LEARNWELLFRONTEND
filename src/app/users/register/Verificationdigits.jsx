@@ -640,6 +640,7 @@ export default function VerificationDigits({ email }) {
           margin: 5px;
           border-radius: 5px;
           border: 1px solid #ccc;
+          background-color: white;
         
         }
     `}</style>
