@@ -14,59 +14,59 @@ import { setHasChanges } from '@/redux/slices/PagesSlice.js'; // Import the acti
 
 export default function Summernote(props) {
   const { key, name, value, id, locale, schema, type } = props;
+  const initialized = useRef(false);
+
   console.log('Summernote props:', props);
   const dispatch = useDispatch();
   console.log(value, "valueinSummernoteEditorSummernoteEditor");
   const editorRef = useRef(null);
   const [content, setContent] = useState('');
+  const [componentloaded, setComponentLoaded] = useState(false);
+
 
   useEffect(() => {
-    if (!value && value.length == 0) {
-      return
-    }
-    console.log('Summernote exists?', typeof $.fn.summernote);
+    if (!editorRef.current || initialized.current) return;
 
     if (typeof window !== 'undefined') {
       window.$ = window.jQuery = $;
     }
-
 
     $(editorRef.current).summernote({
       height: 300,
       container: 'body',
       callbacks: {
         onChange: function (contents) {
-          setContent(contents); // HTML string
+          setContent(contents);
           dispatch(updateField({
             name: 'wysi',
             content: contents,
-            id: id, // replace with actual id if needed
-            locale: locale, // replace with actual locale if needed
-            schema: schema, // replace with actual schema if needed
-            type: 'wysi' // or whatever type you need
+            id,
+            locale,
+            schema,
+            type: 'wysi'
           }));
-          dispatch(setHasChanges(true))
-          console.log('Content changed:', contents);
-          console.log(contents.length, 'datacontent.length');      // logs character count
+          dispatch(setHasChanges(true));
         }
       }
     });
+
+    // Set initial content (even if it's empty)
+    $(editorRef.current).summernote('code', value || '');
+    initialized.current = true;
+
     return () => {
       $(editorRef.current).summernote('destroy');
+      initialized.current = false;
     };
+  }, [editorRef.current]); // one-time mount
 
-  }, [value]);
-
-  const handleChange = (e) => {
-    alert('123123')
-  }
 
   return (
     <>
       {/*  {value && value.length > 0 ? ( */}
-      <textarea ref={editorRef} defaultValue={value.length > 0 ? value : ''} />
+      <textarea ref={editorRef} defaultValue={value} />
 
-
+      {/* defaultValue={value.length > 0 ? value : '' */}
 
     </>
   )
