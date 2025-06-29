@@ -26,6 +26,8 @@ export default function Summernote(props) {
 
   useEffect(() => {
     if (!editorRef.current || initialized.current) return;
+    //Ensures the effect does not run until the DOM element (<textarea>) is attached.
+    //ensures it only runs once (by checking and setting initialized.current).
 
     if (typeof window !== 'undefined') {
       window.$ = window.jQuery = $;
@@ -53,6 +55,7 @@ export default function Summernote(props) {
     // Set initial content (even if it's empty)
     $(editorRef.current).summernote('code', value || '');
     initialized.current = true;
+
 
     return () => {
       $(editorRef.current).summernote('destroy');

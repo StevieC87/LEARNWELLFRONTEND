@@ -82,9 +82,13 @@ export default function ModalInvite(props) {
             <label htmlFor="role">Role</label>
             <select name="role" id="role" onChange={(e) => setRoleValue(e.target.value)} value={rolevalue}>
               <option value="" disabled>Select a role</option>
+              <option value="superadmin">Superadmin</option>
               <option value="admin">Admin</option>
               <option value="editor">Editor</option>
-              <option value="viewer">Author</option>
+              <option value="author">Author</option>
+              <option value="contributor">Contributor</option>
+              <option value="registered">Registered</option>
+
             </select>
             <div className="flex flex-row justify-end">
               <button type="submit" onClick={(e) => inviteusersend(e)} className={`button button-primary ${invitesent ? 'bg-green-500' : ''} `}>

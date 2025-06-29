@@ -1,8 +1,9 @@
-
+'use client';
 import './loginregister.css'
 import { useForm } from 'react-hook-form';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSelector } from 'react-redux'; // Import useSelector to access Redux state
 import Image from 'next/image'; // Import Image from next/image
 import customSessionStorage from '@/utilities/customSessionStorage';
 import GoogleLoginButton from './GoogleLoginbutton'; // Import GoogleLoginButton component
@@ -15,7 +16,7 @@ export default function Login({ showForgotCallback }) {
   const [message, setMessage] = useState(null); // State for UI messages
   const showForgotPassword = false; // State to control the visibility of the forgot password component
 
-
+  const enableuserregistration = useSelector((state) => state.DashSlice.enableuserregistration); // Access the enableuserregistration state from Redux
   //SET CONTEXT STATE TO EMAIL ON CHANGE
   useEffect(() => {
 
@@ -121,16 +122,21 @@ export default function Login({ showForgotCallback }) {
             <div className="flex items-center justify-between">
               <button
                 type="submit"
-                className="button button-primary button-wide"
+                className="button butt/*  */on-primary button-wide"
               >
                 Login
               </button>
             </div>
           </form>
+          {/*         {enableuserregistration && ( */}
           <div><GoogleLoginButton /></div>
+          {/*     )}
+          {enableuserregistration} */ }
           <div className="pt-8 text-blue-500 text-xl text-right font-normal flex flex-row justify-between">
             <button onClick={() => showForgotCallback(true)} className="text-blue-500 hover:text-blue-700">Forgot Password</button>
+            {/*   {enableuserregistration && ( */}
             <button onClick={() => router.push('./register')} className="text-blue-500 hover:text-blue-700">Register</button>
+            {/*     )} */}
           </div>
 
         </div>

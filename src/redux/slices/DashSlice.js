@@ -15,6 +15,7 @@ const DashSlice = createSlice({
     },
     userrole: "", // This is used to check if a page exists in the userrole
     userid: "",
+    enableuserregistration: false, // This is used to check if user registration is enabled
   },
 
   reducers: {
@@ -36,6 +37,9 @@ const DashSlice = createSlice({
     setUserId(state, action) {
       state.userid = action.payload; // This will set the user ID
     },
+    setEnableUserRegistration(state, action) {
+      state.enableuserregistration = action.payload; // This will set the user registration setting
+    },
   },
 });
 
@@ -46,6 +50,7 @@ export const {
   setUserRole,
   setSettings,
   setUserId,
+  setEnableUserRegistration,
 } = DashSlice.actions;
 
 export default DashSlice.reducer;

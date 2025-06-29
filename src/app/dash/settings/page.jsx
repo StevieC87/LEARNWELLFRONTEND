@@ -5,12 +5,19 @@ import './settings.css'
 //redirect refrech roter
 import { useRouter } from 'next/navigation';
 import { set } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import {
+  setEnableUserRegistration, setSelectedLanguage,
+  setMultilingualSharedId,
+  setPageExistsThisLanguage
+} from '@/redux/slices/DashSlice'; // Import the action to set settings
 //! KEEP IT SIMPLE, IM STARTING WITHA NEW BOLERPLATE EVERYT IME, 
 //!I CAN ADAPT THE CODE EASILY TO ADD NEW LANGUAGES 
 //! WE NEED THIS FOR: IN ORDER TO SET LANGUAGES PROBABLY IN THE BEGINNING, DECIDE IF MULTILINGAUL OR NOT, AND SET LANGUAGES FOR LATER 
 
 //DEFAULT LANGUAGE 
 export default function Settings() {
+  const dispatch = useDispatch(); // Initialize the Redux dispatch function
   const router = useRouter();
 
   const [multilingualvalue, setMultilingualValue] = useState(false);
@@ -27,8 +34,6 @@ export default function Settings() {
     //change from previous state based on 
     setMultilingualValue(prev => !prev);
 
-    //setMultilingualValue(e.target.checked);
-    // console.log("Multilingual value changed to:", e.target.checked);
   };
   const [selectedLanguages, setSelectedLanguages] = useState([]);
   const [additionalanguagetoadd, setAdditionalLanguageToAdd] = useState('');
@@ -37,6 +42,8 @@ export default function Settings() {
   const [langlocales, setLangLocales] = useState({}); // This will hold the locales for 
 
   const [defaultlanglocalemonol, setDefaultLangLocaleMonol] = useState('')
+
+  const [publicuserregistration, setPublicUserRegistration] = useState(false); // This will hold the public user registration setting
 
   // each language
   //example: { 
@@ -79,6 +86,7 @@ export default function Settings() {
         setSelectedLanguages(data.languages); // or data.selectedLanguages if 
         setLangLocales(data.langlocales)
         setDefaultLangLocaleMonol(data.defaultlanglocalemonol || ''); // Set the default language locale for monolingual mode
+        setPublicUserRegistration(data.publicuserregistration || false); // Set the public user registration setting
 
         /*   data.languages.map((lang) => {
             console.log('langlocaleslanglocaleslanglocales', lang);
@@ -100,9 +108,6 @@ export default function Settings() {
 
   }, [addedlanguage]);
 
-  useEffect(() => {
-    console.log(langlocales, 'langlocaleslanglocaleslanglocales');
-  }, [langlocales])
 
   const onSave = async () => {
     console.log(selectedLanguages, "selectedLanguages");
@@ -121,6 +126,7 @@ export default function Settings() {
         languages: selectedLanguages,
         langlocales: langlocales, // Send the locales for each language
         defaultlanglocalemonol: defaultlanglocalemonol, // Send the default language locale for monolingual mode
+        publicuserregistration: publicuserregistration, // Send the public user registration setting
 
       }),
       credentials: 'include', // this is what sends/receives cookie
@@ -133,7 +139,10 @@ export default function Settings() {
     }
     const data = await response.json();
     console.log("Settings saved successfully:", data);
-
+    dispatch(setEnableUserRegistration(publicuserregistration)); // Dispatch the action to set user registration setting
+    dispatch(setSelectedLanguage(defaultLanguage)); // Dispatch the action to set selected language
+    dispatch(setMultilingualSharedId(multilingualvalue ? 'multilingual' : 'monolingual')); // Dispatch the action to set multilingual shared ID
+    dispatch(setPageExistsThisLanguage(selectedLanguages.includes(defaultLanguage))); // Dispatch the action to set page exists this language
 
   };
 
@@ -217,6 +226,8 @@ export default function Settings() {
   const addDefaultLangLocale = (e) => {
     setDefaultLangLocaleMonol(e.target.value);
   }
+
+
   return (
     <>
       <div className="titlebuttons">
@@ -316,6 +327,14 @@ export default function Settings() {
 
           </div>
         )}
+
+        <div className="switchbuttonmulti flex flex-row items-center">
+          <label htmlFor="">Enable Public User Registration: </label>
+          <label className="switch  ml-5">
+            <input type="checkbox" onChange={() => setPublicUserRegistration(prevValue => !prevValue)} checked={publicuserregistration} />
+            <span className="slider round"></span>
+          </label>
+        </div>
       </div >
 
 
