@@ -14,50 +14,38 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
 
   const [fieldValue, setFieldValue] = useState('');
 
+  //this for the sahred
   let fieldvalue1 = useSelector(
     (state) => state.SharedSlice.fields[name]?.content || '')
+  let fieldvalueuserprofile = useSelector(
+    (state) => state.PagesSlice.fields[name]?.content || '')
 
   useEffect(() => {
-
     if (source === 'shared') {
       setFieldValue(fieldvalue1);
-    } else {
-      setFieldValue(value)
+    }
+    else if (source === 'userprofile') {
+      setFieldValue(fieldvalueuserprofile);
+    }
+    else {
+      setFieldValue(value);
+      console.log(value, "value3333333333");
     }
 
-  }, [value, type, fieldvalue1]);
+  }, [value, type, fieldvalue1, fieldvalueuserprofile]);
 
 
   const dispatch = useDispatch();
   const slugduplicatewarning = useSelector((state) => state.PagesSlice.slugduplicatewarning);
-  // const fieldData1 = useSelector((state) => state.PagesSlice.fields[name]);
 
-  //console.log(fielddata, "fielddata33333333");
-  // onChange(e, name,id)}
+
   const onChange = (e, arrayfield, arrayfieldparent, indexis, subfield) => {
-    //alert(arrayfield);
 
-    /*     alert(arrayfield)
-        if (arrayfield) {
-          alert('arrayfield changed');
-        } */
     const newValue = e.target.value;
+    console.log(newValue, "newValue3333333333");
 
-    /*         name={name}
-            id={fielddata.id}
-            locale={fielddata.locale}
-            schema={fielddata.schema}
-            type={type}
-            value={fieldValue}
-            placeholder={placeholder}
-            required={required || false} */
-    //! ISSUE IS: BECAUSE I ADDED NAME PARAMETER -> IT DOEST GET IT FROM THE PAGE STATE, ONYL FROM FUNCITON - which i dont pass 
 
     if (source === 'shared') {
-      // alert(newValue)
-      //
-
-
       dispatch(updateSharedFields({
         name: name,
         content: newValue,
@@ -68,24 +56,15 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
       }));
     }
     else {
-      /*  if (arrayfield === 'true') {
-         //   alert(subfield);
-         dispatch(updateArrayField({
-           parentField: arrayfieldparent,
-           index: indexis,
-   
-           content: newValue,
-         }));
-       }
-       else {  } */
+      console.log(fielddata, 'fieldata11111111111111')
       dispatch(updateField({
         name: name,
         content: newValue,
-        id: fielddata.id,
-        locale: fielddata.locale,
-        schema: fielddata.schema,
-        type: type,
-        placeholder: placeholder,
+        id: fielddata.id || '',
+        locale: fielddata.locale || '',
+        schema: fielddata.schema || '',
+        type: type || 'text',
+        placeholder: placeholder || '',
         required: required || false,
         fields: fields || null,
       }));
@@ -106,8 +85,6 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
        schema: fielddata.schema,
      })); */
   }
-
-
 
 
   switch (type) {
@@ -163,7 +140,7 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
           <SummernoteField
             /*  key={name} */
             name={name}
-            id={fielddata.id}
+            id={fielddata.id || ''}
             locale={fielddata.locale}
             schema={fielddata.schema}
             type={type}
@@ -229,7 +206,7 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
           <label htmlFor={name} className="block text-sm font-medium text-gray-700">{label}</label>
           <MediaButton
             name={name}
-            id={fielddata.id}
+            id={fielddata.id || ''}
             locale={fielddata.locale}
             schema={fielddata.schema}
             type={type}

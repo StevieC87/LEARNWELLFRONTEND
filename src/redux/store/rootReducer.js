@@ -6,6 +6,7 @@ import DashSlice from "../slices/DashSlice";
 import JSONLDSlice from "../slices/JSONLDSlice";
 import UISlice from "../slices/UISlice";
 import SharedSlice from "../slices/SharedSlice";
+import SpecialSlice from "../slices/SpecialSlice";
 
 const rootReducer = combineReducers({
   SlideMenuSlice: SlideMenuSlice,
@@ -14,7 +15,7 @@ const rootReducer = combineReducers({
   JSONLDSlice: JSONLDSlice,
   UISlice: UISlice,
   SharedSlice: SharedSlice,
-
+  SpecialSlice: SpecialSlice,
   /* UtilsSlice: UtilsSlice, */
 });
 

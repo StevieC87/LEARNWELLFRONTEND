@@ -128,15 +128,16 @@ export default function Login({ showForgotCallback }) {
               </button>
             </div>
           </form>
-          {/*         {enableuserregistration && ( */}
-          <div><GoogleLoginButton /></div>
-          {/*     )}
-          {enableuserregistration} */ }
+          {enableuserregistration && (
+            <div><GoogleLoginButton /></div>
+          )}
+
           <div className="pt-8 text-blue-500 text-xl text-right font-normal flex flex-row justify-between">
             <button onClick={() => showForgotCallback(true)} className="text-blue-500 hover:text-blue-700">Forgot Password</button>
-            {/*   {enableuserregistration && ( */}
-            <button onClick={() => router.push('./register')} className="text-blue-500 hover:text-blue-700">Register</button>
-            {/*     )} */}
+            {enableuserregistration && (
+              <button onClick={() => router.push('./register')} className="text-blue-500 hover:text-blue-700">Register</button>
+            )}
+
           </div>
 
         </div>
