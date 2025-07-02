@@ -52,6 +52,7 @@ export default function Pages() {
   const [trashedview, setTrashedView] = useState(false); // to store if trashed view is active
 
   const [filtertypeS, setFilterTypeS] = useState(''); // to store filter type
+  const [filterLang, setFilterLang] = useState(''); // to store filter language
 
   //THIS IS TO GET OUT OF THE TRASH VIEW if e.g. clicks on 'pages' which in 'posts' and in trash view 
   useEffect(() => {
@@ -81,9 +82,9 @@ export default function Pages() {
          setPageNumber(1); // Reset to first page if total pages are less than or equal to 10
        } */
       if (pagetype === 'post') {
-        url = `http://localhost:3000/pagesposts/getpagespostslist?paginationlimit=${paginationlimit}&pagenumber=${pagenumber}&columnsorted=${columnsorted}&sortdirection=${sortdirection}&pagetype=${pagetype}&searchterm=${searchterm}&trashedview=${trashedview}&filtertype=${filtertypeS}`;
+        url = `http://localhost:3000/pagesposts/getpagespostslist?paginationlimit=${paginationlimit}&pagenumber=${pagenumber}&columnsorted=${columnsorted}&sortdirection=${sortdirection}&pagetype=${pagetype}&searchterm=${searchterm}&trashedview=${trashedview}&filtertype=${filtertypeS}&filterlang=${filterLang}`;
       } else if (pagetype === 'page') {
-        url = `http://localhost:3000/pagesposts/getpagespostslist?paginationlimit=${paginationlimit}&pagenumber=${pagenumber}&columnsorted=${columnsorted}&sortdirection=${sortdirection}&pagetype=${pagetype}&searchterm=${searchterm}&trashedview=${trashedview}&filtertype=${filtertypeS}`;
+        url = `http://localhost:3000/pagesposts/getpagespostslist?paginationlimit=${paginationlimit}&pagenumber=${pagenumber}&columnsorted=${columnsorted}&sortdirection=${sortdirection}&pagetype=${pagetype}&searchterm=${searchterm}&trashedview=${trashedview}&filtertype=${filtertypeS}&filterlang=${filterLang}`;
       }
       const response = await fetch(url, {
         method: "GET",
@@ -124,7 +125,7 @@ export default function Pages() {
 
 
     //setPageLinkUrl
-  }, [userrole, pagetype, refreshlist, searchterm, trashedview, filtertypeS]);
+  }, [userrole, pagetype, refreshlist, searchterm, trashedview, filtertypeS, filterLang]);
 
   useEffect(() => {
     setFilteredPages(pageslist);
@@ -169,11 +170,6 @@ export default function Pages() {
 
   }
 
-  const filtertype = (selectedSchema) => {
-
-    setFilterTypeS(selectedSchema);
-  }
-
   const restorepage = async (pageid) => {
     const response = await fetch(`http://localhost:3000/pagesposts/restorepage/${pageid}?pagetype=${pagetype}`, {
       method: 'POST',
@@ -190,7 +186,6 @@ export default function Pages() {
     console.log('Page restored:', data);
     setRefreshList((prev) => prev + 1); // Refresh the list after restoring
   }
-
 
   return (
     <div className="pageslistdiv">
@@ -248,7 +243,10 @@ export default function Pages() {
             </select>
           </div>
           <div id="filtertypediv">
-            <select name="" id="" onChange={(e) => filtertype(e.target.value)}>
+            <select name="" id="" onChange={(e) => {
+              setFilterTypeS(e.target.value);
+            }
+            }>
               <option value='all'>All Types</option>
               {pagetype === "post" && multischemas.length > 0 && multischemas.map((schema) => (
                 <option key={schema} value={schema} >{schema}</option>
@@ -259,8 +257,7 @@ export default function Pages() {
             {multilingual && (
               <select name="languagefilter" id="languagefilter"
                 onChange={(e) => {
-                  const selectedLanguage = e.target.value;
-                  //  setFilteredPages(pageslist.filter(page => page.locale === selectedLanguage));
+                  setFilterLang(e.target.value);
                 }}
               >
                 <option value="all">All Languages</option>
