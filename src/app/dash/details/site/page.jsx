@@ -29,6 +29,9 @@ export default function WebsiteDetailsForm() {
   const defaultogimage = useSelector((state) => state.UISlice.defaultogimage)
   const logo = useSelector((state) => state.UISlice.logo)
 
+  const [saved, setSaved] = useState(false);
+  const [errorsave, setErrorSave] = useState(false);
+
   useEffect(() => {
     setDefaultImageFile(defaultogimage.imagepath || "");
     setDefaultogimagethumb(defaultogimage.thumbnail || "");
@@ -93,14 +96,17 @@ export default function WebsiteDetailsForm() {
     });
 
     if (response.ok) {
-      /*   setShowSuccess(true);
-        setShowError(false);
-        setTimeout(() => setShowSuccess(false), 3000);
-      } else {
-        setShowError(true);
-        setShowSuccess(false);
-        setTimeout(() => setShowError(false), 3000); */
+      setSaved(true);
+      setErrorSave(false);
+
+      setTimeout(() => setSaved(false), 3000);
     }
+    else {
+      setSaved(false);
+      setErrorSave(true);
+    }
+
+
 
   };
 
@@ -115,7 +121,10 @@ export default function WebsiteDetailsForm() {
             <span>for default language {defaultlanguage} </span>
           </div>
 
-          <button className="button button-primary " type="submit">Save SEO Settings</button>
+          <button className="button button-primary " type="submit">
+            {saved ? 'Saved!' : 'Save SEO Settings'}
+            {errorsave && <span className="text-red-500">Failed to save. Please try again.</span>}
+          </button>
         </div>
         <div className="flex justify-end">
 
