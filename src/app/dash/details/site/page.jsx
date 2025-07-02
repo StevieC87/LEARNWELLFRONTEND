@@ -1,14 +1,11 @@
 "use client";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from 'react-redux';
-import MediaButtonogimage from "./MediaButtonogimage";
-import MediaButtonlogo from "./MediaButtonlogo";
-import { setDefaultOGImage, setLogo } from '@/redux/slices/UISlice';
+import { useSelector } from 'react-redux';
+
 export default function WebsiteDetailsForm() {
-  const dispatch = useDispatch();
   const defaultlanguage = useSelector((state) => state.DashSlice.settings.defaultlanguage);
-  const { register, handleSubmit, reset, watch } = useForm({
+  const { register, handleSubmit, reset } = useForm({
     defaultValues: {
       url: "",
       brandname: "",
@@ -20,25 +17,6 @@ export default function WebsiteDetailsForm() {
 
   const [logoFile, setLogoFile] = useState(null);
   const [defaultImageFile, setDefaultImageFile] = useState(null);
-  const [defaultogimagethumb, setDefaultogimagethumb] = useState();
-
-  const [defaultlogothumbnail, setDefaultlogothumbnail] = useState();
-
-  const callingfrom = useSelector((state) => state.UISlice.callinsgfrom);
-
-  const defaultogimage = useSelector((state) => state.UISlice.defaultogimage)
-  const logo = useSelector((state) => state.UISlice.logo)
-
-  const [saved, setSaved] = useState(false);
-  const [errorsave, setErrorSave] = useState(false);
-
-  useEffect(() => {
-    setDefaultImageFile(defaultogimage.imagepath || "");
-    setDefaultogimagethumb(defaultogimage.thumbnail || "");
-    setDefaultlogothumbnail(logo.thumbnail || "");
-    setLogoFile(logo.imagepath || "");
-  }, [defaultogimage, logo])
-
 
   useEffect(() => {
     const fetchsitedetails = async () => {
@@ -47,9 +25,6 @@ export default function WebsiteDetailsForm() {
           method: "GET",
           credentials: 'include', // Include cookies in the request
         });
-        if (!response.ok) {
-          console.error("Failed to fetch site details");
-        }
         if (response.ok) {
           const data = await response.json();
           console.log("Fetched site details:", data);
@@ -60,12 +35,10 @@ export default function WebsiteDetailsForm() {
             defaultImage: data.defaultImage || "",
             logo: data.logo || "",
           });
-
           setDefaultImageFile(data.defaultImage || "");
           setLogoFile(data.logo || "");
-          dispatch(setDefaultOGImage({ imagepath: data.defaultImage || "" }));
-          dispatch(setLogo({ imagepath: data.logo || "" }));
-
+        } else {
+          console.error("Failed to fetch site details");
         }
       } catch (error) {
         console.error("Error fetching site details:", error);
@@ -82,11 +55,7 @@ export default function WebsiteDetailsForm() {
     // formData.append("description", data.description);
     //append default langauge 
     formData.append("defaultlanguage", defaultlanguage);
-    if (defaultImageFile) {
-      console.log('thereisdefaultogimagewhilesaving')
-      console.log(defaultImageFile, "defaultImageFile");
-      formData.append("defaultImage", defaultImageFile);
-    }
+    if (defaultImageFile) formData.append("defaultImage", defaultImageFile);
     if (logoFile) formData.append("logo", logoFile);
 
     const response = await fetch("http://localhost:3000/seo/sitedetails", {
@@ -96,20 +65,17 @@ export default function WebsiteDetailsForm() {
     });
 
     if (response.ok) {
-      setSaved(true);
-      setErrorSave(false);
-
-      setTimeout(() => setSaved(false), 3000);
-    }
-    else {
-      setSaved(false);
-      setErrorSave(true);
-    }
 
 
-
-  };
-
+    };
+  }
+  /*   setShowSuccess(true);
+       setShowError(false);
+       setTimeout(() => setShowSuccess(false), 3000);
+     } else {
+       setShowError(true);
+       setShowSuccess(false);
+       setTimeout(() => setShowError(false), 3000); */
   return (
     <>
 
@@ -121,10 +87,7 @@ export default function WebsiteDetailsForm() {
             <span>for default language {defaultlanguage} </span>
           </div>
 
-          <button className="button button-primary " type="submit">
-            {saved ? 'Saved!' : 'Save SEO Settings'}
-            {errorsave && <span className="text-red-500">Failed to save. Please try again.</span>}
-          </button>
+          <button className="button button-primary " type="submit">Save SEO Settings</button>
         </div>
         <div className="flex justify-end">
 
@@ -135,7 +98,7 @@ export default function WebsiteDetailsForm() {
             <span className="labeltip1"> The main address of your website.</span>
             <p className="labeltip2"> Tip: Use a valid URL (e.g., https://example.com).</p>
           </label>
-          <input {...register("url")} value={watch("url") || ""} />
+          <input {...register("url")} />
         </div>
         <div className="formlabelvertical">
           <label>
@@ -143,29 +106,32 @@ export default function WebsiteDetailsForm() {
             <span className="labeltip1"> The public name of your website.</span>
             <p className="labeltip2"> Tip: Keep it short and recognizable.</p>
           </label>
-          <input {...register("brandname")} value={watch("brandname") || ""} />
+          <input {...register("brandname")} />
         </div>
-
+        {/*  <div className="formlabelvertical">
+          <label>
+            Website Description
+            <span className="labeltip1"> Appears in search engines and link previews.</span>
+            <p className="labeltip2"> Tip: Limit to 155–160 characters.</p>
+          </label>
+          <textarea {...register("description")} />
+        </div> */}
         <div className="formlabelvertical">
           <label>
             Default OG Image
             <span className="labeltip1"> Used as the default preview image when social sharing.</span>
             <p className="labeltip2"> Tip: Use a clear, high-quality image wiht dimensions: 1600 x </p>
           </label>
-
           <img src={`${process.env.NEXT_PUBLIC_API_URL}/public/media/${defaultImageFile}`} alt="Current Default Image" width="200" />
 
-          <MediaButtonogimage
-            name="defaultogimage"
-            id="defaultogimage"
-            type="frontendfield"
-          //   sendbackimagecallback={image => sendbackimagecallback(image, 'defaultogimage')}
-          //  sendbackimagecallback={sendbackimagecallback}
+          <input
+            type="file"
+            accept="image/*"
+            onChange={e => setDefaultImageFile(e.target.files[0])}
           />
           {/*   {defaultImageFile && (
-            <p>Selected Default Image: {defaultImageFile}. Leave file input empty to keep</p>
+            <p>Selected Default Image: {defaultImageFile.name}. Leave file input empty to keep</p>
           )} */}
-
         </div>
         <div className="formlabelvertical">
           <label>
@@ -173,18 +139,20 @@ export default function WebsiteDetailsForm() {
             <span className="labeltip1"> The logo displayed on your site.</span>
             <p className="labeltip2"> Tip: Use a transparent PNG or SVG for best results.</p>
           </label>
+          <img src={`${process.env.NEXT_PUBLIC_API_URL}/public/media/${logoFile}`} alt="Current Logo" width="200" />
+          <input
+            type="file"
+            accept="image/*"
 
-          <img src={`${process.env.NEXT_PUBLIC_API_URL}/public/media/${logoFile}`} alt="Logo" width="200" />
-
-          <MediaButtonlogo
-            name="logo"
-            id="logo"
-            type="frontendfield"
+            onChange={e => setLogoFile(e.target.files[0])}
           />
+          {/*  {logoFile && (
+            <p>Selected Logo: {logoFile.name}.  Leave file input empty to keep</p>
+          )} */}
 
         </div>
 
-      </form >
+      </form>
     </>
   );
 }
