@@ -243,15 +243,17 @@ export default function Pages() {
             </select>
           </div>
           <div id="filtertypediv">
-            <select name="" id="" onChange={(e) => {
-              setFilterTypeS(e.target.value);
-            }
-            }>
-              <option value='all'>All Types</option>
-              {pagetype === "post" && multischemas.length > 0 && multischemas.map((schema) => (
-                <option key={schema} value={schema} >{schema}</option>
-              ))}
-            </select>
+            {pagetype === "post" && (
+              <select name="" id="" onChange={(e) => {
+                setFilterTypeS(e.target.value);
+              }
+              }>
+                <option value='all'>All Types</option>
+                {pagetype === "post" && multischemas.length > 0 && multischemas.map((schema) => (
+                  <option key={schema} value={schema} >{schema}</option>
+                ))}
+              </select>
+            )}
           </div>
           <div id="languagefilter">
             {multilingual && (
