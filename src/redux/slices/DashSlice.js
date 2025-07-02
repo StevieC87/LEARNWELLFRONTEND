@@ -15,7 +15,7 @@ const DashSlice = createSlice({
     },
     userrole: "", // This is used to check if a page exists in the userrole
     userid: "",
-    enableuserregistration: false, // This is used to check if user registration is enabled
+    enableuserregistration: "", // This is used to check if user registration is enabled
   },
 
   reducers: {

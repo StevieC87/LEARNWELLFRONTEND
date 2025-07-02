@@ -44,6 +44,7 @@ export default function PageContentTab(props) {
   const [languageui, setLanguageUI] = useState(language || defaultlanguage || "");
 
   const reduxtitlefield = useSelector((state) => state.PagesSlice.fields?.title) || '';
+  const reduxrelationfield = useSelector((state) => state.PagesSlice.fields?.relation) || '';
   const reduxslugfield = useSelector((state) => state.PagesSlice.fields?.slug) || '';
   const reduxslugpathfield = useSelector((state) => state.PagesSlice.fields?.slugpath) || '';
   console.log(reduxslugpathfield, "reduxslugpathfieldreduxslugpathfieldreduxslugpathfieldreduxslugpathfield");
@@ -137,6 +138,7 @@ export default function PageContentTab(props) {
         placeholder: fieldObj.placeholder || null,
         label: fieldObj.label || match?.label || null,
         fields: fieldObj.fields || null,
+        relation: fieldObj.relation || '', //for relation field
         //  pagename: match.pagename,
       };
     }
@@ -157,7 +159,7 @@ export default function PageContentTab(props) {
     mergedinitial.forEach((item) => {
       console.log(item, 'mergedinitialitem')
       dispatch(updateField({
-        name: item.name, content: item.content, id: item.id, locale: item.locale, type: item.type, schema: item.schema, belongsto: item.belongsto, createdAt: item.createdAt, required: item.required, placeholder: item.placeholder, label: item.label, fields: item.fields
+        name: item.name, content: item.content, id: item.id, locale: item.locale, type: item.type, schema: item.schema, belongsto: item.belongsto, createdAt: item.createdAt, required: item.required, placeholder: item.placeholder, label: item.label, fields: item.fields, relation: item.relation //for relation field
       }));
     }
     )
@@ -758,7 +760,7 @@ export default function PageContentTab(props) {
             /* placeholder={titlefield?.placeholder || ""} */
             placeholder={reduxslugpathfield.placeholder || "Add slug path e.g: /articles/webdesign/myarticletitle) (leave empty for default: /articles/myarticletitle)"}
             value={reduxslugpathfield.content || ""}
-            onChange2={(e) => {
+            reduxrelationfield onChange2={(e) => {
               //setHasChanges(true);
               dispatch(setHasChanges(true));
               setIsPublishing(false);
@@ -790,6 +792,8 @@ export default function PageContentTab(props) {
                 disabled={field.disabled || false}
                 autofocus={field.autofocus || false}
                 fields={field.fields || null}
+                relation={field.relation || ''} //for relation field
+
 
               />
 

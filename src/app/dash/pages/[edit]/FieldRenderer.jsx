@@ -6,9 +6,10 @@ import { useEffect, useState } from 'react';
 import SummernoteField from '../../uicomponents/customfields/Summernote/SummernoteField';
 import MediaButton from '../../uicomponents/customfields/MediaButton';
 import { updateSharedFields } from '@/redux/slices/SharedSlice';
+import Relationfield from '../../uicomponents/customfields/Relationfield';
 //! ADD ID OF THE FIELD  - PASS TO REDUX 
 
-const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeholder, required, disabled, autofocus, inputcssclass, inputdivcssclass, labelcssclass, fields, onChange3, fieldarray, fieldarrayparent, indexis, subfield, source }) => {
+const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeholder, required, disabled, autofocus, inputcssclass, inputdivcssclass, labelcssclass, fields, onChange3, fieldarray, fieldarrayparent, indexis, subfield, source, relation }) => {
   //note: source here refers to wher eit's called from e.g. from shared componetns specifically - to set state not in dispatch
   // console.log(fielddata, "fielddata33333333");
 
@@ -40,11 +41,8 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
 
 
   const onChange = (e, arrayfield, arrayfieldparent, indexis, subfield) => {
-
     const newValue = e.target.value;
     console.log(newValue, "newValue3333333333");
-
-
     if (source === 'shared') {
       dispatch(updateSharedFields({
         name: name,
@@ -261,7 +259,33 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
         </>
       );
 
+    case "relation":
+      return (
+        <div className="fielddivblock">
+          <Relationfield
+            name={name}
+            value={fieldValue}
+            label={label}
+            onChange={onChange}
+            options={fielddata.options || []} // Assuming options are passed in fielddata
+            placeholder={placeholder}
+            required={required || false}
+            disabled={disabled || false}
+            relation={relation || null} // Assuming relation is part of fielddata
+          />
+          {/* <label htmlFor={name} className="block text-sm font-medium text-gray-700">{label}</label>
+          <input
+            key={name}
+            name={name}
+            type="text"
+            value={fieldValue}
+            onChange={onChange}
+            placeholder={placeholder}
+            required={required || false}
+          /> */}
 
+        </div>
+      );
 
     default:
       return null;

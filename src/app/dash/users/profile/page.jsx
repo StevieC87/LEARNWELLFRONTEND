@@ -242,7 +242,7 @@ export default function UserProfile() {
                 <option value="superadmin">Super Admin</option>
                 <option value="admin">Admin</option>
                 <option value="superadmin">Editor</option>
-                <option value="user">Author</option>
+                <option value="author">Author</option>
                 <option value="contributor">Contributor</option>
                 <option value="registered">Registered</option>
               </select>

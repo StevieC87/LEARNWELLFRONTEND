@@ -3,14 +3,18 @@ import './loginregister.css'
 import { useForm } from 'react-hook-form';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useSelector } from 'react-redux'; // Import useSelector to access Redux state
 import Image from 'next/image'; // Import Image from next/image
 import customSessionStorage from '@/utilities/customSessionStorage';
 import GoogleLoginButton from './GoogleLoginbutton'; // Import GoogleLoginButton component
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  setEnableUserRegistration
+} from '@/redux/slices/DashSlice';
 
 export default function Login({ showForgotCallback }) {
 
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const { register, watch, handleSubmit, formState: { errors }, setError, clearErrors } = useForm();
   const [message, setMessage] = useState(null); // State for UI messages
@@ -18,6 +22,36 @@ export default function Login({ showForgotCallback }) {
 
   const enableuserregistration = useSelector((state) => state.DashSlice.enableuserregistration); // Access the enableuserregistration state from Redux
   //SET CONTEXT STATE TO EMAIL ON CHANGE
+
+  useEffect(() => {
+    //FETCH HERE TO SEE IF PUBLIC REGISTRATION IS ENABLED OR NOT 
+    const asyncfetch = async () => {
+      const fetchuserpublicreg = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/getuserpublicreg`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include' // This is importan t for cookies to be sent
+        }
+      )
+      if (!fetchuserpublicreg.ok) {
+        console.error('Failed to fetch user public registration status');
+        return;
+      }
+      console.log(fetchuserpublicreg, 'fetchuserpublicreg')
+      const data = await fetchuserpublicreg.json();
+      console.log(data, 'data from getuserpublicreg');
+      let ispublicregyes = data.publicuserregistration
+
+      console.log(ispublicregyes, 'ispublicregyes from getuserpublicreg');
+      dispatch(setEnableUserRegistration(ispublicregyes)); // Dispatch action to set enableuserregistration state in Reduxc
+
+    }
+    asyncfetch();
+  }, []);
+
+
   useEffect(() => {
 
     // Save email to session storage
@@ -69,7 +103,6 @@ export default function Login({ showForgotCallback }) {
 
   return (
     <>
-
       <style jsx>{`
      
       .logocolortest {

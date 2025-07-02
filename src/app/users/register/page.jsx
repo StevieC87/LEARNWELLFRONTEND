@@ -134,6 +134,10 @@ export default function LoginPage() {
         }
         else {
           //redirect to login page
+          setTimeout(() => {
+            setSubmitButtonLoading(false);
+            setMessage({ type: 'success', text: "Verification successful. Please log in." });
+          }, 2000); // Optional: Delay for better UX
           router.push('/users/login');
         }
         // router.push('/dash');
