@@ -25,6 +25,7 @@ export default function Pages() {
   const multilingual = useSelector((state) => state.DashSlice.settings.multilingual);
   const userrole = useSelector((state) => state.DashSlice.userrole);
   const defaultlanguage = useSelector((state) => state.DashSlice.settings.defaultlanguage);
+  const languages = useSelector((state) => state.DashSlice.settings.languages);
 
   const [pageslist, setPagesList] = useState([]);
   const [filteredpages, setFilteredPages] = useState(pageslist);
@@ -49,6 +50,8 @@ export default function Pages() {
   const [searchterm, setSearchTerm] = useState(''); // to store search term
 
   const [trashedview, setTrashedView] = useState(false); // to store if trashed view is active
+
+  const [filtertypeS, setFilterTypeS] = useState(''); // to store filter type
 
   //THIS IS TO GET OUT OF THE TRASH VIEW if e.g. clicks on 'pages' which in 'posts' and in trash view 
   useEffect(() => {
@@ -78,9 +81,9 @@ export default function Pages() {
          setPageNumber(1); // Reset to first page if total pages are less than or equal to 10
        } */
       if (pagetype === 'post') {
-        url = `http://localhost:3000/pagesposts/getpagespostslist?paginationlimit=${paginationlimit}&pagenumber=${pagenumber}&columnsorted=${columnsorted}&sortdirection=${sortdirection}&pagetype=${pagetype}&searchterm=${searchterm}&trashedview=${trashedview}`;
+        url = `http://localhost:3000/pagesposts/getpagespostslist?paginationlimit=${paginationlimit}&pagenumber=${pagenumber}&columnsorted=${columnsorted}&sortdirection=${sortdirection}&pagetype=${pagetype}&searchterm=${searchterm}&trashedview=${trashedview}&filtertype=${filtertypeS}`;
       } else if (pagetype === 'page') {
-        url = `http://localhost:3000/pagesposts/getpagespostslist?paginationlimit=${paginationlimit}&pagenumber=${pagenumber}&columnsorted=${columnsorted}&sortdirection=${sortdirection}&pagetype=${pagetype}&searchterm=${searchterm}&trashedview=${trashedview}`;
+        url = `http://localhost:3000/pagesposts/getpagespostslist?paginationlimit=${paginationlimit}&pagenumber=${pagenumber}&columnsorted=${columnsorted}&sortdirection=${sortdirection}&pagetype=${pagetype}&searchterm=${searchterm}&trashedview=${trashedview}&filtertype=${filtertypeS}`;
       }
       const response = await fetch(url, {
         method: "GET",
@@ -121,7 +124,7 @@ export default function Pages() {
 
 
     //setPageLinkUrl
-  }, [userrole, pagetype, refreshlist, searchterm, trashedview]);
+  }, [userrole, pagetype, refreshlist, searchterm, trashedview, filtertypeS]);
 
   useEffect(() => {
     setFilteredPages(pageslist);
@@ -164,6 +167,11 @@ export default function Pages() {
       setSearchTerm(searchValue);
     }
 
+  }
+
+  const filtertype = (selectedSchema) => {
+
+    setFilterTypeS(selectedSchema);
   }
 
   const restorepage = async (pageid) => {
@@ -213,7 +221,7 @@ export default function Pages() {
 
 
       <div id="tablediv" className="tablediv" >
-        <div id="filterdiv" className="flex flex-row" >
+        <div id="filterdiv" className="flex flex-row gap-3" >
           <div id="searchdiv" className="postspagesearchinput">
             <input
               type="text"
@@ -222,7 +230,7 @@ export default function Pages() {
               onChange={(e) => searchrecords(e.target.value)}
             />
           </div>
-          <div id="paginationdiv" className="ml-5">
+          <div id="paginationdiv" className="">
             <select name="paginationpages" id=""
               onChange={(e) => {
                 setPageNumber(1);
@@ -239,6 +247,31 @@ export default function Pages() {
 
             </select>
           </div>
+          <div id="filtertypediv">
+            <select name="" id="" onChange={(e) => filtertype(e.target.value)}>
+              <option value='all'>All Types</option>
+              {pagetype === "post" && multischemas.length > 0 && multischemas.map((schema) => (
+                <option key={schema} value={schema} >{schema}</option>
+              ))}
+            </select>
+          </div>
+          <div id="languagefilter">
+            {multilingual && (
+              <select name="languagefilter" id="languagefilter"
+                onChange={(e) => {
+                  const selectedLanguage = e.target.value;
+                  //  setFilteredPages(pageslist.filter(page => page.locale === selectedLanguage));
+                }}
+              >
+                <option value="all">All Languages</option>
+                {languages.map((page) => (
+                  <option key={page} value={page} >{page}</option>
+                ))}
+              </select>
+            )}
+          </div>
+
+          {/* <Link key={schema} href={`/dash/pages/newpage?pagetype=post&schema=${schema}`} className="button button-primary m-3">{schema}</Link> */}
         </div>
         <table>
           <thead>
