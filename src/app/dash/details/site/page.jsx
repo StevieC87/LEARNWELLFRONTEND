@@ -122,7 +122,7 @@ export default function WebsiteDetailsForm() {
             <span className="labeltip1"> Used as the default preview image when social sharing.</span>
             <p className="labeltip2"> Tip: Use a clear, high-quality image wiht dimensions: 1600 x </p>
           </label>
-          <img src={`${process.env.NEXT_PUBLIC_API_URL}/public/media/${defaultImageFile}`} alt="Current Default Image" width="200" />
+          <img src={`${process.env.NEXT_PUBLIC_API_URL}/public/media${defaultImageFile}`} alt="Current Default Image" width="200" />
 
           <input
             type="file"
@@ -139,7 +139,7 @@ export default function WebsiteDetailsForm() {
             <span className="labeltip1"> The logo displayed on your site.</span>
             <p className="labeltip2"> Tip: Use a transparent PNG or SVG for best results.</p>
           </label>
-          <img src={`${process.env.NEXT_PUBLIC_API_URL}/public/media/${logoFile}`} alt="Current Logo" width="200" />
+          <img src={`${process.env.NEXT_PUBLIC_API_URL}/public/media${logoFile}`} alt="Current Logo" width="200" />
           <input
             type="file"
             accept="image/*"
