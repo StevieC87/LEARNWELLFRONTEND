@@ -6,6 +6,9 @@
   .newclasstest {
     color: blue;
   }
+  .newclassoriginal {
+    color: purple;
+  }
   /* Universal Reset */
   *,
   *::before,
