@@ -3,6 +3,9 @@
     font-size: 62.5%; /* 1rem = 10px */
   }
 
+  .newclasstest {
+    color: blue;
+  }
   /* Universal Reset */
   *,
   *::before,
