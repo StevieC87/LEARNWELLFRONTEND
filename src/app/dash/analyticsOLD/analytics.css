@@ -1,0 +1,83 @@
+input,
+select {
+  background-color: #f5f5f5 !important;
+}
+.linechartcanvas1 {
+  max-width: 700px;
+  max-height: 250px;
+}
+@media screen and (max-width: 920px) {
+  .linechartcanvas1 {
+    max-width: 100%;
+  }
+}
+
+.datecontrols {
+  margin: 20px 0px;
+}
+
+.analyticsquickdatadiv {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: center;
+  max-width: var(--maxwidthcontent);
+  padding: 20px 0px;
+}
+
+.analyticsquickdatabox {
+  padding: 10px;
+  /*  border: 1px solid var(--primary-color-light); */
+  border-radius: 5px;
+}
+.analyticsquickdataboxes {
+  flex-wrap: wrap;
+  flex: 3;
+  min-height: 220px;
+}
+
+.analyticsquickdataboxpie {
+  flex: 1;
+}
+
+.analyticsquickdataboxlabel {
+  font-weight: bold;
+  font-size: 1.6rem;
+  color: var(--textcolorDarkMode);
+}
+
+.analyticsquickdataboxdata {
+  font-size: 1.5em;
+  color: var(--textcolorDarkMode);
+  font-weight: bold;
+  text-align: center;
+}
+
+.topcountries {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px 0px;
+  justify-content: center;
+}
+.topcountryitemtoptop {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.topcountryitem {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* align-items: center; */
+  /*   padding: 10px;
+  border: 1px solid var(--primary-color-light);
+  border-radius: 5px; */
+}
+.topcountryitemcountrynnumbersdiv {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

@@ -1,0 +1,12 @@
+.piechartdiv {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 220px;
+}
+
+.piechartcanvas {
+  max-width: 120px;
+  max-height: 120px;
+}

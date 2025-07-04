@@ -2,7 +2,7 @@
 import './GDPR.css';
 import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
-import PostAnalytics from './PostAnalytics';
+//import PostAnalytics from './PostAnalytics';
 import { useParams } from 'next/navigation';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { enableFullAnalytics } from './userconsents.js';

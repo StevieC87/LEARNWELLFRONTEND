@@ -7,12 +7,13 @@ import MainContent from '@/components/layout/MainContent';
 import '@/app/globals.css';
 //import '@/components/layout/layout.css'; // Adjust the path as necessary
 import { verify } from 'jsonwebtoken';
+import Script from 'next/script';
 
 
 import BottomBar from '@/components/layout/Navbar/BottomBar';
 import SlideMenuDesktop from '@/components/layout/Navbar/SlideMenuDesktop';
 import VerifyToken from '../users/components/VerifyToken';
-import GDPR from '../../components/GDPRNanalytics/GDPR';
+// import GDPR from '../../components/GDPRNanalytics/GDPR';
 //import './layout.css';
 export default async function Layout({ children }) {
 
@@ -31,12 +32,16 @@ export default async function Layout({ children }) {
     <>
       
       {/* <Sidenav /> */}
+      <Script
+        src="http://localhost:3000/track.js"
+        strategy="afterInteractive"
+      />
       <div className="outerlayoutdiv">
         <div className="adminwrapperdiv">
           <VerifyToken />
           <SlideMenuDesktop />
           <MainContent children1={children} />
-          <GDPR />
+        {/*   <GDPR /> */}
         </div>
         <BottomBar />
       </div>
