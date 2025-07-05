@@ -37,7 +37,7 @@ export default async function Layout({ children }) {
       <Script
         src="http://localhost:3000/track.js"
         strategy="afterInteractive"
-        data-site="abcd123"
+        data-site="b26a56dc-8c4b-4d7b-9c42-739cd79b8cc1"
       />
       <div className="outerlayoutdiv">
         <div className="adminwrapperdiv">
