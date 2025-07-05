@@ -32,9 +32,12 @@ export default async function Layout({ children }) {
     <>
       
       {/* <Sidenav /> */}
+      
+      {/* note this always client side coz afterInteractive */}
       <Script
         src="http://localhost:3000/track.js"
         strategy="afterInteractive"
+        data-site="abcd123"
       />
       <div className="outerlayoutdiv">
         <div className="adminwrapperdiv">
