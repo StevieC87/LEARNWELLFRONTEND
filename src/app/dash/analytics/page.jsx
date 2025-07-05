@@ -37,6 +37,12 @@ export default function Analytics() {
 
   const [referrals, setReferrals] = useState([]); // For referrals data
 
+
+  //newstuff
+  const [totalpageviews, setTotalPageViews] = useState(0);
+  const [totaluniquevisitorscount, setTotalUniqueVisitorsCount] = useState(0);
+  const [totalvisitscount, setTotalVisitsCount] = useState(0);
+
   const handleDateChange = (newdate) => {
     console.log('newdate in handleDateChange', newdate)
     console.log(typeof newdate, 'typeof newdate')
@@ -91,8 +97,12 @@ export default function Analytics() {
 
   useEffect(() => {
     const fetchCountriesData = async () => {
+      if (!selecteddatesMulti || selecteddatesMulti.length === 0) {
+        return
+      }
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/analytics/testanalytics`, {
+
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/analytics/getanalyticsaw`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -113,26 +123,35 @@ export default function Analytics() {
         const data = await response.json();
         console.log(data, 'data');
         //         setCountriesData(data.data)
-        setCountriesData(data.visitorsbycountry)
-        console.log(data.visitorsbycountry, 'data.visitorsbycountry');
-        console.log(data.data, 'data.dat1111a');
-        setMapBackupCountries(data.data || []); // Use data.data if it exists
-        //setVisitorsByCountry(data.visitorsbycountry || {}); // Use data.data if it exists
-        console.log(data.visitorsbycountry, 'data.visitorsbycountry');
-        setUsersByMonth(data.visitorseachday || []); // Use data.userByMonth if it exists
-        console.log(data.visitorseachday, 'data.visitorseachday');
-        setTotalUsersDataRange(data.visitorseachday || []); // Use data.visitorseachday if it exists
-        setTotalNumberOfSessions(data.totalnumberofsessions || 0); // Use data.totalnumberofsessions if it exists
-        setTotalNumberOfPageViews(data.totalnumberofpageviews || 0); // Use data.totalnumberofpageviews if it exists
-        setAverageSessionDuration(data.averagesessionduration || 0); // Use data.averagesessionduration if it exists
-        //
-        let roundedpagespersessiontoTWOdecimals = Math.round((data.pagespersession || 0) * 100) / 100; // Round to two decimal places
-        setPagesPerSession(roundedpagespersessiontoTWOdecimals || 0); // Use data.pagespersession if it exists
-        console.log(data.bouncerate, 'data.bouncerate');
-        setBounceRate(data.bouncerate || 0); // Use data.bouncerate if it exists
-        setNewReturningTotalPie(data.totalvisitorsthatperiodv || {}); // Use data.newreturningtotalPie if it exists
-        setReferrals(data.referrals || []); // Use data.referrals if it exists 
-        setMostVisitedPages(data.mostvisitedpages || []); // Use data.mostvisitedpages if it exists
+        // totalvisitspercountry: totalvisitspercountry,
+        // uniquevisitspercountry: uniquevisitspercountry,
+        setTotalPageViews(data.totalpageviews || 0); // Use data.totalpageviews if it exists
+        setTotalUniqueVisitorsCount(data.totaluniquevisitors || 0); // Use data.totaluniquevisitors if it exists
+        setTotalVisitsCount(data.totalvisits || 0); // Use data.totalvisits if it exists
+        //setTotalUniqueVisitorsCount 
+        // setTotalVisitsCount
+
+
+        /*  setCountriesData(data.visitorsbycountry)
+         console.log(data.visitorsbycountry, 'data.visitorsbycountry');
+         console.log(data.data, 'data.dat1111a');
+         setMapBackupCountries(data.data || []); // Use data.data if it exists
+         //setVisitorsByCountry(data.visitorsbycountry || {}); // Use data.data if it exists
+         console.log(data.visitorsbycountry, 'data.visitorsbycountry');
+         setUsersByMonth(data.visitorseachday || []); // Use data.userByMonth if it exists
+         console.log(data.visitorseachday, 'data.visitorseachday');
+         setTotalUsersDataRange(data.visitorseachday || []); // Use data.visitorseachday if it exists
+         setTotalNumberOfSessions(data.totalnumberofsessions || 0); // Use data.totalnumberofsessions if it exists
+         setTotalNumberOfPageViews(data.totalnumberofpageviews || 0); // Use data.totalnumberofpageviews if it exists
+         setAverageSessionDuration(data.averagesessionduration || 0); // Use data.averagesessionduration if it exists
+         //
+         let roundedpagespersessiontoTWOdecimals = Math.round((data.pagespersession || 0) * 100) / 100; // Round to two decimal places
+         setPagesPerSession(roundedpagespersessiontoTWOdecimals || 0); // Use data.pagespersession if it exists
+         console.log(data.bouncerate, 'data.bouncerate');
+         setBounceRate(data.bouncerate || 0); // Use data.bouncerate if it exists
+         setNewReturningTotalPie(data.totalvisitorsthatperiodv || {}); // Use data.newreturningtotalPie if it exists
+         setReferrals(data.referrals || []); // Use data.referrals if it exists 
+         setMostVisitedPages(data.mostvisitedpages || []); // Use data.mostvisitedpages if it exists */
 
       } catch (error) {
         console.error('Error fetching countries data:', error);
@@ -377,34 +396,38 @@ export default function Analytics() {
           <button className="button button-outline">All time</button> */}
         </div>
 
-        <ChartVisitsFilter data={totalusersdatarange} />
+        {/*    <ChartVisitsFilter data={totalusersdatarange} /> */}
         <div id="analyticsquickdatadiv card" className="analyticsquickdatadiv">
           <div className="analyticsquickdataboxes flex flex-row gap-4 card">
             <div className="analyticsquickdatabox flex flex-col">
-              <span className="analyticsquickdataboxlabel">Sessions</span>
-              <span className="analyticsquickdataboxdata text-2xl font-bold">{totalnumberofsessions}</span>
+              <span className="analyticsquickdataboxlabel">Unique Visitors</span>
+              <span className="analyticsquickdataboxdata text-2xl font-bold">{totaluniquevisitorscount}</span>
             </div>
             <div className="analyticsquickdatabox flex flex-col">
-              <span className="analyticsquickdataboxlabel">Page Views</span>
-              <span className="analyticsquickdataboxdata text-2xl font-bold">{totalnumberofpageviews}</span>
+              <span className="analyticsquickdataboxlabel">Total Visits</span>
+              <span className="analyticsquickdataboxdata text-2xl font-bold">{totalvisitscount}</span>
+            </div>
+            <div className="analyticsquickdatabox flex flex-col">
+              <span className="analyticsquickdataboxlabel">Total Pageviews</span>
+              <span className="analyticsquickdataboxdata text-2xl font-bold">{totalpageviews}</span>
             </div>
             <div className="analyticsquickdatabox flex flex-col">
               <span className="analyticsquickdataboxlabel">Avg. Session Duration</span>
-              <span className="analyticsquickdataboxdata text-2xl font-bold">{averagesessionduration} sec</span>
+              <span className="analyticsquickdataboxdata text-2xl font-bold">{/* {averagesessionduration} */} sec</span>
             </div>
 
             <div className="analyticsquickdatabox flex flex-col">
               <span className="analyticsquickdataboxlabel">Bounce Rate</span>
               <span className="analyticsquickdataboxdata text-2xl font-bold
-">{bouncerate}</span>
+">{/* {bouncerate} */}</span>
             </div>
             <div className="analyticsquickdatabox flex flex-col">
               <span className="analyticsquickdataboxlabel">Pages / Session</span>
-              <span className="analyticsquickdataboxdata text-2xl font-bold">{pagespersession}</span>
+              <span className="analyticsquickdataboxdata text-2xl font-bold">{/* {pagespersession} */}</span>
             </div>
           </div>
           <div className="analyticsquickdataboxpie flex flex-col">
-            <Pie data={newreturningtotalPie} />
+            {/*  <Pie data={newreturningtotalPie} /> */}
 
           </div>
 
@@ -412,26 +435,25 @@ export default function Analytics() {
         </div>
 
         <div className="mt-8 fade-in mapsdiv">
-          {/*    <MapAnalyticsComponentCopy visitorsbycountry={mapbackupcountries} /> */}
+          {/* 
           {countriesdata && Object.keys(countriesdata).length > 0 ? (
             <>
-              {/*  <MapAnalyticsComponent countriesdata={countriesdata} /> */}
               <MapAnalyticsComponent countriesdata={countriesdata} />
             </>
           ) : (
             <div className="text-red-500">
               No data available for the map.
             </div>
-          )}
-          {/* visitorsbycountry */}
+          )} */}
+
         </div>
 
         <div className="topreferrersouterdiv mt-4 card">
-          <TopReferrers referrals={referrals} />
+          {/*    <TopReferrers referrals={referrals} /> */}
         </div>
 
         <div className="card mt-4">
-          <TopVisitedPages mostvisitedpages={mostvisitedpages} />
+          {/* <TopVisitedPages mostvisitedpages={mostvisitedpages} /> */}
         </div>
       </div>
 
