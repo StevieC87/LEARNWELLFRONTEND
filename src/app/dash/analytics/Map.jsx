@@ -9,7 +9,7 @@ import LineAnalyticsPerc from './LineAnalyticsPerc.jsx';
 export default function MapAnalyticsComponent({ countriesdata }) {
   const [mapReady, setMapReady] = useState(false);
   const mapInstance = useRef(null);
-  const [visitorfilter, setVisitorfilter] = useState('allvisitors'); // state to manage visitor filter
+  const [visitorfilter, setVisitorfilter] = useState('visitors'); // state to manage visitor filter
   console.log(countriesdata, 'countriesdata in MapAnalyticsComponent')
   if (!countriesdata) {
     return;
@@ -26,12 +26,10 @@ export default function MapAnalyticsComponent({ countriesdata }) {
 
     console.log(visitorfilter, 'visitorfilter in MapAnalyticsComponent')
     let filtervisitortype
-    if (visitorfilter === 'allvisitors') {
+    if (visitorfilter === 'visitors') {
       filtervisitortype = 'visitors';
-    } else if (visitorfilter === 'returningvisitors') {
-      filtervisitortype = 'returningUsers';
-    } else if (visitorfilter === 'newvisitors') {
-      filtervisitortype = 'newUsers';
+    } else if (visitorfilter === 'unique_visitors') {
+      filtervisitortype = 'unique_visitors';
     }
 
     // Keep only key and the value based on filtervisitortype
@@ -103,27 +101,27 @@ export default function MapAnalyticsComponent({ countriesdata }) {
         disableDefaultFill: true,
         data: {
           data: {
-            allvisitors: {
+            visitors: {
               name: 'Visitors per country',
               format: '{0}',
               thousandSeparator: ',',
               // thresholdMax: 5000,
               //thresholdMin: 0
             },
-            newvisitors: {
+            unique_visitors: {
               name: 'New Users per country',
               format: '{0}',
               thousandSeparator: ',',
               //  thresholdMax: 5000,
               // thresholdMin: 0
-            },
+            },/* 
             returningvisitors: {
               name: 'Returning Users per country',
               format: '{0}',
               thousandSeparator: ',',
               //  thresholdMax: 5000,
               // thresholdMin: 0
-            }
+            } */
           },
           applyData: visitorfilter,
           // applyData: 'allvisitors',
@@ -256,9 +254,8 @@ export default function MapAnalyticsComponent({ countriesdata }) {
           <select className="filtervisitortypeselect" name="" id="" value={visitorfilter} onChange={(e) => {
             setVisitorfilter(e.target.value);
           }}>
-            <option value="allvisitors">All Visitors</option>
-            <option value="returningvisitors">Returning Visitors</option>
-            <option value="newvisitors">New Visitors</option>
+            <option value="visitors">All Visitors</option>
+            <option value="unique_visitors">Unique Visitors</option>
           </select>
           <div key={visitorfilter + JSON.stringify(filteredDataS)} className="fade-in05">
             <div id="svgMap" className="mapdiv" ref={mapContainerRef}></div>

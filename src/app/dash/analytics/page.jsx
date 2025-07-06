@@ -43,6 +43,8 @@ export default function Analytics() {
   const [totaluniquevisitorscount, setTotalUniqueVisitorsCount] = useState(0);
   const [totalvisitscount, setTotalVisitsCount] = useState(0);
 
+  const [pagespervisit, setPagesPerVisit] = useState(0); // For pages per visit
+
   const handleDateChange = (newdate) => {
     console.log('newdate in handleDateChange', newdate)
     console.log(typeof newdate, 'typeof newdate')
@@ -128,10 +130,11 @@ export default function Analytics() {
         setTotalPageViews(data.totalpageviews || 0); // Use data.totalpageviews if it exists
         setTotalUniqueVisitorsCount(data.totaluniquevisitors || 0); // Use data.totaluniquevisitors if it exists
         setTotalVisitsCount(data.totalvisits || 0); // Use data.totalvisits if it exists
-        //setTotalUniqueVisitorsCount 
-        // setTotalVisitsCount
-
-
+        console.log(data.countriesdata, 'data.countriesdata');
+        setCountriesData(data.countriesdata || []); // Use data.totalvisitspercountry if it exists
+        setPagesPerVisit(data.pagespervisit || 0); // Use data.pagespervisit if it exists
+        console.log(data.bouncerate, 'data.bouncerate');
+        setBounceRate(data.bouncerate || 0); // Use data.bouncerate if it exists
         /*  setCountriesData(data.visitorsbycountry)
          console.log(data.visitorsbycountry, 'data.visitorsbycountry');
          console.log(data.data, 'data.dat1111a');
@@ -419,11 +422,11 @@ export default function Analytics() {
             <div className="analyticsquickdatabox flex flex-col">
               <span className="analyticsquickdataboxlabel">Bounce Rate</span>
               <span className="analyticsquickdataboxdata text-2xl font-bold
-">{/* {bouncerate} */}</span>
+">{bouncerate}%</span>
             </div>
             <div className="analyticsquickdatabox flex flex-col">
               <span className="analyticsquickdataboxlabel">Pages / Session</span>
-              <span className="analyticsquickdataboxdata text-2xl font-bold">{/* {pagespersession} */}</span>
+              <span className="analyticsquickdataboxdata text-2xl font-bold">{pagespervisit}</span>
             </div>
           </div>
           <div className="analyticsquickdataboxpie flex flex-col">
@@ -435,16 +438,16 @@ export default function Analytics() {
         </div>
 
         <div className="mt-8 fade-in mapsdiv">
-          {/* 
+
           {countriesdata && Object.keys(countriesdata).length > 0 ? (
             <>
               <MapAnalyticsComponent countriesdata={countriesdata} />
-            </>
+            </> /* //totalvisitspercountry  uniquevisitspercountry */
           ) : (
             <div className="text-red-500">
               No data available for the map.
             </div>
-          )} */}
+          )}
 
         </div>
 

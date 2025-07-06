@@ -1,9 +1,9 @@
 'use client'
-import MapAnalyticsComponent from "./Map";
+import MapAnalyticsComponent from "../Map.jsx";
 import { useEffect, useState } from "react";
-import Datepicker from './datepicker/Datepicker.jsx';
-import ChartVisitsFilter from "./ChartVisitsFilter.jsx";
-import Pie from './PieChart.jsx';
+import Datepicker from '../datepicker/Datepicker.jsx';
+import ChartVisitsFilter from "../ChartVisitsFilter.jsx";
+import Pie from '../PieChart.jsx';
 import './datepicker/Datepicker.css'
 import './analytics.css';
 
