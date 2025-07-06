@@ -72,7 +72,7 @@ export default function ChartVisitsFilter(props) {
             borderColor: 'rgb(75,192,192)',
             tension: 0.2
           }, //dataonlynomonth
-          {
+        /*   {
             label: 'New Users',
             data: newUsers, //,
             borderColor: 'rgb(178, 241, 60)',
@@ -84,7 +84,7 @@ export default function ChartVisitsFilter(props) {
             data: returningUsers, //,
             borderColor: 'rgb(157, 11, 255)',
             tension: 0.2
-          }]
+          } */]
           //dataon
         }
       });

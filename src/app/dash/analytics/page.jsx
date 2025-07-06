@@ -44,6 +44,7 @@ export default function Analytics() {
   const [totalvisitscount, setTotalVisitsCount] = useState(0);
 
   const [pagespervisit, setPagesPerVisit] = useState(0); // For pages per visit
+  const [getaveragevisitduration, setGetAverageVisitDuration] = useState(0); // For average visit duration
 
   const handleDateChange = (newdate) => {
     console.log('newdate in handleDateChange', newdate)
@@ -134,7 +135,10 @@ export default function Analytics() {
         setCountriesData(data.countriesdata || []); // Use data.totalvisitspercountry if it exists
         setPagesPerVisit(data.pagespervisit || 0); // Use data.pagespervisit if it exists
         console.log(data.bouncerate, 'data.bouncerate');
-        setBounceRate(data.bouncerate || 0); // Use data.bouncerate if it exists
+        setBounceRate(data.bouncerate || 0);
+        setGetAverageVisitDuration(data.getaveragevisitduration || 0); // Use data.getaveragevisitduration if it exists
+
+        // Use data.bouncerate if it exists
         /*  setCountriesData(data.visitorsbycountry)
          console.log(data.visitorsbycountry, 'data.visitorsbycountry');
          console.log(data.data, 'data.dat1111a');
@@ -416,7 +420,7 @@ export default function Analytics() {
             </div>
             <div className="analyticsquickdatabox flex flex-col">
               <span className="analyticsquickdataboxlabel">Avg. Session Duration</span>
-              <span className="analyticsquickdataboxdata text-2xl font-bold">{/* {averagesessionduration} */} sec</span>
+              <span className="analyticsquickdataboxdata text-2xl font-bold">{getaveragevisitduration}</span>
             </div>
 
             <div className="analyticsquickdatabox flex flex-col">
