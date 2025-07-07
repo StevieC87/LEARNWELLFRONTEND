@@ -1,6 +1,6 @@
 'use client'
 import MapAnalyticsComponent from "./Map";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Datepicker from './datepicker/Datepicker.jsx';
 import ChartVisitsFilter from "./ChartVisitsFilter.jsx";
 import Pie from './PieChart.jsx';
@@ -185,6 +185,8 @@ export default function Analytics() {
 
   const [mostvisitedpages, setMostVisitedPages] = useState([]);
 
+  const [activevisitors, setActiveVisitors] = useState([]); // For active visitors data
+
   const selectchangefilterdates = (e) => {
     const value = e.target.value;
     console.log(value, 'value in selectchangefilterdates');
@@ -354,7 +356,71 @@ export default function Analytics() {
     }
   }
 
+  //,for fetchign active users
+  const fetchActiveUsers = useRef(() => { });
+  fetchActiveUsers.current = async () => {
+    let fetchactive = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/analytics/activevisitors`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include', // Include cookies in the request
+    });
 
+    console.log(fetchactive, 'fetchactive in fetchActiveUsers');
+    if (!fetchactive.ok) {
+      console.log('fetchactive not ok');
+      return;
+    }
+    let data = await fetchactive.json();
+    console.log(data, 'data from fetchActiveUsers');
+    setActiveVisitors(data.activeVisitors || []); // Use data.activevisitors if it exists
+    // Fetch active users from the API
+  }
+
+
+  useEffect(() => {
+    fetchActiveUsers.current(); // Initial fetch
+    const id = setInterval(() => {
+      fetchActiveUsers.current();
+    }, 30000); // 30 seconds
+    return () => clearInterval(id);
+  }, []);
+  /*  function useIntervalFetch(callback, interval) {
+     const savedCallback = useRef();
+ 
+     useEffect(() => {
+       savedCallback.current = callback;
+     }, [callback]);
+ 
+     useEffect(() => {
+       function tick() {
+         savedCallback.current();
+       }
+       const id = setInterval(tick, interval);
+       return () => clearInterval(id);
+     }, [interval]);
+   }
+   function ActiveUsersComponent() {
+     const fetchActiveUsers = async () => {
+       const fetchactive = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/analytics/activevisitors`, {
+         method: 'GET',
+         headers: {
+           'Content-Type': 'application/json',
+         },
+         credentials: 'include', // Include cookies in the request
+       });
+       if (!fetchactive.ok) {
+         console.log('fetchactive not ok');
+         return;
+       }
+       const data = await fetchactive.json();
+       console.log(data, 'data from fetchActiveUsers');
+       // setActiveVisitors(data.activevisitors || []); // Use data.activevisitors if it exists
+     }
+   };
+   useIntervalFetch(fetchActiveUsers, 30000); // 30000ms = 30s
+  */
   return (
     <>
       {/*    {selecteddatesMulti.map((date) => (
@@ -374,7 +440,7 @@ export default function Analytics() {
           <div id="pagecontent" className={`pagecontent ${initialpage ? 'visible' : 'hidden'}`}>
           </div>
         </div> */}
-        <div className="datecontrols flex flex-row gap-2" >
+        <div className="datecontrols flex flex-row gap-2 " >
           {/*     {selecteddatesMulti.length > 0 && ( */}
           <Datepicker onDateChange={handleDateChange}
             dateprop={(multiple === 'yes' || multiple === 'range') ? selecteddatesMulti : selecteddate}
@@ -394,17 +460,23 @@ export default function Analytics() {
             <option value="yesterday">Yesterday</option>
             <option value="7days" >Last 7 days</option>
             <option value="14days">Last 14 days</option>
-
-            {/* NEED TO SO THAT E.G. END DAY AND START DAY - midnight to midnight not beginning of the day */}
             <option value="30days">Last 30 days</option>
             <option value="60days">Last 60 days</option>
             <option value="90days">Last 90 days</option>
             <option value="alltime">All time</option>
             <option value="custom">Custom Date Range</option>
           </select>
+          <div>{activevisitors === '0' ? (
+            <span>{activevisitors} active visitors</span>
+          ) : activevisitors === '1' ? (
+            <span className="text-green-500">{activevisitors} active visitor</span>
+          ) : (
+            <span className="text-green-500">{activevisitors} active visitors</span>
+          )}
+          </div>
           {/* <button className="button button-primary">Last 7 days</button>
-          <button className="button button-outline">Last 30 days</button>
-          <button className="button button-outline">All time</button> */}
+                  <button className="button button-outline">Last 30 days</button>
+                  <button className="button button-outline">All time</button> */}
         </div>
 
         <ChartVisitsFilter data={linecharttotalusers} />
