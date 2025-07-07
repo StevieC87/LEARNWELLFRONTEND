@@ -29,21 +29,21 @@ export default function ChartVisitsFilter(props) {
 
     let loopoverdata = data.map(item => {
       let datelabel = item.date;
-      let totalusers = item.totalUsers;
-      let returnignusers = item.returningUsers;
-      let newusers = item.newUsers;
+      let totalusers = item.totalusers;
+      // let returnignusers = item.returningUsers;
+      // let newusers = item.newUsers;
 
       dataonlyv.push(totalusers);
       labelsv.push(datelabel);
-      returningUsersv.push(returnignusers);
-      newUsersv.push(newusers);
+      // returningUsersv.push(returnignusers);
+      // newUsersv.push(newusers);
     })
     console.log('dataonlyv', dataonlyv);
     console.log('labelsv', labelsv);
     setDataonly(dataonlyv);
     setLabels(labelsv);
-    setReturningUsers(returningUsersv);
-    setNewUsers(newUsersv);
+    // setReturningUsers(returningUsersv);
+    //setNewUsers(newUsersv);
 
   }, [data]); // Re-run effect when data changes
 
@@ -67,27 +67,35 @@ export default function ChartVisitsFilter(props) {
         data: {
           labels: labels,
           datasets: [{
-            label: 'Total Users',
-            data: dataonly, //,
+            label: 'Total Visitors',
+            data: dataonly,
             borderColor: 'rgb(75,192,192)',
             tension: 0.2
-          }, //dataonlynomonth
-        /*   {
-            label: 'New Users',
-            data: newUsers, //,
-            borderColor: 'rgb(178, 241, 60)',
-            tension: 0.2
-          },
-
-          {
-            label: 'Returning Users',
-            data: returningUsers, //,
-            borderColor: 'rgb(157, 11, 255)',
-            tension: 0.2
-          } */]
-          //dataon
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              ticks: {
+                callback: function (value) {
+                  return Number.isInteger(value) ? value : null;
+                }
+              },
+              suggestedMax: Math.max(...dataonly) * 1.3, // Increase the maximum value by 10%
+              suggestedMin: 0, // Ensure the minimum value is 0
+              grid: {
+                display: false // Hide the grid lines
+              }
+            },
+            x: {
+              grid: {
+                display: false // Hide the grid lines
+              }
+            }
+          }
         }
       });
+
     }
   }, [dataonly]);
 

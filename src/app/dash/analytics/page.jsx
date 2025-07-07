@@ -46,6 +46,8 @@ export default function Analytics() {
   const [pagespervisit, setPagesPerVisit] = useState(0); // For pages per visit
   const [getaveragevisitduration, setGetAverageVisitDuration] = useState(0); // For average visit duration
 
+  const [linecharttotalusers, setLineChartTotalUsers] = useState([]); // For line chart total users data
+
   const handleDateChange = (newdate) => {
     console.log('newdate in handleDateChange', newdate)
     console.log(typeof newdate, 'typeof newdate')
@@ -137,6 +139,8 @@ export default function Analytics() {
         console.log(data.bouncerate, 'data.bouncerate');
         setBounceRate(data.bouncerate || 0);
         setGetAverageVisitDuration(data.getaveragevisitduration || 0); // Use data.getaveragevisitduration if it exists
+
+        setLineChartTotalUsers(data.totalvisitslinechartdata || []);
 
         // Use data.bouncerate if it exists
         /*  setCountriesData(data.visitorsbycountry)
@@ -403,7 +407,7 @@ export default function Analytics() {
           <button className="button button-outline">All time</button> */}
         </div>
 
-        {/*    <ChartVisitsFilter data={totalusersdatarange} /> */}
+        <ChartVisitsFilter data={linecharttotalusers} />
         <div id="analyticsquickdatadiv card" className="analyticsquickdatadiv">
           <div className="analyticsquickdataboxes flex flex-row gap-4 card">
             <div className="analyticsquickdatabox flex flex-col">
