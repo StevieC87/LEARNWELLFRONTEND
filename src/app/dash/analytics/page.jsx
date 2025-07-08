@@ -35,8 +35,6 @@ export default function Analytics() {
 
   const [customdates, setCustomDates] = useState(false); // For custom date range selection
 
-  const [referrals, setReferrals] = useState([]); // For referrals data
-
 
   //newstuff
   const [totalpageviews, setTotalPageViews] = useState(0);
@@ -47,6 +45,9 @@ export default function Analytics() {
   const [getaveragevisitduration, setGetAverageVisitDuration] = useState(0); // For average visit duration
 
   const [linecharttotalusers, setLineChartTotalUsers] = useState([]); // For line chart total users data
+
+  const [referrals, setReferrals] = useState([]); // For referrals data
+  const [mostvisitedpages, setMostVisitedPages] = useState([]); // For most visited pages data
 
   const handleDateChange = (newdate) => {
     console.log('newdate in handleDateChange', newdate)
@@ -141,7 +142,11 @@ export default function Analytics() {
         setGetAverageVisitDuration(data.getaveragevisitduration || 0); // Use data.getaveragevisitduration if it exists
 
         setLineChartTotalUsers(data.totalvisitslinechartdata || []);
-
+        console.log(data.getreferrers, 'data.getreferrers11111111');
+        setReferrals(data.getreferrers || []); // Use data.getreferrers if it exists
+        console.log(data.topvisitedpages, 'mostvisitedpages');
+        setMostVisitedPages(data.topvisitedpages)
+        //mostvisitedpages, setMostVisitedPages
         // Use data.bouncerate if it exists
         /*  setCountriesData(data.visitorsbycountry)
          console.log(data.visitorsbycountry, 'data.visitorsbycountry');
@@ -183,7 +188,7 @@ export default function Analytics() {
   const [opendatepickercustom, setOpenDatePickerCustom] = useState(false);
   const [selectedValue, setSelectedValue] = useState("7days");
 
-  const [mostvisitedpages, setMostVisitedPages] = useState([]);
+  /*  */
 
   const [activevisitors, setActiveVisitors] = useState([]); // For active visitors data
 
@@ -532,11 +537,11 @@ export default function Analytics() {
         </div>
 
         <div className="topreferrersouterdiv mt-4 card">
-          {/*    <TopReferrers referrals={referrals} /> */}
+          <TopReferrers referrals={referrals} />
         </div>
 
         <div className="card mt-4">
-          {/* <TopVisitedPages mostvisitedpages={mostvisitedpages} /> */}
+          <TopVisitedPages mostvisitedpages={mostvisitedpages} />
         </div>
       </div>
 

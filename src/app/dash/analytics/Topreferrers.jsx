@@ -19,19 +19,18 @@ export default function TopReferrers({ referrals }) {
 
           <span className="referrer-name">Url</span>
           <span className="referrer-visits">Total visits</span>
-          <span className="referrer-visits">Returning visits</span>
-          <span className="referrer-visits">New visits</span>
+          {/*           <span className="referrer-visits">Returning visits</span>
+          <span className="referrer-visits">New visits</span> */}
         </div>
         <div className="referralstuff">
           {referrals && referrals.map((referrer, index) => (
             <div key={index}
               className={`referrer-item ${index % 2 === 0 ? 'even' : 'odd'}`}>
 
-              <span className="referrer-name">{referrer._id}</span>
-              <span className="referrer-visits"> {referrer.totalUsers} </span>
-              <span className="referrer-visits">{referrer.totalReturningUsers}</span>
+              <span className="referrer-name">{referrer.referrer}</span>
 
-              <span className="referrer-visits">{referrer.totalNewUsers}</span>
+
+              <span className="referrer-visits">{referrer.count}</span>
             </div>
           ))}
         </div>
