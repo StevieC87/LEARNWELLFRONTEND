@@ -7,9 +7,11 @@ import { useSearchParams } from "next/navigation";
 import FieldRenderer from '@/app/dash/pages/[edit]/FieldRenderer';
 import { useDispatch, useSelector } from "react-redux";
 import { updateField } from '@/redux/slices/PagesSlice';
-
+import ModalYesNo from "../../../../components/global/ModalYesNo";
+import { useRouter } from 'next/navigation';
 
 export default function UserProfile() {
+  const router = useRouter();
   const dispatch = useDispatch();
   const searchParams = useSearchParams();
   const useridparams = searchParams.get('userid'); // Get user ID from URL parameters
@@ -201,16 +203,42 @@ export default function UserProfile() {
 
   }
 
+  const [showModal, setShowModal] = useState(false);
+
+  const getModalAnswer = (answer) => {
+    if (answer) {
+      //IF YES, DO TRASH PAGE
+      //doDeletePage()
+      setShowModal(false);
+    }
+    else {
+      //IF NO, CLOSE MODAL
+      setShowModal(false);
+    }
+  }
+
+  //,here do fetch disable 
+  const disable2fa = async () => {
+
+  }
+
   return (
     <>
-      {!loaded && (
-        <div></div>
-      )}
+      <ModalYesNo
+        textchoice={`Are you sure you want to disable Two-factor Authentication?`}
+        isOpen={showModal}
+        changeOpen={setShowModal}
+        getModalAnswer={getModalAnswer}
+        buttontextconfirm="Yes"
+        buttontextcancel="No"
+        context="delete"
+      />
+      {!loaded && <div></div>}
       {fieldswithdataifany && fieldswithdataifany.length > 0 && (
         <form className="card">
           <div className="flex flex-row justify-between items-center align-center">
-            <h1 className="pb-10"> User profile</h1>
-            <button className="button button-primary " type="submit" onClick={(e) => onSubmit(e)}>
+            <h1 className="pb-10">User profile</h1>
+            <button className="button button-primary" type="submit" onClick={(e) => onSubmit(e)}>
               {saved ? 'Saved!' : 'Save'}
               {errorsave && <span className="text-red-500">{errorsave}</span>}
             </button>
@@ -228,45 +256,66 @@ export default function UserProfile() {
                 label={field.label || field.name || ''}
                 source="userprofile"
                 fielddata={field}
-                onChange2={(name, value) => {
-                }}
+                onChange2={(name, value) => { }}
               />
             ))}
           </div>
-          {currentuserrole === 'admin' || currentuserrole === 'superadmin' && (
+          {(currentuserrole === 'admin' || currentuserrole === 'superadmin') && (
             <div>
-              <div className="mt-4"><label htmlFor="role">Role:  </label> <span>{userRole}</span>
+              <div className="mt-4">
+                <label htmlFor="role">Role: </label> <span>{userRole}</span>
               </div>
               <label htmlFor="">Edit Role: </label>
-              <select value={userRole} onChange={(e) => setUserRole(e.target.value)} >
+              <select value={userRole} onChange={(e) => setUserRole(e.target.value)}>
                 <option value="superadmin">Super Admin</option>
                 <option value="admin">Admin</option>
-                <option value="superadmin">Editor</option>
+                <option value="editor">Editor</option>
                 <option value="author">Author</option>
                 <option value="contributor">Contributor</option>
                 <option value="registered">Registered</option>
               </select>
             </div>
           )}
-          <input type="hidden" value={userId} onChange={(e) => {
-            console.log('donothing')
-          }} />
-          <div >
+          <input
+            type="hidden"
+            value={userId}
+            onChange={(e) => {
+              console.log('donothing');
+            }}
+          />
+          <div>
             <label htmlFor="password">Password: </label>
-            <button className="button button-outline changepassbutton" onClick={() => changepassword()}>Change password</button>
-            <div><span className="text-green-500">{successmessage}</span>
-              <span className="text-red-500"> {errormessage}</span>
+            <button className="button button-outline changepassbutton" onClick={() => changepassword()}>
+              Change password
+            </button>
+            <div>
+              <span className="text-green-500">{successmessage}</span>
+              <span className="text-red-500">{errormessage}</span>
             </div>
+          </div>
+          <div className="mt-4">
+            <span className="poppinsSemiBold">Two-factor Authentication</span>
 
+            <button className="button button-outline ml-5"
+              onClick={(e) => {
+                e.preventDefault(); // Prevent default form submission
+                router.push('/dash/users/profile/twofactor');
+              }}
+            /* ?userid=' + useridparams */
+            >Enable</button>
+            <button
+              className="button button-outline ml-5"
+              onClick={(e) => {
+                e.preventDefault(); // Prevent default form submission
+                setShowModal(true);
+              }}
+            >
+              Disable
+            </button>
           </div>
 
-
-        </form >
+        </form>
       )}
-
     </>
-
-
-
-  )
+  );
 }
