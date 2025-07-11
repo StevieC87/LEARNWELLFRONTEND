@@ -81,8 +81,15 @@ export default function Login({ showForgotCallback }) {
 
       }
       if (response.ok) {
-        console.log('Login successful:  ');
-        router.push('/dash');
+        const data = await response.json();
+        if (data.verifyotpredirect === true) {
+          alert('123')
+          router.push('/users/verifyotp'); // Redirect to verify OTP page if two-factor authentication is enabled
+        }
+        else {
+          console.log('Login successful:  ');
+          router.push('/dash');
+        }
 
       }
 
@@ -113,11 +120,11 @@ export default function Login({ showForgotCallback }) {
       <div className="cardouterdiv">
         <div className="card">
           {/* flex flex-col items-center justify-center h-screen */}
-
           <div className="flex items-center justify-center mb-8">
             <Image className="logocolor" src="/images/logo/logocolor.svg" alt="Logo" width={50} height={50} />
             <span className="poppinsSemiBold  text-black">Alpine<span className="logocolortest">Web</span></span>
           </div>
+
 
           <h4 className="pb-8 poppinsSemiBold text-center ">Login</h4>
           <form onSubmit={handleSubmit(onSubmit)}>

@@ -30,7 +30,7 @@
     /*  flex-direction: column; */
     grid-template-columns: 1fr;
     /*   min-height: 100vh; */
-    padding-bottom: 80px; /* Add space for sticky footer */
+    /* Add space for sticky footer */
   }
   /*  .adminwrapperdiv {
     display: flex;
@@ -44,5 +44,11 @@
     background: linear-gradient(90deg, #ff7e5f, #feb47b);
     background-size: 400% 400%;
     animation: gradient 15s ease infinite;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  body {
+    padding-bottom: 80px; /* Adjust font size for smaller screens */
   }
 }
