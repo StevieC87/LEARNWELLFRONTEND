@@ -1,9 +1,12 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 
 export default function VerifyOTP() {
   const router = useRouter(); // Initialize the Next.js router for navigation
+  const searchParams = useSearchParams(); // Get the search parameters from the URL]
+  const verifyotp = searchParams.get('verifyotp'); // Get the 'verifyotp' parameter from the URL
   const [otp, setOtp] = useState(''); // State to hold the OTP input
   const [otpverifysuccess, setOtpVerifySuccess] = useState(false); // State to hold OTP verification success
 
