@@ -71,8 +71,6 @@ export default function Login({ showForgotCallback }) {
         credentials: 'include' // THIS is what allows Set-Cookie to work
       });
 
-
-
       if (!response.ok) {
         const errorData = await response.json();
         setMessage({ type: 'error', text: "Login failed" });

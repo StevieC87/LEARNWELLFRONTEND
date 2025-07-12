@@ -34,6 +34,8 @@ export default function UserProfile() {
   const [fieldsdatatosend, setFieldsDataForSend] = useState(null);
   const [loaded, setLoaded] = useState(false);
 
+  const [twofactorenabled, setTwoFactorEnabled] = useState(false);
+
   //,FIRST WE FETCH SCHEMA AND FIELDS DATA
   useEffect(() => {
 
@@ -62,6 +64,7 @@ export default function UserProfile() {
         setUserId(data.fieldsdata._id);
         setUserRole(data.fieldsdata.role); // Set user role for display
         console.log(data.fieldsdata.role, 'userrole from profile page');
+        setTwoFactorEnabled(data.fieldsdata.twoFactorEnabled || false); // Set two-factor authentication status
         // Set user ID for display
         /*      setUserEmail(data.email); // Set user email for display
              setUserRole(data.userrole); // Set user role for display
@@ -296,22 +299,27 @@ export default function UserProfile() {
           <div className="mt-4">
             <span className="poppinsSemiBold">Two-factor Authentication</span>
 
-            <button className="button button-outline ml-5"
-              onClick={(e) => {
-                e.preventDefault(); // Prevent default form submission
-                router.push('/dash/users/profile/twofactor');
-              }}
-            /* ?userid=' + useridparams */
-            >Enable</button>
-            <button
-              className="button button-outline ml-5"
-              onClick={(e) => {
-                e.preventDefault(); // Prevent default form submission
-                setShowModal(true);
-              }}
-            >
-              Disable
-            </button>
+            {!twofactorenabled && (
+              <button className="button button-outline ml-5"
+                onClick={(e) => {
+                  e.preventDefault(); // Prevent default form submission
+                  router.push('/dash/users/profile/twofactor');
+                }}
+              /* ?userid=' + useridparams */
+              >
+                Enable</button>
+            )}
+            {twofactorenabled && (
+              <button
+                className="button button-outline ml-5"
+                onClick={(e) => {
+                  e.preventDefault(); // Prevent default form submission
+                  setShowModal(true);
+                }}
+              >
+                Disable
+              </button>
+            )}
           </div>
 
         </form>
