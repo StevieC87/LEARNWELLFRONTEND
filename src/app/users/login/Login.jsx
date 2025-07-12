@@ -83,7 +83,6 @@ export default function Login({ showForgotCallback }) {
       if (response.ok) {
         const data = await response.json();
         if (data.verifyotpredirect === true) {
-          alert('123')
           router.push('/users/verifyotp'); // Redirect to verify OTP page if two-factor authentication is enabled
         }
         else {
