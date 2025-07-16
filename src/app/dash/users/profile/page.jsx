@@ -34,6 +34,8 @@ export default function UserProfile() {
   const [fieldsdatatosend, setFieldsDataForSend] = useState(null);
   const [loaded, setLoaded] = useState(false);
 
+  const [triggerfetch, setTriggerFetch] = useState(0); // For re-fetching data
+
   const [twofactorenabled, setTwoFactorEnabled] = useState(false);
 
   //,FIRST WE FETCH SCHEMA AND FIELDS DATA
@@ -82,7 +84,7 @@ export default function UserProfile() {
 
     }
     fetchprofile();
-  }, [])
+  }, [triggerfetch])
 
 
   //, THEN WE MERGE THEM TOGETHER AND SET THEM TO STATE AND REDUX
@@ -212,6 +214,8 @@ export default function UserProfile() {
     if (answer) {
       //IF YES, DO TRASH PAGE
       //doDeletePage()
+      disable2fa();
+
       setShowModal(false);
     }
     else {
@@ -221,7 +225,25 @@ export default function UserProfile() {
   }
 
   //,here do fetch disable 
+
   const disable2fa = async () => {
+    //alert('Disabling Two-factor Authentication');
+    const fetchdisable2fa = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/disable2fa`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userid: userId }),
+      credentials: 'include', // Include cookies in the request
+    });
+    if (!fetchdisable2fa.ok) {
+      console.error('Failed to disable Two-factor Authentication');
+      setErrormessage('Failed to disable Two-factor Authentication');
+      return;
+    }
+
+    setTriggerFetch(triggerfetch + 1); // Increment trigger to re-fetch data
+
 
   }
 
