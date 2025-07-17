@@ -36,7 +36,7 @@ export default function Login({ showForgotCallback }) {
         }
       )
       if (!fetchuserpublicreg.ok) {
-        console.error('Failed to fetch user public registration status');
+        // console.log('Failed to fetch user public registration status');
         return;
       }
       console.log(fetchuserpublicreg, 'fetchuserpublicreg')
