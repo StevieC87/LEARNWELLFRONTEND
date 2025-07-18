@@ -135,7 +135,7 @@ export default function Popupinfo(props) {
       />
       {elipsisOpen && (
         <>
-          <div id="popupmenudiv" className="popupmenudiv p-3" /* style={{ left: positionx, top: positiony }} */>
+          <div id="popupmenudiv" className="popupmenudiv p-3" >
             <div className="popupmenuitemsdiv">
               {/* {type === "folder" && (
                 <button className="popupmenuitemitem"> Rename</button>

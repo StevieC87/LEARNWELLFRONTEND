@@ -76,7 +76,8 @@ export default function MediaButton(props) {
             className="button  button-outline">
             Choose
           </button>
-          <input type="text" style={{ width: '200px' }}
+          <input type="text"
+            className="width200"
             onChange={() => onChangehandler()}
             value={thisfieldvalue?.content?.imagepath || ''}
             name={name}

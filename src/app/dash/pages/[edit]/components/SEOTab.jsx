@@ -287,7 +287,7 @@ export default function SEOTab(props) {
       <div onClick={(e) => closePopup(e)}>
         <Popup />
 
-        <form className="seoform" onSubmit={handleSubmit(onSubmit)} style={{ marginBottom: 24 }}>
+        <form className="seoform mb-10" onSubmit={handleSubmit(onSubmit)} >
           <div className="flex flex-row justify-between items-center mb-4">
             <h1>Page SEO</h1>
             {showsuccess && <div className="alert alert-success">SEO settings saved.</div>}

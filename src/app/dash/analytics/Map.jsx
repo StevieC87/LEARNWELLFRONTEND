@@ -225,24 +225,6 @@ export default function MapAnalyticsComponent({ countriesdata }) {
 
   return (
     <>
-      <style jsx>{`
-        .mapdiv {
-          width: 375px;
-          height: 260px;
-        }
-          .showdata {
-          height: 200px;
-          font-size: 1rem}
-
-        @media (min-width: 600px) {
-          .mapdiv {
-            width: 450px;
-            height: 320px;
-          }
-     
-      }
-      `}</style>
-
 
 
 
@@ -303,17 +285,7 @@ export default function MapAnalyticsComponent({ countriesdata }) {
       {hoverData && (
         <>
           <div
-            style={{
-              position: 'absolute',
-              top: coords.y + 10,
-              left: coords.x + 10,
-              background: 'black',
-              color: 'white',
-              padding: '5px 10px',
-              borderRadius: '3px',
-              pointerEvents: 'none',
-              zIndex: 9999,
-            }}
+            className="hoverdatas  "
           >
             <strong className="flex flex-row gap-3">
               {/* {hoverData.countryID} */}
@@ -327,6 +299,20 @@ export default function MapAnalyticsComponent({ countriesdata }) {
 
         </>
       )}
+
+      <style jsx nonce={nonce}>{`
+          .hoverdatas {
+             position: 'absolute',
+              top: coords.y + 10,
+              left: coords.x + 10,
+              background: 'black',
+              color: 'white',
+              padding: '5px 10px',
+              borderRadius: '3px',
+              pointerEvents: 'none',
+              zIndex: 9999,
+          }
+      `}</style>
     </>
   );
 

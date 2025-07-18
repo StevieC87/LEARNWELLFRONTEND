@@ -73,14 +73,9 @@ export default function ForgotPassword({ onBack }) {
 
   return (
     <>
-      <style jsx>{`
-       .card {
-        width: 370px;
-      }
-     
-    `}</style>
+
       <div className="cardouterdiv forgot-password-container loginouterdivhigherup pb-100">
-        <div className="card">
+        <div className="card cardpwordforgot">
           <h1 className="cardh1">Forgot Password</h1>
           <div className="flex flex-col gap-6">
             {!successmessage && (

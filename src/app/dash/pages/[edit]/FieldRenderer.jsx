@@ -250,7 +250,7 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
               );
             })
             }
-            <div className="flex flex-col gap-5" style={{ width: "300px" }}>
+            <div className="flex flex-col gap-5 width300" >
               <button className="button button-primary">+</button>
               {/* onClick={CreateNewField} */}
 

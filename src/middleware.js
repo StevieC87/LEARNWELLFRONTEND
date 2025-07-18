@@ -1,74 +1,50 @@
-// middleware.js
 import { NextResponse } from "next/server";
 
-export default async function Middleware(request) {
+export default function middleware(request) {
   const fullURL = request.url;
-  const url = await request.nextUrl;
-  const pathname = url.pathname; // Get the current pathname+
+  const url = request.nextUrl;
+  const pathname = url.pathname;
 
+  // Update request headers (if needed)
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("x-full-url", fullURL);
   requestHeaders.set("x-custom-pathname", pathname);
-  // const response = NextResponse.next();
-  // response.headers.set("x-custom-pathname", pathname); // Add pathname to headers
 
-  return NextResponse.next({
+  const cspDisabledRoutes = [
+    "/route-without-csp",
+    "/another-no-csp",
+    // Add more as needed
+  ];
+
+  const response = NextResponse.next({
     request: {
-      headers: requestHeaders,
+      headers: request.headers,
     },
   });
+
+  // Only set CSP if not in the disabled list
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+  if (!cspDisabledRoutes.includes(pathname)) {
+    const nonce = crypto.randomUUID();
+    const csp = [
+      "default-src 'self'",
+      `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'`,
+      `style-src-elem 'self' 'nonce-${nonce}' 'unsafe-hashes' 'sha256-sHwQzC2ZsVrt1faUYCjF/eo8aIoBlQbGjVstzanL9CU=' 'sha256-Ylx4sWaDgn6RRamxe7jevX4yDhNtiSG3CQWrPAdPh6A=' 'sha256-TkUgajJ946/xb1R0Vfeuzb73k2VAKoEIF3sRGeX4aBU=' 'sha256-rZot9UVcdtXL99KiVSLfpDfxS3VtOsOY1PXjNX1ntxg=' 'sha256-k1m9MgjuV56OVgoQq43A5vLIpdJFJrlq/3ANCGJD4es=' 'sha256-m8dEh7VmKFRCO8jEWPbmkeO1mq4SIx8omtyx50rrS/M=' 'sha256-rZot9UVcdtXL99KiVSLfpDfxS3VtOsOY1PXjNX1ntxg=' 'sha256-fNQvmabDUct/Q8bVROR2oAMzjWD2CYHGuJj7V7Sxgfc='`,
+      `style-src 'self' 'nonce-${nonce}' 'unsafe-hashes' 'sha256-zlqnbDt84zf1iSefLU/ImC54isoprH/MRiVZGskwexk=' 'sha256-sHwQzC2ZsVrt1faUYCjF/eo8aIoBlQbGjVstzanL9CU=' 'sha256-zlqnbDt84zf1iSefLU/ImC54isoprH/MRiVZGskwexk=' 'sha256-Ylx4sWaDgn6RRamxe7jevX4yDhNtiSG3CQWrPAdPh6A=' 'sha256-zlqnbDt84zf1iSefLU/ImC54isoprH/MRiVZGskwexk=' 'sha256-TkUgajJ946/xb1R0Vfeuzb73k2VAKoEIF3sRGeX4aBU=' 'sha256-rZot9UVcdtXL99KiVSLfpDfxS3VtOsOY1PXjNX1ntxg=' 'sha256-k1m9MgjuV56OVgoQq43A5vLIpdJFJrlq/3ANCGJD4es=' 'sha256-m8dEh7VmKFRCO8jEWPbmkeO1mq4SIx8omtyx50rrS/M=' 'sha256-fNQvmabDUct/Q8bVROR2oAMzjWD2CYHGuJj7V7Sxgfc='`,
+      `connect-src 'self' ${apiUrl}`,
+    ].join("; ");
+
+    response.headers.set("Content-Security-Policy", csp);
+    response.headers.set("x-nonce", nonce);
+  }
+
+  // Always set these
+  response.headers.set("x-full-url", request.url);
+  response.headers.set("x-custom-pathname", pathname);
+
+  return response;
 }
 
 export const config = {
   matcher: "/:path*",
 };
-
-/* import { NextResponse } from "next/server";
-
-
-
-export async function middleware(request) {
-  // Get the full URL of the incoming request
-  const fullURL = request.url;
-  // console.log(fullURL, "fullURLbbbbbbbbbbbbbbbb");
-  // Create a response
-  const response = NextResponse.next(); // Create a new response
-  response.headers.set("x-full-url", fullURL); // Set the custom header
-  console.log(response.headers.get("x-full-url"), "Header Set in Middleware"); // Confirm header is set 
-  // Clone the request and add the custom header
-  const requestHeaders = new Headers(request.headers);
-  requestHeaders.set("x-full-url", fullURL);
-  requestHeaders.set("x-hello-from-middleware1", "hello");
-  const response = NextResponse.next({
-    request: {
-      headers: requestHeaders,
-    },
-  });
-  response.headers.set("x-hello-from-middleware2", "hello");
-  return response;
-}
-
-// Apply to every route
-export const config = {
-  matcher: "/:path*", // Matches all paths
-};
- */
-/* import { NextResponse } from 'next/server'
- 
-export function middleware(request) {
-  // Clone the request headers and set a new header `x-hello-from-middleware1`
-  const requestHeaders = new Headers(request.headers)
-  requestHeaders.set('x-hello-from-middleware1', 'hello')
- 
-  // You can also set request headers in NextResponse.next
-  const response = NextResponse.next({
-    request: {
-      // New request headers
-      headers: requestHeaders,
-    },
-  })
- 
-  // Set a new response header `x-hello-from-middleware2`
-  response.headers.set('x-hello-from-middleware2', 'hello')
-  return response
-} */

@@ -82,37 +82,26 @@ export default function QuizInput({ getquizanswer }) {
   return (
     <>
       {/* JSX STYLE */}
-      <style jsx>{`
-        
-        .button-check {
-          padding: 0px 10px;
-        }
-          .quizdivinputs {
-          height: 35px
-          }
-        .inputquiz{
-          margin-bottom: 0px;
-        }
-      `}</style>
+
       <div >
-        {setWrongAnswerCount >= 3 && <p style={{ color: 'red' }}>Captcha failed, please try again.</p>}
-        {ratelimitmsg && <p style={{ color: 'red' }}>You answered wrongly too many times, please try again later.</p>}
+        {setWrongAnswerCount >= 3 && <p className="text-red-500">Captcha failed, please try again.</p>}
+        {ratelimitmsg && <p className="text-red-500">You answered wrongly too many times, please try again later.</p>}
         {wronganswercount < 3 && !ratelimitmsg && (
           <div >
 
             <label htmlFor="puzzle">{quiznumberquestion}</label>
             <div className="flex flex-row gap-2 quizdivinputs">
-              <input style={{ width: '225px' }}
-                className="inputquiz"
+              <input
+                className="inputquiz "
                 type="number"
                 placeholder="Enter the answer"
                 value={quizanswer}
                 onChange={testthings}
                 required
               />
-              <button type="button" className="button button-primary button-check" style={{ backgroundColor: showansweredcorrect ? 'green' : '' }} onClick={checkquizanswer}>Check </button>
+              <button type="button" className={`button button-primary button-checkQUIZ ${showansweredcorrect ? 'bg-green-500' : ''}`} onClick={checkquizanswer}>Check </button>
             </div>
-            {wrongquizanswer && <p style={{ color: 'red' }}>Incorrect answer, {3 - wronganswercount} attempts left.</p>}
+            {wrongquizanswer && <p className="text-red-500">Incorrect answer, {3 - wronganswercount} attempts left.</p>}
             {/* {!wrongquizanswer && <p style={{ color: 'green' }}>Correct answer</p>} */}
           </div>
         )}

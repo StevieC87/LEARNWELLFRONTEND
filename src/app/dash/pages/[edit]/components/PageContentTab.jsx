@@ -570,7 +570,7 @@ export default function PageContentTab(props) {
                   </button>
                 </div>
               )}
-              <button id="savedraft" style={{ width: '106px' }} type="submit" className={hasChanges ? "button button-primary button-thin" : "button button-outline button-thin"}>
+              <button id="savedraft" type="submit" className={hasChanges ? "button button-primary button-thin savedraftbutton" : "button button-outline button-thin savedraftbutton"}>
                 {issaving && (
                   <span>Saving</span>
                 )}
@@ -607,7 +607,7 @@ export default function PageContentTab(props) {
 
                     {userrole !== 'contributor' && (
                       <button className={`${publishchanges ? 'button' : 'button button-outline button-noborder'}`}
-                        style={{ width: '180px', paddingLeft: '2px', paddingRight: '2px' }} onClick={() => onPublish()}
+                        onClick={() => onPublish()}
                       >
                         <>
                           {!ispublishing && (
@@ -645,14 +645,14 @@ export default function PageContentTab(props) {
                         }
 
                         />
-                        <span className="slider round" style={{ cursor: userrole === 'contributor' ? 'not-allowed' : 'pointer' }}></span>
+                        <span className={userrole === 'contributor' ? 'slider round cursor-not-allowed ' : 'cursor-pointer slider round'}></span>
 
                       </label>
 
                     </div>
                     <div>
                       {publishswitchstatus && (
-                        <span className={!islatestversion ? 'text-red-900' : ''} style={{ fontSize: '1.2rem' }}>{islatestversion ? 'Latest Draft Published' : 'Unpublished Changes'
+                        <span className={!islatestversion ? 'text-red-900 fontsize1p2' : 'fontsize1p2'} >{islatestversion ? 'Latest Draft Published' : 'Unpublished Changes'
                         }</span>
                       )}
                     </div>
@@ -800,8 +800,8 @@ export default function PageContentTab(props) {
             )
           })}
 
-        </form>
-      </div>
+        </form >
+      </div >
 
     </>
   )

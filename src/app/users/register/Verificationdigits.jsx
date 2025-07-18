@@ -627,23 +627,7 @@ export default function VerificationDigits({ email }) {
   // ================================================
   return (
     <>
-      <style jsx>{`
-        .verifycard {
-        min-width: 320px;
-        max-width: 400px;
-        }
-        .verifinput {
-          width: 50px;
-          height: 50px;
-          font-size: 30px;
-          text-align: center;
-          margin: 5px;
-          border-radius: 5px;
-          border: 1px solid #ccc;
-          background-color: white;
-        
-        }
-    `}</style>
+
 
       <div className="verifycard">
         {switchscreensonsuccessshow && (

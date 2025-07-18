@@ -119,11 +119,11 @@ export default function UsersPage() {
         <table>
           <thead>
             <tr>
-              <th className="cursor-pointer" onClick={() => sorttable('role')}
-                style={{ width: '140px' }}
+              <th className="cursor-pointer width140" onClick={() => sorttable('role')}
+
               >
-                <div className="flex flex-row justify-between items-center"
-                  style={{ textAlign: 'center' }}
+                <div className="flex flex-row justify-between items-center text-center"
+
                 >
                   role
                   {columnsorted === 'role' && (
@@ -144,11 +144,11 @@ export default function UsersPage() {
               </th>
 
 
-              <th className="cursor-pointer" onClick={() => sorttable('username')}
-                style={{ width: '140px' }}
+              <th className="cursor-pointer width140" onClick={() => sorttable('username')}
+
               >
-                <div className="flex flex-row justify-between items-center"
-                  style={{ textAlign: 'center' }}
+                <div className="flex flex-row justify-between items-center text-center"
+
                 >
                   username
                   {columnsorted === 'username' && (
@@ -169,10 +169,10 @@ export default function UsersPage() {
                 <td className="" ><Link href={`/dash/users/profile?userid=${user._id}`}>{user.role} </Link></td>
                 <td className=""><Link href={`/dash/users/profile?userid=${user._id}`}>{user.email} </Link></td>
 
-                <td className="" style={{ textAlign: 'center' }}>{user.username}</td>
+                <td className="text-center" >{user.username}</td>
 
-                <td className="tdpageslist"
-                  style={{ width: '60px' }}>
+                <td className="tdpageslist width60"
+                >
                   {((user._id.toString() !== userid) || (user.role !== 'superadmin')) && (
                     <div>
 

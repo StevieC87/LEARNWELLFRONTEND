@@ -33,6 +33,22 @@
   h6 {
     font-size: 1.6rem;
   }
+
+  .fontsize6 {
+    font-size: 6rem;
+  }
+  .fontsize5 {
+    font-size: 5rem;
+  }
+  .fontsize4 {
+    font-size: 4rem;
+  }
+  .fontsize3 {
+    font-size: 3rem;
+  }
+  .fontsize1p2 {
+    font-size: 1.2rem;
+  }
   /* Paragraphs and body text */
   /* p {
     margin-bottom: var(--spacing-medium);

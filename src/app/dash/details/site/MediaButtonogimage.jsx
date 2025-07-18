@@ -79,7 +79,7 @@ export default function MediaButtonogimage(props) {
             className="button  button-outline">
             Choose
           </button>
-          <input type="text" style={{ width: '200px' }} value={defaultogimage.imagepath || ""} onChange={() => donothing()}
+          <input type="text" className="width200" value={defaultogimage.imagepath || ""} onChange={() => donothing()}
 
           /*    onChange={() => onChangehandler()}
              value={thisfieldvalue?.content.imagepath || ''}

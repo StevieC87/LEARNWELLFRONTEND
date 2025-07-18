@@ -188,150 +188,151 @@ export default function Pages() {
   }
 
   return (
-    <div className="pageslistdiv">
-      {/*    <h1 className="">Pages</h1> */}
-      {/*       <LexicalField /> */}
-      <div>
-        {/* THIS IS TO SHOW THE MISSING PAGES FOR PAGE SCHEMA*/}
-        <Showschemasnopages multilingual={multilingual} defaultlanguage={defaultlanguage} pagetype={pagetype} schemanopages={schemanopages} />
+    <>
+      <div className="pageslistdiv">
+        {/*    <h1 className="">Pages</h1> */}
+        {/*       <LexicalField /> */}
+        <div>
+          {/* THIS IS TO SHOW THE MISSING PAGES FOR PAGE SCHEMA*/}
+          <Showschemasnopages multilingual={multilingual} defaultlanguage={defaultlanguage} pagetype={pagetype} schemanopages={schemanopages} />
 
 
-        {(pagetype === "post" && multischemas.length > 0) && (
-          <span>Create New: </span>
+          {(pagetype === "post" && multischemas.length > 0) && (
+            <span>Create New: </span>
 
-        )}
-        {pagetype === "post" && multischemas.length > 0 && multischemas.map((schema) => (
-          <Link key={schema} href={`/dash/pages/newpage?pagetype=post&schema=${schema}`} className="button button-primary m-3">{schema}</Link>
+          )}
+          {pagetype === "post" && multischemas.length > 0 && multischemas.map((schema) => (
+            <Link key={schema} href={`/dash/pages/newpage?pagetype=post&schema=${schema}`} className="button button-primary m-3">{schema}</Link>
 
-        ))}
-      </div>
-      <h1 className="text-2xl pt-10">
-        {pagetype === "page" && (
-          trashedview ? <span>Trashed Pages </span> : <span>Pages List</span>
-        )}
-        {pagetype === "post" && (
-          trashedview ? <span>Trashed Posts </span> : <span>Posts List</span>
-        )}
-      </h1>
-
-
-      <div id="tablediv" className="tablediv" >
-        <div id="filterdiv" className="flex flex-row gap-3" >
-          <div id="searchdiv" className="postspagesearchinput">
-            <input
-              type="text"
-              placeholder="Search by title"
-              className="input input-bordered w-full max-w-xs"
-              onChange={(e) => searchrecords(e.target.value)}
-            />
-          </div>
-          <div id="paginationdiv" className="">
-            <select name="paginationpages" id=""
-              onChange={(e) => {
-                setPageNumber(1);
-                const newLimit = parseInt(e.target.value, 10);
-                setPaginationLimit(newLimit);
-                setRefreshList((prev) => prev + 1);
-              }
-              }
-            >
-              <option value="10">10</option>
-              <option value="20">20</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-
-            </select>
-          </div>
-          <div id="filtertypediv">
-            {pagetype === "post" && (
-              <select name="" id="" onChange={(e) => {
-                setFilterTypeS(e.target.value);
-              }
-              }>
-                <option value='all'>All Types</option>
-                {pagetype === "post" && multischemas.length > 0 && multischemas.map((schema) => (
-                  <option key={schema} value={schema} >{schema}</option>
-                ))}
-              </select>
-            )}
-          </div>
-          <div id="languagefilter">
-            {multilingual && (
-              <select name="languagefilter" id="languagefilter"
-                onChange={(e) => {
-                  setFilterLang(e.target.value);
-                }}
-              >
-                <option value="all">All Languages</option>
-                {languages.map((page) => (
-                  <option key={page} value={page} >{page}</option>
-                ))}
-              </select>
-            )}
-          </div>
-
-          {/* <Link key={schema} href={`/dash/pages/newpage?pagetype=post&schema=${schema}`} className="button button-primary m-3">{schema}</Link> */}
+          ))}
         </div>
-        <table>
-          <thead>
-            <tr>
-              <th className="cursor-pointer" onClick={() => sorttable('title')}
+        <h1 className="text-2xl pt-10">
+          {pagetype === "page" && (
+            trashedview ? <span>Trashed Pages </span> : <span>Pages List</span>
+          )}
+          {pagetype === "post" && (
+            trashedview ? <span>Trashed Posts </span> : <span>Posts List</span>
+          )}
+        </h1>
+
+
+        <div id="tablediv" className="tablediv" >
+          <div id="filterdiv" className="flex flex-row gap-3" >
+            <div id="searchdiv" className="postspagesearchinput">
+              <input
+                type="text"
+                placeholder="Search by title"
+                className="input input-bordered w-full max-w-xs"
+                onChange={(e) => searchrecords(e.target.value)}
+              />
+            </div>
+            <div id="paginationdiv" className="">
+              <select name="paginationpages" id=""
+                onChange={(e) => {
+                  setPageNumber(1);
+                  const newLimit = parseInt(e.target.value, 10);
+                  setPaginationLimit(newLimit);
+                  setRefreshList((prev) => prev + 1);
+                }
+                }
               >
-                <div className="flex flex-row justify-between items-center">
-                  Title
-                  {columnsorted === 'title' && (
-                    <Caret direction={sortdirection === 'asc' ? 'asc' : 'desc'} />
-                  )
-                  }
-                </div>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
 
-
-              </th>
-              {uniquenumberofschemas > 1 && (
-
-                <th className="cursor-pointer" onClick={() => sorttable('schema')} style={{ width: '70px' }}>
-                  <div className="flex flex-row justify-between items-center">
-                    Type
-                    {columnsorted === 'schema' && (
-                      <Caret direction={sortdirection === 'asc' ? 'asc' : 'desc'} />
-                    )
-
-                    }
-                  </div>
-                </th>
+              </select>
+            </div>
+            <div id="filtertypediv">
+              {pagetype === "post" && (
+                <select name="" id="" onChange={(e) => {
+                  setFilterTypeS(e.target.value);
+                }
+                }>
+                  <option value='all'>All Types</option>
+                  {pagetype === "post" && multischemas.length > 0 && multischemas.map((schema) => (
+                    <option key={schema} value={schema} >{schema}</option>
+                  ))}
+                </select>
               )}
-
+            </div>
+            <div id="languagefilter">
               {multilingual && (
-                <th className="cursor-pointer" onClick={() => sorttable('locale')} style={{ width: '58px' }}>
+                <select name="languagefilter" id="languagefilter"
+                  onChange={(e) => {
+                    setFilterLang(e.target.value);
+                  }}
+                >
+                  <option value="all">All Languages</option>
+                  {languages.map((page) => (
+                    <option key={page} value={page} >{page}</option>
+                  ))}
+                </select>
+              )}
+            </div>
+
+            {/* <Link key={schema} href={`/dash/pages/newpage?pagetype=post&schema=${schema}`} className="button button-primary m-3">{schema}</Link> */}
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th className="cursor-pointer" onClick={() => sorttable('title')}
+                >
                   <div className="flex flex-row justify-between items-center">
-                    Lang
-                    {columnsorted === 'locale' && (
+                    Title
+                    {columnsorted === 'title' && (
+                      <Caret direction={sortdirection === 'asc' ? 'asc' : 'desc'} />
+                    )
+                    }
+                  </div>
+
+
+                </th>
+                {uniquenumberofschemas > 1 && (
+
+                  <th className="cursor-pointer width70" onClick={() => sorttable('schema')} >
+                    <div className="flex flex-row justify-between items-center">
+                      Type
+                      {columnsorted === 'schema' && (
+                        <Caret direction={sortdirection === 'asc' ? 'asc' : 'desc'} />
+                      )
+
+                      }
+                    </div>
+                  </th>
+                )}
+
+                {multilingual && (
+                  <th className="cursor-pointer width58" onClick={() => sorttable('locale')} >
+                    <div className="flex flex-row justify-between items-center">
+                      Lang
+                      {columnsorted === 'locale' && (
+                        <Caret direction={sortdirection === 'asc' ? 'asc' : 'desc'} />
+                      )
+
+                      }
+                    </div>
+                  </th>
+                )}
+
+                <th className="cursor-pointer width140" onClick={() => sorttable('lastModified')}
+
+
+
+                >
+                  <div className="flex flex-row justify-between items-center text-center"
+
+                  >
+                    Modified
+
+                    {columnsorted === 'lastModified' && (
                       <Caret direction={sortdirection === 'asc' ? 'asc' : 'desc'} />
                     )
 
                     }
                   </div>
                 </th>
-              )}
-
-              <th className="cursor-pointer" onClick={() => sorttable('lastModified')}
-                style={{ width: '140px' }}
-
-
-              >
-                <div className="flex flex-row justify-between items-center"
-                  style={{ textAlign: 'center' }}
-                >
-                  Modified
-
-                  {columnsorted === 'lastModified' && (
-                    <Caret direction={sortdirection === 'asc' ? 'asc' : 'desc'} />
-                  )
-
-                  }
-                </div>
-              </th>
-              {/*    <th className="cursor-pointer" onClick={() => sorttable('createdAt')}>
+                {/*    <th className="cursor-pointer" onClick={() => sorttable('createdAt')}>
                 <div className="flex flex-row justify-between items-center">
 
                   Created
@@ -343,63 +344,63 @@ export default function Pages() {
                   }
                 </div>
               </th> */}
-              {trashedview && (
-                <th style={{ width: '40px' }}>
-                  Restore
-                </th>
-              )}
+                {trashedview && (
+                  <th className="width40">
+                    Restore
+                  </th>
+                )}
 
 
-              {(issuperadmin || pagetype === 'post') && (
-                <th style={{ backgroundColor: !trashedview ? '' : 'red' }}>
-                  {!trashedview ? 'Trash' : 'Delete'}
-                </th>
-              )}
+                {(issuperadmin || pagetype === 'post') && (
+                  <th className={trashedview ? 'trashedview' : ''}>
+                    {!trashedview ? 'Trash' : 'Delete'}
+                  </th>
+                )}
 
 
-            </tr>
-          </thead>
-          <tbody>
-            {/* THIS IS TO SHOW THE LIST OF EXISTING PAGES */}
-            {filteredpages.length > 0 && filteredpages.map((page, index) => (
-              <tr key={page._id} className="pageitem ">
-                <td className="tdpageslist poppinsSemiBold">
-                  {multilingual && (
-                    <Link key={page._id} href={`/dash/pages/${page._id}?pagetype=${pagetype}&schema=${page.schema}&language=${page.locale}`} className="">
-                      <div>{page.title}</div></Link>
-                  )}
-                  {!multilingual && (
-                    <Link key={page._id} href={`/dash/pages/${page._id}?pagetype=${pagetype}&schema=${page.schema}&language=${defaultlanguage}`} className="">
-                      <div>{page.title}</div>
-                    </Link>
-                  )}
-                </td>
-                {uniquenumberofschemas > 1 && (
-
-                  <td data-label="Type:"
-                    className="tdpageslist">
-                    {page.schema}
+              </tr>
+            </thead>
+            <tbody>
+              {/* THIS IS TO SHOW THE LIST OF EXISTING PAGES */}
+              {filteredpages.length > 0 && filteredpages.map((page, index) => (
+                <tr key={page._id} className="pageitem ">
+                  <td className="tdpageslist poppinsSemiBold">
+                    {multilingual && (
+                      <Link key={page._id} href={`/dash/pages/${page._id}?pagetype=${pagetype}&schema=${page.schema}&language=${page.locale}`} className="">
+                        <div>{page.title}</div></Link>
+                    )}
+                    {!multilingual && (
+                      <Link key={page._id} href={`/dash/pages/${page._id}?pagetype=${pagetype}&schema=${page.schema}&language=${defaultlanguage}`} className="">
+                        <div>{page.title}</div>
+                      </Link>
+                    )}
                   </td>
-                )}
-                {multilingual && (
-                  <td className="tdpageslist text-center" data-label="Language:">{page.locale}</td>
-                )}
+                  {uniquenumberofschemas > 1 && (
 
-
-                <td data-label="Modified:" className="tdpageslist" style={{ fontSize: '1.2rem', textAlign: 'center' }}>
-                  {page.lastModified && (
-
-                    new Date(page.lastModified).toLocaleDateString('en-UK', {
-                      year: 'numeric',
-                      month: '2-digit',
-                      day: '2-digit',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })
-
+                    <td data-label="Type:"
+                      className="tdpageslist">
+                      {page.schema}
+                    </td>
                   )}
-                </td>
-                {/*   <td data-label="Created:" className="">
+                  {multilingual && (
+                    <td className="tdpageslist text-center" data-label="Language:">{page.locale}</td>
+                  )}
+
+
+                  <td data-label="Modified:" className="tdpageslist fontsize1p2 text-center" >
+                    {page.lastModified && (
+
+                      new Date(page.lastModified).toLocaleDateString('en-UK', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })
+
+                    )}
+                  </td>
+                  {/*   <td data-label="Created:" className="">
                   {new Date(page.createdAt).toLocaleDateString('en-UK', {
                     year: 'numeric',
                     month: '2-digit',
@@ -408,81 +409,82 @@ export default function Pages() {
                     minute: '2-digit',
                   })}
                 </td> */}
-                {trashedview && (
-                  <td>
-                    <div className="flex justify-center">
-                      <svg onClick={() => restorepage(page._id)} xmlns="http://www.w3.org/2000/svg" width="24 " height="24" fill="currentColor" className="bi bi-arrow-clockwise cursor-pointer" viewBox="0 0 16 16">
-                        <path fillRule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z" />
-                        <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466" />
-                      </svg>
-                    </div>
-                  </td>
-                )}
+                  {trashedview && (
+                    <td>
+                      <div className="flex justify-center">
+                        <svg onClick={() => restorepage(page._id)} xmlns="http://www.w3.org/2000/svg" width="24 " height="24" fill="currentColor" className="bi bi-arrow-clockwise cursor-pointer" viewBox="0 0 16 16">
+                          <path fillRule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z" />
+                          <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466" />
+                        </svg>
+                      </div>
+                    </td>
+                  )}
 
-                {(issuperadmin || pagetype === 'post') && (
-                  <td data-label="Trash:" className="tdpageslist"
-                    style={{ width: '60px' }}
-                  >
-                    <span>
-                      {!trashedview ?
-                        <TrashPage pagetype={pagetype} pageid={page._id} pageindexinarray={filteredpages.findIndex(p => p._id === page._id)}
-                          pagenumber={pagenumber}
-                          totalpageindexes={filteredpages.length}
-                          /*   changePagefunction={changePagefunction} */
-                          RefreshList1={Trashcallback}
-                        />
-                        : <DeletePage pagetype={pagetype} pageid={page._id} pageindexinarray={filteredpages.findIndex(p => p._id === page._id)}
-                          pagenumber={pagenumber}
-                          totalpageindexes={filteredpages.length}
-                          /*   changePagefunction={changePagefunction} */
-                          RefreshList1={Trashcallback}
-                        />
-                      }
-                    </span>
-                  </td>
+                  {(issuperadmin || pagetype === 'post') && (
+                    <td data-label="Trash:" className="tdpageslist width60">
+                      <span>
+                        {!trashedview ?
+                          <TrashPage pagetype={pagetype} pageid={page._id} pageindexinarray={filteredpages.findIndex(p => p._id === page._id)}
+                            pagenumber={pagenumber}
+                            totalpageindexes={filteredpages.length}
+                            /*   changePagefunction={changePagefunction} */
+                            RefreshList1={Trashcallback}
+                          />
+                          : <DeletePage pagetype={pagetype} pageid={page._id} pageindexinarray={filteredpages.findIndex(p => p._id === page._id)}
+                            pagenumber={pagenumber}
+                            totalpageindexes={filteredpages.length}
+                            /*   changePagefunction={changePagefunction} */
+                            RefreshList1={Trashcallback}
+                          />
+                        }
+                      </span>
+                    </td>
 
-                )}
+                  )}
 
-              </tr>
-            ))}
-
-
-
-          </tbody>
-        </table>
-      </div>
-
-      <div className="flex flex-row justify-between items-end">
-        <div id="pagination ">
-          {pageswenedArray.length > 1 && (
-            <div className="flex flex-row  gap-2 mt-5">
-              {pageswenedArray.map((page) => (
-                <button key={page} className={`button ${pagenumber === page ? 'button-primary' : 'button-outline'}`} onClick={() => {
-                  setPageNumber(page);
-                  setRefreshList((prev) => prev + 1);
-                }}>
-                  {page}
-                </button>
+                </tr>
               ))}
-            </div>
-          )}
 
+
+
+            </tbody>
+          </table>
         </div>
-        <div id="viewtrashed">
-          <button className="button button-outline"
-            onClick={() => {
-              setTrashedView((prev) => !prev)
-            }}
-          >
-            {trashedview ? 'View Active' : 'View Trashed'}
-          </button>
+
+        <div className="flex flex-row justify-between items-end">
+          <div id="pagination ">
+            {pageswenedArray.length > 1 && (
+              <div className="flex flex-row  gap-2 mt-5">
+                {pageswenedArray.map((page) => (
+                  <button key={page} className={`button ${pagenumber === page ? 'button-primary' : 'button-outline'}`} onClick={() => {
+                    setPageNumber(page);
+                    setRefreshList((prev) => prev + 1);
+                  }}>
+                    {page}
+                  </button>
+                ))}
+              </div>
+            )}
+
+          </div>
+          <div id="viewtrashed">
+            <button className="button button-outline"
+              onClick={() => {
+                setTrashedView((prev) => !prev)
+              }}
+            >
+              {trashedview ? 'View Active' : 'View Trashed'}
+            </button>
+          </div>
         </div>
+
+
+
+
+
       </div>
 
 
-
-
-
-    </div>
+    </>
   );
 }

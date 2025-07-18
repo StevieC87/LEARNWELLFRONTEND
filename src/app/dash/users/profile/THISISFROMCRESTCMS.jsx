@@ -244,7 +244,7 @@ export default function EditPageComp(props) {
 
         </div>
 
-        <div className="flex flex-col gap-5" style={{ width: "300px" }}>
+        <div className="flex flex-col gap-5 width300" >
           <button onClick={CreateNewField} className="button button-primary">+</button>
 
 

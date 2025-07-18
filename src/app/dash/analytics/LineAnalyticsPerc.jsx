@@ -32,21 +32,35 @@ export default function LineAnalyticsPerc(props) {
 
   return (
     <>
-      <style jsx>{`
-    .line-analytics-perc {
-      height: 1px;
-      background-color: blue;
-     
-    }
-      
-  `}</style>
+      <style jsx nonce={nonce}>{`
+        .line-analytics-perc-container {
+          position: relative;
+          width: 300px;
+          height: 1px;
+        }
+        .line-analytics-perc-background {
+          width: 300px;
+          height: 1px;
+          background: lightgray;
+          position: absolute;
+          left: 0;
+          top: 0;
+        }
+        .line-analytics-perc {
+          height: 1px;
+          background-color: blue;
+          position: relative;
+          z-index: 1;
+        }
+          .line-analytics-perc-width {
+          width: ${linewidth}px
+        }
+      `}</style>
 
-
-      <div style={{ position: 'relative', width: '300px', height: '1px' }}>
-        <div style={{ width: '300px', height: '1px', background: 'lightgray', position: 'absolute', left: 0, top: 0 }} />
-        <div className="line-analytics-perc" style={{ width: `${linewidth}px`, position: 'relative', zIndex: 1 }} />
+      <div className="line-analytics-perc-container">
+        <div className="line-analytics-perc-background" />
+        <div className="line-analytics-perc" />
       </div>
-
     </>
   );
 }

@@ -78,7 +78,7 @@ export default function MediaButtonlogo(props) {
             className="button  button-outline">
             Choose
           </button>
-          <input type="text" style={{ width: '200px' }} value={logo.imagepath || ""} onChange={() => donothing()}
+          <input type="text" className="width200" value={logo.imagepath || ""} onChange={() => donothing()}
 
           /*    onChange={() => onChangehandler()}
              value={thisfieldvalue?.content.imagepath || ''}

@@ -37,41 +37,7 @@ export default function TopVisitedPages({ mostvisitedpages }) {
           </div>
         ))}
       </div>
-      <style jsx>{`
-          .topvistedpagesouterdiv {
-            border-radius: 8px;
-       
-            background-color: #f9f9f9;
-          }
-          .topvisitedpagestitles {
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            padding: 5px 0;
-          }
-          .topvisitedpage-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 5px 0;
-          }
-          .topvisitedpage-item.even {
-            background-color: #f0f0f0;
-          }
-          .topvisitedpage-item.odd {
-            background-color: #ffffff;
-          }
-          .topvisitedpage-name {
-            font-weight: bold;
-            flex: 3;
-          }
-          .topvisitedpage-visits {
-            flex: 1;
-          }
-            @media (max-width: 600px) {
-          .topvisitedpage-name {
-            font-size: 1.2rem;   
-        };
-        `}</style>
+
 
     </>
   );

@@ -1,40 +1,82 @@
 'use client'; //FOR NOW QUICKLY
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { useNonce } from '@/hooks/useNonce'
+
+
 export default function Dash() {
+  const noncea = useNonce()
+  const [mounted, setMounted] = useState(false)
 
 
-  /*   useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const response = await fetch('http://localhost:3000/testcsrf', {
-            method: 'POST',
-            credentials: 'include', // Include cookies in the request
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
-  
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-  
-          //   const data = await response.json();
-          //  console.log(data);
-        } catch (error) {
-          console.error('Error fetching data:', error);
-        }
-      };
-  
-      fetchData();
-  
-    }, []) */
+  useEffect(() => {
+    const cspMeta = document.querySelector('meta[http-equiv="Content-Security-Policy"]')
+    if (cspMeta) {
+      console.log('CSP from meta:', cspMeta.content)
+    }
+    if (noncea && noncea.length > 0) {
+
+      setMounted(true)
+      console.log(noncea, 'nonceaaaaaa')
+    }
+  }, [noncea])
+
 
 
   return (
-    <div>
-      I am the dash, you are logged in
-    </div>
+    <>
+
+
+      <div>
+        <div className="testhere">testdiv</div>
+        I am the dash, you are logged in
+      </div>
+      {mounted && noncea && (
+        <>
+          {noncea}
+          <style nonce={noncea}>{`
+        .testhere {
+          color: red;
+          font-size: 20px;
+          font-weight: bold;
+        }
+          
+      `}</style>
+        </>
+      )}
+
+
+    </>
+
   )
 
 }
 
+
+
+
+
+/*   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/testcsrf', {
+          method: 'POST',
+          credentials: 'include', // Include cookies in the request
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+ 
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+ 
+        //   const data = await response.json();
+        //  console.log(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+ 
+    fetchData();
+ 
+  }, []) */

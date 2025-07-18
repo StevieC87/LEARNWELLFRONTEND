@@ -84,17 +84,10 @@ export default function ResetPassword() {
 
   return (
     <>
-      <style jsx>{`
-      .smallmarginbottominput {
-        margin-bottom: 0px;  
-      }
-        .card {
-        width: 370px
-          }
-      `}
-      </style>
+
+
       <div className="cardouterdiv">
-        <div className="card">
+        <div className="card cardpssword">
 
           <h1 className="cardh1">Reset Password</h1>
           <div className="cardinputsdiv">
@@ -103,9 +96,9 @@ export default function ResetPassword() {
             <input type="password" name="password" placeholder="" required ref={newpasswordref} />
             <label htmlFor="passwordconfirm">Confirm Password</label>
             <input className="smallmarginbottominput" type="password" name="passwordconfirm" placeholder="" required ref={newpasswordconfirmref} />
-            <div > {/* style={{ height: '30px' }} */}
-              {successmessage.length > 0 && <p style={{ color: 'green', marginBottom: '5px' }} className="text-base">{successmessage}</p>}
-              {passnotmatch && <p style={{ color: 'red', marginBottom: '5px' }}>{errormessage}</p>}
+            <div >
+              {successmessage.length > 0 && <p className="text-base text-red-500 mb-5">{successmessage}</p>}
+              {passnotmatch && <p className="text-red-500 mb-5" >{errormessage}</p>}
             </div>
             <div className="flex flex-row justify-center">
               <button className="button button-primary mt-8 " onClick={(e) => onSubmit(e)} type="submit">Reset Password</button>

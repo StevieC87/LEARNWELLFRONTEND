@@ -166,18 +166,6 @@ export default function LoginPage() {
 
   return (
     <>
-      <style jsx>{`
-      .box {
-        padding: 10px;
-        background: #eee;
-      }
-      
-     
-      .logocolortest {
-          color: #5bcaec;
-        }
-     
-    `}</style>
 
       <div className="cardouterdiv">
 

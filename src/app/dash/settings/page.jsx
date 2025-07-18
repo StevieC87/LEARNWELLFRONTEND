@@ -278,7 +278,7 @@ export default function Settings() {
             {!multilingualvalue && (
               <div>
                 <label htmlFor="defaultlanglocale">Defaul language locale</label>
-                <input type="text" name="defaultlanglocale" style={{ display: 'inline-block', width: '80px', marginLeft: '10px' }} onChange={(e) => addDefaultLangLocale(e)} value={defaultlanglocalemonol} />
+                <input type="text" className="defaultlanglocalesettings" name="defaultlanglocale" onChange={(e) => addDefaultLangLocale(e)} value={defaultlanglocalemonol} />
 
               </div>
             )}
@@ -300,7 +300,7 @@ export default function Settings() {
                     ))}
                   </div>
                 </div>
-                <div className="flex flex-col" style={{ maxWidth: '400px' }}>
+                <div className="flex flex-colf mwidth400" >
                   {selectedLanguages.length > 0 && (
                     < span > Preferred Locale e.g. fr-FR</span>
                   )}
@@ -308,12 +308,14 @@ export default function Settings() {
                   {selectedLanguages.map((language, index) => (
                     <div key={language}>
                       <label htmlFor=""
-                        style={{ width: '185px', display: 'inline-block' }}
+                        className="selectedlanglabelsettings"
+
                       >Preferred Locale for {language}   </label>
                       <input data-lang={language} type="text" name={`locale-${language}`}
                         value={langlocales[language] || ""}
-                        style={{ maxWidth: '100px' }}
+
                         onChange={(e) => addlanglocale(e)}
+                        className="mwidth100"
                       />
                     </div>
                   ))}
@@ -354,7 +356,6 @@ export default function Settings() {
           </label>
         </div>
       </div >
-
 
     </>
 

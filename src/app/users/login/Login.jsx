@@ -11,7 +11,9 @@ import {
   setEnableUserRegistration
 } from '@/redux/slices/DashSlice';
 
+import { useNonce } from '@/hooks/useNonce'
 export default function Login({ showForgotCallback }) {
+  const nonce = useNonce()
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -24,6 +26,9 @@ export default function Login({ showForgotCallback }) {
   //SET CONTEXT STATE TO EMAIL ON CHANGE
 
   useEffect(() => {
+
+
+
     //FETCH HERE TO SEE IF PUBLIC REGISTRATION IS ENABLED OR NOT 
     const asyncfetch = async () => {
       const fetchuserpublicreg = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/getuserpublicreg`,
@@ -107,13 +112,7 @@ export default function Login({ showForgotCallback }) {
 
   return (
     <>
-      <style jsx>{`
-     
-      .logocolortest {
-          color: #5bcaec;
-        }
-     
-    `}</style>
+
       <div className="cardouterdiv">
         <div className="card">
           {/* flex flex-col items-center justify-center h-screen */}
@@ -172,13 +171,15 @@ export default function Login({ showForgotCallback }) {
           <div className="pt-8 text-blue-500 text-xl text-right font-normal flex flex-row justify-between">
             <button onClick={() => showForgotCallback(true)} className="text-blue-500 hover:text-blue-700">Forgot Password</button>
             {enableuserregistration && (
-              <button onClick={() => router.push('./register')} className="text-blue-500 hover:text-blue-700">Register</button>
+              <button onClick={() => router.push('./register')} className="text-blue-500 hover:text-blue-700 rrregsiter">Register</button>
             )}
 
           </div>
 
         </div>
       </div>
+
+
     </>
   );
 }

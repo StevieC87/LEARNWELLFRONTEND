@@ -12,11 +12,24 @@ export default function TwoFactorPage() {
   const [otpverifysuccess, setOtpVerifySuccess] = useState(''); // State to hold OTP verification success
 
   useEffect(() => {
+
+    function getCsrfToken() {
+      return document.cookie
+        .split('; ')
+        .find(row => row.startsWith('csrfToken='))
+        ?.split('=')[1];
+    }
+
+    // Usage:
+    const csrfToken = getCsrfToken();
+    console.log(object)
+
     const fetchfetch = async () => {
       const fetch2factor = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/generatetwofactor`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          "X-CSRF-Token": csrfToken
         },
         credentials: 'include', // Include cookies for authenticationj
       });
@@ -92,8 +105,8 @@ export default function TwoFactorPage() {
         <input
           type="text"
           placeholder="Enter 6-digit code"
-          className="input input-bordered"
-          style={{ border: '1px solid black' }}
+          className="input input-bordered sixdigitinput"
+
           onChange={(e) => setOtp(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
@@ -112,6 +125,7 @@ export default function TwoFactorPage() {
           <span className="text-red-500">OTP Verification Failed</span>
         )}
       </div>
+
     </div >
   )
 }

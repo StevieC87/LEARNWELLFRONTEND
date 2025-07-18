@@ -154,7 +154,7 @@ export default function JsonLDPage() {
 
   return (
 
-    <div className="" style={{ maxWidth: '600px' }}>
+    <div className="jsonldouterdiv" >
       <h1 className="text-2xl font-bold mb-4">JSON-LD Configuration</h1>
       <div className="flex flex-row justify-end">
         <button className="button button-primary mb-4" onClick={saveJsonLD}>
@@ -187,7 +187,6 @@ export default function JsonLDPage() {
           </div>
         </div>
       ))}
-
 
 
     </div>
