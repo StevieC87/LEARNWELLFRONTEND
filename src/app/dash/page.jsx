@@ -1,4 +1,4 @@
-'use client'; //FOR NOW QUICKLY
+'use client';
 import { useEffect, useState } from 'react';
 import { useNonce } from '@/hooks/useNonce'
 
@@ -20,30 +20,33 @@ export default function Dash() {
     }
   }, [noncea])
 
+  const color = 'red'; // Example of a color variable, not used in this component
 
 
   return (
     <>
-
-
-      <div>
-        <div className="testhere">testdiv</div>
-        I am the dash, you are logged in
-      </div>
-      {mounted && noncea && (
+      {mounted && (
         <>
-          {noncea}
-          <style nonce={noncea}>{`
-        .testhere {
-          color: red;
-          font-size: 20px;
-          font-weight: bold;
-        }
-          
-      `}</style>
-        </>
-      )}
+          <div>
+            <div className="testhere">testdiv</div>
+            I am the dash, you are logged in
+          </div>
 
+          {noncea && (
+            <>
+              {noncea}
+              <style nonce={noncea}>{`
+              .testhere {
+                color: ${color};
+                font-size: 20px;
+                font-weight: bold;
+              }
+            `}</style>
+            </>
+          )}
+        </>
+
+      )}
 
     </>
 

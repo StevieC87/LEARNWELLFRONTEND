@@ -52,7 +52,6 @@ export default async function RootLayout({
         <meta name="nonce" content={noncea} />
       </head>
       <body>
-        {" "}
         <Providers>
           {children}
         </Providers>
