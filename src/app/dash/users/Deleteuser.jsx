@@ -25,6 +25,16 @@ export default function DeletePage(props) {
   const onclickDelete = async (e) => {
     setShowModal(true);
   }
+  function getCsrfToken() {
+    if (typeof document !== 'undefined') {
+      return document.cookie
+        .split('; ')
+        .find(row => row.startsWith('csrfToken='))
+        ?.split('=')[1];
+    }
+    return null; // Return null if running on the server
+  }
+  const csrfToken = getCsrfToken();
 
   const doDeleteUser = async () => {
     console.log(pagenumber, 'pagenumber');
@@ -35,6 +45,8 @@ export default function DeletePage(props) {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
+        "X-CSRF-Token": csrfToken
+
 
       },
       credentials: 'include', // this is what sends/receives cookie

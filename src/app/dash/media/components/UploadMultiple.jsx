@@ -10,6 +10,16 @@ export default function MultiFileUpload(props) {
     setSelectedFiles(Array.from(e.target.files));
   };
 
+  function getCsrfToken() {
+    if (typeof document !== 'undefined') {
+      return document.cookie
+        .split('; ')
+        .find(row => row.startsWith('csrfToken='))
+        ?.split('=')[1];
+    }
+    return null; // Return null if running on the server
+  }
+  const csrfToken = getCsrfToken();
 
 
   const handleSubmit = async (e) => {
@@ -27,6 +37,9 @@ export default function MultiFileUpload(props) {
 
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/media/uploadmultiple`, {
+        headers: {
+          "X-CSRF-Token": csrfToken, // Include CSRF token in the request headers
+        },
         method: "POST",
         body: formData,
         credentials: "include",

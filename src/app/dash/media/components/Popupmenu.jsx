@@ -9,6 +9,18 @@ export default function Popupinfo(props) {
 
   const { type, filepath, filename, foldername, currentfolder, currentpath, refreshfetch, elipsisOpen, clickelipsis } = props;
 
+  function getCsrfToken() {
+    if (typeof document !== 'undefined') {
+      return document.cookie
+        .split('; ')
+        .find(row => row.startsWith('csrfToken='))
+        ?.split('=')[1];
+    }
+    return null; // Return null if running on the server
+  }
+  const csrfToken = getCsrfToken();
+
+
   const [showModal, setShowModal] = useState(false);
   /* const [isOpen, setIsOpen] = useState(true); */
   /* const dispatch = useDispatch();
@@ -88,6 +100,7 @@ export default function Popupinfo(props) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "X-CSRF-Token": csrfToken, // Include CSRF token in the headers
         },
         body: JSON.stringify({ objecttosend }),
         credentials: "include",

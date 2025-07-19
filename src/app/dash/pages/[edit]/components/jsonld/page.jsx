@@ -24,6 +24,17 @@ export default function JsonLDPage() {
   //! INTERSETING
   const blocksandfields = useSelector((state) => state.JSONLDSlice.blocksandfields);
 
+  function getCsrfToken() {
+    if (typeof document !== 'undefined') {
+      return document.cookie
+        .split('; ')
+        .find(row => row.startsWith('csrfToken='))
+        ?.split('=')[1];
+    }
+    return null; // Return null if running on the server
+  }
+  const csrfToken = getCsrfToken();
+
 
   const [webpageblockfieldvalues, setWebpageBlockFieldValues] = useState([]);
   const [articleblogblockfieldvalues, setArticleBlogBlockFieldValues] = useState([]);
@@ -96,10 +107,12 @@ export default function JsonLDPage() {
    */
 
   const saveJsonLD = async () => {
-    const response = await fetch(`http://localhost:3000/savejsonld`, {
+    const response = await fetch(`${[process.env.NEXT_PUBLIC_API_URL]}/savejsonld`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "X-CSRF-Token": csrfToken // Include CSRF token in the request headers
+
       },
       body: JSON.stringify({
         blocksandfields: blocksandfields,

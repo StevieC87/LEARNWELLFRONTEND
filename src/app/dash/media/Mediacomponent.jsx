@@ -51,6 +51,17 @@ export default function MediaComponent(props) {
 
   const userrole = useSelector((state) => state.DashSlice.userrole); // Get the user role from the authSlice
 
+  function getCsrfToken() {
+    if (typeof document !== 'undefined') {
+      return document.cookie
+        .split('; ')
+        .find(row => row.startsWith('csrfToken='))
+        ?.split('=')[1];
+    }
+    return null; // Return null if running on the server
+  }
+  const csrfToken = getCsrfToken();
+
 
   useEffect(() => {
     const fetchbasefilesandfolders = async () => {
@@ -60,6 +71,7 @@ export default function MediaComponent(props) {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
+              'X-CSRF-Token': csrfToken, // Include CSRF token in the request headers
             },
             body: JSON.stringify({
               folderName: currentfolder,
@@ -126,6 +138,7 @@ export default function MediaComponent(props) {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'X-CSRF-Token': csrfToken, // Include CSRF token in the request headers
           },
           body: JSON.stringify({
             filepath: pathclean, // Send the current path if needed
@@ -318,6 +331,7 @@ export default function MediaComponent(props) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'X-CSRF-Token': csrfToken, // Include CSRF token in the request headers
       },
       body: JSON.stringify({
         folderName: newfoldername,

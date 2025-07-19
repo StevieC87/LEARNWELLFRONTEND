@@ -167,7 +167,16 @@ export default function UserProfile() {
 
     }
   }
-
+  function getCsrfToken() {
+    if (typeof document !== 'undefined') {
+      return document.cookie
+        .split('; ')
+        .find(row => row.startsWith('csrfToken='))
+        ?.split('=')[1];
+    }
+    return null; // Return null if running on the server
+  }
+  const csrfToken = getCsrfToken();
   const onSubmit = async (e) => {
     e.preventDefault(); // Prevent the default form submission behavior
     try {
@@ -175,6 +184,7 @@ export default function UserProfile() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          "X-CSRF-Token": csrfToken
         },
         body: JSON.stringify({
           fields: reduxfieldsdata,
@@ -191,13 +201,14 @@ export default function UserProfile() {
       }
       const data = await sendfields.json();
       console.log(data, "result from save user profile");
-      if (data.success) {
-        setSaved(true);
-        setTimeout(() => setSaved(false), 1500);
-        setSuccessmessage('User profile updated successfully');
-        setErrormessage('');
-      }
+
+
+      setSaved(true);
+      setTimeout(() => setSaved(false), 1500);
+      setSuccessmessage('User profile updated successfully');
+      setErrormessage('');
     }
+
     catch (error) {
       console.error('Error updating user profile:', error);
       setSaved(false);

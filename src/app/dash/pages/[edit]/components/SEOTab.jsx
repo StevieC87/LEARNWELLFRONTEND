@@ -50,6 +50,16 @@ export default function SEOTab(props) {
   // 
   const [changeddefaultimg, setChangedDefaultImage] = useState(false);
 
+  function getCsrfToken() {
+    if (typeof document !== 'undefined') {
+      return document.cookie
+        .split('; ')
+        .find(row => row.startsWith('csrfToken='))
+        ?.split('=')[1];
+    }
+    return null; // Return null if running on the server
+  }
+  const csrfToken = getCsrfToken();
 
 
   //FETCH SEO SETTINGS
@@ -178,7 +188,10 @@ export default function SEOTab(props) {
       {
         method: "POST",
         credentials: 'include',
-        body: formData
+        body: formData,
+        headers: {
+          "X-CSRF-Token": csrfToken // Include CSRF token in the request headers
+        }
       });
 
     if (response.ok) {

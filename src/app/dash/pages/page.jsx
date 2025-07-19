@@ -76,6 +76,7 @@ export default function Pages() {
       console.log("userrole is superadmin");
       setIsSuperAdmin(true);
     }
+
     const fetchpageslist = async () => {
       let url;
       /*  if (data.totalpostpages <= 10) {
@@ -90,6 +91,7 @@ export default function Pages() {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+
           //'Authorization': `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
         },
         credentials: 'include', // Include cookies in the request
@@ -170,11 +172,22 @@ export default function Pages() {
 
   }
 
+  function getCsrfToken() {
+    if (typeof document !== 'undefined') {
+      return document.cookie
+        .split('; ')
+        .find(row => row.startsWith('csrfToken='))
+        ?.split('=')[1];
+    }
+    return null; // Return null if running on the server
+  }
+  const csrfToken = getCsrfToken();
   const restorepage = async (pageid) => {
     const response = await fetch(`http://localhost:3000/pagesposts/restorepage/${pageid}?pagetype=${pagetype}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        "X-CSRF-Token": csrfToken
       },
       credentials: 'include', // Include cookies in the request
     });

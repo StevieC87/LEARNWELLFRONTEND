@@ -28,6 +28,17 @@ export default function TrashPage(props) {
   const onclickTrash = async (e) => {
     setShowModal(true);
   }
+  function getCsrfToken() {
+    if (typeof document !== 'undefined') {
+      return document.cookie
+        .split('; ')
+        .find(row => row.startsWith('csrfToken='))
+        ?.split('=')[1];
+    }
+    return null; // Return null if running on the server
+  }
+  const csrfToken = getCsrfToken();
+
 
   const doTrashPage = async () => {
     console.log(pagenumber, 'pagenumber');
@@ -38,6 +49,7 @@ export default function TrashPage(props) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "X-CSRF-Token": csrfToken
 
       },
       credentials: 'include', // this is what sends/receives cookie

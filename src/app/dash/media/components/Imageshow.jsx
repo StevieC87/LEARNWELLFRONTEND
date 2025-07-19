@@ -30,6 +30,17 @@ export default function Imageshow(props) {
   const [saved, setSaved] = useState(false);
   const [errorsaved, setErrorsaved] = useState(false);
   //get photo details from db 
+  function getCsrfToken() {
+    if (typeof document !== 'undefined') {
+      return document.cookie
+        .split('; ')
+        .find(row => row.startsWith('csrfToken='))
+        ?.split('=')[1];
+    }
+    return null; // Return null if running on the server
+  }
+  const csrfToken = getCsrfToken();
+
   useEffect(() => {
     console.log(currentimagepathcleanwfilename, 'currentimagepathcleanwfilenamecurrentimagepathcleanwfilename')
     const fetchImageDetails = async () => {
@@ -37,6 +48,7 @@ export default function Imageshow(props) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'X-CSRF-Token': csrfToken // Include CSRF token in the request headers
         },
         body: JSON.stringify({
           filepath: currentimagepathcleanwfilename
@@ -90,6 +102,7 @@ export default function Imageshow(props) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'X-CSRF-Token': csrfToken // Include CSRF token in the request headers
       },
       body: JSON.stringify({
         filepath: currentimagepathcleanwfilename,

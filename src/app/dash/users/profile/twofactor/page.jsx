@@ -14,10 +14,13 @@ export default function TwoFactorPage() {
   useEffect(() => {
 
     function getCsrfToken() {
-      return document.cookie
-        .split('; ')
-        .find(row => row.startsWith('csrfToken='))
-        ?.split('=')[1];
+      if (typeof document !== 'undefined') {
+        return document.cookie
+          .split('; ')
+          .find(row => row.startsWith('csrfToken='))
+          ?.split('=')[1];
+      }
+      return null; // Return null if running on the server
     }
 
     // Usage:

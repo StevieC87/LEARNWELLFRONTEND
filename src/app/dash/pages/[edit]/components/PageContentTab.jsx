@@ -83,6 +83,16 @@ export default function PageContentTab(props) {
   //field from medialibarary
   // const selectedImagefromGalleryModal = useSelector((state) => state.UISlice.selectedImagefromGalleryModal) || '';
 
+  function getCsrfToken() {
+    if (typeof document !== 'undefined') {
+      return document.cookie
+        .split('; ')
+        .find(row => row.startsWith('csrfToken='))
+        ?.split('=')[1];
+    }
+    return null; // Return null if running on the server
+  }
+  const csrfToken = getCsrfToken();
 
   const slugpathfieldaR = useSelector((state) => state.PagesSlice.fields?.slugpath) || '';
   //,set multilingual state from props + depedency
@@ -188,6 +198,17 @@ export default function PageContentTab(props) {
 
     setPublishchange(true)
     setIsSaving(true);
+    function getCsrfToken() {
+      if (typeof document !== 'undefined') {
+        return document.cookie
+          .split('; ')
+          .find(row => row.startsWith('csrfToken='))
+          ?.split('=')[1];
+      }
+      return null; // Return null if running on the server
+    }
+    const csrfToken = getCsrfToken();
+
     let url = `${process.env.NEXT_PUBLIC_API_URL}/pagesposts/schema`;
     let nochangesonlyundosave;
     if (nochangescozundonsave === 'nochangescozundonsave') {
@@ -207,6 +228,7 @@ export default function PageContentTab(props) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        'X-CSRF-Token': csrfToken, // Include CSRF token in the headers
         //  Authorization: `Bearer ${token}`,
       },
       credentials: 'include', // Include cookies in the request
@@ -314,6 +336,7 @@ export default function PageContentTab(props) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        'X-CSRF-Token': csrfToken, // Include CSRF token in the headers
         //  Authorization: `Bearer ${token}`,
       },
       credentials: 'include', // Include cookies in the request
@@ -378,6 +401,8 @@ export default function PageContentTab(props) {
      console */
   }
 
+
+
   //! i need to get existing publish status from the db
   //i gues in the backend before i send it 
   //publishswitchstatus, setPublishSwitchStatus]
@@ -392,6 +417,7 @@ export default function PageContentTab(props) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        'X-CSRF-Token': csrfToken, // Include CSRF token in the headers
       },
       credentials: 'include', // Include cookies in the request
       body: JSON.stringify({
@@ -475,6 +501,7 @@ export default function PageContentTab(props) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'X-CSRF-Token': csrfToken, // Include CSRF token in the headers
       },
       credentials: 'include', // Include cookies in the request
       body: JSON.stringify({

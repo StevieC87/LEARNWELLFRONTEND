@@ -18,6 +18,17 @@ export default function WebsiteDetailsForm() {
   const [logoFile, setLogoFile] = useState(null);
   const [defaultImageFile, setDefaultImageFile] = useState(null);
 
+  function getCsrfToken() {
+    if (typeof document !== 'undefined') {
+      return document.cookie
+        .split('; ')
+        .find(row => row.startsWith('csrfToken='))
+        ?.split('=')[1];
+    }
+    return null; // Return null if running on the server
+  }
+  const csrfToken = getCsrfToken();
+
   useEffect(() => {
     const fetchsitedetails = async () => {
       try {
@@ -62,6 +73,9 @@ export default function WebsiteDetailsForm() {
       method: "POST",
       credentials: 'include',
       body: formData,
+      headers: {
+        "X-CSRF-Token": csrfToken // Include CSRF token in the request headers
+      }
     });
 
     if (response.ok) {
