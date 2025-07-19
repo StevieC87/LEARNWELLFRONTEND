@@ -300,7 +300,7 @@ export default function Settings() {
                     ))}
                   </div>
                 </div>
-                <div className="flex flex-colf mwidth400" >
+                <div className="flex flex-col mwidth400" >
                   {selectedLanguages.length > 0 && (
                     < span > Preferred Locale e.g. fr-FR</span>
                   )}
