@@ -1,9 +1,11 @@
 'use client';
 import { useEffect, useState } from 'react';
+import { useNonce } from '@/hooks/useNonce'
 
 
 
 export default function LineAnalyticsPerc(props) {
+  const noncea = useNonce()
 
   const { topcountriestotalvisits, thiscountryvisits, thiscountryname } = props;
 
@@ -32,7 +34,7 @@ export default function LineAnalyticsPerc(props) {
 
   return (
     <>
-      <style jsx nonce={nonce}>{`
+      <style nonce={noncea}>{`
         .line-analytics-perc-container {
           position: relative;
           width: 300px;

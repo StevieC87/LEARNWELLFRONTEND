@@ -2,9 +2,13 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setIsPopupInfoOpen, setPopupInfo } from "@/redux/slices/UISlice";
+import { useNonce } from '@/hooks/useNonce'
+
 import './Popup.css'
 
 export default function Popupinfo(props) {
+  const noncea = useNonce()
+
   const dispatch = useDispatch();
   const ispopupinfoopen = useSelector((state) => state.UISlice.ispopupinfoopen);
   const popupinfo = useSelector((state) => state.UISlice.popupinfo);
@@ -34,7 +38,7 @@ export default function Popupinfo(props) {
       )
 
       }
-      <style jsx nonce={nonce}>{`
+      <style nonce={noncea}>{`
         .popupinfodiv1 {
           left: ${positionx}px;
           top: ${positiony}px;

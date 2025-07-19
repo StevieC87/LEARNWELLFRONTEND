@@ -6,7 +6,11 @@ import './styles/morecustomsvgmap.css'
 import { useEffect, useRef, useState } from 'react';
 import { countryandcode, flags } from './styles/countrystuff.js'
 import LineAnalyticsPerc from './LineAnalyticsPerc.jsx';
+import { useNonce } from '@/hooks/useNonce'
+
 export default function MapAnalyticsComponent({ countriesdata }) {
+  const noncea = useNonce()
+
   const [mapReady, setMapReady] = useState(false);
   const mapInstance = useRef(null);
   const [visitorfilter, setVisitorfilter] = useState('visitors'); // state to manage visitor filter
@@ -300,17 +304,17 @@ export default function MapAnalyticsComponent({ countriesdata }) {
         </>
       )}
 
-      <style jsx nonce={nonce}>{`
+      <style nonce={noncea}>{`
           .hoverdatas {
              position: 'absolute',
-              top: coords.y + 10,
-              left: coords.x + 10,
+              top: ${coords.y + 10},
+              left: ${coords.x + 10},
               background: 'black',
               color: 'white',
               padding: '5px 10px',
-              borderRadius: '3px',
-              pointerEvents: 'none',
-              zIndex: 9999,
+              border-radius: '3px',
+              pointer-events: none;
+              z-index: 9999,
           }
       `}</style>
     </>
