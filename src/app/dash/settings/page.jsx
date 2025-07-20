@@ -114,6 +114,16 @@ export default function Settings() {
   }, [addedlanguage]);
 
 
+  function getCsrfToken() {
+    if (typeof document !== 'undefined') {
+      return document.cookie
+        .split('; ')
+        .find(row => row.startsWith('csrfToken='))
+        ?.split('=')[1];
+    }
+    return null; // Return null if running on the server
+  }
+  const csrfToken = getCsrfToken();
   const onSave = async () => {
     console.log(selectedLanguages, "selectedLanguages");
     console.log("defaultLanguage", defaultLanguage);
@@ -124,6 +134,7 @@ export default function Settings() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'X-CSRF-Token': csrfToken, // Include CSRF token in the headers
       },
       body: JSON.stringify({
         multilingual: multilingualvalue,
@@ -180,6 +191,7 @@ export default function Settings() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'X-CSRF-Token': csrfToken, // Include CSRF token in the headers
       },
       body: JSON.stringify({
         language: additionalanguagetoadd, // Use the selected language to add

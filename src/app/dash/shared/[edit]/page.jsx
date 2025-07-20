@@ -39,6 +39,16 @@ export default function EditSharedComponent() {
   const fieldsdatafromredux = useSelector((state) => state.SharedSlice.fields);
 
 
+  function getCsrfToken() {
+    if (typeof document !== 'undefined') {
+      return document.cookie
+        .split('; ')
+        .find(row => row.startsWith('csrfToken='))
+        ?.split('=')[1];
+    }
+    return null; // Return null if running on the server
+  }
+  const csrfToken = getCsrfToken();
   const [fieldswithdataifany, setFieldsWithDataIfAny] = useState(null);
   useEffect(() => {
     const fetchfields = async () => {
@@ -154,6 +164,7 @@ export default function EditSharedComponent() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'X-CSRF-Token': csrfToken, // Include CSRF token in the headers
       },
       body: JSON.stringify({
         sharedcomponentid: sharedcomponentidis,
