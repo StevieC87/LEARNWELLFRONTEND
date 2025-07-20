@@ -83,7 +83,7 @@ export default async function RootLayout({
     slugpath = 'homepage';
   }
   const response = await fetch(
-    `http://localhost:3000/api/monolingualmetadata/${slugpath}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/monolingualmetadata/${slugpath}`,
     {
       method: "GET",
       headers: {

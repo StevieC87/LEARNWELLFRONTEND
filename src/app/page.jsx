@@ -15,7 +15,7 @@ export default async function Home({ params }) {
   //! this is for MONOLINGUAL 
   //TRY AFTER MULTILINGAUL 
   redirect('/en'); // or detect language dynamically
-  const response = await fetch("http://localhost:3000/api/monolingual/homepage", {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/monolingual/homepage`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

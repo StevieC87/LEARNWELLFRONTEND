@@ -20,7 +20,7 @@ export async function generateMetadata({ params }) {
       = slugsinurl[0]; // e.g. 'en', 'fr', 'de'
   }
   /*  const response = await fetch(
-     `http://localhost:3000/api/multilingualmetadata/${slugpath}?language=${langslug}`,
+     `${process.env.NEXT_PUBLIC_API_URL}/api/multilingualmetadata/${slugpath}?language=${langslug}`,
      {
        method: "GET",
        headers: {
