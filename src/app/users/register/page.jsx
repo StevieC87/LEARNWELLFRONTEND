@@ -91,7 +91,7 @@ export default function LoginPage() {
     console.log(data);
     try {
       setSubmitButtonLoading(true);
-      const response = await fetch('http://localhost:3000/users/register', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

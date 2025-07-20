@@ -1,7 +1,10 @@
-export const response = await fetch("http://localhost:3000/about", {
-  method: "GET",
-  headers: {
-    "Content-Type": "application/json",
-    //'Authorization': `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
-  },
-});
+export const response = await fetch(
+  `${process.env.NEXT_PUBLIC_API_URL}/about`,
+  {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      //'Authorization': `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
+    },
+  }
+);

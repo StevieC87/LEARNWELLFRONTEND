@@ -36,7 +36,7 @@ export default function QuizInput({ getquizanswer }) {
 
   const checkquizanswer = async (e) => {
     // let fetchurl = process.env.API_URL + '/users/registercaptcha';
-    let fetchurl = 'http://localhost:3000/users/registercaptcha';
+    let fetchurl = `${process.env.NEXT_PUBLIC_API_URL}/users/registercaptcha`;
     const response = await fetch(fetchurl, {
       method: 'POST',
       headers: {

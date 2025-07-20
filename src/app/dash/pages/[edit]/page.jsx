@@ -55,10 +55,10 @@ export default function EditPage() {
       //set URL depending if new/existing page
       if (pageid === "newpage") {
 
-        url = `http://localhost:3000/pagesposts/schema/newpage?pagetype=${pagetype}&schemaname=${schemaq}`;
+        url = `${process.env.NEXT_PUBLIC_API_URL}/pagesposts/schema/newpage?pagetype=${pagetype}&schemaname=${schemaq}`;
       }
       else if (pageid !== "newpage") {
-        url = `http://localhost:3000/pagesposts/schema/${pageid}?pagetype=${pagetype}&schemaname=${schemaq}&language=${language}&multilingualsharedid=${multilingualsharedid}`;
+        url = `${process.env.NEXT_PUBLIC_API_URL}/pagesposts/schema/${pageid}?pagetype=${pagetype}&schemaname=${schemaq}&language=${language}&multilingualsharedid=${multilingualsharedid}`;
       }
       try {
         const response = await fetch(url, {

@@ -43,7 +43,7 @@ export default function ForgotPassword({ onBack }) {
   //for whe nuser hits back / forward on browser history
   const submitPasswordForgot = async () => {
     setSending(true);
-    const response = await fetch('http://localhost:3000/users/forgotpasswordrequest', {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/forgotpasswordrequest`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

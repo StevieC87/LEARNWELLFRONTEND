@@ -23,7 +23,7 @@ export default function middleware(request) {
   });
 
   // Only set CSP if not in the disabled list
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   if (!cspDisabledRoutes.includes(pathname)) {
     const nonce = crypto.randomUUID();
     const csp = [

@@ -74,7 +74,7 @@ export default async function Page({ params, searchParams }) {
 
     if (ispreview) {
       //previewtoken
-      response = await fetch(`http://localhost:3000/api/multilingualpreview/${pagesslugwithlang}?language=${lang}&previewtoken=${previewtoken}`, {
+      response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/multilingualpreview/${pagesslugwithlang}?language=${lang}&previewtoken=${previewtoken}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ export default async function Page({ params, searchParams }) {
 
     }
     else {
-      response = await fetch(`http://localhost:3000/api/multilingual/${pagesslugwithlang}?language=${lang}`, {
+      response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/multilingual/${pagesslugwithlang}?language=${lang}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

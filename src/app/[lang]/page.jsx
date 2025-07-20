@@ -30,7 +30,7 @@ export default async function HomeMultilang({ params }) {
   let data;
   //,GET PAGE DATA 
   try {
-    const response = await fetch(`http://localhost:3000/api/multilingual/homepage?language=${langslug}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/multilingual/homepage?language=${langslug}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

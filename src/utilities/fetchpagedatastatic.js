@@ -11,7 +11,7 @@ export const FetchpagedataStatic = async (
   if (previewyesno) {
     console.log("Fetching page data for preview mode");
     response = await fetch(
-      `http://localhost:3000/api/monolingualpreview/${slugpath}?previewtoken=${previewtoken}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/monolingualpreview/${slugpath}?previewtoken=${previewtoken}`,
       {
         method: "GET",
         headers: {
@@ -21,7 +21,7 @@ export const FetchpagedataStatic = async (
     );
   } else {
     response = await fetch(
-      `http://localhost:3000/api/monolingual/${slugpath}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/monolingual/${slugpath}`,
       {
         method: "GET",
         headers: {

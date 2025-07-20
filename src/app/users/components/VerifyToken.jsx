@@ -76,7 +76,7 @@ export default function VerifyToken() {
         else if (response.message === "refreshtrue") {
           // alert('token expired, refreshing token');
           console.log('token expired, refreshing token');
-          let refreshit = await fetch('http://localhost:3000/users/refresh-token', {
+          let refreshit = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/refresh-token`, {
             method: 'POST',
             credentials: 'include',
           }).catch(console.error);
@@ -114,7 +114,7 @@ export default function VerifyToken() {
 
 
   let getuserroleverify = async () => {
-    const response = await fetch('http://localhost:3000/settings/getdataforredux', {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/settings/getdataforredux`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

@@ -545,7 +545,7 @@ export default function VerificationDigits({ email }) {
 
   //! we will do fetch when complete 
   async function whenCompleteVerify(alldigitsString) {
-    const response = await fetch('http://localhost:3000/users/verifyrandom6digits', {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/verifyrandom6digits`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -595,7 +595,7 @@ export default function VerificationDigits({ email }) {
 
 
   const Triggerfreshdigits = async () => {
-    const response = await fetch('http://localhost:3000/users/reissueverifydigits', {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/reissueverifydigits`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

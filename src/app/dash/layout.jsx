@@ -35,7 +35,7 @@ export default async function Layout({ children }) {
       
       {/* note this always client side coz afterInteractive */}
       <Script
-        src="http://localhost:3000/track.js"
+        src={`${process.env.NEXT_PUBLIC_API_URL}/track.js`}
         strategy="afterInteractive"
         data-site="b26a56dc-8c4b-4d7b-9c42-739cd79b8cc1"
       />

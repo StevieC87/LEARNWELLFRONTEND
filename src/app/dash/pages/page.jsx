@@ -83,9 +83,9 @@ export default function Pages() {
          setPageNumber(1); // Reset to first page if total pages are less than or equal to 10
        } */
       if (pagetype === 'post') {
-        url = `http://localhost:3000/pagesposts/getpagespostslist?paginationlimit=${paginationlimit}&pagenumber=${pagenumber}&columnsorted=${columnsorted}&sortdirection=${sortdirection}&pagetype=${pagetype}&searchterm=${searchterm}&trashedview=${trashedview}&filtertype=${filtertypeS}&filterlang=${filterLang}`;
+        url = `${process.env.NEXT_PUBLIC_API_URL}/pagesposts/getpagespostslist?paginationlimit=${paginationlimit}&pagenumber=${pagenumber}&columnsorted=${columnsorted}&sortdirection=${sortdirection}&pagetype=${pagetype}&searchterm=${searchterm}&trashedview=${trashedview}&filtertype=${filtertypeS}&filterlang=${filterLang}`;
       } else if (pagetype === 'page') {
-        url = `http://localhost:3000/pagesposts/getpagespostslist?paginationlimit=${paginationlimit}&pagenumber=${pagenumber}&columnsorted=${columnsorted}&sortdirection=${sortdirection}&pagetype=${pagetype}&searchterm=${searchterm}&trashedview=${trashedview}&filtertype=${filtertypeS}&filterlang=${filterLang}`;
+        url = `${process.env.NEXT_PUBLIC_API_URL}/pagesposts/getpagespostslist?paginationlimit=${paginationlimit}&pagenumber=${pagenumber}&columnsorted=${columnsorted}&sortdirection=${sortdirection}&pagetype=${pagetype}&searchterm=${searchterm}&trashedview=${trashedview}&filtertype=${filtertypeS}&filterlang=${filterLang}`;
       }
       const response = await fetch(url, {
         method: "GET",
@@ -183,7 +183,7 @@ export default function Pages() {
   }
   const csrfToken = getCsrfToken();
   const restorepage = async (pageid) => {
-    const response = await fetch(`http://localhost:3000/pagesposts/restorepage/${pageid}?pagetype=${pagetype}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/pagesposts/restorepage/${pageid}?pagetype=${pagetype}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -66,7 +66,7 @@ export default function SEOTab(props) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/seo/pagespecificseo?pageid=${pageid}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/seo/pagespecificseo?pageid=${pageid}`, {
           method: "GET",
           credentials: 'include',
         });
@@ -184,7 +184,7 @@ export default function SEOTab(props) {
     formData.append("changeddefaultimage", changeddefaultimg);
     // formData.append("defaultimgurl", `${process.env.NEXT_PUBLIC_API_URL}/media/ogimage`);
 
-    const response = await fetch("http://localhost:3000/seo/savepagespecificSEO",
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/seo/savepagespecificSEO`,
       {
         method: "POST",
         credentials: 'include',

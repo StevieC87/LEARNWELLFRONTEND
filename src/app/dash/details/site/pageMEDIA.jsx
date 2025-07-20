@@ -43,7 +43,7 @@ export default function WebsiteDetailsForm() {
   useEffect(() => {
     const fetchsitedetails = async () => {
       try {
-        const response = await fetch("http://localhost:3000/seo/sitedetails", {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/seo/sitedetails`, {
           method: "GET",
           credentials: 'include', // Include cookies in the request
         });
@@ -89,7 +89,7 @@ export default function WebsiteDetailsForm() {
     }
     if (logoFile) formData.append("logo", logoFile);
 
-    const response = await fetch("http://localhost:3000/seo/sitedetails", {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/seo/sitedetails`, {
       method: "POST",
       credentials: 'include',
       body: formData,

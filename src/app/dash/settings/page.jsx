@@ -60,7 +60,7 @@ export default function Settings() {
   //first I NEED TO POPULATE THE VALUES FROM THE DATABASE 
   useEffect(() => {
     const fetchSettings = async () => {
-      const response = await fetch('http://localhost:3000/settings/getsettings', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/settings/getsettings`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -130,7 +130,7 @@ export default function Settings() {
     console.log("multilingualvalue", multilingualvalue);
 
 
-    const response = await fetch('http://localhost:3000/settings/savesettings', {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/settings/savesettings`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -187,7 +187,7 @@ export default function Settings() {
   let languagetoadd;
   const addAditionallanguage1 = async () => {
     //we do post fetch to include language in the array of languages
-    const response = await fetch('http://localhost:3000/settings/addlanguage', {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/settings/addlanguage`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
