@@ -17,7 +17,7 @@ export default function LogoutButton() {
       // window.location.href = '/login';
       router.push("/users/login");
     } else {
-      console.error("Failed to log out");
+      console.log("Failed to log out");
       router.push("/users/login");
     }
     // router.push("/login");

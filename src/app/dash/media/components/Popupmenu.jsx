@@ -115,7 +115,7 @@ export default function Popupinfo(props) {
       //  setIsOpen(false); // Close the popup after deletion
       refreshfetch()
     } catch (error) {
-      console.error("Error deleting file:", error);
+      console.log("Error deleting file:", error);
     }
 
   };

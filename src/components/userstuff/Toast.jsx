@@ -13,14 +13,14 @@ export default function Toast() {
        });
  
        if (!response.ok) {
-         console.error("Failed to fetch toast data");
+         console.log("Failed to fetch toast data");
          return;
        }
  
        const data = await response.json();
        console.log("Toast data fetched:", data);
      } catch (error) {
-       console.error("Error fetching toast data:", error);
+       console.log("Error fetching toast data:", error);
      } */
 
   }

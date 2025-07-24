@@ -48,7 +48,7 @@ export default function WebsiteDetailsForm() {
           credentials: 'include', // Include cookies in the request
         });
         if (!response.ok) {
-          console.error("Failed to fetch site details");
+          console.log("Failed to fetch site details");
         }
         if (response.ok) {
           const data = await response.json();
@@ -68,7 +68,7 @@ export default function WebsiteDetailsForm() {
 
         }
       } catch (error) {
-        console.error("Error fetching site details:", error);
+        console.log("Error fetching site details:", error);
       }
     }
     fetchsitedetails();

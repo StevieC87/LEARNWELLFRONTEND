@@ -148,9 +148,9 @@ export default function Settings() {
       credentials: 'include', // this is what sends/receives cookie
     });
     if (!response.ok) {
-      console.error("Failed to save settings");
+      console.log("Failed to save settings");
       const data = await response.json();
-      console.error(data);
+      console.log(data);
       setErrorSave('Failed to save settings. Please try again.'); // Set the error save state
       setSaved(false); // Set the saved state to false
       setTimeout(() => {
@@ -199,9 +199,9 @@ export default function Settings() {
       credentials: 'include', // this is what sends/receives cookie
     });
     if (!response.ok) {
-      console.error("Failed to add language");
+      console.log("Failed to add language");
       const data = await response.json();
-      console.error(data);
+      console.log(data);
       return;
     }
     const data = await response.json();

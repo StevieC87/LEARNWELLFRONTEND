@@ -115,7 +115,7 @@ export default function SEOTab(props) {
 
 
       } catch (error) {
-        console.error("Error fetching SEO settings:", error);
+        console.log("Error fetching SEO settings:", error);
       }
     };
 

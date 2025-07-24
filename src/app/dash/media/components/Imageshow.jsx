@@ -77,7 +77,7 @@ export default function Imageshow(props) {
         setCaption(imagedata.caption || '');
       }
       else {
-        console.error('Failed to fetch image details:');
+        console.log('Failed to fetch image details:');
       }
 
     };
@@ -125,7 +125,7 @@ export default function Imageshow(props) {
     } else {
       setErrorsaved(true);
       setSaved(false);
-      console.error('Failed to save changes:', response.statusText);
+      console.log('Failed to save changes:', response.statusText);
     }
   }
 

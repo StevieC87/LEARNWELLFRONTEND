@@ -48,7 +48,7 @@ export default function UsersPage() {
         setFilteredUsers(data.users);
         //  setPagesWenedArray(data.pagesArray);
       } catch (error) {
-        console.error('Error fetching users:', error);
+        console.log('Error fetching users:', error);
       }
     }
     fetchasync();

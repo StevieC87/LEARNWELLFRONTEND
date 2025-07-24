@@ -25,7 +25,7 @@ export default function Shared() {
         setMissingSchemas(data.schemaswithoutdbrecord);
         setExistingSchemas(data.schemaswithdbrecord);
       } catch (error) {
-        console.error('Error fetching shared schemas:', error);
+        console.log('Error fetching shared schemas:', error);
       }
     };
 

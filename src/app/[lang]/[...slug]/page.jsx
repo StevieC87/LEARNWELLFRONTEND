@@ -120,10 +120,6 @@ export default async function Page({ params, searchParams }) {
   catch (error) {
     notFound();
 
-    //return <div>404 Not Found</div>;
-
-    // console.error("Error fetching page data:");
-    // showerror = true;
   }
 
   return (

@@ -38,7 +38,7 @@ export default function TwoFactorPage() {
       });
 
       if (!fetch2factor.ok) {
-        console.error('Failed to fetch two-factor authentication data');
+        console.log('Failed to fetch two-factor authentication data');
         return;
       }
       const data = await fetch2factor.json();

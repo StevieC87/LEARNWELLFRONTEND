@@ -49,10 +49,10 @@ export default function WebsiteDetailsForm() {
           setDefaultImageFile(data.defaultImage || "");
           setLogoFile(data.logo || "");
         } else {
-          console.error("Failed to fetch site details");
+          console.log("Failed to fetch site details");
         }
       } catch (error) {
-        console.error("Error fetching site details:", error);
+        console.log("Error fetching site details:", error);
       }
     }
     fetchsitedetails();

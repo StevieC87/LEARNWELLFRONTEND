@@ -192,7 +192,7 @@ export default function Pages() {
       credentials: 'include', // Include cookies in the request
     });
     if (!response.ok) {
-      console.error('Failed to restore page:', response.statusText);
+      console.log('Failed to restore page:', response.statusText);
       return;
     }
     const data = await response.json();

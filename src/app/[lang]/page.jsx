@@ -39,7 +39,6 @@ export default async function HomeMultilang({ params }) {
       //cache: 'no-store', // Ensures fresh data on each request
     });
     if (!response.ok) {
-      // console.error("Failed to fetch page data");
       showerror = true;
     }
     else {
@@ -51,7 +50,7 @@ export default async function HomeMultilang({ params }) {
     }
   }
   catch (error) {
-    console.error("Error fetching page data:");
+    console.log("Error fetching page data:");
     showerror = true;
   }
 

@@ -25,7 +25,7 @@ export default function RelationField({ name, value, label, onChange, options, p
 
       );
       if (!fetchrelation.ok) {
-        console.error('Failed to fetch relation data');
+        console.log('Failed to fetch relation data');
       }
       else {
         const data = await fetchrelation.json();

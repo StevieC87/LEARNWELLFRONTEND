@@ -59,7 +59,7 @@ export default function MultiFileUpload(props) {
 
     }
     catch (err) {
-      console.error("Upload error:", err);
+      console.log("Upload error:", err);
     }
   };
 

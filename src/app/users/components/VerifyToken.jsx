@@ -79,10 +79,9 @@ export default function VerifyToken() {
           let refreshit = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/refresh-token`, {
             method: 'POST',
             credentials: 'include',
-          }).catch(console.error);
+          }).catch(console.log);
           if (!refreshit.ok) {
             console.log('failed to refresh token');
-            alert('failed to refresh token, redirecting to login');
             // Redirect to login page or handle accordingly
             window.location.href = '/users/login'; // Adjust the path as necessary
           }

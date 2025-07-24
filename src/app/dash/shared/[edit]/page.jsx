@@ -56,7 +56,7 @@ export default function EditSharedComponent() {
       const locale = searchParams.get('locale')
 
       if (!schema || !locale) {
-        console.error("Schema and locale are required")
+        console.log("Schema and locale are required")
         return
       }
 
@@ -80,7 +80,7 @@ export default function EditSharedComponent() {
         setSchemaFields(data.schemaFields)
         setFieldsData(data.fieldsdata)
       } catch (error) {
-        console.error('Error fetching shared component fields:', error)
+        console.log('Error fetching shared component fields:', error)
       }
     }
     fetchfields()
@@ -174,7 +174,7 @@ export default function EditSharedComponent() {
       }),
     });
     if (!sendtosave.ok) {
-      console.error('Failed to save shared component');
+      console.log('Failed to save shared component');
       return;
     }
     const data = await sendtosave.json();

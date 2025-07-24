@@ -54,7 +54,7 @@ export default function UserProfile() {
         );
         if (!fetchprofile.ok) {
           setErrormessage('Failed to fetch user profile');
-          console.error('Failed to fetch user profile:', fetchprofile.statusText);
+          console.log('Failed to fetch user profile:', fetchprofile.statusText);
           return;
         }
         setLoaded(true); // Set loaded to true after fetching data
@@ -77,7 +77,7 @@ export default function UserProfile() {
       }
       catch (error) {
         setErrormessage('An error occurred while fetching user profile');
-        console.error('Error fetching user profile:', error);
+        console.log('Error fetching user profile:', error);
       }
 
 
@@ -210,7 +210,7 @@ export default function UserProfile() {
     }
 
     catch (error) {
-      console.error('Error updating user profile:', error);
+      console.log('Error updating user profile:', error);
       setSaved(false);
       setErrorSave('Failed to update user profile. Please try again.');
     }
@@ -248,7 +248,7 @@ export default function UserProfile() {
       credentials: 'include', // Include cookies in the request
     });
     if (!fetchdisable2fa.ok) {
-      console.error('Failed to disable Two-factor Authentication');
+      console.log('Failed to disable Two-factor Authentication');
       setErrormessage('Failed to disable Two-factor Authentication');
       return;
     }

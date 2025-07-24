@@ -93,7 +93,7 @@ export default function MediaComponent(props) {
         console.log(data.folders, "folders from media page");
         setImagesDBArray(data.imagesdbarray); // Set the images from the database
       } catch (error) {
-        console.error('Error fetching base files and folders:', error);
+        console.log('Error fetching base files and folders:', error);
       }
     }
     fetchbasefilesandfolders();
@@ -208,7 +208,7 @@ export default function MediaComponent(props) {
 
       }
       catch (error) {
-        //  console.error('Error fetching image details:', error);
+        //    console.log('Error fetching image details:', error);
       }
       dispatch(setShowMediaLibraryModal(false))
     }
@@ -340,7 +340,7 @@ export default function MediaComponent(props) {
       credentials: 'include', // Include credentials for session management
     });
     if (!response.ok) {
-      console.error('Failed to create folder');
+      console.log('Failed to create folder');
       return;
     }
     else {
