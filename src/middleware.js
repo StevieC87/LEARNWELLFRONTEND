@@ -10,6 +10,14 @@ export default function middleware(request) {
   requestHeaders.set("x-full-url", fullURL);
   requestHeaders.set("x-custom-pathname", pathname);
 
+  if (
+    pathname.startsWith("/dash") &&
+    !request.cookies.get("token") &&
+    !request.cookies.get("refreshToken")
+  ) {
+    return NextResponse.redirect(new URL("/users/login", request.url));
+  }
+
   const cspDisabledRoutes = [
     "/route-without-csp",
     "/another-no-csp",
