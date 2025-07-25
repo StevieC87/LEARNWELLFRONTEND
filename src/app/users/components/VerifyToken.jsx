@@ -109,7 +109,78 @@ export default function VerifyToken() {
 
   }, [urlchanged])
 
+  useEffect(() => {
+    if (!window) return; // Ensure this runs only in the browser
+    function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+    }
 
+    const checkAndRefresh = async () => {
+      try {
+        //get cookie TokenExpiry
+        const tokenExpiry = getCookie('tokenExpiry');
+
+        if (!tokenExpiry) {
+          //  console.log('Tokenexpiry cookie not found tokenrefresh');
+          return;
+        }
+        // console.log('Tokenexpiry tokenrefresh:', tokenExpiry);
+        let decodetoken = decodeURIComponent(tokenExpiry);
+        // console.log('Decoded tokenexpiry tokenrefresh:', decodetoken);
+        const now = new Date().getTime(); // Current time in milliseconds
+        // console.log('Current time:', now);
+        const exp = new Date(decodetoken).getTime(); // Convert to milliseconds
+        //console.log('Token expiry time:', exp);
+        if (exp - now < 20 * 60 * 1000) {
+          //   console.log('tokenrefresh is about to expire, refreshing...');
+          //wait fetch("/api/auth/refresh", { credentials: "include" });
+
+          const makefetchrefreshbeforeexpiry = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/refresh-token`, {
+            method: 'POST',
+            credentials: 'include', // Include cookies in the request
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              refreshtype: 'beforeexpiry',
+            }),
+          });
+
+          if (!makefetchrefreshbeforeexpiry.ok) {
+            console.log('Failed to tokenrefresh beforeexpiry');
+            // Redirect to login page or handle accordingly
+            window.location.href = '/users/login'; // Adjust the path as necessary
+          }
+          else {
+            // console.log('Tokenrefres successfully beforeexpiry');
+
+          }
+        }
+        else {
+          //  console.log('tokenrefresh is still valid, no need to refresh');
+          //display time left
+          //  const timeLeft = Math.ceil((exp - now) / 1000 / 60); // Convert to minutes
+          // console.log(`tokenrefresh is valid for another ${timeLeft} minutes`);
+        }
+
+      }
+      catch (error) {
+        console.error('Error checking token expiry:', error);
+      }
+
+
+    };
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") {
+        checkAndRefresh();
+      }
+    });
+    window.addEventListener("focus", checkAndRefresh);
+
+
+  }, []);
 
 
   let getuserroleverify = async () => {
@@ -156,6 +227,8 @@ export default function VerifyToken() {
     // Redux store
     // You can use the user role data here if needed
   }
+
+
 
   return (
     <>
