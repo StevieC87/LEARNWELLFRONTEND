@@ -40,9 +40,10 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
   const slugduplicatewarning = useSelector((state) => state.PagesSlice.slugduplicatewarning);
 
 
-  const onChange = (e, arrayfield, arrayfieldparent, indexis, subfield) => {
+  const [fieldvaluebeforedispatch, setFieldValueBeforeDispatch] = useState({});
+
+  const onBlur = (e) => {
     const newValue = e.target.value;
-    console.log(newValue, "newValue3333333333");
     if (source === 'shared') {
       dispatch(updateSharedFields({
         name: name,
@@ -54,7 +55,6 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
       }));
     }
     else {
-      console.log(fielddata, 'fieldata11111111111111')
       dispatch(updateField({
         name: name,
         content: newValue,
@@ -66,14 +66,42 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
         required: required || false,
         fields: fields || null,
       }));
+    }
+    onChange2();
+  }
 
+  const onChange = (e, arrayfield, arrayfieldparent, indexis, subfield, fieldname) => {
+    const newValue = e.target.value;
+    console.log(newValue, "newValue3333333333");
+    if (source === 'shared') {
+      setFieldValueBeforeDispatch({
+        name: name,
+        content: newValue,
+        type: type,
+        placeholder: placeholder,
+        required: required || false,
+        fields: fields || null,
+      });
+    }
+    else {
+      console.log(fielddata, 'fieldata11111111111111')
+      setFieldValueBeforeDispatch({
+        name: name,
+        content: newValue,
+        id: fielddata.id || '',
+        locale: fielddata.locale || '',
+        schema: fielddata.schema || '',
+        type: type || 'text',
+        placeholder: placeholder || '',
+        required: required || false,
+        fields: fields || null,
+      });
 
-      onChange2();
     }
   }
 
   const changeArrayfield = (e) => {
-    alert('hello')
+    // alert('hello')
     const newValue = e.target.value;
     /*  dispatch(updateField({
        name: name,
@@ -97,10 +125,12 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
             key={name}
             name={name}
             type="text"
-            value={fieldValue}
+            //value={fieldValue}
+            value={fieldvaluebeforedispatch.content || fieldValue || ''}
             fieldarray={fieldarray || 'false'}
             fieldarrayparent={fieldarrayparent || ''}
-            onChange={(e) => onChange(e, fieldarray, fieldarrayparent, indexis, subfield)}
+            onChange={(e) => onChange(e, fieldarray, fieldarrayparent, indexis, subfield, name)}
+            onBlur={(e) => onBlur(e)}
             placeholder={placeholder}
             required={required || false}
             disabled={disabled || false}
@@ -108,7 +138,7 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
             autoFocus={name === "title" ? true : false}
             className={inputcssclass || ''}
 
-          />
+          />D
           {name === "slug" && slugduplicatewarning && (
             <p className="text-red-500 mt-1">
               This slug is already in use, has been renamed.
@@ -123,9 +153,11 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
           <textarea
             key={name}
             name={name}
-            value={fieldValue}
+            // value={fieldValue}
+            value={fieldvaluebeforedispatch.content || fieldValue || ''}
             required={required || false}
             onChange={onChange}
+            onBlur={onBlur}
             placeholder={placeholder}
           />
         </div>
@@ -142,7 +174,8 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
             locale={fielddata.locale}
             schema={fielddata.schema}
             type={type}
-            value={fieldValue}
+            //value={fieldValue}
+            value={fieldvaluebeforedispatch.content || fieldValue || ''}
             placeholder={placeholder}
             required={required || false}
           // onChange={onChange}
@@ -157,8 +190,10 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
             key={name}
             name={name}
             type="number"
-            value={fieldValue}
+            //value={fieldValue}
+            value={fieldvaluebeforedispatch.content || fieldValue || ''}
             onChange={onChange}
+            onBlur={onBlur}
             placeholder={placeholder}
 
             required={required || false}
@@ -177,6 +212,7 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
             onChange={(e) =>
               onChange({ target: { name: name, value: e.target.checked } })
             }
+            onBlur={onBlur}
 
           />
         </div>
@@ -189,8 +225,10 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
             key={name}
             name={name}
             type="date"
-            value={fieldValue}
+            //value={fieldValue}
+            value={fieldvaluebeforedispatch.content || fieldValue || ''}
             onChange={onChange}
+            onBlur={onBlur}
             placeholder={placeholder}
 
             required={required || false}
@@ -237,6 +275,7 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
                   indexis={index}
                   subfield={fieldObj.name}
                   onChange2={onChange2}
+
                   fielddata={fielddata}
                   placeholder={fieldObj.placeholder || ''}
                   required={fieldObj.required || false}
@@ -264,9 +303,11 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
         <div className="fielddivblock">
           <Relationfield
             name={name}
-            value={fieldValue}
+            // value={fieldValue}
+            value={fieldvaluebeforedispatch.content || fieldValue || ''}
             label={label}
             onChange={onChange}
+            onBlur={onBlur}
             options={fielddata.options || []} // Assuming options are passed in fielddata
             placeholder={placeholder}
             required={required || false}
