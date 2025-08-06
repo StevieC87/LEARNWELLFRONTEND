@@ -9,7 +9,7 @@ import { updateSharedFields } from '@/redux/slices/SharedSlice';
 import Relationfield from '../../uicomponents/customfields/Relationfield';
 //! ADD ID OF THE FIELD  - PASS TO REDUX 
 
-const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeholder, required, disabled, autofocus, inputcssclass, inputdivcssclass, labelcssclass, fields, onChange3, fieldarray, fieldarrayparent, indexis, subfield, source, relation }) => {
+const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeholder, required, disabled, autofocus, inputcssclass, inputdivcssclass, labelcssclass, fields, onChange3, fieldarray, fieldarrayparent, indexis, subfield, source, relation, neworexisting }) => {
   //note: source here refers to wher eit's called from e.g. from shared componetns specifically - to set state not in dispatch
   // console.log(fielddata, "fielddata33333333");
 
@@ -41,22 +41,25 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
 
 
   const [fieldvaluebeforedispatch, setFieldValueBeforeDispatch] = useState({});
+  useEffect(() => {
+    setFieldValue(value || '');
+  }, [value]);
+
 
   const onBlur = (e) => {
     const newValue = e.target.value;
     if (source === 'shared') {
       dispatch(updateSharedFields({
-        name: name,
+        name,
         content: newValue,
-        type: type,
-        placeholder: placeholder,
+        type,
+        placeholder,
         required: required || false,
         fields: fields || null,
       }));
-    }
-    else {
+    } else {
       dispatch(updateField({
-        name: name,
+        name,
         content: newValue,
         id: fielddata.id || '',
         locale: fielddata.locale || '',
@@ -68,37 +71,12 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
       }));
     }
     onChange2();
-  }
+  };
 
-  const onChange = (e, arrayfield, arrayfieldparent, indexis, subfield, fieldname) => {
-    const newValue = e.target.value;
-    console.log(newValue, "newValue3333333333");
-    if (source === 'shared') {
-      setFieldValueBeforeDispatch({
-        name: name,
-        content: newValue,
-        type: type,
-        placeholder: placeholder,
-        required: required || false,
-        fields: fields || null,
-      });
-    }
-    else {
-      console.log(fielddata, 'fieldata11111111111111')
-      setFieldValueBeforeDispatch({
-        name: name,
-        content: newValue,
-        id: fielddata.id || '',
-        locale: fielddata.locale || '',
-        schema: fielddata.schema || '',
-        type: type || 'text',
-        placeholder: placeholder || '',
-        required: required || false,
-        fields: fields || null,
-      });
 
-    }
-  }
+  const onChange = (e) => {
+    setFieldValue(e.target.value);
+  };
 
   const changeArrayfield = (e) => {
     // alert('hello')
@@ -126,7 +104,8 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
             name={name}
             type="text"
             //value={fieldValue}
-            value={fieldvaluebeforedispatch.content || fieldValue || ''}
+            value={fieldValue}
+
             fieldarray={fieldarray || 'false'}
             fieldarrayparent={fieldarrayparent || ''}
             onChange={(e) => onChange(e, fieldarray, fieldarrayparent, indexis, subfield, name)}
@@ -138,7 +117,7 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
             autoFocus={name === "title" ? true : false}
             className={inputcssclass || ''}
 
-          />D
+          />
           {name === "slug" && slugduplicatewarning && (
             <p className="text-red-500 mt-1">
               This slug is already in use, has been renamed.
@@ -154,7 +133,7 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
             key={name}
             name={name}
             // value={fieldValue}
-            value={fieldvaluebeforedispatch.content || fieldValue || ''}
+            value={fieldValue}
             required={required || false}
             onChange={onChange}
             onBlur={onBlur}
@@ -175,7 +154,7 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
             schema={fielddata.schema}
             type={type}
             //value={fieldValue}
-            value={fieldvaluebeforedispatch.content || fieldValue || ''}
+            value={fieldValue}
             placeholder={placeholder}
             required={required || false}
           // onChange={onChange}
@@ -191,7 +170,7 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
             name={name}
             type="number"
             //value={fieldValue}
-            value={fieldvaluebeforedispatch.content || fieldValue || ''}
+            value={fieldValue}
             onChange={onChange}
             onBlur={onBlur}
             placeholder={placeholder}
@@ -226,7 +205,7 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
             name={name}
             type="date"
             //value={fieldValue}
-            value={fieldvaluebeforedispatch.content || fieldValue || ''}
+            value={fieldValue}
             onChange={onChange}
             onBlur={onBlur}
             placeholder={placeholder}
@@ -304,7 +283,7 @@ const FieldRenderer = ({ type, name, value, label, onChange2, fielddata, placeho
           <Relationfield
             name={name}
             // value={fieldValue}
-            value={fieldvaluebeforedispatch.content || fieldValue || ''}
+            value={fieldValue}
             label={label}
             onChange={onChange}
             onBlur={onBlur}
