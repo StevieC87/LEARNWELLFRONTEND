@@ -172,6 +172,7 @@ export default function EditSharedComponent() {
         schema: schemais,
         locale: searchParams.get('locale') || 'en', // Default to 'en' if locale is not provided
       }),
+      credentials: 'include', // This is important for cookies to be sent
     });
     if (!sendtosave.ok) {
       console.log('Failed to save shared component');
@@ -225,7 +226,11 @@ export default function EditSharedComponent() {
                 placeholder={field.placeholder || ''}
                 label={field.label || field.name || ''}
                 source="shared"
+                onChange2={(e) => {
+
+                }}
               />
+
 
             ))}
           </div>
