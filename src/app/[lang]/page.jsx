@@ -2,30 +2,37 @@
 import { headers } from 'next/headers'
 
 export default async function HomeMultilang({ params }) {
-
+  console.log('HELOOOOO')
   let params1 = await params;
   if (!params1) {
     console.log("No params found, redirecting to default language");
   }
+  console.log(params1, "params in multilingual page");
   let langslug = await params1.lang; // e.g. 'en', 'fr', 'de'
   //let searchparams = await searchParams;
+  console.log(langslug, "langslug in multilingual page");
   const allHeaders = await headers();
   const fullUrl = allHeaders.get('x-full-url');
+  console.log(fullUrl, "fullUrl from headers");
   const pathname = allHeaders.get('x-custom-pathname');
+  console.log(pathname, "pathname from headers");
   let slugsinurl = pathname.split("/").filter(Boolean);;
+  console.log(slugsinurl, "slugsinurlfromheaders"); //e.g. ['en', 'services', 'wedesign']
   let slugsinurlcount = slugsinurl.length;
   let pageslug;
   let showerror = false;
-  if (slugsinurlcount === 0) {
-    pageslug = "homepage";
-
-  }
-  else {
-    langslug
-      = slugsinurl[0];
-  }
-
-
+  langslug = slugsinurl[0];
+  console.log(langslug, "langslug");
+  /*   if (slugsinurlcount === 0) {
+      pageslug = "homepage";
+  
+    }
+    else {
+      langslug
+        = slugsinurl[0];
+    }
+   */
+  console.log('jello aagain')
   let fieldsdata;
   let data;
   //,GET PAGE DATA 
@@ -44,8 +51,9 @@ export default async function HomeMultilang({ params }) {
     else {
       data = await response.json();
       console.log("Fetched page data:", data);
-      fieldsdata = data.pagefields;
-      console.log("Pagefields:", fieldsdata);
+      // fieldsdata = data.pagefields;
+      //console.log("Pagefields:", fieldsdata);
+      fieldsdata = data.pagefieldsarray;
       showerror = false;
     }
   }
@@ -75,7 +83,7 @@ export default async function HomeMultilang({ params }) {
       {!showerror && (
         <>
           <span>hello from multilingual page</span>
-          <p>Title: {getFieldValue("HeaderH1Title")}</p>
+          <p>Title: {getFieldValue("pageheadlineH1")}</p>
           {/*   {showerror && (
         <div className="flex flex-col items-center justify-center min-h-screen py-2">
           <h1 className="text-4xl font-bold mb-4">Error</h1>
