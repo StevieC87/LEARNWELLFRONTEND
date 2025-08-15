@@ -1,0 +1,229 @@
+"use client";
+import { useDispatch, useSelector } from "react-redux";
+// import { setdifficultylevels } from "@/redux/slices/flashcardSlice";
+import {
+  setWordSaved,
+  setCurrentWord,
+  setOriginal,
+  setTotalWordsKnown,
+  setTotalWordsRemaining,
+  setAllWords2,
+  setallknownwordsdata,
+  setallremainingwordsdata,
+  setfluentWORDSArray,
+  setfamiliarWORDSArray,
+  setuncertainWORDSArray,
+  setnewwordsArray,
+} from "@/redux/slices/flashcardSlice";
+import { flashcardsUserSaveWord } from "../services/fetchwords";
+import {
+  getFlashcardsRemaining,
+  getFlashcardsKnownWords,
+} from "../services/fetchwords";
+
+/* setnumberoffluentwords,
+  setnumberoffamiliarwords,
+  setnumberofuncertainwords,
+  setnumberofnewwords, */
+
+const DifficultyButtons = () => {
+  const dispatch = useDispatch();
+  const showOriginal = useSelector(
+    (state) => state.flashcardSlice.showOriginal
+  );
+  const wordsaved = useSelector((state) => state.flashcardSlice.wordsaved);
+  const currentword = useSelector((state) => state.flashcardSlice.currentword);
+  const allwords = useSelector((state) => state.flashcardSlice.allwords);
+  const totalwordsknown = useSelector(
+    (state) => state.flashcardSlice.totalwordsknown
+  );
+  const totalwordsremaining = useSelector(
+    (state) => state.flashcardSlice.totalwordsremaining
+  );
+  const showRemainingWords2 = useSelector(
+    (state) => state.flashcardSlice.showRemainingWords2
+  );
+
+  const allremainingwordsdata = useSelector(
+    (state) => state.flashcardSlice.allremainingwordsdata
+  );
+  const allknownwordsdata = useSelector(
+    (state) => state.flashcardSlice.allknownwordsdata
+  );
+
+  const fluentWORDSArray = useSelector(
+    (state) => state.flashcardSlice.fluentWORDSArray
+  );
+  const familiarWORDSArray = useSelector(
+    (state) => state.flashcardSlice.familiarWORDSArray
+  );
+  const uncertainWORDSArray = useSelector(
+    (state) => state.flashcardSlice.uncertainWORDSArray
+  );
+  const newwordsArray = useSelector(
+    (state) => state.flashcardSlice.newwordsArray
+  );
+  const disablediffbuttons = useSelector(
+    (state) => state.flashcardSlice.disablediffbuttons
+  );
+
+  const handleChangeWord = () => {
+    let currentindex = allwords.indexOf(currentword);
+    if (currentindex === allwords.length - 1) {
+      dispatch(setCurrentWord(allwords[0]));
+      dispatch(setOriginal(true));
+    } else {
+      dispatch(setCurrentWord(allwords[currentindex + 1]));
+      dispatch(setOriginal(true));
+    }
+  };
+
+  const submitWord = async (difficulty) => {
+    let wordtosubmit = {
+      wordde: currentword.word,
+      word: currentword,
+      difficulty: difficulty,
+      sortnumber: currentword.sortnumber,
+    };
+    console.log(wordtosubmit, "wordtosubmit2222");
+
+    //will insert or update existing word in db
+    //  setWordSaved(true);
+    const data = await flashcardsUserSaveWord(wordtosubmit);
+    console.log(totalwordsremaining, "totalwordsremaining123");
+    console.log(totalwordsknown, "totalwordsknown123");
+    console.log(data, "data");
+
+    if (data.acknowledged === true) {
+      // console.log("yes trueeee");
+      //alert("saved");
+      dispatch(setWordSaved(true));
+
+      //ONLY UPDATE IF IT'S A REMAINING WORD THAT WAS SAVED
+      //this is just the counter - no need updatae if it's a known word
+
+      //CHECK IF IT'S A REMAINING WORD OR A KNOWN WORD\
+      if (currentword.difficulty) {
+        // alert("known word");
+        // alert(difficulty);
+        //change difficulty of currentword
+        let newcurr = { ...currentword, difficulty: difficulty };
+        dispatch(setCurrentWord(newcurr));
+        console.log(newcurr, "newcurr");
+        //find index in allknownwrds and change difficulty
+        let currentwordid1 = currentword._id;
+        //find exissting word in allknownwordsdata and change difficilty
+        let newallknownwords = allknownwordsdata.map((word) => {
+          if (word._id === currentwordid1) {
+            // alert("found");
+            return { ...word, difficulty: difficulty };
+          }
+          return word;
+        });
+        console.log(newallknownwords, "newallknownword33333s");
+
+        dispatch(setallknownwordsdata(newallknownwords));
+        //remove current word from allwords array
+        let currentwordid = currentword._id;
+        // console.log(, "currentwordindex1");
+        //IF WE ARE SAVING AT SAME DIFFICULTY AS ORIGINAL - dont remove from ALL WORDS
+        let existingdifficultyknownword = currentword.difficulty;
+        let newdifficulty = difficulty;
+        if (!existingdifficultyknownword === newdifficulty) {
+          let filtered = allwords.filter((word) => word._id !== currentwordid);
+          dispatch(setAllWords2(filtered));
+        }
+
+      } else {
+        //alert("remaining word");
+        //remove word from allwords array
+        let currentwordindex = allwords.indexOf(currentword);
+        console.log(currentwordindex, "currentwordindex");
+        //make a copy of the allwords array
+        let newallwords = [...allwords];
+        //remo  ve by index
+        newallwords.splice(currentwordindex, 1);
+        console.log(newallwords, "newallwords4444444");
+        dispatch(setAllWords2(newallwords));
+
+        //add diff to current word
+        let newcurr = { ...currentword, difficulty: difficulty };
+
+        //REMOVE WORD FROM allremainingwordsdata array
+        //get wordid of currentword
+        let currentwordid = currentword._id;
+        let filteredremainingwords = allremainingwordsdata.filter(
+          (word) => word._id !== currentwordid
+        );
+        dispatch(setallremainingwordsdata(filteredremainingwords));
+        dispatch(setTotalWordsKnown(totalwordsknown + 1));
+        dispatch(setTotalWordsRemaining(totalwordsremaining - 1));
+        dispatch(setallknownwordsdata([...allknownwordsdata, newcurr]));
+      }
+      if (showRemainingWords2) {
+      }
+
+      setTimeout(() => {
+        dispatch(setWordSaved(false));
+        //   setWordSaved(false);
+        handleChangeWord("next");
+      }, 1000);
+    }
+  };
+
+  return (
+    <>
+      <div className="bottombartoptop">
+        <button
+          className="btn mybtn diffic-btn buttonSaveWord fluentbtn"
+          onClick={() => submitWord("Fluent")}
+          disabled={disablediffbuttons}
+        >
+          Fluent
+        </button>{" "}
+        {/*  ✓  ◐  ? ✗*/}
+        {/*  className={`btn mybtn diffic-btn buttonSaveWord  ${
+            showOriginal ? "inactivedbtn" : "familiarbtn"
+          }`} */}
+        <button
+          className="btn mybtn diffic-btn buttonSaveWord familiarbtn
+          "
+          onClick={() => submitWord("Familiar")}
+          disabled={disablediffbuttons}
+        >
+          Familiar
+        </button>
+        <button
+          className="btn mybtn diffic-btn buttonSaveWord uncertainbtn"
+          onClick={() => submitWord("Uncertain")}
+          disabled={disablediffbuttons}
+        >
+          Uncertain
+        </button>
+        <button
+          className="btn mybtn diffic-btn buttonSaveWord newbtn"
+          onClick={() => submitWord("New")}
+          disabled={disablediffbuttons}
+        >
+          New
+        </button>
+        {/* <button
+          className="btn mybtn diffic-btn buttonSaveWord problembtn"
+          onClick={() => submitWord("Problem")}
+          disabled={disablediffbuttons}
+        >
+          Problem
+        </button> */}
+      </div>
+      {/*  {wordsaved ? (
+        <div className="bottombartopbottom">
+          <div className="confirmsaved">WORD Saved</div>
+        </div>
+      ) : (
+        ""
+      )} */}
+    </>
+  );
+};
+
+export default DifficultyButtons;

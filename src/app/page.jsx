@@ -1,20 +1,8 @@
 import { redirect } from 'next/navigation';
 
 export default async function Home({ params }) {
-  // let Homepagedata = {};
-  // let Homepagefields = [];
-  let langslug = await params.lang;
-  if (langslug) {
-    console.log(langslug, 'langslug')
-    redirect('/langslug'); // or detect language dynamically
-  }
-  else {
-    redirect('/en'); // or detect language dynamically
 
-  }
-  //! this is for MONOLINGUAL 
-  //TRY AFTER MULTILINGAUL 
-  redirect('/en'); // or detect language dynamically
+
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/monolingual/homepage`, {
     method: "GET",
     headers: {
@@ -42,7 +30,7 @@ export default async function Home({ params }) {
   }
 
   /*  return <>{<p>Title: {getFieldValue(fieldsdata, "HeaderH1Title")}</p>}</>; */
-  return <>{<p>Title: {getFieldValue("HeaderH1Title")}</p>}</>;
+  /*   return <>{<p>Title: {getFieldValue("HeaderH1Title")}</p>}</>; */
 
   return (
     <div>

@@ -1,0 +1,167 @@
+import { useEffect, useState, useRef } from 'react';
+import { Modal } from 'bootstrap';
+import { useForm, SubmitHandler } from "react-hook-form"
+import { useSelector } from 'react-redux';
+
+
+export default function AIQandA() {
+  const currentword = useSelector((state) => state.flashcardSlice.currentword);
+  const [modalshow, setmodalShow] = useState(false);
+  const modalRef = useRef(null);
+  const [answer, setAnswer] = useState('');
+  console.log(currentword, 'currentword333333333333');
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    setFocus,
+    getValues,
+    formState: { errors },
+  } = useForm()
+  useEffect(() => {
+    const modalElement = document.getElementById('exampleModal');
+    if (modalElement) {
+      const modal = new Modal(modalElement); // Initialize modal
+      // modal.show(); // Show modal
+    }
+  }, []);
+
+  /*  useEffect(() => {
+     setFocus('question');
+ 
+ 
+   }, [setFocus]); */
+  /* 
+    useEffect(() => {
+      if (modalshow) {
+        setFocus('question');
+      }
+    }, [modalshow]); */
+
+  useEffect(() => {
+    const modalElement = modalRef.current;
+
+    // Event listeners for Bootstrap modal
+    const handleShow = () => setmodalShow(true);  // Modal is opening
+    const handleHide = () => setmodalShow(false); // Modal is closing
+
+    modalElement.addEventListener('show.bs.modal', handleShow);
+    modalElement.addEventListener('hide.bs.modal', handleHide);
+
+    // Cleanup listeners when component unmounts
+    return () => {
+      modalElement.removeEventListener('show.bs.modal', handleShow);
+      modalElement.removeEventListener('hide.bs.modal', handleHide);
+    };
+  }, []);
+
+  //WHEN CHANGE WORD - CLEAR DIV WITH ANSWERS
+  useEffect(() => {
+    setAnswer([]);
+    setValue("question", "");
+
+
+  }, [currentword]);
+
+  const AskClickHandler = async () => {
+    console.log('Ask button clicked');
+    const questioncontent = getValues("question");
+    setAnswer(prevAnswers => [...prevAnswers, questioncontent]);
+
+    const fetchfunction = async () => {
+      const response = await fetch('http://localhost:3001/api/askaiquestion', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(
+          {
+            question: watch('question'),
+            currentwordobj: currentword,
+            answerhistory: answer
+
+          }
+
+        ),
+      });
+
+      const data = await response.json();
+
+      console.log(data);
+      let answerdata = data.answer;
+      return answerdata;
+    }
+    let answeris = await fetchfunction();
+    setValue("question", "");
+    //setAnswer(answeris);
+    setAnswer(prevAnswers => [...prevAnswers, answeris]);
+
+  }
+
+
+  return (
+    <>
+      <div className="teacherimgdiv" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <img className="teacherimg" src='/icons/teacher.png' alt='teacher' />
+
+      </div>
+
+
+      {/* Modal Structure */}
+      <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" ref={modalRef}>
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="exampleModalLabel">Ask Mr.Learnwell</h5>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div className="modal-body">
+              <div className="answerbox">
+
+                {answer.length > 0 &&
+                  answer.map((item, index) => (
+
+                    index % 2 === 0 ? (
+                      <p key={index}><strong >{item}</strong></p>
+                    ) : (
+                      <p key={index}><span >{item}</span></p>
+                    )
+                  ))
+                }
+
+
+
+              </div>
+              <form onSubmit={handleSubmit(AskClickHandler)}>
+                <div className="input-group mb-3">
+                  <input type="hidden" value={JSON.stringify(currentword)} className="form-control"  {...register("currentwordobj", { required: false })} id="currentwordinput" />
+                  {/* autoFocus={modalshow ? true : undefined} */}
+
+
+                  <input type="hidden" value={answer} className="form-control"  {...register("answerhistory", { required: false })} id="answerhistory" />
+                  {/* autoFocus={modalshow ? true : undefined} */}
+
+
+
+                  <input type="text" className="form-control" placeholder="Your question" aria-label="your query" aria-describedby="button-addon2"  {...register("question", { required: true })} />
+
+                  <button className="btn btn-outline-secondary" type="submit" id="button-addon2">Ask</button>
+
+
+                </div>
+                {errors.question && <span>Where's the question?</span>}
+              </form>
+
+              {/* onClick={() => AskClickHandler()} */}
+
+            </div>
+            {/*  <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div> */}
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}

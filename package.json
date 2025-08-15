@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@lexical/react": "^0.31.2",
     "@popperjs/core": "^2.11.8",
     "@reduxjs/toolkit": "^2.8.2",
     "bson": "^6.10.3",
