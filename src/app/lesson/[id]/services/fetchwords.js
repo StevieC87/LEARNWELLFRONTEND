@@ -4,19 +4,22 @@
 
 export const getFlashcardsKnownWords = async (wordstart, wordend) => {
   try {
-    let url = `http://localhost:3001/api/flashcardknownwords?wordstart=${wordstart}&wordend=${wordend}`;
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/api/flashcardknownwords?wordstart=${wordstart}&wordend=${wordend}`;
     const response = await fetch(url);
     if (!response.ok) {
       console.log("Error fetching (known) flashcards");
       return null;
     }
+
     const data = await response.json();
-    if (Array.isArray(data) && data.length > 0) {
-      // console.log(data.length, 'dataLENGTH');
-      // console.log(data, "data123123123");
-      return data;
-    } else {
-      return null;
+    if (data) {
+      if (Array.isArray(data) && data.length > 0) {
+        // console.log(data.length, 'dataLENGTH');
+        // console.log(data, "data123123123");
+        return data;
+      } else {
+        return null;
+      }
     }
   } catch (error) {
     console.log("Error fetching (known) flashcards" + error);
@@ -25,17 +28,22 @@ export const getFlashcardsKnownWords = async (wordstart, wordend) => {
 };
 
 export const getFlashcardsRemaining = async (wordstart, wordend) => {
-  let url = `http://localhost:3001/api/flashcardremainingSPLITCARDS?wordstart=${wordstart}&wordend=${wordend}`;
-  console.log(url, "urlurlurlurlurlurl");
-  const response = await fetch(url);
+  try {
+    console.log("API URL:", process.env.NEXT_PUBLIC_API_URL);
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/api/flashcardremainingSPLITCARDS?wordstart=${wordstart}&wordend=${wordend}`;
+    console.log(url, "urlurlurlurlurlurl");
+    const response = await fetch(url);
 
-  if (!response.ok) {
-    console.log("Error fetching (remaining) flashcards");
+    if (!response.ok) {
+      console.log("Error fetching (remaining) flashcards");
+    }
+
+    const data = await response.json();
+    //console.log(data, "data123123123");
+    return data;
+  } catch (error) {
+    console.log("Error fetching (remaining) flashcards", error);
   }
-
-  const data = await response.json();
-  //console.log(data, "data123123123");
-  return data;
 };
 
 export const flashcardsUserSaveWord = async (wordtosubmit) => {
@@ -46,7 +54,7 @@ export const flashcardsUserSaveWord = async (wordtosubmit) => {
   console.log(wordtosubmit1, "wordtosubmit2222444");
   try {
     const response = await fetch(
-      "http://localhost:3001/api/flashcardsusersaveword/",
+      `${process.env.NEXT_PUBLIC_API_URL}/api/flashcardsusersaveword/`,
       {
         method: "POST",
         headers: {

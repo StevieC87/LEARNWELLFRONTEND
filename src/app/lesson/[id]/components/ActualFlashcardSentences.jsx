@@ -100,9 +100,6 @@ const ActualFlashcard = (props) => {
 
   //THIS IS FOR DISPLAYUING THE BASE FORM IF IT'S DIFFERENT like sie Sie
   useEffect(() => {
-
-
-
     if (currentword) {
       //console.log("currentword444444:", currentword);
       //HERE SEE IF THE WORD HAS OTHER MEANINGS
@@ -143,8 +140,7 @@ const ActualFlashcard = (props) => {
 
 
   const fetchmp3 = async (exampleid) => {
-    // let fetchurl = `http://localhost:3001/api/fetchmp3/${exampleid}?wordnostart=${slug}&wordorexample=example`;
-    let fetchurl = `http://localhost:3001/api/fetchmp3/${exampleid}?wordorexample=example`;
+    let fetchurl = `${process.env.NEXT_PUBLIC_API_URL}/api/fetchmp3/${exampleid}?wordorexample=example`;
     const response = await fetch(fetchurl);
     const blob = await response.blob();
     const url = URL.createObjectURL(blob);

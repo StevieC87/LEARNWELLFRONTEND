@@ -80,8 +80,9 @@ const DifficultyButtons = () => {
 
   const submitWord = async (difficulty) => {
     let wordtosubmit = {
-      wordde: currentword.word,
-      word: currentword,
+      // wordde: currentword.word,
+      wordid: currentword._id,
+      // word: currentword,
       difficulty: difficulty,
       sortnumber: currentword.sortnumber,
     };

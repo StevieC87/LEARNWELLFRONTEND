@@ -120,7 +120,7 @@ export default function AudioMode() {
   //THEN WE PLAY THE EXAMPLES in both english and german maybe - IF CHOOSES TO PLAY EXAMPLES - so e.g. we ask
 
   const fetchmp3 = async (exampleid, wordorexample) => {
-    let fetchurl = `http://localhost:3001/api/fetchmp3/${exampleid}?wordorexample=${wordorexample}`;
+    let fetchurl = `${process.env.NEXT_PUBLIC_API_URL}/api/fetchmp3/${exampleid}?wordorexample=${wordorexample}`;
     const response = await fetch(fetchurl);
     const blob = await response.blob();
     const url = URL.createObjectURL(blob);

@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { Modal } from 'bootstrap';
+// import { Modal } from 'bootstrap';
 import { useForm, SubmitHandler } from "react-hook-form"
 import { useSelector } from 'react-redux';
 
