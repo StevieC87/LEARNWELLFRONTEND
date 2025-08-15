@@ -1,0 +1,184 @@
+.logocolortest {
+  color: #5bcaec;
+}
+
+.googleloginbutton {
+  display: block;
+  height: 24px;
+  width: 24px;
+}
+
+/* ANALYTICS */
+.mapdiv {
+  width: 375px;
+  height: 260px;
+}
+.showdata {
+  height: 200px;
+  font-size: 1rem;
+}
+
+@media (min-width: 600px) {
+  .mapdiv {
+    width: 450px;
+    height: 320px;
+  }
+}
+.piechartnewvisitors {
+  color: rgb(36, 175, 255);
+}
+.piechartreturningvisitors {
+  color: rgb(41, 156, 31);
+}
+.referralsdiv {
+  border-radius: 8px;
+}
+.referralstitles {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+}
+.referrer-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+}
+.referrer-name {
+  font-weight: bold;
+  flex: 3;
+}
+.referrer-visits {
+  flex: 1;
+  text-align: center;
+}
+.referrer-item.even {
+  background-color: #f0f0f0;
+}
+.referrer-item.odd {
+  background-color: #ffffff;
+}
+@media (max-width: 600px) {
+  .referrer-name {
+    font-size: 1.2rem;
+  }
+}
+
+.topvistedpagesouterdiv {
+  border-radius: 8px;
+
+  background-color: #f9f9f9;
+}
+.topvisitedpagestitles {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+}
+.topvisitedpage-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+}
+.topvisitedpage-item.even {
+  background-color: #f0f0f0;
+}
+.topvisitedpage-item.odd {
+  background-color: #ffffff;
+}
+.topvisitedpage-name {
+  font-weight: bold;
+  flex: 3;
+}
+.topvisitedpage-visits {
+  flex: 1;
+}
+@media (max-width: 600px) {
+  .topvisitedpage-name {
+    font-size: 1.2rem;
+  }
+}
+
+.calendarsvgdatepicker {
+  z-index: "200";
+  width: "20px";
+  height: "20px";
+  background-color: "white";
+}
+
+/* tabvle */
+
+.thtrashed {
+  background-color: red;
+}
+
+/* PAGES */
+.savedraftbutton {
+  width: 106px;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+/* JSONLD */
+.jsonldouterdiv {
+  max-width: 600px;
+}
+
+/* settings */
+.defaultlanglocalesettings {
+  display: inline-block;
+  width: "80px";
+  margin-left: 10px;
+}
+
+.selectedlanglabelsettings {
+  width: 185px;
+  display: inline-block;
+}
+
+.smallmarginbottominput {
+  margin-bottom: 0px;
+}
+.cardpssword {
+  width: 370px;
+}
+
+/* login verfication OTP */
+.verifycard {
+  min-width: 320px;
+  max-width: 400px;
+}
+.verifinput {
+  width: 50px;
+  height: 50px;
+  font-size: 30px;
+  text-align: center;
+  margin: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: white;
+}
+
+.sixdigitinput {
+  border: 1px solid black;
+}
+
+/* login quiz */
+.button-checkQUIZ {
+  padding: 0px 10px;
+}
+.quizdivinputs {
+  height: 35px;
+}
+.inputquiz {
+  margin-bottom: 0px;
+  width: 225px;
+}
+
+/* REGISTER */
+.logocolortest {
+  color: #5bcaec;
+}
+
+.cardpwordforgot {
+  width: 370px;
+}

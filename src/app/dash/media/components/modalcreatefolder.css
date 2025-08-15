@@ -1,0 +1,25 @@
+.modalouterdiv {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+/* bg-white rounded-lg shadow-lg p-6 w-full max-w-md */
+
+.modalinner {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  width: 100%;
+  max-width: 375px;
+}
+
+.buttonconfirm {
+}
+
+.buttoncancel {
+}

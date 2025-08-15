@@ -1,0 +1,34 @@
+.outerlayoutdiv {
+  width: 100vw !important;
+  max-width: 1200px !important;
+}
+@media screen and (width >= 768px) {
+  .outerlayoutdiv {
+    flex-direction: column;
+    width: 100vw !important;
+    height: 100%;
+    display: flex;
+  }
+}
+.maincontent {
+  max-width: 100%;
+}
+
+.pageslistdiv {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+.pageitem {
+  background-color: transparent;
+  align-items: start;
+}
+
+.tablediv {
+  flex: 0.8;
+  overflow-y: auto;
+}
+
+.tdpageslist {
+  /*   padding: 5px 0 5px 0; */
+}

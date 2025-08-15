@@ -1,0 +1,68 @@
+.slidemenuouterdiv {
+  background-color: #eef2f6;
+  border-right: 1px solid lightgray;
+}
+
+.slidemenu {
+  z-index: 9998;
+  position: fixed;
+  padding-top: 40px;
+  top: 0;
+  left: 0;
+  /* Set a fixed width for the slide-in menu */
+  /* width: 100%; */
+  width: 150px;
+  height: 100%;
+  background-color: #eef2f6;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateX(-100%); /* Start off-screen */
+  transition: transform 0.3s ease-in-out;
+}
+
+.slidemenu.closed {
+  transform: translateX(-150px); /* Keep it off-screen when closed */
+}
+
+.slidemenu.open {
+  /*  transform: translateX(0); */ /* Slide into view when open */
+  /*   transform: translateX(0%); */
+  transform: translateX(0px);
+}
+
+.sidebartext {
+  font-size: 1.5rem;
+  padding-left: 10px;
+}
+.sidebarlinkforicon {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  /*  padding: 10px; */
+
+  text-decoration: none;
+}
+
+.maincontent-mobile {
+  transform: translateX(var(--adminsidebarwidth));
+}
+.maincontent-blur {
+  filter: blur(2px);
+  /*   background-color: rgba(109, 109, 109, 0.7); */
+}
+.sidenav {
+  height: 100vh;
+  width: var(--adminsidebarwidth);
+  background-color: #eef2f6;
+}
+
+.sidenavh1 {
+  color: white;
+}
+
+.titlebuttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}

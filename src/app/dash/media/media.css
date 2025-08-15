@@ -1,0 +1,98 @@
+.mediaouterdiv {
+  border: 0px solid var(--primary-color-light);
+  height: 100vh;
+}
+
+.folderslistdiv {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 20px;
+  width: 100%;
+}
+.folderitemdiv {
+  display: flex;
+  flex-direction: row;
+  width: 110px;
+  /*   align-items: center; */
+  /*   justify-content: center; */
+}
+.fileitemdiv2 {
+  display: flex;
+  flex-direction: row;
+  width: 150px;
+  /*   align-items: center; */
+  /*   justify-content: center; */
+}
+.folderimagetextdiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  width: 100%;
+  /*  border: 1px solid var(--primary-color-light); */
+}
+.fileimagetextdiv2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  width: 100%;
+  /*  border: 1px solid var(--primary-color-light); */
+}
+.folderitem {
+  /*  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem; */
+}
+.folderimage {
+  cursor: pointer;
+}
+
+.folderfilename {
+  font-size: 1.1rem;
+  text-align: center;
+  width: 100%;
+  overflow-wrap: break-word;
+}
+
+.filefilename2 {
+  font-size: 1.1rem;
+  text-align: center;
+  width: 100%;
+  overflow-wrap: break-word;
+}
+
+.folderfileVelipsis {
+  height: 30px;
+  width: 20px;
+  font-size: 2rem;
+  cursor: pointer;
+}
+.fileslistdiv {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 20px;
+
+  font-size: 1.1rem;
+}
+
+.fileitem {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  justify-content: center;
+  width: 160px;
+  border: 0px solid var(--primary-color-light);
+  overflow-wrap: break-word;
+  cursor: pointer;
+}
+
+.fileimage {
+  align-self: center;
+}

@@ -1,0 +1,58 @@
+:root {
+  --navbargridtohide: grid;
+}
+
+.navbar1 {
+  background-color: #eef2f6;
+  /*   display: grid; */
+  display: var(--navbargridtohide);
+  z-index: 10001;
+  grid-template-columns: 130px 1fr 40px;
+  /*  justify-content: space-between; */
+  /* margin-top: 5px; */
+  /*  margin-left: 5px; */
+  align-self: top;
+  height: 32px;
+  width: 100vw;
+  position: fixed;
+  bottom: 0;
+}
+
+.navlogoarea {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  grid-column: 1;
+  z-index: 10001;
+}
+
+.navlogoimgdiv {
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+}
+
+.navlogotextdiv {
+  padding-top: 5px;
+  color: black;
+  font-family: PoppinsSemiBold;
+}
+
+.navlinksarea {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  grid-column: 2;
+}
+
+/* MEDIA QUERIES - HIDE SHOW NAV  */
+
+@media (max-width: 768px) {
+  .hamburgericondiv {
+    display: block;
+  }
+  .navlinksarea {
+    display: none;
+  }
+}

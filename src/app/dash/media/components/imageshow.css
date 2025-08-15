@@ -1,0 +1,69 @@
+.showimagediv {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  /* background-color: rgba(0, 0, 0, 0.8); */
+  background-color: white;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+}
+
+.showimagecaret {
+  width: 35px;
+  background-color: white;
+  text-align: center;
+}
+.imageshowinnerdiv {
+  display: flex;
+  flex-direction: column;
+}
+.imageshowtopbuttons {
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+}
+.imageshowtopbuttonsright {
+  display: flex;
+  flex-direction: row;
+  gap: 0px;
+}
+
+.imagetopbutton {
+  border: 1px solid lightgray;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.imagexbutton {
+  padding: 0 10px;
+}
+
+.imageshowmainarea {
+  display: flex;
+  flex-direction: column;
+}
+
+.imageshowbelowimg {
+  display: flex;
+  flex-direction: column;
+}
+.imageshowfiledetailslist {
+  display: flex;
+  flex-direction: column;
+  font-size: 1.2rem;
+}
+
+.imageshowfiletailstlistlabel {
+  font-weight: bold;
+}
+
+.imageshowsubmitbuttondiv {
+  display: flex;
+  justify-content: end;
+  margin-top: 20px;
+}

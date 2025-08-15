@@ -1,0 +1,88 @@
+@layer buttons {
+  button {
+    display: inline-block;
+    cursor: pointer;
+  }
+  .button {
+    padding: 4px 7px;
+    font-size: 16px;
+    font-weight: 00;
+    text-align: center;
+    text-decoration: none;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    transition: all 0.3s ease-in-out;
+    background-color: #5bcaec;
+    color: #ffffff;
+    border-color: #5bcaec;
+    font-family: PoppinsSemiBold !important;
+    align-self: flex-start;
+  }
+  .button-wide {
+    width: 100%;
+  }
+  .button-thick {
+    padding: 10px 20px;
+  }
+  /* Primary button */
+  .button-primary {
+  }
+  .button-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+  }
+  .button-primary:active {
+    background-color: #004494;
+    border-color: #004494;
+  }
+  /* Secondary button */
+  .button-secondary {
+    background-color: #6c757d;
+    color: #ffffff;
+    border-color: #6c757d;
+  }
+  .button-secondary:hover {
+    background-color: #545b62;
+    border-color: #545b62;
+  }
+  .button-secondary:active {
+    background-color: #3e444a;
+    border-color: #3e444a;
+  }
+  /* Outline button */
+  .button-outline {
+    background-color: transparent;
+    color: #5bcaec;
+    border-color: #5bcaec;
+  }
+  .button-thin {
+    border: 1px solid #5bcaec;
+  }
+  .button-noborder {
+    border: none;
+  }
+  .button-outline:hover {
+    background-color: #5bcaec;
+    color: #ffffff;
+  }
+  .button-outline:active {
+    background-color: #0056b3;
+    border-color: #0056b3;
+  }
+  /* Disabled button */
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .button-danger {
+    background-color: #dc3545;
+    color: #ffffff;
+    border-color: #dc3545;
+  }
+
+  .gray {
+    border-color: #d1d5db;
+    color: gray;
+  }
+}

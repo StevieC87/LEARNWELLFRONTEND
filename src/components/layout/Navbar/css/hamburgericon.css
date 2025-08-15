@@ -1,0 +1,11 @@
+.hamburgericondiv {
+  display: flex;
+  justify-items: end;
+  align-items: center;
+  grid-column: 3;
+  z-index: 10001;
+}
+
+.hamburgericoncolor {
+  color: black;
+}

@@ -1,0 +1,121 @@
+/* =========================
+2. Typography
+========================= */
+/* Headings */
+
+@layer typography {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: var(--spacing-small);
+  }
+  /* Define sizes for different headings */
+  h1 {
+    font-size: 3.2rem;
+  } /* Page title */
+  h2 {
+    font-size: 2.8rem;
+  } /* Section title */
+  h3 {
+    font-size: 2.4rem;
+  } /* Subsection */
+  h4 {
+    font-size: 2rem;
+  } /* Minor headings */
+  h5 {
+    font-size: 1.8rem;
+  }
+  h6 {
+    font-size: 1.6rem;
+  }
+
+  .fontsize6 {
+    font-size: 6rem;
+  }
+  .fontsize5 {
+    font-size: 5rem;
+  }
+  .fontsize4 {
+    font-size: 4rem;
+  }
+  .fontsize3 {
+    font-size: 3rem;
+  }
+  .fontsize1p2 {
+    font-size: 1.2rem;
+  }
+  /* Paragraphs and body text */
+  /* p {
+    margin-bottom: var(--spacing-medium);
+    font-size: 1.6rem;
+  } */
+  /* Links */
+  a {
+    /* color: var(--primary); */
+    /* color: blue;
+    text-decoration: underline;
+    font-weight: 600; */
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  /* CUSTOM FONTS */
+  @font-face {
+    font-family: "PoppinsSemiBold";
+    src: url("/fonts/Poppins-SemiBold.ttf") format("truetype");
+    /*   font-display: swap; */
+  }
+  @font-face {
+    font-family: "Poppins";
+    src: url("/fonts/Poppins-Regular.ttf") format("truetype");
+    /*   font-display: swap; */
+  }
+  .poppinsSemiBold {
+    font-family: "PoppinsSemiBold", sans-serif;
+    font-weight: 400;
+  }
+  .poppins {
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+  }
+  .poppinsl {
+    font-family: "Poppins";
+  }
+
+  /* Text Utilities */
+
+  .fontprimarycolor {
+    color: var(--primary-color-light);
+  }
+
+  .text-center {
+    text-align: center;
+  }
+  .text-right {
+    text-align: right;
+  }
+  .text-muted {
+    color: #757575;
+  } /* Muted text */
+  .truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .break-word {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+  }
+  .balance-text {
+    text-wrap: balance;
+  }
+  .hyphenate {
+    hyphens: auto;
+  }
+}

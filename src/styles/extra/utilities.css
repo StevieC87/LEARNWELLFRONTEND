@@ -1,0 +1,49 @@
+.transparent {
+  background-color: transparent; /* White background */
+}
+
+@layer utilities {
+  .text-center {
+    text-align: center;
+  }
+  .hidden {
+    display: none;
+  }
+  .p-1 {
+    padding: 4px;
+  }
+  .m-1 {
+    margin: 4px;
+  }
+  .mwidth100 {
+    max-width: 100%;
+  }
+  .width200 {
+    width: 200px;
+  }
+  .width300 {
+    width: 300px;
+  }
+  .width400 {
+    width: 400px;
+  }
+  .mwidth400 {
+    max-width: 400px;
+  }
+
+  .width140 {
+    width: 140px;
+  }
+  .width70 {
+    width: 70px;
+  }
+  .width60 {
+    width: 60px;
+  }
+  .width58 {
+    width: 58px;
+  }
+  .width40 {
+    width: 40px;
+  }
+}

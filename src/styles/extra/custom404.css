@@ -1,0 +1,13 @@
+.custom404div {
+  display: grid;
+  align-self: center;
+  justify-self: center;
+}
+
+.custom404h1 {
+  font-size: 6rem !important;
+  font-weight: 600;
+  color: #111827; /* text-gray-900 */
+  margin-bottom: 0.5rem;
+  color: blue;
+}

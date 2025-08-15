@@ -1,0 +1,73 @@
+@layer variables {
+  :root {
+    /* Colors */
+    --primary-color: #007bff;
+    --primary-color-light: #5bcaec;
+    --secondary-color: #6c757d;
+    --background-color: #eef2f6;
+    --text-color: #333333;
+    --link-color: #0056b3;
+    /* possibly Colours */
+    --text-dark: #333333; /* Standard dark text */
+    --text-light: #ffffff; /* Standard light text */
+    --background-light: #f5f5f5; /* Light background */
+    --background-dark: #1a1a1a; /* Dark background */
+    --border-color: #dddddd; /* Default border colour */
+    /* Semantic Colours */
+    --success: #4caf50; /* Green for success */
+    --error: #f44336; /* Red for errors */
+    --warning: #ffc107; /* Yellow for warnings */
+    --info: #2196f3; /* Blue for informational elements */
+
+    /* LAYOUT UI */
+    --adminsidebarwidth: 200px; /* Sidebar width */
+
+    /* Typography */
+    /*  --font-base: "Arial", sans-serif; */
+    --font-base: Poppins, sans-serif;
+
+    --font-primary: "Inter", sans-serif;
+    --font-secondary: "Georgia", serif;
+    --font-heading: "Georgia", serif;
+    --font-size-small: 1.4rem; /* 14px */
+    --font-size-medium: 1.6rem; /* 16px */
+    --font-size-large: 2.4rem; /* 24px */
+    --font-weight-normal: 400;
+    --font-weight-bold: 700;
+
+    /* Spacing (rem-based for scalability) */
+    --spacing-xxs: 0.25rem; /* 2.5px */
+    --spacing-xs: 0.5rem; /* 5 */
+    --spacing-sm: 1rem; /* 10px */
+    --spacing-md: 1.5rem; /* 15px */
+    --spacing-lg: 2rem; /* 20px */
+    --spacing-xl: 2.5rem; /* 25px */
+    --spacing-xxl: 3rem; /* 30px */
+
+    /* Z-Index */
+    --z-index-header: 1000;
+    --z-index-modal: 1050;
+    --z-index-tooltip: 1100;
+
+    /* Breakpoints */
+    --breakpoint-xs: 48rem; /* 480px */
+    --breakpoint-sm: 76.8rem; /* 768px */
+    --breakpoint-md: 102.4rem; /* 1024px */
+    --breakpoint-lg: 120rem; /* 1200px */
+
+    /* STATES */
+    --active-background-color: #3498db;
+    --active-text-color: #ffffff;
+    --disabled-background-color: #cccccc;
+    --disabled-text-color: #666666;
+    --loading-background-color: #f3f3f3;
+    --loading-text-color: #999999;
+
+    /* VARS FOR BORDER RADIUS */
+    --borderradius: 10px; /* 5px */
+  }
+  /* HERE CAN ADD RESPONSIVE STUFF TO THE VARABLES 
+  e.g. change spacing for smaller screens */
+  @media screen {
+  }
+}
