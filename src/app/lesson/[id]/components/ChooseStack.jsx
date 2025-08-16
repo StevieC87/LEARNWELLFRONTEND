@@ -136,16 +136,20 @@ const ChooseStack = () => {
     <>
       <div className="chooseWordStackInner">
         <div
-          className="btn mybtn btn-outline-primary"
+          className="btn mybtn btn-outline-primary cursor-pointer"
           style={{
             backgroundColor: !showRemainingWords2 ? "turquoise" : "#f0f8ff",
           }}
-          onClick={() => changeWordList("known")}
+          onClick={() => {
+            if (allknownwordsdata.length > 0) {
+              changeWordList("known")
+            }
+          }}
         >
           Covered{allknownwordsdata.length}
         </div>
         <div
-          className="mybtn btn btn-outline-primary"
+          className="mybtn btn btn-outline-primary cursor-pointer"
           style={{
             backgroundColor: showRemainingWords2 ? "#bd53f640" : "#f0f8ff",
           }}

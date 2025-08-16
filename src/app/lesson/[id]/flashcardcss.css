@@ -276,7 +276,7 @@
   flex-direction: row;
   justify-self: center;
   justify-content: space-between;
-  align-items: start;
+  align-items: center;
   width: 100%;
   max-width: 400px;
   border: 0px solid #ccc;

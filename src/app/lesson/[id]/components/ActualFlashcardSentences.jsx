@@ -10,15 +10,9 @@ const ActualFlashcard = (props) => {
   const dispatch = useDispatch();
 
   const pathname = usePathname();
-
   const slug = pathname.split("/").pop();
-  //console.log(slug, "slugsss");
   const { wordnostart, wordnoend } = props;
-  // alert(wordnostart);
-  // console.log(wordnostart, "wordnostart");
-
   const currentword = useSelector((state) => state.flashcardSlice.currentword);
-
   //show original language (German) - true by default
   const showOriginal = useSelector(
     (state) => state.flashcardSlice.showOriginal
@@ -29,27 +23,23 @@ const ActualFlashcard = (props) => {
     (state) => state.flashcardSlice.errorNoWords
   );
   const isloading = useSelector((state) => state.flashcardSlice.isloading);
-
   const totalwordsknown = useSelector(
     (state) => state.flashcardSlice.totalwordsknown
   );
   const totalwordsremaining = useSelector(
-    (state) => state.flashcardSlice.totalwordsremaining
-  );
+    (state) => state.flashcardSlice.totalwordsremaining);
   const allremainingwordsdata = useSelector(
     (state) => state.flashcardSlice.allremainingwordsdata
   );
   const allknownwordsdata = useSelector(
     (state) => state.flashcardSlice.allknownwordsdata
   );
-
   const switchbuttondeen = useSelector(
     (state) => state.flashcardSlice.switchbuttondeen
   );
   const disablediffbuttons = useSelector(
     (state) => state.flashcardSlice.disablediffbuttons
   );
-
   const [remainingwordsNotempty, setRemainingWordsNotEmpty] = useState();
   const [knownwordsNotempty, setKnownWordsNotEmpty] = useState();
 
@@ -80,6 +70,19 @@ const ActualFlashcard = (props) => {
       /// setOriginal(true);
     }
   };
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "ArrowUp" || event.key === "ArrowDown" || event.key === " " || event.key === "Space") {
+        fliptoEnglish()
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [fliptoEnglish]);
 
   //----------------------------------------------------
 
@@ -173,9 +176,12 @@ const ActualFlashcard = (props) => {
           }`}
         onClick={(e) => {
           if (
-            e.target.closest(".flashcardmultiple") ||
-            e.target.closest(".flashcard123") ||
-            disablediffbuttons
+            // e.target.closest(".flashcardmultiple") ||
+            // e.target.closest(".flashcard123") ||
+            // disablediffbuttons
+            e.target.closest(".bi")
+            || e.target.closest("span") ||
+            e.target.closest("p")
           ) {
             e.stopPropagation();
           } else {
@@ -224,7 +230,11 @@ const ActualFlashcard = (props) => {
                                 className="btn btn-outline-primary"
                                 onClick={() => fetchmp3(example.id)}
                               >
-                                <i className="bi bi-volume-up"></i>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" className="bi bi-volume-up" viewBox="0 0 16 16">
+                                  <path d="M11.536 14.01A8.47 8.47 0 0 0 14.026 8a8.47 8.47 0 0 0-2.49-6.01l-.708.707A7.48 7.48 0 0 1 13.025 8c0 2.071-.84 3.946-2.197 5.303z" />
+                                  <path d="M10.121 12.596A6.48 6.48 0 0 0 12.025 8a6.48 6.48 0 0 0-1.904-4.596l-.707.707A5.48 5.48 0 0 1 11.025 8a5.48 5.48 0 0 1-1.61 3.89z" />
+                                  <path d="M10.025 8a4.5 4.5 0 0 1-1.318 3.182L8 10.475A3.5 3.5 0 0 0 9.025 8c0-.966-.392-1.841-1.025-2.475l.707-.707A4.5 4.5 0 0 1 10.025 8M7 4a.5.5 0 0 0-.812-.39L3.825 5.5H1.5A.5.5 0 0 0 1 6v4a.5.5 0 0 0 .5.5h2.325l2.363 1.89A.5.5 0 0 0 7 12zM4.312 6.39 6 5.04v5.92L4.312 9.61A.5.5 0 0 0 4 9.5H2v-3h2a.5.5 0 0 0 .312-.11" />
+                                </svg>
                               </button>
                             )}
                           </div>
@@ -264,10 +274,10 @@ const ActualFlashcard = (props) => {
                       (example, index) => (
                         <div key={index} className="exampleSentencesBack">
                           <div className="exampleSbackEN">
-                            {example.ExampleSentenceEN}
+                            <span>{example.ExampleSentenceEN}</span>
                           </div>
                           <div className="fontsmall padright10">
-                            {example.ExampleSentenceDE}
+                            <span>{example.ExampleSentenceDE}</span>
                           </div>
                         </div>
                       )

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCurrentWord, setOriginal, setrandom, setallremainingwordsdata, setAllWords2, setallknownwordsdata, setpauseonnextprev } from "@/redux/slices/flashcardSlice";
 // import AIQandA from "./AIQandA";
 import Link from 'next/link';
+import { useEffect } from "react";
 
 const BottomBar = () => {
 
@@ -65,6 +66,21 @@ const BottomBar = () => {
 
   const myParam = "Hello, World!123";
 
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "ArrowRight") {
+        handleChangeWord("next");
+      } else if (event.key === "ArrowLeft") {
+        handleChangeWord("prev");
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [currentword, allwords]);
+
   return (
     <>
       <div>
@@ -89,11 +105,11 @@ const BottomBar = () => {
         </button>
       </div>
       <div>
-        {!showRemainingWords2 && (
+        {/*   {!showRemainingWords2 && (
           <Link href="/reinforce" className="reinforce"  >
             Reinforce Word
           </Link>
-        )}
+        )} */}
       </div>
       {/* <AIQandA /> */}
     </>

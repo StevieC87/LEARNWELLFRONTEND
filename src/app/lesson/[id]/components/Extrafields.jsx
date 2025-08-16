@@ -13,12 +13,14 @@ const Extrafields = () => {
           <hr className="dotted"></hr>
           <p className="fontmedium">
             <span className="semibold">Explanation:</span>{" "}
-            {currentword?.Meaning?.Explanation}
+            <span>{currentword?.Meaning?.Explanation}</span>
+
           </p>
 
           <div className="fontmedium">
             <span className="semibold ">Usage Notes: </span>
-            {currentword?.Meaning?.CommonFields?.UsageNotes}
+            <span> {currentword?.Meaning?.CommonFields?.UsageNotes}</span>
+
           </div>
 
           <hr className="dotted  centeredhr padtop10"></hr>
@@ -82,7 +84,7 @@ const Extrafields = () => {
             <>
               <span>Collocations: </span>
               {currentword?.Meaning.Collocations.map((collocation, i) => (
-                <div key={i}>{collocation}</div>
+                <div key={i}><span>{collocation}</span></div>
               ))}
               <hr className="dotted  centeredhr padtop10"></hr>
             </>

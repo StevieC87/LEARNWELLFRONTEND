@@ -39,8 +39,8 @@ body {
   /*  background: -webkit-linear-gradient(to right, #cbcaa5, #8f94fb) !important; */
   /* Chrome 10-25, Safari 5.1-6 */
   /*  background: linear-gradient(to right, #cbcaa5, #8f94fb) !important; */
-  background: #2b3e36 !important;
-  color: white !important;
+  /* background: #2b3e36 !important; */
+  color: rgb(0, 0, 0) !important;
   overflow: hidden;
   max-width: 1200px;
   display: grid;
@@ -52,7 +52,7 @@ body {
 
 a {
   text-decoration: none !important;
-  color: white !important;
+  color: rgb(0, 0, 0) !important;
 }
 
 @font-face {
@@ -253,11 +253,11 @@ hr.dashed {
   filter: url(#chalk-filter);
 }
 
-svg {
+/* svg {
   width: 0;
   height: 0;
   position: absolute;
-}
+} */
 .chalkborder::after {
   content: "";
   position: absolute;
