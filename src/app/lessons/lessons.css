@@ -1,13 +1,9 @@
 .lessoncardFlex {
   margin-top: 20px;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  justify-items: center;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   gap: 20px;
-  padding-left: 10px;
-  padding-right: 10px;
-  max-width: 750px;
+  padding: 0 10px;
+
+  justify-content: center;
 }

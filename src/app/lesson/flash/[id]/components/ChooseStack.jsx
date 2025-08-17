@@ -25,7 +25,8 @@ import {
   setallremainingwordsdata,
   setswitchbuttondeen,
 } from "@/redux/slices/flashcardSlice";
-import ProgressBar from "./ProgressBar";
+/* import ProgressBar from "./ProgressBar";
+ */
 import AudioMode from "./AudioMode";
 
 const ChooseStack = () => {

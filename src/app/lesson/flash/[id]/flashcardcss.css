@@ -482,7 +482,8 @@
   margin: 0 1 0 0;
   border: 1px solid #888484;
   height: 44px;
-  width: 85px;
+  min-width: 84;
+  max-width: 104px;
   box-shadow: 1 1 0 0 rgba(0, 0, 0, 0.2);
   border: 1px solid #a5a4a4ec;
   word-wrap: break-word;
@@ -499,7 +500,9 @@
   width: 85px;
   text-align: center;
 }
-
+.fluentnevershow {
+  background-color: #ff515140 !important;
+}
 .fluentbtn {
   background-color: #83ec0b40 !important;
 }

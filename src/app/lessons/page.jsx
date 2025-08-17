@@ -63,27 +63,29 @@ export default function Lessons() {
 
   return (
     <>
-      <h1 className="gloria dboard text-center chalkunderline yellow ">Lessons </h1>
-
+      {/*  <h1 className="gloria dboard text-center chalkunderline yellow ">Lessons </h1> */}
+      <h1 className="text-center">Lessons </h1>
       <div className="lessoncardFlex">
         {progresswordstack && progresswordstack.length > 0 ? (
 
           progresswordstack.map((stack, index) => (
             <Link href={`./lesson/${index + 1}`} key={index}>
               <div className="lessoncard  " >{ }
-                <div className="specialelite text-center">Lesson {index + 1}</div>
+                <div className="text-center">Lesson {index + 1}</div>
                 <div className="lessoncardtext">
-                  <p>{stack.totallength}</p>
+                  {/*  <p>{stack.totallength}</p>
                   {stack.totallength > 95 ? <span className="marker checktext">✔</span> : ''}
                   <p>Fluent: <span className="bold lessoncardtextnumber">{stack.fluent}</span></p>
                   <p>Familiar: <span className="bold lessoncardtextnumber">{stack.familiar}</span></p>
                   <p>Uncertain: <span className="bold lessoncardtextnumber">{stack.uncertain}</span></p>
-                  <p>New: <span className="bold lessoncardtextnumber">{stack.newword}</span></p>
+                  <p>New: <span className="bold lessoncardtextnumber">{stack.newword}</span></p> */}
                 </div>
-                <div><button href="/#" className="typewritebutton" onClick={(e) => {
+                <div>
+                  {/*     <button href="/#" className="typewritebutton" onClick={(e) => {
                   e.stopPropagation();
                   router.push('/review');
-                }}>Review</button></div>
+                  }}>Review</button> */}
+                </div>
               </div>
             </Link>
           ))

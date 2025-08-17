@@ -41,7 +41,7 @@ body {
   /*  background: linear-gradient(to right, #cbcaa5, #8f94fb) !important; */
   /* background: #2b3e36 !important; */
   color: rgb(0, 0, 0) !important;
-  overflow: hidden;
+  /*  overflow: hidden; */
   max-width: 1200px;
   display: grid;
   grid-auto-flow: row;
@@ -347,7 +347,7 @@ hr.dashed {
   text-decoration-color: var(--chalkgray);
 }
 
-.lessoncard {
+/* .lessoncard {
   display: grid;
   place-self: center;
   max-width: 1200px;
@@ -356,11 +356,16 @@ hr.dashed {
   width: 120px;
   padding: 10px;
   justify-content: center;
-  /*  .dashboardcard {
-    box-shadow: 0 2px 6px gray;
-    padding: 10px;
-    border-radius: 10px;
-  } */
+ 
+} */
+.lessoncard {
+  display: grid;
+  display: grid;
+  place-self: center;
+  max-width: 1200px;
+  border: 1px solid gray;
+  border-radius: 10px;
+  padding: 10px;
 }
 
 .checktext {
@@ -368,19 +373,19 @@ hr.dashed {
   color: green;
 }
 .lessoncardtext {
-  font-size: 10pt;
-  font-family: cutive;
+  /*   font-size: 10pt;
+  font-family: cutive; */
 }
 .lessoncardtextnumber {
-  font-family: "SpecialElite" !important;
-  font-size: 14pt;
+  /* font-family: "SpecialElite" !important;
+  font-size: 14pt; */
 }
 .typewritebutton {
-  position: relative; /* Ensure the pseudo-element positions correctly */
+  /*  position: relative; 
   font-family: "Special Elite", cursive;
-  color: black;
+  color: black; */
 }
-.lessoncard {
+/* .lessoncard {
   background-color: #fff;
   margin: 5px;
   background-image: linear-gradient(
@@ -390,10 +395,8 @@ hr.dashed {
     #ccc 1em,
     #fff 1em
   );
-  /*   background-position: 0% 1em; */
   background-size: 100% 1em;
-  /*  background-repeat: repeat-y; */
-}
+} */
 
 .dboard {
   color: yellow;
