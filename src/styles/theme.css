@@ -34,6 +34,10 @@ html {
   width: 100vw;
 }
 body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden; /* keeps layout stable */
+  scrollbar-width: none;
   /*  background: #4e54c8 !important; */
   /* fallback for old browsers */
   /*  background: -webkit-linear-gradient(to right, #cbcaa5, #8f94fb) !important; */

@@ -12,9 +12,9 @@
     border: 2px solid transparent;
     border-radius: 4px;
     transition: all 0.3s ease-in-out;
-    background-color: #5bcaec;
+    background-color: var(--primary-color);
     color: #ffffff;
-    border-color: #5bcaec;
+    border-color: var(--primary-color);
     font-family: PoppinsSemiBold !important;
     align-self: flex-start;
   }
@@ -26,12 +26,12 @@
   }
   /* Primary button */
   .button-primary {
-    background-color: #007bff;
+    background-color: var(--primary-color);
     color: #ffffff;
-    border-color: #007bff;
-    padding: 10px 20px;
+    border-color: var(--primary-color);
+    padding: 5px 25px;
     font-size: 16px;
-    border-radius: 10px;
+    border-radius: 5px;
   }
   .button-primary:hover {
     background-color: #0056b3;
@@ -58,17 +58,24 @@
   /* Outline button */
   .button-outline {
     background-color: transparent;
-    color: #5bcaec;
-    border-color: #5bcaec;
+    color: var(--primary-color);
+    border-color: var(--primary-color);
   }
   .button-thin {
-    border: 1px solid #5bcaec;
+    border: 1px solid var(--primary-color);
+  }
+
+  .button-narrow {
+    padding: 2px 5px;
+    border: 1px solid var(--primary-color);
+    font-weight: 0;
+    font-family: Poppins !important;
   }
   .button-noborder {
     border: none;
   }
   .button-outline:hover {
-    background-color: #5bcaec;
+    background-color: var(--primary-color);
     color: #ffffff;
   }
   .button-outline:active {

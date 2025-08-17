@@ -118,4 +118,8 @@
   .hyphenate {
     hyphens: auto;
   }
+
+  li {
+    list-style-type: square;
+  }
 }

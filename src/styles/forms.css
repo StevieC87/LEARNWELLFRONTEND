@@ -28,7 +28,7 @@ select {
   outline: none;
   font-family: "poppins";
   font-weight: 400;
-  margin-bottom: 1rem;
+  /*   margin-bottom: 1rem; */
 }
 
 input:focus,

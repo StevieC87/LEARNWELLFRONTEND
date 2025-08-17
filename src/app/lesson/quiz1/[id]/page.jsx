@@ -54,6 +54,9 @@ export default function Quiz1() {
   const [showcorrect, setShowCorrect] = useState(false);
   const [showwrong, setShowWrong] = useState(false);
   const [showExplanation, setShowExplanation] = useState(false);
+  const [revealanswerdiv, setRevealAnswerDiv] = useState(false);
+  const [currentwordnumberofexamples, setCurrentWordNumberOfExamples] = useState(0);
+  const [wordtype, setWordType] = useState("");
   const slug = pathname.split("/").pop();
   //console.log(slug, "slugsss");
   if (isNaN(slug)) {
@@ -78,48 +81,33 @@ export default function Quiz1() {
         //alert("111");
         return;
       } else {
+        //randomise order 
+        knownwords = knownwords.sort(() => Math.random() - 0.5);
         //alert("2222");
         dispatch(setTotalWordsKnown(knownwords.length));
         setWordsforquiz1(knownwords);
         setCurrentQuiz1Word(knownwords[0]);
-        setCurrentQuizWordGerman(knownwords[0].word);
-        setCurrentQuizWordEnglish(knownwords[0].Meaning);
-        console.log(knownwords[0], "currentquiz1word");
+
         dispatch(setCurrentWord(knownwords[0]));
         dispatch(setisloading(false));
-
-        //WE PUT ALL KNOWS WORDS IN ARRAY REDUX
-        //dispatch(setAllWords2(getknownwordsf));
         dispatch(setallknownwordsdata(knownwords));
-        // return knownwords;
-        //CREATE ARRAY OF WORDS FOR EACH DIFFICULTY LEVEL
-        let fluentWORDS1 = knownwords.filter(
-          (word) => word.difficulty === "Fluent"
-        );
-        let familiarWORDS = knownwords.filter(
-          (word) => word.difficulty === "Familiar"
-        );
-        let uncertainWORDS = knownwords.filter(
-          (word) => word.difficulty === "Uncertain"
-        );
-        let newwords = knownwords.filter(
-          (word) => word.difficulty === "New"
-        );
 
-        dispatch(setfluentWORDSArray(fluentWORDS1));
-        dispatch(setfamiliarWORDSArray(familiarWORDS));
-        dispatch(setuncertainWORDSArray(uncertainWORDS));
-        dispatch(setnewwordsArray(newwords));
       }
     }
 
     getknownwordsfromapi()
   }, []);
 
+  useEffect(() => {
+    setWordType(currentquiz1word?.Meaning.WordType);
+    setCurrentQuizWordGerman(currentquiz1word?.word);
+    setCurrentQuizWordEnglish(currentquiz1word?.Meaning);
+    console.log(currentquiz1word, "currentquiz1word");
+    setCurrentWordNumberOfExamples(currentquiz1word?.Meaning?.CommonFields?.Examples?.length || 0);
+
+  }, [currentquiz1word]);
+
   const compareWords = (word1, word2) => {
-    //lowercase both words for case-insensitive comparison
-    //    const lowerWord1 = word1.toLowerCase();
-    //   const lowerWord2 = word2.toLowerCase();
     console.log(word1, "word1");
     console.log(word2, "word2");
     //trim word 2
@@ -148,14 +136,13 @@ export default function Quiz1() {
       const nextWord = wordsforquiz1[currentIndex + 1];
       setCurrentQuiz1Word(nextWord);
       console.log(nextWord, "nextWord");
-      setCurrentQuizWordGerman(nextWord.word);
-      setCurrentQuizWordEnglish(nextWord.Meaning);
       dispatch(setCurrentWord(nextWord));
       //hide examples if they are shown
       setShowExamples(false);
       setShowExamplesCount(0);
       setShowCorrect(false);
       setShowWrong(false);
+      setRevealAnswerDiv(false);
       console.log(nextWord, "nextWord");
     } else {
       console.log("No more words to show");
@@ -164,77 +151,46 @@ export default function Quiz1() {
     setWordInputted("");
   };
 
+
+
   return (
     <>
-      <div className="quiz1-container">
-        <h1>Quiz 1</h1>
-        <p>This is a placeholder for Quiz 1 content.</p>
-        {/* Add your quiz content here */}
+      <div className="quiz1-container mt-10">
+        {/*  <h1>Quiz 1</h1> */}
 
         <div className="showwordtotranslate">
           {currentquiz1word ? (
-            <div>
-              <h2>Current Word</h2>
-              <p>{currentquiz1word.word}</p>
-              <button onClick={() => setShowExplanation(!showExplanation)}>
-                {showExplanation ? "Hide Explanation" : "Show Explanation"}
-              </button>
-              {showExplanation && (
-                <p>{currentquiz1word.explanation || "No explanation available"}</p>
-              )}
-              {showexamples && (
-                <button onClick={() => {
-                  setShowExamplesCount(showexamplescount + 1);
-                }}>Show more</button>
-              )}
-              <button onClick={() => {
-                setShowExamples(!showexamples)
-                if (!showexamples) {
-                  setShowExamplesCount(showexamplescount + 1);
-                }
-              }
-              }>
+            <>
+              <p className="text-center">Type the word in English</p>
+              <div className="maxdiv pt-10 pb-10 text-center">
+                <span className="quiz1wordtotranslate">{currentquiz1word.word}</span>
+                {/*   <p className="pl-5">({wordtype?.toLowerCase()})</p> */}
+              </div>
+            </>
 
-                {showexamples ? "Hide Examples" : "Show Examples"}
-              </button>
-              {showexamples && (
-                <>
-                  <p>Examples</p>
-                  <ul>
-                    {currentquiz1word.Meaning?.CommonFields?.Examples?.length > 0 ? (
-                      currentquiz1word.Meaning.CommonFields.Examples.slice(0, showexamplescount).map((example, index) => (
 
-                        <li key={index}>{example.ExampleSentenceDE}</li>
-                      ))
-                    ) : (
-                      <li>No examples available</li>
-                    )}
-                  </ul>
-
-                </>
-              )}
-
-            </div>
           ) : (
             <p>Loading...</p>
           )}
         </div>
-        <div className="inputarea">
+        <div className="quiz1inputarea">
           <input
             type="text"
+            className="quiz1input"
             value={wordinputted}
             placeholder="Type your answer here"
+            autoFocus
             onChange={(e) => {
               setWordInputted(e.target.value);
               console.log(e.target.value, "input value");
             }}
             onBlur={(e) => {
-              // Handle input change
               setWordInputted(e.target.value);
               console.log(e.target.value, "input value");
             }}
           />
           <button
+            className="button button-primary"
             onClick={(e) => {
               // Handle submit action
               console.log("Submit button clicked");
@@ -244,25 +200,98 @@ export default function Quiz1() {
             Submit
           </button>
         </div>
-        <button onClick={() => {
-          // Handle next wo rd action
-          handleNextWord();
-        }}>
-          Next Word
-        </button>
-        {showcorrect && (
-          <div className="correct-message">
-            <p>Correct!</p>
-          </div>
-        )}
-        {showwrong && (
-          <div className="wrong-message">
-            <p>Wrong! Try again.</p>
-          </div>
-        )
-        }
+        <div className="showcorrectwrongdiv">
+          {showcorrect && (
+            <div className="correct-message">
+              <p>Correct!</p>
+            </div>
+          )}
+          {showwrong && (
+            <div className="wrong-message">
+              <p>Wrong! Try again.</p>
+            </div>
+          )
+          }
+        </div>
+        <div className="quiz1hints">
+          <div className="quiz1hintbuttons flex">
+            <div className="showexamplesdiv">
+              {currentwordnumberofexamples > 0 && (
+                <button
+                  className="button button-primary button-outline button-narrow "
+                  onClick={() => {
+                    setShowExamples(!showexamples)
+                    if (!showexamples) {
+                      if (showexamplescount === 0) {
+                        setShowExamplesCount(showexamplescount + 1);
+                      }
+                    }
+                  }
+                  }>{showexamples ? "Hide Examples" : "Show Examples"}
+                </button>
+              )}
 
-      </div>
+            </div>
+            <div className="revealanswerdiv">
+              <button
+                className="button button-primary button-outline button-narrow"
+                onClick={() => {
+                  setRevealAnswerDiv(prevValue => {
+                    setRevealAnswerDiv(!prevValue);
+                  });
+                }}>Show Answer
+              </button>
+            </div>
+          </div>
+          <div className="showanswerdiv">
+            {showexamples && (
+              <>
+                <ul>
+                  {currentquiz1word.Meaning?.CommonFields?.Examples?.length > 0 ? (
+                    currentquiz1word.Meaning.CommonFields.Examples.slice(0, showexamplescount).map((example, index) => (
+
+                      <li key={index}>{example.ExampleSentenceDE}</li>
+                    ))
+                  ) : (
+                    <li>No examples available</li>
+                  )}
+                </ul>
+                {showexamples && (
+                  (showexamplescount < currentwordnumberofexamples) &&
+                  <button
+                    className="mt-5 underline"
+                    onClick={() => {
+                      setShowExamplesCount(showexamplescount + 1);
+                    }}>Show more</button>
+                )}
+              </>
+            )}
+            {revealanswerdiv && (
+              <div className="revealanswer">
+                <p className="text-center quiz1wordtotranslate pt-10 pb-10">{currentquiz1word.meaningEn}
+                  {currentquiz1word.Meaning?.CommonFields?.TranslationDE}</p>
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="quiz1nextworddiv">
+          <button
+            className="mt-10 button button-primary button-outline button-narrow"
+            onClick={() => {
+              // Handle next wo rd action
+              handleNextWord();
+            }}>
+            Next Word
+          </button>
+        </div>
+      </div >
     </>
   )
 }
+
+{/*  <button onClick={() => setShowExplanation(!showExplanation)}>
+            {showExplanation ? "Hide Explanation" : "Show Explanation"}
+          </button>
+          {showExplanation && (
+            <p>{currentquiz1word.explanation || "No explanation available"}</p>
+          )} */}
