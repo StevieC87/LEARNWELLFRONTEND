@@ -82,7 +82,7 @@ const DifficultyButtons = () => {
     let wordtosubmit = {
       // wordde: currentword.word,
       wordid: currentword._id,
-      // word: currentword,
+      word: currentword.word,
       difficulty: difficulty,
       sortnumber: currentword.sortnumber,
     };

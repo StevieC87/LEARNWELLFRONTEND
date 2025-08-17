@@ -2,10 +2,9 @@
 import { useDispatch, useSelector } from "react-redux";
 import { setOriginal, setCurrentWord } from "@/redux/slices/flashcardSlice";
 import { useEffect, useState } from "react";
-import Extrafields from "./Extrafields";
+import Extrafields from "../Extrafields";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { setShowMoreBackCard } from "@/redux/slices/flashcardSlice";
 
 
 const ActualFlashcard = (props) => {
@@ -46,9 +45,7 @@ const ActualFlashcard = (props) => {
   const [knownwordsNotempty, setKnownWordsNotEmpty] = useState();
 
   const allwords = useSelector((state) => state.flashcardSlice.allwords);
-  const showmorebackcard = useSelector(
-    (state) => state.flashcardSlice.showmorebackcard
-  );
+
   useEffect(() => {
     if (totalwordsknown) {
       setRemainingWordsNotEmpty(true);
@@ -186,7 +183,7 @@ const ActualFlashcard = (props) => {
             // disablediffbuttons
             e.target.closest(".bi")
             || e.target.closest("span") ||
-            e.target.closest("p") || e.target.closest(".showmorecard")
+            e.target.closest("p")
           ) {
             e.stopPropagation();
           } else {
@@ -200,14 +197,13 @@ const ActualFlashcard = (props) => {
         ) : allwords.length !== 0 ? (
           showOriginal ? (
             <div className="flashcardnk123">
-              {/*    <Link href={`/card?id=${currentword._id}`}>Editcard</Link> */}
+              <Link href={`/card?id=${currentword._id}`}>Editcard</Link>
               {currentword?.word && (
                 <>
                   <div className="semibold wordde">
                     {switchbuttondeen ? (
                       <>
                         <span>{currentword.word}</span>
-
 
                         {currentword.Meaning?.Noun?.Gender && (
                           <span className="fontweightregular">  ({currentword.Meaning.Noun.Gender})</span>
@@ -260,16 +256,9 @@ const ActualFlashcard = (props) => {
             <div className="flashcardmultiple">
               <div className="fmultipleOrgWord">
                 <div className="splitbacktopmeaningEN">
-                  <div>
+                  <div className="semibold wordde">
                     {switchbuttondeen ? (
-                      <div >
-                        <p className="semibold wordde"> {currentword.Meaning.Meaning}</p>
-
-
-
-                      </div>
-
-
+                      <span> {currentword.Meaning.Meaning}</span>
                     ) : (
                       <>
                         <span>{currentword.word}</span>
@@ -287,32 +276,20 @@ const ActualFlashcard = (props) => {
                     {currentword?.Meaning?.CommonFields?.Examples?.map(
                       (example, index) => (
                         <div key={index} className="exampleSentencesBack">
-                          <div className="exampleSbackEN mt-3">
+                          <div className="exampleSbackEN">
                             <span>{example.ExampleSentenceEN}</span>
                           </div>
-                          <div className="examplegermanenglishside padright10">
+                          <div className="fontsmall padright10">
                             <span>{example.ExampleSentenceDE}</span>
                           </div>
                         </div>
                       )
                     )}
                   </div>
-
-
-                  <button className="mt-10 mb-10 showmorecard button button-primary button-outline button-narrow button-gray"
-                    onClick={() => {
-                      dispatch(setShowMoreBackCard(!showmorebackcard));
-                    }
-                    }>{showmorebackcard ? "Hide More" : "Show More"}
-                  </button>
-
-
-                  {showmorebackcard && (
-                    <Extrafields
-                      currentword={currentword}
-                      othermeanings={othermeaningsArray}
-                    />
-                  )}
+                  <Extrafields
+                    currentword={currentword}
+                    othermeanings={othermeaningsArray}
+                  />
                 </div>
               </div>
             </div>
@@ -321,7 +298,7 @@ const ActualFlashcard = (props) => {
           <div>{ifnowords()}</div>
           /*  <div>no words to show</div> */
         )}
-      </div >
+      </div>
     </>
   );
 };

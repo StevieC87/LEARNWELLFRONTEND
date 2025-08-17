@@ -319,12 +319,13 @@ export default function FlashcardPage() {
 
       <div className="skeletonWrapper">
         <div className="skeletonCenter">
-          {/*  <ActualFlashcard /> */}
+
           <ActualFlashcardSentences wordnostart={parseInt(slug)} />
         </div>
 
         <div className="botttombar">
-          <div className="bottomBarbottom">{<BottomBar />}</div>
+          {<BottomBar />}
+
         </div>
       </div>
     </div>

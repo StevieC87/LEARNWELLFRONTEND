@@ -64,7 +64,10 @@
   .button-thin {
     border: 1px solid var(--primary-color);
   }
-
+  .button-gray {
+    color: #6c757d !important;
+    border-color: #6c757d !important;
+  }
   .button-narrow {
     padding: 2px 5px;
     border: 1px solid var(--primary-color);

@@ -4,6 +4,7 @@ import { setCurrentWord, setOriginal, setrandom, setallremainingwordsdata, setAl
 // import AIQandA from "./AIQandA";
 import Link from 'next/link';
 import { useEffect } from "react";
+import "./bottombar.css";
 
 const BottomBar = () => {
 
@@ -82,28 +83,24 @@ const BottomBar = () => {
   }, [currentword, allwords]);
 
   return (
-    <>
-      <div>
-        <button
-          className="btn mybtn prevnext"
-          onClick={() => handleChangeWord("prev")}
-        >
-          Prev
-        </button>
-      </div>
-      <div>
-        <button
-          className="btn mybtn prevnext"
-          onClick={() => handleChangeWord("next")}
-        >
-          Next
-        </button>
-      </div>
-      <div>
+    <div className="bottomBarbottom ">
+      <button
+        className="btn mybtn prevnext"
+        onClick={() => handleChangeWord("prev")}
+      >
+        Prev
+      </button>
+      <button
+        className="btn mybtn prevnext prevnextnext"
+        onClick={() => handleChangeWord("next")}
+      >
+        Next
+      </button>
+      {/*  <div>
         <button className="btn mybtn prevnext" onClick={() => handleRandomize()}>
           <i className={`bi bi-shuffle ${random ? '' : 'gray'}`}></i>
         </button>
-      </div>
+      </div> */}
       <div>
         {/*   {!showRemainingWords2 && (
           <Link href="/reinforce" className="reinforce"  >
@@ -112,7 +109,7 @@ const BottomBar = () => {
         )} */}
       </div>
       {/* <AIQandA /> */}
-    </>
+    </div>
   );
 };
 

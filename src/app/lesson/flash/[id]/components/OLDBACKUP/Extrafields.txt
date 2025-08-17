@@ -10,22 +10,22 @@ const Extrafields = () => {
     <div className="extrafields fontmedium">
       {currentword && currentword.word && (
         <>
-          {/* <hr className="dotted"></hr> */}
-          <div className="fontmedium mb-4">
+          <hr className="dotted"></hr>
+          <p className="fontmedium">
             <span className="semibold">Explanation:</span>{" "}
             <span>{currentword?.Meaning?.Explanation}</span>
 
-          </div>
+          </p>
 
-          {/*  {currentword?.Meaning?.CommonFields?.UsageNotes && (
+          {currentword?.Meaning?.CommonFields?.UsageNotes && (
             <div className="fontmedium">
               <span className="semibold ">Usage Notes: </span>
               <span> {currentword?.Meaning?.CommonFields?.UsageNotes}</span>
 
             </div>
-          )} */}
+          )}
 
-          {/*    <hr className="dotted  centeredhr padtop10"></hr> */}
+          <hr className="dotted  centeredhr padtop10"></hr>
           {currentword?.Meaning?.BaseForm && (
             <>
               {currentword.Meaning.BaseForm !== currentword.word && (

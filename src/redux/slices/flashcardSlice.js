@@ -1,5 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { set } from 'react-hook-form';
+import { createSlice } from "@reduxjs/toolkit";
+import { set } from "react-hook-form";
 
 /* 
   
@@ -15,7 +15,7 @@ import { set } from 'react-hook-form';
   const [showallwords3, setShowAllWords3] = useState(true);
    */
 const flashcardSlice = createSlice({
-  name: 'FlashcardSlice',
+  name: "FlashcardSlice",
   initialState: {
     isloading: true,
     allwords: [],
@@ -43,7 +43,7 @@ const flashcardSlice = createSlice({
     originalarrayorder: [],
     examples: [],
     pauseonnextprev: false,
-
+    showmorebackcard: false,
   },
   reducers: {
     sethello: (state, action) => {
@@ -96,8 +96,7 @@ const flashcardSlice = createSlice({
 
     setallremainingwordsdata: (state, action) => {
       state.allremainingwordsdata = action.payload;
-    }
-    ,
+    },
     setallknownwordsdata: (state, action) => {
       state.allknownwordsdata = action.payload;
     },
@@ -128,10 +127,43 @@ const flashcardSlice = createSlice({
     setpauseonnextprev: (state, action) => {
       state.pauseonnextprev = action.payload;
     },
-
+    setShowMoreBackCard: (state, action) => {
+      state.showmorebackcard = action.payload;
+    },
   },
 });
 
-export const { sethello, setAllWords2, setCurrentWord, setOriginal, setWordSaved, setdifficultylevels, setShowAllWords3, setKnownFilteredWords, setfluentWORDSArray, setfamiliarWORDSArray, setuncertainWORDSArray, setnewwordsArray, seterrorNoWords, setisloading, setnumberoffluentwords, setnumberoffamiliarwords, setnumberofuncertainwords, setnumberofnewwords, setallremainingwordsdata, setallknownwordsdata, setShowRemainingWords2, setTotalWordsKnown, setTotalWordsRemaining, setswitchbuttondeen, setdisablediffbuttons, setrandom, setoriginalarrayorder, setexamples, setpauseonnextprev } = flashcardSlice.actions;
+export const {
+  sethello,
+  setAllWords2,
+  setCurrentWord,
+  setOriginal,
+  setWordSaved,
+  setdifficultylevels,
+  setShowAllWords3,
+  setKnownFilteredWords,
+  setfluentWORDSArray,
+  setfamiliarWORDSArray,
+  setuncertainWORDSArray,
+  setnewwordsArray,
+  seterrorNoWords,
+  setisloading,
+  setnumberoffluentwords,
+  setnumberoffamiliarwords,
+  setnumberofuncertainwords,
+  setnumberofnewwords,
+  setallremainingwordsdata,
+  setallknownwordsdata,
+  setShowRemainingWords2,
+  setTotalWordsKnown,
+  setTotalWordsRemaining,
+  setswitchbuttondeen,
+  setdisablediffbuttons,
+  setrandom,
+  setoriginalarrayorder,
+  setexamples,
+  setpauseonnextprev,
+  setShowMoreBackCard,
+} = flashcardSlice.actions;
 
 export default flashcardSlice.reducer;

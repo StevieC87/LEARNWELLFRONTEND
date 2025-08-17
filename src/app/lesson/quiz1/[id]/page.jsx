@@ -118,6 +118,9 @@ export default function Quiz1() {
       setShowWrong(false);
 
       //switch to
+      setTimeout(() => {
+        handleNextWord();
+      }, 1000);
 
       // You can add more logic here, like updating the state or showing a message
     } else {
@@ -275,14 +278,14 @@ export default function Quiz1() {
           </div>
         </div>
         <div className="quiz1nextworddiv">
-          <button
+          {/*  <button
             className="mt-10 button button-primary button-outline button-narrow"
             onClick={() => {
               // Handle next wo rd action
               handleNextWord();
             }}>
             Next Word
-          </button>
+          </button> */}
         </div>
       </div >
     </>

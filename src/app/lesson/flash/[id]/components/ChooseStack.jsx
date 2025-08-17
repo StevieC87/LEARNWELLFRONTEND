@@ -27,7 +27,7 @@ import {
 } from "@/redux/slices/flashcardSlice";
 /* import ProgressBar from "./ProgressBar";
  */
-import AudioMode from "./AudioMode";
+// import AudioMode from "./AudioMode";
 
 const ChooseStack = () => {
   const dispatch = useDispatch();
@@ -158,15 +158,15 @@ const ChooseStack = () => {
         >
           Remaining{allremainingwordsdata.length}
         </div>
-        <div className="playpause">
+        {/*  <div className="playpause">
           <AudioMode />
-        </div>
+        </div> */}
         {!showRemainingWords2 && (
           <div className="form-check form-switch switchgrid">
             <div>
 
             </div>
-            <div>
+            {/*  <div>
               <input
                 className="form-check-input"
                 type="checkbox"
@@ -182,7 +182,7 @@ const ChooseStack = () => {
               >
                 {switchchecked ? "Standard" : "Reverse"}
               </label>
-            </div>
+            </div> */}
           </div>
         )}
       </div>

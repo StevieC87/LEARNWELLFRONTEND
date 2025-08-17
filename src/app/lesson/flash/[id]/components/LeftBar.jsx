@@ -143,7 +143,7 @@ const Leftbar = () => {
             className={`diffclick ${difficultylevels.includes("Fluent") ? "bold" : ""
               }`}
           >
-            <span>Fluent</span>
+            <span>Never Show Again</span>
             <span> ({fluentWORDSArray.length})</span>
           </div>
           <div
