@@ -193,135 +193,94 @@ const ActualFlashcard = (props) => {
             fliptoEnglish();
           }
         }}
-      /* onClick={() => fliptoEnglish()} */
       >
-        {isloading ? (
+        {/*   {isloading ? (
           <img src="/gifs/spinner.gif" alt="loading" />
-        ) : allwords.length !== 0 ? (
-          showOriginal ? (
-            <div className="flashcardnk123">
-              {/*    <Link href={`/card?id=${currentword._id}`}>Editcard</Link> */}
-              {currentword?.word && (
-                <>
-                  <div className="semibold wordde">
-                    {switchbuttondeen ? (
-                      <>
-                        <span>{currentword.word}</span>
+        ) : allwords.length !== 0 ? ( */}
 
+        <div>
+          <div className="flashcardnk123">
+            {/*    <Link href={`/card?id=${currentword._id}`}>Editcard</Link> */}
+            {currentword?.word && (
+              <>
+                <div className="semibold wordde">
+                  {showOriginal ? (
+                    <span>{currentword.word}</span>
+                  ) : (
+                    <>
+                      <p className="semibold wordde"> {currentword?.Meaning?.Meaning}</p>
+                      {currentword?.Meaning?.Noun?.Gender && (
+                        <span className="fontweightregular">  ({currentword?.Meaning?.Noun?.Gender})</span>
 
-                        {currentword.Meaning?.Noun?.Gender && (
-                          <span className="fontweightregular">  ({currentword.Meaning.Noun.Gender})</span>
-                        )}
-                      </>
-                    ) : (
-                      <span> {currentword.Meaning.Meaning}</span>
-
-                    )}
-                  </div>
-                  <div className="sentencesdiv">
-                    {currentword?.Meaning?.CommonFields?.Examples?.map(
-                      (example, index) => (
-                        <div key={index} className="examplediv">
-                          <div>
-                            {switchbuttondeen ? (
-                              <>
-                                <span>{example.ExampleSentenceDE}</span>
-                              </>
-                            ) : (
-                              <span> {example.ExampleSentenceEN}</span>
-                            )}
-                          </div>
-                          <div>
-                            {example.id && currentword.audiomp3 && (
-                              <button
-                                className="btn btn-outline-primary"
-                                onClick={() => fetchmp3(example.id)}
-                              >
-                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" className="bi bi-volume-up" viewBox="0 0 16 16">
-                                  <path d="M11.536 14.01A8.47 8.47 0 0 0 14.026 8a8.47 8.47 0 0 0-2.49-6.01l-.708.707A7.48 7.48 0 0 1 13.025 8c0 2.071-.84 3.946-2.197 5.303z" />
-                                  <path d="M10.121 12.596A6.48 6.48 0 0 0 12.025 8a6.48 6.48 0 0 0-1.904-4.596l-.707.707A5.48 5.48 0 0 1 11.025 8a5.48 5.48 0 0 1-1.61 3.89z" />
-                                  <path d="M10.025 8a4.5 4.5 0 0 1-1.318 3.182L8 10.475A3.5 3.5 0 0 0 9.025 8c0-.966-.392-1.841-1.025-2.475l.707-.707A4.5 4.5 0 0 1 10.025 8M7 4a.5.5 0 0 0-.812-.39L3.825 5.5H1.5A.5.5 0 0 0 1 6v4a.5.5 0 0 0 .5.5h2.325l2.363 1.89A.5.5 0 0 0 7 12zM4.312 6.39 6 5.04v5.92L4.312 9.61A.5.5 0 0 0 4 9.5H2v-3h2a.5.5 0 0 0 .312-.11" />
-                                </svg>
-                              </button>
-                            )}
-                          </div>
-
-                          {/*   <div className="example">{example.ExampleSentenceDE}</div> */}
-                          {/* {highlightWord(example.ExampleSentenceDE, currentword.Meaning.BaseForm)} */}
-                          {/*   <div className="translation">{example.ExampleSentenceEN}</div> */}
-                        </div>
-                      )
-                    )}
-                  </div>
-                </>
-              )}
-            </div>
-          ) : (
-            <div className="flashcardmultiple">
-              <div className="fmultipleOrgWord">
-                <div className="splitbacktopmeaningEN">
-                  <div>
-                    {switchbuttondeen ? (
-                      <div >
-                        <p className="semibold wordde"> {currentword.Meaning.Meaning}</p>
-
-
-
-                      </div>
-
-
-                    ) : (
-                      <>
-                        <span>{currentword.word}</span>
-                        <span className="">
-                          - {currentword.Meaning.Meaning}
-                        </span>
-                      </>
-                    )}{" "}
-                    { }
-                  </div>
-                  {/* <div> {currentword.Meaning.BaseForm}</div> */}
-                </div>
-                <div className="wrapperborderdotted">
-                  <div className="exampleparentdiv">
-                    {currentword?.Meaning?.CommonFields?.Examples?.map(
-                      (example, index) => (
-                        <div key={index} className="exampleSentencesBack">
-                          <div className="exampleSbackEN mt-3">
-                            <span>{example.ExampleSentenceEN}</span>
-                          </div>
-                          <div className="examplegermanenglishside padright10">
-                            <span>{example.ExampleSentenceDE}</span>
-                          </div>
-                        </div>
-                      )
-                    )}
-                  </div>
-
-
-                  <button className="mt-10 mb-10 showmorecard button button-primary button-outline button-narrow button-gray"
-                    onClick={() => {
-                      dispatch(setShowMoreBackCard(!showmorebackcard));
-                    }
-                    }>{showmorebackcard ? "Hide More" : "Show More"}
-                  </button>
-
-
-                  {showmorebackcard && (
-                    <Extrafields
-                      currentword={currentword}
-                      othermeanings={othermeaningsArray}
-                    />
+                      )}
+                    </>
                   )}
                 </div>
-              </div>
-            </div>
-          )
-        ) : (
-          <div>{ifnowords()}</div>
-          /*  <div>no words to show</div> */
-        )}
-      </div >
+                <div className="sentencesdiv ">
+                  {currentword?.Meaning?.CommonFields?.Examples?.map(
+                    (example, index) => (
+                      <div key={index} className="examplediv">
+
+                        {showOriginal ? (
+                          <>
+                            <div className="flex flex-row items-center gap-4 justify-between w-full">
+                              <span>{example.ExampleSentenceDE}</span>
+
+
+                              {example.id && currentword.audiomp3 && (
+                                <button
+                                  className="btn btn-outline-primary"
+                                  onClick={() => fetchmp3(example.id)}
+                                >
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" className="bi bi-volume-up" viewBox="0 0 16 16">
+                                    <path d="M11.536 14.01A8.47 8.47 0 0 0 14.026 8a8.47 8.47 0 0 0-2.49-6.01l-.708.707A7.48 7.48 0 0 1 13.025 8c0 2.071-.84 3.946-2.197 5.303z" />
+                                    <path d="M10.121 12.596A6.48 6.48 0 0 0 12.025 8a6.48 6.48 0 0 0-1.904-4.596l-.707.707A5.48 5.48 0 0 1 11.025 8a5.48 5.48 0 0 1-1.61 3.89z" />
+                                    <path d="M10.025 8a4.5 4.5 0 0 1-1.318 3.182L8 10.475A3.5 3.5 0 0 0 9.025 8c0-.966-.392-1.841-1.025-2.475l.707-.707A4.5 4.5 0 0 1 10.025 8M7 4a.5.5 0 0 0-.812-.39L3.825 5.5H1.5A.5.5 0 0 0 1 6v4a.5.5 0 0 0 .5.5h2.325l2.363 1.89A.5.5 0 0 0 7 12zM4.312 6.39 6 5.04v5.92L4.312 9.61A.5.5 0 0 0 4 9.5H2v-3h2a.5.5 0 0 0 .312-.11" />
+                                  </svg>
+                                </button>
+                              )}
+                            </div>
+
+                          </>
+                        ) : (
+                          <>
+                            <div className="flex flex-col justify-between w-full">
+                              <span>{example.ExampleSentenceEN}</span>
+                              <span className="examplegermanenglishside"> {example.ExampleSentenceDE}</span>
+                            </div>
+                          </>
+                        )}
+
+                        <div>
+
+                        </div>
+                      </div>
+                    )
+                  )}
+                </div>
+              </>
+            )}
+          </div>
+
+          {!showOriginal && (
+            <button className="mt-10 mb-10 showmorecard button button-primary button-outline button-narrow button-gray"
+              onClick={() => {
+                dispatch(setShowMoreBackCard(!showmorebackcard));
+              }
+              }>{showmorebackcard ? "Hide More" : "Show More"}
+            </button>
+          )}
+
+          {showmorebackcard && (
+            <Extrafields
+              currentword={currentword}
+              othermeanings={othermeaningsArray}
+            />
+          )}
+        </div>
+      </div>
+
+
     </>
   );
 };
