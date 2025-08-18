@@ -1,7 +1,8 @@
 @layer variables {
   :root {
     /* Colors */
-    --primary-color: #007bff;
+    /* --primary-color: #007bff; */
+    --primary-color: #8a5209; /* Blue */
     --primary-color-light: #5bcaec;
     --secondary-color: #6c757d;
     --background-color: #eef2f6;

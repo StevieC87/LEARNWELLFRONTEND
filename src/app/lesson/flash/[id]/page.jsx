@@ -48,12 +48,13 @@ export default function FlashcardPage() {
   if (isNaN(slug)) {
     return <div>error</div>;
   }
-
+  const wordsperlesson = useSelector((state) => state.flashcardSlice.userwordsperlesson);
+  console.log(wordsperlesson, "wordsperlessonwordsperlesson");
   //first we clean out the redux to not show anything if we switch to another page
 
   /*  */
 
-  let wordstartwordendarray = dynamichunneds(20);
+  let wordstartwordendarray = dynamichunneds(wordsperlesson);
 
   let wordstart1 = wordstartwordendarray.find((item) => item.id === parseInt(slug));
   // console.log(wordstart1, "wordstart1");

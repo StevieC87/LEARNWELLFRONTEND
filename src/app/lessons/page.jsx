@@ -15,7 +15,14 @@ export default function Lessons() {
     try {
       let fetchseewordsbystack = await fetch('')
       let url = `http://localhost:3000/api/fetchprogresswordstack`;
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include', // Include credentials for session management
+
+      });
 
       if (!response.ok) {
         console.log('Error fetching (remaining) flashcards');

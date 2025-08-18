@@ -44,7 +44,9 @@ const flashcardSlice = createSlice({
     examples: [],
     pauseonnextprev: false,
     showmorebackcard: false,
+    userwordsperlesson: 15,
   },
+
   reducers: {
     sethello: (state, action) => {
       state.hello = action.payload;
@@ -130,6 +132,9 @@ const flashcardSlice = createSlice({
     setShowMoreBackCard: (state, action) => {
       state.showmorebackcard = action.payload;
     },
+    setuserwordsperlesson: (state, action) => {
+      state.userwordsperlesson = action.payload;
+    },
   },
 });
 
@@ -164,6 +169,7 @@ export const {
   setexamples,
   setpauseonnextprev,
   setShowMoreBackCard,
+  setuserwordsperlesson,
 } = flashcardSlice.actions;
 
 export default flashcardSlice.reducer;

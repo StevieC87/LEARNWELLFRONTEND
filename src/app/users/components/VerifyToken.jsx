@@ -3,7 +3,8 @@
 import { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUserRole, setSettings, setUserId, setEnableUserRegistration } from '@/redux/slices/DashSlice'; // Import the action to set user role
-//refresh next smooth
+
+import { setuserwordsperlesson } from '@/redux/slices/flashcardSlice';
 import { useRouter } from 'next/navigation'; // Import useRouter for navigation
 import { usePathname } from 'next/navigation'
 import { useSearchParams } from 'next/navigation'
@@ -222,8 +223,8 @@ export default function VerifyToken() {
     dispatch(setSettings(data.settings)); // Dispatch the 
     dispatch(setUserId(data.userid));
     dispatch(setEnableUserRegistration(data.settings.publicuserregistration || false)); // Dispatch the action to set user registration setting
-
-    // action to set settings in the Redux store
+    dispatch(setuserwordsperlesson(data.wordsperlesson));
+    // action to set settings in the Redux  store
     // Redux store
     // You can use the user role data here if needed
   }

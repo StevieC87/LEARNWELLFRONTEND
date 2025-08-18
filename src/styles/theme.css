@@ -1,35 +1,3 @@
-:root {
-  --primary-color: #007bff;
-  --secondary-color: #6c757d;
-  --success-color: #28a745;
-  --info-color: #17a2b8;
-  --warning-color: #ffc107;
-  --danger-color: #dc3545;
-  --light-color: #f8f9fa;
-  --dark-color: #343a40;
-  --btn-light-mode: #343a40;
-  --btn-dark-mode: #f8f9fa;
-
-  --flashheight: 250px;
-  --flashheightinner: 200px;
-  --flashwidth: 350px;
-  --flashwidthinner: 350px;
-
-  --chalkwhite: white;
-  --chalkyellow: yellow;
-  --chalkblue: blue;
-  --chalkred: red;
-  --chalkpurple: purple;
-  --chalkcyan: cyan;
-  --chalklime: lime;
-  --chalkorange: orange;
-  --chalkpink: pink;
-  --chalkgreen: green;
-  --chalkblack: black;
-  --chalkgray: gray;
-  --chalkbrown: brown;
-  --chalkdarkblue: darkblue;
-}
 html {
   width: 100vw;
 }

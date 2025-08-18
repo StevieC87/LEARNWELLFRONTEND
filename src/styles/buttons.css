@@ -34,8 +34,8 @@
     border-radius: 5px;
   }
   .button-primary:hover {
-    background-color: #0056b3;
-    border-color: #0056b3;
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
   }
   .button-primary:active {
     background-color: #004494;
