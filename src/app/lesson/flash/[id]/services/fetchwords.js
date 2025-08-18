@@ -61,6 +61,7 @@ export const flashcardsUserSaveWord = async (wordtosubmit) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(wordtosubmit1),
+        credentials: "include", // Include credentials for session management
       }
     );
     const data = await response.json();

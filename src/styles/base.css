@@ -31,7 +31,22 @@
     grid-template-columns: 1fr;
     /*   min-height: 100vh; */
     /* Add space for sticky footer */
+
+    /*   justify-content: center;*/
+
+    font-size: 16px;
+
+    overflow-x: hidden; /* keeps layout stable */
+    scrollbar-width: none;
+
+    color: rgb(0, 0, 0) !important;
+    /*  overflow: hidden; */
+    width: 100%;
+    max-width: 1200px;
+    grid-auto-flow: row;
+    margin: 0 auto; /* Centers the body horizontally */
   }
+
   /*  .adminwrapperdiv {
     display: flex;
     flex-direction: row;

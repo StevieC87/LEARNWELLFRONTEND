@@ -156,7 +156,7 @@ const Leftbar = () => {
               {difficultylevels.includes("Familiar") ? "Shown" : "Hidden"
               }
             </span>
-            <span>{familiarWORDSArray.length})</span>
+            <span>({familiarWORDSArray.length})</span>
           </div>
           <div
             onClick={() => addremoveDifficulty("Uncertain")}
