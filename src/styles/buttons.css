@@ -68,6 +68,15 @@
     color: #6c757d !important;
     border-color: #6c757d !important;
   }
+  .button-gray-filled {
+    background-color: #6c757d;
+    color: #ffffff !important;
+  }
+  .button-gray:hover {
+    background-color: #6c757d !important;
+    color: #fff !important;
+  }
+
   .button-narrow {
     padding: 2px 5px;
     border: 1px solid var(--primary-color);

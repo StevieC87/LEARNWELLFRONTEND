@@ -140,35 +140,45 @@ const Leftbar = () => {
           {/* i want TO ADD DIFFICULTIES - NOT EXCLUSIVE so can mix */}
           <div
             onClick={() => addremoveDifficulty("Fluent")}
-            className={`diffclick ${difficultylevels.includes("Fluent") ? "bold" : ""
+            className={`cursor-pointer diffclick ${difficultylevels.includes("Fluent") ? "bold" : ""
               }`}
           >
-            <span>Never Show Again</span>
+            <span>{difficultylevels.includes("Fluent") ? "Shown" : "Hidden"
+            }</span>
             <span> ({fluentWORDSArray.length})</span>
           </div>
           <div
             onClick={() => addremoveDifficulty("Familiar")}
-            className={`diffclick ${difficultylevels.includes("Familiar") ? "bold" : ""
+            className={`cursor-pointer diffclick ${difficultylevels.includes("Familiar") ? "bold" : ""
               }`}
           >
-            <span>Familiar (</span>
+            <span>
+              {difficultylevels.includes("Familiar") ? "Shown" : "Hidden"
+              }
+            </span>
             <span>{familiarWORDSArray.length})</span>
           </div>
           <div
             onClick={() => addremoveDifficulty("Uncertain")}
-            className={`diffclick ${difficultylevels.includes("Uncertain") ? "bold" : ""
+            className={`cursor-pointer diffclick ${difficultylevels.includes("Uncertain") ? "bold" : ""
               }`}
           >
-            <span>Uncertain (</span>
-            <span>{uncertainWORDSArray.length})</span>
+            <span>
+              {difficultylevels.includes("Uncertain") ? "Shown" : "Hidden"
+              }
+            </span>
+            <span>({uncertainWORDSArray.length})</span>
           </div>
           <div
             onClick={() => addremoveDifficulty("New")}
-            className={`diffclick ${difficultylevels.includes("New") ? "bold" : ""
+            className={`cursor-pointer diffclick ${difficultylevels.includes("New") ? "bold" : ""
               }`}
           >
-            <span>New (</span>
-            <span>{newwordsArray.length})</span>
+            <span>
+              {difficultylevels.includes("New") ? "Shown" : "Hidden"
+              }
+            </span>
+            <span>({newwordsArray.length})</span>
           </div>
           {/*  <span> {allwords.length} </span> */}
         </div>

@@ -136,28 +136,24 @@ const ChooseStack = () => {
   return (
     <>
       <div className="chooseWordStackInner">
-        <div
-          className="btn mybtn btn-outline-primary cursor-pointer"
-          style={{
-            backgroundColor: !showRemainingWords2 ? "turquoise" : "#f0f8ff",
-          }}
+        <button
+          className={`cursor-pointer button  ${showRemainingWords2 ? "button-outline button-narrow button-gray" : "button-primary button-narrow button-gray button-gray-filled "}`}
+
           onClick={() => {
             if (allknownwordsdata.length > 0) {
               changeWordList("known")
             }
           }}
         >
-          Covered{allknownwordsdata.length}
-        </div>
-        <div
-          className="mybtn btn btn-outline-primary cursor-pointer"
-          style={{
-            backgroundColor: showRemainingWords2 ? "#bd53f640" : "#f0f8ff",
-          }}
+          Covered ({allknownwordsdata.length})
+        </button>
+        <button
+          className={` cursor-pointer  ml-3 button ${!showRemainingWords2 ? "button-outline button-narrow button-gray" : "button-primary button-narrow button-gray button-gray-filled "}`}
+
           onClick={() => changeWordList("remaining")}
         >
-          Remaining{allremainingwordsdata.length}
-        </div>
+          Remaining ({allremainingwordsdata.length})
+        </button>
         {/*  <div className="playpause">
           <AudioMode />
         </div> */}

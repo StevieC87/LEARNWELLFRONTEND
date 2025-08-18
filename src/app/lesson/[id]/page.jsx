@@ -5,6 +5,8 @@ export default function LessonPage({ params }) {
 
   return (
     <>
+
+      {/* WE NEED TO CHECK IF ALL THE FLASHCARDS WERE STUDIED IN THE STACK FIRST */}
       <div className="lessoncard">
         <h1>Lesson {params.id}</h1>
       </div>

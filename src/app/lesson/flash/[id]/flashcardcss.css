@@ -12,8 +12,8 @@
   max-width: 650px;
   /*  grid-auto-rows: auto; */
   /* grid-template-rows: 30px 120px; */
-  height: 120px;
-  grid-template-rows: 30px 23px 55px;
+  /* height: 120px; */
+  grid-template-rows: 30px 35px 55px;
 }
 
 .flashcardwrapperleft {
@@ -272,11 +272,16 @@
 
 .sentencesdiv {
   height: auto;
+
+  display: grid;
+  flex-direction: column;
+  justify-content: center;
+  justify-items: center;
 }
 
 .examplediv {
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: 1fr;
   justify-self: center;
   justify-content: space-between;
   align-items: center;

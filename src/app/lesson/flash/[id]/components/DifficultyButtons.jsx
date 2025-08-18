@@ -94,20 +94,15 @@ const DifficultyButtons = () => {
     console.log(totalwordsremaining, "totalwordsremaining123");
     console.log(totalwordsknown, "totalwordsknown123");
     console.log(data, "data");
-
+    if (!data) {
+      console.log("No data returned from API");
+    }
     if (data.acknowledged === true) {
       // console.log("yes trueeee");
       //alert("saved");
       dispatch(setWordSaved(true));
 
-      //ONLY UPDATE IF IT'S A REMAINING WORD THAT WAS SAVED
-      //this is just the counter - no need updatae if it's a known word
-
-      //CHECK IF IT'S A REMAINING WORD OR A KNOWN WORD\
       if (currentword.difficulty) {
-        // alert("known word");
-        // alert(difficulty);
-        //change difficulty of currentword
         let newcurr = { ...currentword, difficulty: difficulty };
         dispatch(setCurrentWord(newcurr));
         console.log(newcurr, "newcurr");
@@ -136,8 +131,7 @@ const DifficultyButtons = () => {
         }
 
       } else {
-        //alert("remaining word");
-        //remove word from allwords array
+
         let currentwordindex = allwords.indexOf(currentword);
         console.log(currentwordindex, "currentwordindex");
         //make a copy of the allwords array
@@ -163,12 +157,12 @@ const DifficultyButtons = () => {
       }
       if (showRemainingWords2) {
       }
-
-      setTimeout(() => {
-        dispatch(setWordSaved(false));
-        //   setWordSaved(false);
-        handleChangeWord("next");
-      }, 1000);
+      handleChangeWord("next");
+      /*   setTimeout(() => {
+          dispatch(setWordSaved(false));
+          //   setWordSaved(false);
+          handleChangeWord("next");
+        }, 1000); */
     }
   };
 
@@ -189,19 +183,7 @@ const DifficultyButtons = () => {
         >
           Knew it
         </button>{" "}
-        {/*  ✓  ◐  ? ✗*/}
-        {/*  className={`btn mybtn diffic-btn buttonSaveWord  ${
-            showOriginal ? "inactivedbtn" : "familiarbtn"
-          }`} */}
-        {/* 
-        <button
-          className="btn mybtn diffic-btn buttonSaveWord familiarbtn
-          "
-          onClick={() => submitWord("Familiar")}
-          disabled={disablediffbuttons}
-        >
-          Familiar
-        </button> */}
+
         <button
           className="btn mybtn diffic-btn buttonSaveWord uncertainbtn"
           onClick={() => submitWord("Uncertain")}

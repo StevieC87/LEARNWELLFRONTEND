@@ -299,7 +299,7 @@ export default function FlashcardPage() {
   }, [showRemainingWords2, allremainingwordsdata, allknownwordsdata]);
   // --------------------------------------------------
   return (
-    <div className="flashmain" style={{ minHeight: "100vh" }}>
+    <div className="flashmain mt-8" style={{ minHeight: "100vh" }}>
 
       <h3>Words {wordstart} - {wordend} </h3>
       {/*  {totalwordsknown}
@@ -309,10 +309,10 @@ export default function FlashcardPage() {
         className={`flashcardwrapper ${!showRemainingWords2 ? "flashcardwrapperleft" : ""
           }`}
       >
-        <div className="chooseWordStack">
+        <div className="chooseWordStack mt-5">
           <ChooseStack />
         </div>
-        <div className="leftbar">{!showRemainingWords2 && <LeftBar />}</div>
+        <div className="leftbar mt-5 mb-5">{!showRemainingWords2 && <LeftBar />}</div>
         <div className="bottomBartop">
           <DifficultyButtons />
         </div>
