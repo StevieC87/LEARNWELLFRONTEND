@@ -109,6 +109,18 @@ export default function Lessons() {
               <div className="lessoncard  " >{ }
                 <div className="text-center">Lesson {index + 1}</div>
                 <div className="lessoncardtext">
+                  {stack.lessoncompleted === "Completed" && (
+                    <span className="marker checktext">✔ Completed</span>
+                  )}
+                  {/* //Not started  In progress */}
+                  {stack.lessoncompleted === "In progress" && (
+                    <span className="marker inprogresstext">In progress</span>
+                  )}
+                  {stack.lessoncompleted === "Not started" && (
+                    <span className="marker notstartedtext">Not started</span>
+                  )}
+
+
                   {/*  <p>{stack.totallength}</p>
                   {stack.totallength > 95 ? <span className="marker checktext">✔</span> : ''}
                   <p>Fluent: <span className="bold lessoncardtextnumber">{stack.fluent}</span></p>
