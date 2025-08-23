@@ -76,7 +76,6 @@ const ActualFlashcard = (props) => {
       setKnownWordsNotEmpty(false);
     }
     if (difficultybuttonclicked && totalwordsremaining === 0) {
-      alert('hello')
       async function savelessoncompleted(lessonid) {
         let fetchurl = `${process.env.NEXT_PUBLIC_API_URL}/api/savelessoncompleted`;
         const response = await fetch(fetchurl, {

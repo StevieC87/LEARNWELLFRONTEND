@@ -27,8 +27,9 @@ export default function Lessons() {
       if (!response.ok) {
         console.log('Error fetching (remaining) flashcards');
       }
-      console.log('hello')
+
       const data = await response.json();
+      console.log(data, "dataflashcardslessons");
       return data;
     }
     //console.log(data, "data123123123");
@@ -37,6 +38,32 @@ export default function Lessons() {
       console.log('Failed to fetch (remaining) flashcards', error);
     }
 
+  }
+
+  async function getuserlessonscompleted() {
+    try {
+      let url = `http://localhost:3000/api/getuserlessonscompleted`;
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include', // Include credentials for session management
+      });
+
+      if (!response.ok) {
+        console.log('Error fetching user lessons completed');
+      }
+
+      const data = await response.json();
+      console.log(data, "data lessons completed");
+      return data;
+    }
+    //console.log(data, "data123123123");
+
+    catch (error) {
+      console.log('Failed to fetch user lessons completed', error);
+    }
   }
 
 
@@ -57,6 +84,8 @@ export default function Lessons() {
       }
     }
     getData()
+
+    getuserlessonscompleted()
   }, [])
 
   useEffect(() => {
