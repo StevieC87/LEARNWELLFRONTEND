@@ -49,10 +49,10 @@ export const getFlashcardsRemaining = async (wordstart, wordend) => {
     if (!response.ok) {
       console.log("Error fetching (remaining) flashcards");
     }
-    
+
     const data = await response.json();
-    if(data) {
-    console.log(data, "data123123123");
+    if (data) {
+      console.log(data, "data123123123");
     }
     return data;
   } catch (error) {

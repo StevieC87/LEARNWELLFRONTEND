@@ -158,6 +158,7 @@ export default function FlashcardPage() {
         return <div>error</div>;
       }
       if (getremainingwords.length > 0) {
+        console.log(getremainingwords, "getremainingwords");
         // console.log(getremainingwords, "getremainingwords");
         // setTotalWordsRemaining(getremainingwords.length);
         dispatch(setTotalWordsRemaining(getremainingwords.length));

@@ -138,8 +138,7 @@ export default function Lessons() {
             </Link>
           ))
         ) : (
-          <div className="card1">
-            <p>No flashcards remaining</p>
+          <div className="">
           </div>
         )
         }

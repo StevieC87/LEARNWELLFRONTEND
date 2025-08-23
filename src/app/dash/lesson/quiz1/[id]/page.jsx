@@ -84,13 +84,16 @@ export default function Quiz1() {
         //randomise order 
         knownwords = knownwords.sort(() => Math.random() - 0.5);
         //alert("2222");
-        dispatch(setTotalWordsKnown(knownwords.length));
-        setWordsforquiz1(knownwords);
-        setCurrentQuiz1Word(knownwords[0]);
+        let knownwordsfiltered = knownwords.filter(word => word.difficulty !== 'Fluent');
 
-        dispatch(setCurrentWord(knownwords[0]));
+        console.log(knownwordsfiltered, "knownwordsfiltered");
+        dispatch(setTotalWordsKnown(knownwordsfiltered.length));
+        setWordsforquiz1(knownwordsfiltered);
+        setCurrentQuiz1Word(knownwordsfiltered[0]);
+
+        dispatch(setCurrentWord(knownwordsfiltered[0]));
         dispatch(setisloading(false));
-        dispatch(setallknownwordsdata(knownwords));
+        dispatch(setallknownwordsdata(knownwordsfiltered));
 
       }
     }
@@ -101,7 +104,7 @@ export default function Quiz1() {
   useEffect(() => {
     setWordType(currentquiz1word?.Meaning.WordType);
     setCurrentQuizWordGerman(currentquiz1word?.word);
-    setCurrentQuizWordEnglish(currentquiz1word?.Meaning);
+    setCurrentQuizWordEnglish(currentquiz1word?.Meaning?.Meaning);
     console.log(currentquiz1word, "currentquiz1word");
     setCurrentWordNumberOfExamples(currentquiz1word?.Meaning?.CommonFields?.Examples?.length || 0);
 
@@ -112,6 +115,29 @@ export default function Quiz1() {
     console.log(word2, "word2");
     //trim word 2
     word2 = word2.trim();
+
+    //if word1 includes a /, then either of the words before or after the / can be correct
+    if (word1.includes("/")) {
+      let word1options = word1.split("/").map(option => option.trim());
+      if (word1options.includes(word2)) {
+        console.log("Words match!");
+        setShowCorrect(true);
+        setShowWrong(false);
+
+        //switch to
+        setTimeout(() => {
+          handleNextWord();
+        }, 1000);
+
+        return; // Exit the function early since we found a match
+      } else {
+        console.log("Words do not match.");
+        setShowWrong(true);
+        setShowCorrect(false);
+        return; // Exit the function early since we did not find a match
+      }
+    }
+
     if (word1 === word2) {
       console.log("Words match!");
       setShowCorrect(true);
@@ -191,13 +217,18 @@ export default function Quiz1() {
               setWordInputted(e.target.value);
               console.log(e.target.value, "input value");
             }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                compareWords(currentquiz1word.Meaning?.Meaning, wordinputted);
+              }
+            }}
           />
           <button
             className="button button-primary"
             onClick={(e) => {
               // Handle submit action
               console.log("Submit button clicked");
-              compareWords(currentquiz1word.meaningEn, wordinputted);
+              compareWords(currentquiz1word.Meaning?.Meaning, wordinputted);
             }}
           >
             Submit
