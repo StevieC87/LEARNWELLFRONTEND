@@ -7,7 +7,7 @@ import {
   getFlashcardsRemaining,
   getFlashcardsKnownWords,
 } from "../../flash/[id]/services/fetchwords";
-import { dynamichunneds } from '../../../../utilities/arrayswordshunneds';
+import { dynamichunneds } from '@/utilities/arrayswordshunneds';
 
 import { usePathname } from "next/navigation";
 import { get } from "http";

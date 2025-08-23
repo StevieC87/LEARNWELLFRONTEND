@@ -5,7 +5,13 @@
 export const getFlashcardsKnownWords = async (wordstart, wordend) => {
   try {
     let url = `${process.env.NEXT_PUBLIC_API_URL}/api/flashcardknownwords?wordstart=${wordstart}&wordend=${wordend}`;
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include", // Include credentials for session management
+    });
     if (!response.ok) {
       console.log("Error fetching (known) flashcards");
       return null;
@@ -32,14 +38,22 @@ export const getFlashcardsRemaining = async (wordstart, wordend) => {
     console.log("API URL:", process.env.NEXT_PUBLIC_API_URL);
     let url = `${process.env.NEXT_PUBLIC_API_URL}/api/flashcardremainingSPLITCARDS?wordstart=${wordstart}&wordend=${wordend}`;
     console.log(url, "urlurlurlurlurlurl");
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
 
     if (!response.ok) {
       console.log("Error fetching (remaining) flashcards");
     }
-
+    
     const data = await response.json();
-    //console.log(data, "data123123123");
+    if(data) {
+    console.log(data, "data123123123");
+    }
     return data;
   } catch (error) {
     console.log("Error fetching (remaining) flashcards", error);

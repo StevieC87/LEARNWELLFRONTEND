@@ -36,7 +36,7 @@ import {
   getFlashcardsRemaining,
   getFlashcardsKnownWords,
 } from "./services/fetchwords";
-import { dynamichunneds } from '../../../../utilities/arrayswordshunneds';
+import { dynamichunneds } from '@/utilities/arrayswordshunneds';
 
 export default function FlashcardPage() {
   const dispatch = useDispatch();

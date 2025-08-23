@@ -29,13 +29,15 @@ export default function AppSettingsPage() {
           setIsLoading(false);
         }
         else if (!data || !data.wordsperlesson) {
-          console.error("No settings found, using default values");
+          console.log("No settings found, using default values");
           setWordsPerLesson(15); // Default value if no settings found
           setIsLoading(false);
         }
       }
       catch (error) {
-        console.error("Error fetching settings:", error);
+        setWordsPerLesson(15); // Default value if no settings found
+          setIsLoading(false);
+        console.log("Error fetching settings:", error);
       }
     }
     fetchSettings();

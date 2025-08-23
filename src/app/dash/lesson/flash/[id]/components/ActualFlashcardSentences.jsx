@@ -42,6 +42,9 @@ const ActualFlashcard = (props) => {
   const disablediffbuttons = useSelector(
     (state) => state.flashcardSlice.disablediffbuttons
   );
+  const showRemainingWords2 = useSelector(
+    (state) => state.flashcardSlice.showRemainingWords2
+  );
   const [remainingwordsNotempty, setRemainingWordsNotEmpty] = useState();
   const [knownwordsNotempty, setKnownWordsNotEmpty] = useState();
 
@@ -165,9 +168,9 @@ const ActualFlashcard = (props) => {
       allknownwordsdata.length !== 0
     ) {
       return (
-        <div>
-          Well done, you have covered all the words in this stack, switch to
-          'Covered' to practice the words
+        <div className="pt-20">
+          Flashcard lesson complete! Take the 
+          <Link href="/quiz">first quiz</Link>   to strengthen your memory!
         </div>
       );
     } else {
@@ -200,8 +203,12 @@ const ActualFlashcard = (props) => {
 
         <div>
           <div className="flashcardnk123">
+          { (allremainingwordsdata.length === 0 && allknownwordsdata.length !== 0 && showRemainingWords2) && (
+              ifnowords()
+          )}
+
             {/*    <Link href={`/card?id=${currentword._id}`}>Editcard</Link> */}
-            {currentword?.word && (
+            {((allremainingwordsdata.length > 0 || allknownwordsdata.length > 0)  && currentword?.word) && (
               <>
                 <div className="semibold wordde">
                   {showOriginal ? (
