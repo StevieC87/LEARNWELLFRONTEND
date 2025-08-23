@@ -211,7 +211,7 @@ const ActualFlashcard = (props) => {
       return (
         <div className="pt-20">
           Flashcard lesson complete! Take the
-          <Link href="/quiz">first quiz</Link>   to strengthen your memory!
+          <Link href={`../quiz1/${slug}`}>first quiz</Link>   to strengthen your memory!
         </div>
       );
     } else {
