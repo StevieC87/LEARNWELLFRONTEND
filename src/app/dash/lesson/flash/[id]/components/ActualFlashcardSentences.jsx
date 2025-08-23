@@ -52,6 +52,16 @@ const ActualFlashcard = (props) => {
   const showmorebackcard = useSelector(
     (state) => state.flashcardSlice.showmorebackcard
   );
+
+  const userwordsperlesson = useSelector(
+    (state) => state.flashcardSlice.userwordsperlesson
+  );
+
+  
+  // ----------------------------------------------------
+
+  //TOGGLE SHOW MORE BACK OF CARD
+  //----------------------------------------------------
   useEffect(() => {
     if (totalwordsknown) {
       setRemainingWordsNotEmpty(true);
@@ -92,6 +102,26 @@ const ActualFlashcard = (props) => {
     };
   }, [fliptoEnglish]);
 
+  //HERE SO AS NOT TO SHOW THE 'LESSON COMPLETED' AND THE CARD UNDERNEATH ONE HT ELAST CARD
+  const [countcardsflipped, setCountCardsFlipped] = useState(0);
+  
+  //IF IT'S THE LAST CARD, THEN DON'T GO TO THE NEXT CARD
+  //BUT LET THEM FLIP IT AND SEE THE BACK
+  //THEN SHOW THE LESSON COMPLETE MESSAGE
+  //AND THE BUTTON TO GO TO THE QUIZ
+  //----------------------------------------------------
+  useEffect(() => {
+    //check see if currentword is last in the array
+    if (currentword) {
+      let currentindex = allwords.indexOf(currentword);
+      if (currentindex === allwords.length - 1) {
+        //if so, go back to start
+      //  dispatch(setCurrentWord(allwords[0]));
+      //  dispatch(setOriginal(true));
+      }
+    }
+
+  },[currentword,])
   //----------------------------------------------------
 
   const [expandedIndex, setExpandedIndex] = useState(false);
@@ -187,9 +217,10 @@ const ActualFlashcard = (props) => {
             // e.target.closest(".flashcardmultiple") ||
             // e.target.closest(".flashcard123") ||
             // disablediffbuttons
-            e.target.closest(".bi")
+          /*   e.target.closest(".bi")
             || e.target.closest("span") ||
-            e.target.closest("p") || e.target.closest(".showmorecard")
+            e.target.closest("p") || e.target.closest(".showmorecard") */
+             e.target.closest(".bi")
           ) {
             e.stopPropagation();
           } else {
@@ -208,18 +239,23 @@ const ActualFlashcard = (props) => {
           )}
 
             {/*    <Link href={`/card?id=${currentword._id}`}>Editcard</Link> */}
-            {((allremainingwordsdata.length > 0 || allknownwordsdata.length > 0)  && currentword?.word) && (
+            {((allremainingwordsdata.length > 0 && showRemainingWords2) || (allknownwordsdata.length > 0 && !showRemainingWords2)  && currentword?.word) && (
               <>
-                <div className="semibold wordde">
+                <div className=" wordde">
                   {showOriginal ? (
-                    <span>{currentword.word}</span>
+                    <span className="semibold">{currentword.word}</span>
                   ) : (
                     <>
                       <p className="semibold wordde"> {currentword?.Meaning?.Meaning}</p>
                       {currentword?.Meaning?.Noun?.Gender && (
                         <span className="fontweightregular">  ({currentword?.Meaning?.Noun?.Gender})</span>
+                        
 
                       )}
+                       <div className="fontmedium mb-4">
+          {/*   <span className="semibold">Explanation:</span> */}
+            <span>{currentword?.Meaning?.Explanation}</span>
+          </div>
                     </>
                   )}
                 </div>
@@ -265,6 +301,7 @@ const ActualFlashcard = (props) => {
                     )
                   )}
                 </div>
+               
               </>
             )}
           </div>
@@ -278,7 +315,7 @@ const ActualFlashcard = (props) => {
             </button>
           )}
 
-          {showmorebackcard && (
+          {(showmorebackcard && !showOriginal) && (
             <Extrafields
               currentword={currentword}
               othermeanings={othermeaningsArray}

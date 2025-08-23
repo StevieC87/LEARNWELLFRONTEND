@@ -171,14 +171,14 @@ const DifficultyButtons = () => {
       <div className="bottombartoptop">
         <button
           className="btn mybtn diffic-btn buttonSaveWord fluentbtn"
-          onClick={() => submitWord("Hide Forever")}
+          onClick={() => submitWord("Fluent")}
           disabled={disablediffbuttons}
         >
           Never Show Again
         </button>
         <button
           className="btn mybtn diffic-btn buttonSaveWord familiarbtn"
-          onClick={() => submitWord("Fluent")}
+          onClick={() => submitWord("Familiar")}
           disabled={disablediffbuttons}
         >
           Knew it

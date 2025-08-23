@@ -11,11 +11,11 @@ const Extrafields = () => {
       {currentword && currentword.word && (
         <>
           {/* <hr className="dotted"></hr> */}
-          <div className="fontmedium mb-4">
+          {/* <div className="fontmedium mb-4">
             <span className="semibold">Explanation:</span>{" "}
             <span>{currentword?.Meaning?.Explanation}</span>
 
-          </div>
+          </div> */}
 
           {/*  {currentword?.Meaning?.CommonFields?.UsageNotes && (
             <div className="fontmedium">
