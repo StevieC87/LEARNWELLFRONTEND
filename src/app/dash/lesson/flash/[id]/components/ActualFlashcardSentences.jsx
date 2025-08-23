@@ -217,10 +217,9 @@ const ActualFlashcard = (props) => {
             // e.target.closest(".flashcardmultiple") ||
             // e.target.closest(".flashcard123") ||
             // disablediffbuttons
-          /*   e.target.closest(".bi")
-            || e.target.closest("span") ||
-            e.target.closest("p") || e.target.closest(".showmorecard") */
              e.target.closest(".bi")
+            || e.target.closest("span") ||
+            e.target.closest("p") || e.target.closest(".showmorecard") 
           ) {
             e.stopPropagation();
           } else {
