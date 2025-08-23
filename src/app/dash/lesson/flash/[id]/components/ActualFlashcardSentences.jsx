@@ -13,6 +13,7 @@ const ActualFlashcard = (props) => {
 
   const pathname = usePathname();
   const slug = pathname.split("/").pop();
+  console.log(slug, 'slug');
   const { wordnostart, wordnoend } = props;
   const currentword = useSelector((state) => state.flashcardSlice.currentword);
   //show original language (German) - true by default
@@ -57,11 +58,12 @@ const ActualFlashcard = (props) => {
     (state) => state.flashcardSlice.userwordsperlesson
   );
 
-  
+
   // ----------------------------------------------------
 
   //TOGGLE SHOW MORE BACK OF CARD
   //----------------------------------------------------
+  const difficultybuttonclicked = useSelector((state) => state.flashcardSlice.difficultybuttonclicked);
   useEffect(() => {
     if (totalwordsknown) {
       setRemainingWordsNotEmpty(true);
@@ -73,7 +75,26 @@ const ActualFlashcard = (props) => {
     } else {
       setKnownWordsNotEmpty(false);
     }
-  }, [totalwordsknown, totalwordsremaining]);
+    if (difficultybuttonclicked && totalwordsremaining === 0) {
+      alert('hello')
+      async function savelessoncompleted(lessonid) {
+        let fetchurl = `${process.env.NEXT_PUBLIC_API_URL}/api/savelessoncompleted`;
+        const response = await fetch(fetchurl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ lessonid: lessonid, wordsperlesson: userwordsperlesson }),
+          credentials: "include"
+        });
+        const data = await response.json();
+        console.log(data, "data from savelessoncompleted");
+        return data;
+      };
+      let savelessonascompleted = savelessoncompleted(slug);
+      //mark lesson as done - SAVE TO DB
+    }
+  }, [totalwordsknown, totalwordsremaining, userwordsperlesson, difficultybuttonclicked]);
 
   //----------------------------------------------------
   const fliptoEnglish = () => {
@@ -102,26 +123,7 @@ const ActualFlashcard = (props) => {
     };
   }, [fliptoEnglish]);
 
-  //HERE SO AS NOT TO SHOW THE 'LESSON COMPLETED' AND THE CARD UNDERNEATH ONE HT ELAST CARD
-  const [countcardsflipped, setCountCardsFlipped] = useState(0);
-  
-  //IF IT'S THE LAST CARD, THEN DON'T GO TO THE NEXT CARD
-  //BUT LET THEM FLIP IT AND SEE THE BACK
-  //THEN SHOW THE LESSON COMPLETE MESSAGE
-  //AND THE BUTTON TO GO TO THE QUIZ
-  //----------------------------------------------------
-  useEffect(() => {
-    //check see if currentword is last in the array
-    if (currentword) {
-      let currentindex = allwords.indexOf(currentword);
-      if (currentindex === allwords.length - 1) {
-        //if so, go back to start
-      //  dispatch(setCurrentWord(allwords[0]));
-      //  dispatch(setOriginal(true));
-      }
-    }
 
-  },[currentword,])
   //----------------------------------------------------
 
   const [expandedIndex, setExpandedIndex] = useState(false);
@@ -179,6 +181,15 @@ const ActualFlashcard = (props) => {
   }, [currentword]);
 
 
+  //FETCH MP3
+  //wordorexample = word or example
+  //EXAMPLE SENTENCE MP3
+  //IF WE HAVE AN ID FOR THE EXAMPLE AND THE WORD HAS mp3 AUDIO
+  //WE CAN FETCH IT
+  //WE FETCH IT FROM THE BACKEND - WHICH FETCHES IT FROM THE FOLDER WHERE WE STORE IT
+  //WE THEN CREATE A BLOB AND A URL AND PLAY IT
+  //WE DO THIS IN THE COMPONENT WHERE WE DISPLAY THE EXAMPLE SENTENCES
+  //WE PASS THE EXAMPLE
 
   const fetchmp3 = async (exampleid) => {
     let fetchurl = `${process.env.NEXT_PUBLIC_API_URL}/api/fetchmp3/${exampleid}?wordorexample=example`;
@@ -199,7 +210,7 @@ const ActualFlashcard = (props) => {
     ) {
       return (
         <div className="pt-20">
-          Flashcard lesson complete! Take the 
+          Flashcard lesson complete! Take the
           <Link href="/quiz">first quiz</Link>   to strengthen your memory!
         </div>
       );
@@ -217,9 +228,9 @@ const ActualFlashcard = (props) => {
             // e.target.closest(".flashcardmultiple") ||
             // e.target.closest(".flashcard123") ||
             // disablediffbuttons
-             e.target.closest(".bi")
+            e.target.closest(".bi")
             || e.target.closest("span") ||
-            e.target.closest("p") || e.target.closest(".showmorecard") 
+            e.target.closest("p") || e.target.closest(".showmorecard")
           ) {
             e.stopPropagation();
           } else {
@@ -233,12 +244,12 @@ const ActualFlashcard = (props) => {
 
         <div>
           <div className="flashcardnk123">
-          { (allremainingwordsdata.length === 0 && allknownwordsdata.length !== 0 && showRemainingWords2) && (
+            {(allremainingwordsdata.length === 0 && allknownwordsdata.length !== 0 && showRemainingWords2) && (
               ifnowords()
-          )}
+            )}
 
             {/*    <Link href={`/card?id=${currentword._id}`}>Editcard</Link> */}
-            {((allremainingwordsdata.length > 0 && showRemainingWords2) || (allknownwordsdata.length > 0 && !showRemainingWords2)  && currentword?.word) && (
+            {((allremainingwordsdata.length > 0 && showRemainingWords2) || (allknownwordsdata.length > 0 && !showRemainingWords2) && currentword?.word) && (
               <>
                 <div className=" wordde">
                   {showOriginal ? (
@@ -248,13 +259,13 @@ const ActualFlashcard = (props) => {
                       <p className="semibold wordde"> {currentword?.Meaning?.Meaning}</p>
                       {currentword?.Meaning?.Noun?.Gender && (
                         <span className="fontweightregular">  ({currentword?.Meaning?.Noun?.Gender})</span>
-                        
+
 
                       )}
-                       <div className="fontmedium mb-4">
-          {/*   <span className="semibold">Explanation:</span> */}
-            <span>{currentword?.Meaning?.Explanation}</span>
-          </div>
+                      <div className="fontmedium mb-4">
+                        {/*   <span className="semibold">Explanation:</span> */}
+                        <span>{currentword?.Meaning?.Explanation}</span>
+                      </div>
                     </>
                   )}
                 </div>
@@ -300,7 +311,7 @@ const ActualFlashcard = (props) => {
                     )
                   )}
                 </div>
-               
+
               </>
             )}
           </div>

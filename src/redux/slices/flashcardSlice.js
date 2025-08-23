@@ -45,6 +45,7 @@ const flashcardSlice = createSlice({
     pauseonnextprev: false,
     showmorebackcard: false,
     userwordsperlesson: 15,
+    difficultybuttonclicked: false
   },
 
   reducers: {
@@ -135,6 +136,9 @@ const flashcardSlice = createSlice({
     setuserwordsperlesson: (state, action) => {
       state.userwordsperlesson = action.payload;
     },
+    setdifficultybuttonclicked: (state, action) => {
+      state.difficultybuttonclicked = action.payload;
+    }
   },
 });
 
@@ -170,6 +174,7 @@ export const {
   setpauseonnextprev,
   setShowMoreBackCard,
   setuserwordsperlesson,
+  setdifficultybuttonclicked
 } = flashcardSlice.actions;
 
 export default flashcardSlice.reducer;

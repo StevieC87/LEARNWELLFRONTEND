@@ -14,6 +14,7 @@ import {
   setfamiliarWORDSArray,
   setuncertainWORDSArray,
   setnewwordsArray,
+  setdifficultybuttonclicked
 } from "@/redux/slices/flashcardSlice";
 import { flashcardsUserSaveWord } from "../services/fetchwords";
 import {
@@ -79,6 +80,8 @@ const DifficultyButtons = () => {
   };
 
   const submitWord = async (difficulty) => {
+
+    dispatch(setdifficultybuttonclicked(true))
     let wordtosubmit = {
       // wordde: currentword.word,
       wordid: currentword._id,
@@ -164,6 +167,10 @@ const DifficultyButtons = () => {
           handleChangeWord("next");
         }, 1000); */
     }
+    setTimeout(() => {
+      dispatch(setdifficultybuttonclicked(false))
+    }, 1000
+    )
   };
 
   return (
