@@ -91,6 +91,9 @@ export default function Quiz1() {
         let knownwordsfiltered = knownwords.filter(word => word.difficulty !== 'Fluent');
 
         console.log(knownwordsfiltered, "knownwordsfiltered");
+        //keep only 3 of total
+        knownwordsfiltered = knownwordsfiltered.slice(0, 3);
+        console.log(knownwordsfiltered, "knownwordsfiltered");
         dispatch(setTotalWordsKnown(knownwordsfiltered.length));
         setWordsforquiz1(knownwordsfiltered);
         setCurrentQuiz1Word(knownwordsfiltered[0]);
@@ -171,8 +174,8 @@ export default function Quiz1() {
   const handleNextWord = () => {
     const currentIndex = wordsforquiz1.indexOf(currentquiz1word);
     console.log(currentIndex, "currentIndex");
-    if (currentIndex === wordsforquiz1.length) {
-      alert('123')
+    console.log(wordsforquiz1.length, "wordsforquiz1.length");
+    if (currentIndex === wordsforquiz1.length - 1) {
       // If it's the first word, just proceed to the next one
       setLessonCompletedv(true)
     }
