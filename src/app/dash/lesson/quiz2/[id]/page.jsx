@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from "react";
-import "./quiz1.css";
+import "./quiz2.css";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getFlashcardsRemaining,
@@ -62,15 +62,12 @@ export default function Quiz1() {
   const [wordsleftinstack, setWordsLeftInStack] = useState('');
   const [originalnumberwords, setOriginalNumbetwords] = useState('');
   const [lessoncompletedv, setLessonCompletedv] = useState(false);
-
-  const userwordsperlesson = useSelector((state) => state.flashcardSlice.userwordsperlesson);
   const inputRef = useRef(null);
   //console.log(slug, "slugsss");
   if (isNaN(slug)) {
     return <div>error</div>;
   }
-  let wordstartwordendarray = dynamichunneds(userwordsperlesson || 15);
-  // console.log(wordstartwordendarray, "wordstartwordendarray");
+  let wordstartwordendarray = dynamichunneds(20);
 
   let wordstart1 = wordstartwordendarray.find((item) => item.id === parseInt(slug));
   // console.log(wordstart1, "wordstart1");
@@ -86,6 +83,7 @@ export default function Quiz1() {
       // console.log(knownwords, "knownwords");
       if (!knownwords || knownwords.length === 0) {
         //alert("111");
+        console.log('nonewowrds');
         return;
       } else {
         //randomise order 
@@ -95,6 +93,7 @@ export default function Quiz1() {
 
         console.log(knownwordsfiltered, "knownwordsfiltered");
         //keep only 3 of total
+        //knownwordsfiltered = knownwordsfiltered.slice(0, 3);
         console.log(knownwordsfiltered, "knownwordsfiltered");
         dispatch(setTotalWordsKnown(knownwordsfiltered.length));
         setWordsforquiz1(knownwordsfiltered);
@@ -169,6 +168,8 @@ export default function Quiz1() {
 
   }
   const [currentindexis, setCurrentIndexis] = useState(0);
+
+
   useEffect(() => {
     const index = wordsforquiz1.indexOf(currentquiz1word);
     setCurrentIndexis(index + 1);
@@ -238,7 +239,7 @@ export default function Quiz1() {
               <p className="text-center">Type the word in German</p>
               <p>{wordsleftinstack} / {originalnumberwords}</p>
               <div className="maxdiv pt-10 pb-10 text-center">
-                <span className="quiz1wordtotranslate">{currentquiz1word.Meaning.Meaning}</span>
+                <span className="quiz1wordtotranslate">{currentquiz1word.word}</span>
                 {/*   <p>{currentquiz1word.Meaning.Explanation}</p> */}
                 {/*  <span className="quiz1wordtotranslate">{currentquiz1word.word}</span> */}
                 {/*   <p className="pl-5">({wordtype?.toLowerCase()})</p> */}
@@ -257,54 +258,10 @@ export default function Quiz1() {
         </div>
         {(!lessoncompletedv && currentquiz1word) && (
           <>
-            <div className="quiz1inputarea">
-              <input
-                ref={inputRef}
-                type="text"
-                className="quiz1input"
-                value={wordinputted}
-                placeholder="Type your answer here"
-                autoFocus
-                onChange={(e) => {
-                  setWordInputted(e.target.value);
-                  console.log(e.target.value, "input value");
-                }}
-                onBlur={(e) => {
-                  setWordInputted(e.target.value);
-                  console.log(e.target.value, "input value");
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    setWordInputted(e.target.value);
-                    compareWords(currentquiz1word.word, wordinputted);
-                  }
-                }}
-              />
-              <button
-                className="button button-primary"
-                onClick={(e) => {
-                  // Handle submit action
-                  console.log("Submit button clicked");
-                  compareWords(currentquiz1word.word, wordinputted);
-                }}
-              >
-                Submit
-              </button>
+            <div className="quiz2pickwordsdiv">
+
             </div>
-            <div className="showcorrectwrongdiv">
-              {showcorrect && (
-                <div className="correct-message">
-                  <p>Correct!</p>
-                </div>
-              )}
-              {showwrong && (
-                <div className="wrong-message">
-                  <p>Wrong! Try again.</p>
-                </div>
-              )
-              }
-            </div>
-            <div className="quiz1hints">
+            {/*     <div className="quiz1hints">
               <div className="quiz1hintbuttons flex flex-row gap-5 pb-5">
                 <div className="showexplanationbutton">
                   <button className="button button-primary button-outline button-narrow" onClick={() => setShowExplanation(!showExplanation)}>
@@ -365,18 +322,18 @@ export default function Quiz1() {
                 {revealanswerdiv && (
                   <div className="revealanswer">
                     <p className="text-center quiz1wordtotranslate pt-10 pb-10">{currentquiz1word.word}
-                      {/* {currentquiz1word.Meaning?.CommonFields?.TranslationDE} */}</p>
-                  </div>
-                )}
-              </div>
-              <div className="showexpl">
-                {showExplanation && (
-                  <div className="explanationdiv">
-                    <p>{currentquiz1word.Meaning?.Explanation || "No explanation available"}</p>
-                  </div>
-                )}
-              </div>
             </div>
+                )}
+        </div >
+            <div className="showexpl">
+                {showExplanation && (
+                    <div className="explanationdiv">
+                        <p>{currentquiz1word.Meaning?.Explanation || "No explanation available"}</p>
+                    </div>
+                )}
+            </div>
+            </div > */
+            }
             <div className="quiz1nextworddiv">
             </div>
           </>

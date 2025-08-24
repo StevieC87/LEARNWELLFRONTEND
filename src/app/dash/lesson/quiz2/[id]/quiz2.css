@@ -1,0 +1,56 @@
+.quiz1-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    justify-self: center;
+    width: 375px;
+}
+
+.quiz1wordtotranslate {
+    font-size: 2rem;
+    font-weight: bold;
+
+    /*   font-style:  italic; */
+}
+
+.quiz1hints {
+    text-align: start;
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+}
+
+.quiz1inputarea {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+
+.quiz1input {
+    max-width: 250px;
+}
+
+.quiz1nextworddiv {
+    padding-top: 30px;
+}
+
+.showexamplesdiv {
+    flex: 1;
+
+}
+
+.showanswerdiv {
+    margin-top: 0px;
+    padding-left: 20px;
+}
+
+.maxdiv {
+    width: 100%;
+}
+
+.showwordtotranslate {
+    width: 100%;
+}

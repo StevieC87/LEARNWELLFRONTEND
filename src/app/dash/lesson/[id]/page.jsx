@@ -2,7 +2,7 @@
 import Link from "next/link";
 export default function LessonPage({ params }) {
 
- const lessonid = params.id
+  const lessonid = params.id
   return (
     <>
 
