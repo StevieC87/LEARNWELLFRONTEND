@@ -39,7 +39,11 @@
 
 .showexamplesdiv {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
+
 .showanswerdiv {
   margin-top: 0px;
   padding-left: 20px;
@@ -48,6 +52,7 @@
 .maxdiv {
   width: 100%;
 }
+
 .showwordtotranslate {
   width: 100%;
 }

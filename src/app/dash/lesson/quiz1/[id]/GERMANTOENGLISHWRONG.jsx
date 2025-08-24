@@ -76,6 +76,7 @@ export default function Quiz1() {
   let wordend = wordstart1.wordend;
   // console.log(wordend, "wordend");
 
+
   useEffect(() => {
 
     const getknownwordsfromapi = async () => {
@@ -163,16 +164,11 @@ export default function Quiz1() {
     }
 
   }
-  const [currentindexis, setCurrentIndexis] = useState(0);
-  useEffect(() => {
-    const index = wordsforquiz1.indexOf(currentquiz1word);
-    setCurrentIndexis(index + 1);
-  }, [currentquiz1word]);
+
   const handleNextWord = () => {
     const currentIndex = wordsforquiz1.indexOf(currentquiz1word);
     console.log(currentIndex, "currentIndex");
-    if (currentIndex === wordsforquiz1.length) {
-      alert('123')
+    if (currentIndex === 0) {
       // If it's the first word, just proceed to the next one
       setLessonCompletedv(true)
     }
@@ -187,7 +183,6 @@ export default function Quiz1() {
       setShowCorrect(false);
       setShowWrong(false);
       setRevealAnswerDiv(false);
-      setShowExplanation(false);
       console.log(nextWord, "nextWord");
 
       //remove word from setWordsLeftInStack 
@@ -210,8 +205,6 @@ export default function Quiz1() {
     setShowWrong(false);
     setRevealAnswerDiv(false);
     setWordInputted("");
-    setShowExplanation(false);
-    inputRef.current?.focus(); // Refocus the input field
   }
 
   useEffect(() => {
@@ -229,12 +222,10 @@ export default function Quiz1() {
         <div className="showwordtotranslate">
           {(!lessoncompletedv && currentquiz1word) && (
             <>
-              <span>currentindex {currentindexis}</span>
               <p className="text-center">Type the word in German</p>
               <p>{wordsleftinstack} / {originalnumberwords}</p>
               <div className="maxdiv pt-10 pb-10 text-center">
                 <span className="quiz1wordtotranslate">{currentquiz1word.Meaning.Meaning}</span>
-                {/*   <p>{currentquiz1word.Meaning.Explanation}</p> */}
                 {/*  <span className="quiz1wordtotranslate">{currentquiz1word.word}</span> */}
                 {/*   <p className="pl-5">({wordtype?.toLowerCase()})</p> */}
               </div>
@@ -270,8 +261,7 @@ export default function Quiz1() {
                 }}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
-                    setWordInputted(e.target.value);
-                    compareWords(currentquiz1word.word, wordinputted);
+                    compareWords(currentquiz1word.Meaning?.Meaning, wordinputted);
                   }
                 }}
               />
@@ -280,7 +270,7 @@ export default function Quiz1() {
                 onClick={(e) => {
                   // Handle submit action
                   console.log("Submit button clicked");
-                  compareWords(currentquiz1word.word, wordinputted);
+                  compareWords(currentquiz1word.Meaning?.Meaning, wordinputted);
                 }}
               >
                 Submit
@@ -300,12 +290,7 @@ export default function Quiz1() {
               }
             </div>
             <div className="quiz1hints">
-              <div className="quiz1hintbuttons flex flex-row gap-5 pb-5">
-                <div className="showexplanationbutton">
-                  <button className="button button-primary button-outline button-narrow" onClick={() => setShowExplanation(!showExplanation)}>
-                    {showExplanation ? "Hide Explanation" : "Show Explanation"}
-                  </button>
-                </div>
+              <div className="quiz1hintbuttons flex">
                 <div className="showexamplesdiv">
                   {currentwordnumberofexamples > 0 && (
                     <button
@@ -330,7 +315,7 @@ export default function Quiz1() {
                       setRevealAnswerDiv(prevValue => {
                         setRevealAnswerDiv(!prevValue);
                       });
-                    }}> {revealanswerdiv ? "Hide Answer" : "Show Answer"}
+                    }}>Show Answer
                   </button>
                 </div>
               </div>
@@ -341,7 +326,7 @@ export default function Quiz1() {
                       {currentquiz1word.Meaning?.CommonFields?.Examples?.length > 0 ? (
                         currentquiz1word.Meaning.CommonFields.Examples.slice(0, showexamplescount).map((example, index) => (
 
-                          <li key={index}>{example.ExampleSentenceEN}</li>
+                          <li key={index}>{example.ExampleSentenceDE}</li>
                         ))
                       ) : (
                         <li>No examples available</li>
@@ -359,15 +344,8 @@ export default function Quiz1() {
                 )}
                 {revealanswerdiv && (
                   <div className="revealanswer">
-                    <p className="text-center quiz1wordtotranslate pt-10 pb-10">{currentquiz1word.word}
-                      {/* {currentquiz1word.Meaning?.CommonFields?.TranslationDE} */}</p>
-                  </div>
-                )}
-              </div>
-              <div className="showexpl">
-                {showExplanation && (
-                  <div className="explanationdiv">
-                    <p>{currentquiz1word.Meaning?.Explanation || "No explanation available"}</p>
+                    <p className="text-center quiz1wordtotranslate pt-10 pb-10">{currentquiz1word.meaningEn}
+                      {currentquiz1word.Meaning?.CommonFields?.TranslationDE}</p>
                   </div>
                 )}
               </div>
@@ -383,4 +361,9 @@ export default function Quiz1() {
   )
 }
 
-{/*  */ }
+{/*  <button onClick={() => setShowExplanation(!showExplanation)}>
+            {showExplanation ? "Hide Explanation" : "Show Explanation"}
+          </button>
+          {showExplanation && (
+            <p>{currentquiz1word.explanation || "No explanation available"}</p>
+          )} */}
