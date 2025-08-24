@@ -67,7 +67,7 @@ export default function Quiz1() {
   useEffect(() => {
 
     const getknownwordsfromapi = async () => {
-      let knownwords = await getFlashcardsKnownWords(wordstart, wordend);
+      let knownwords = await getFlashcardsKnownWords(slug);
       // console.log(knownwords, "knownwords");
       if (!knownwords || knownwords.length === 0) {
         //alert("111");

@@ -38,6 +38,7 @@ export default function Quiz1() {
   const dispatch = useDispatch();
   const pathname = usePathname();
 
+
   const [wordsforquiz1, setWordsforquiz1] = useState([]);
   const [currentquiz1word, setCurrentQuiz1Word] = useState(null);
   const [currentquizwordGerman, setCurrentQuizWordGerman] = useState(null);
@@ -82,7 +83,7 @@ export default function Quiz1() {
   useEffect(() => {
 
     const getknownwordsfromapi = async () => {
-      let knownwords = await getFlashcardsKnownWords(wordstart, wordend);
+      let knownwords = await getFlashcardsKnownWords(slug);
       // console.log(knownwords, "knownwords");
       if (!knownwords || knownwords.length === 0) {
         //alert("111");

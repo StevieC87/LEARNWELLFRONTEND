@@ -128,7 +128,6 @@ export default function FlashcardPage() {
         dispatch(setCurrentWord(getremainingwords[0]));
         dispatch(setisloading(false));
         //! keep THIS FOR NOW - check again
-        totalwordsremainingVAR = getremainingwords;
       } else {
         dispatch(seterrorNoWords(true));
         dispatch(setallremainingwordsdata([]));
@@ -188,7 +187,6 @@ export default function FlashcardPage() {
         // console.log(newwords, "newwords");
 
         //! keep THIS FOR NOW - check again
-        totalknownwrodsknownVAR = getknownwordsf;
       } else {
         // alert("no known words found");
         dispatch(setallknownwordsdata([]));
