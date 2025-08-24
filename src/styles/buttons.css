@@ -3,6 +3,7 @@
     display: inline-block;
     cursor: pointer;
   }
+
   .button {
     padding: 4px 7px;
     font-size: 16px;
@@ -18,12 +19,15 @@
     font-family: PoppinsSemiBold !important;
     align-self: flex-start;
   }
+
   .button-wide {
     width: 100%;
   }
+
   .button-thick {
     padding: 10px 20px;
   }
+
   /* Primary button */
   .button-primary {
     background-color: var(--primary-color);
@@ -33,45 +37,55 @@
     font-size: 16px;
     border-radius: 5px;
   }
+
   .button-primary:hover {
     background-color: var(--primary-color);
     border-color: var(--primary-color);
   }
+
   .button-primary:active {
     background-color: #004494;
     border-color: #004494;
   }
+
   /* Secondary button */
   .button-secondary {
     background-color: #6c757d;
     color: #ffffff;
     border-color: #6c757d;
   }
+
   .button-secondary:hover {
     background-color: #545b62;
     border-color: #545b62;
   }
+
   .button-secondary:active {
     background-color: #3e444a;
     border-color: #3e444a;
   }
+
   /* Outline button */
   .button-outline {
     background-color: transparent;
     color: var(--primary-color);
     border-color: var(--primary-color);
   }
+
   .button-thin {
     border: 1px solid var(--primary-color);
   }
+
   .button-gray {
     color: #6c757d !important;
     border-color: #6c757d !important;
   }
+
   .button-gray-filled {
     background-color: #6c757d;
     color: #ffffff !important;
   }
+
   .button-gray:hover {
     background-color: #6c757d !important;
     color: #fff !important;
@@ -83,17 +97,21 @@
     font-weight: 0;
     font-family: Poppins !important;
   }
+
   .button-noborder {
     border: none;
   }
+
   .button-outline:hover {
     background-color: var(--primary-color);
     color: #ffffff;
   }
+
   .button-outline:active {
     background-color: #0056b3;
     border-color: #0056b3;
   }
+
   /* Disabled button */
   button:disabled {
     opacity: 0.5;
@@ -109,5 +127,18 @@
   .gray {
     border-color: #d1d5db;
     color: gray;
+  }
+
+  .pill-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+
+    border-radius: 50px;
+    background-color: var(--primary-color);
+    color: #ffffff;
+    font-family: Poppins, sans-serif;
   }
 }

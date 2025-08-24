@@ -12,26 +12,10 @@ import { dynamichunneds } from '@/utilities/arrayswordshunneds';
 import { usePathname } from "next/navigation";
 import { get } from "http";
 import {
-  setAllWords2,
   setCurrentWord,
-  setShowAllWords,
-  setdifficultylevels,
-  seterrorNoWords,
   setisloading,
-  setallremainingwordsdata,
   setallknownwordsdata,
-  setnumberoffluentwords,
-  setnumberoffamiliarwords,
-  setnumberofuncertainwords,
-  setnumberofnewwords,
-  setfluentWORDSArray,
-  setfamiliarWORDSArray,
-  setuncertainWORDSArray,
-  setnewwordsArray,
   setTotalWordsKnown,
-  setTotalWordsRemaining,
-  setdisablediffbuttons,
-  // setoriginalarrayorder,
 } from "@/redux/slices/flashcardSlice";
 
 export default function Quiz1() {
@@ -62,6 +46,9 @@ export default function Quiz1() {
   const [wordsleftinstack, setWordsLeftInStack] = useState('');
   const [originalnumberwords, setOriginalNumbetwords] = useState('');
   const [lessoncompletedv, setLessonCompletedv] = useState(false);
+
+  const [wordspickchoose, setWordspickChoose] = useState([])
+
   const inputRef = useRef(null);
   //console.log(slug, "slugsss");
   if (isNaN(slug)) {
@@ -105,6 +92,22 @@ export default function Quiz1() {
         setWordsLeftInStack(knownwordsfiltered.length);
         setOriginalNumbetwords(knownwordsfiltered.length);
 
+        let wordstoaddtoarraytochoose;
+        //let uniquewordsinArray 
+        //first get unique words from knownwordsfiltered array 
+        let uniquewords = [...new Set(knownwordsfiltered.map(word => word.Meaning.Meaning))];
+        let excludecurrentword = new Set([...uniquewords].filter(word => word !== knownwordsfiltered[0].Meaning.Meaning))
+        console.log(excludecurrentword, 'excludecurrentword');
+        let randomizedArray = Array.from(excludecurrentword).sort(() => Math.random() - 0.5);
+        console.log(randomizedArray, 'randomizedArray');
+        let pick3words = randomizedArray.splice(0, 3)
+        console.log(pick3words, 'pick3words');
+        console.log(currentword, 'currentwordword');
+        console.log(knownwordsfiltered[0].word, 'knownword0');
+        let finalarraywordschoose = pick3words.push(knownwordsfiltered[0].Meaning.Meaning)
+        console.log(pick3words, 'pick3words');
+        let randomizeagain = pick3words.sort(() => Math.random() - 0.5);
+        setWordspickChoose(randomizeagain);
       }
     }
 
@@ -185,6 +188,10 @@ export default function Quiz1() {
     else if (currentIndex < wordsforquiz1.length - 1) {
       const nextWord = wordsforquiz1[currentIndex + 1];
       setCurrentQuiz1Word(nextWord);
+      const updatedWords = wordsforquiz1.filter((word) => word !== currentquiz1word);
+      setWordsforquiz1(updatedWords);
+
+
       console.log(nextWord, "nextWord");
       dispatch(setCurrentWord(nextWord));
       //hide examples if they are shown
@@ -194,8 +201,20 @@ export default function Quiz1() {
       setShowWrong(false);
       setRevealAnswerDiv(false);
       setShowExplanation(false);
-      console.log(nextWord, "nextWord");
 
+      let uniquewords = [...new Set(updatedWords.map(word => word.Meaning.Meaning))];
+      let excludecurrentword = new Set([...uniquewords].filter(word => word !== nextWord.word))
+      console.log(excludecurrentword, 'excludecurrentword');
+      let randomizedArray = Array.from(excludecurrentword).sort(() => Math.random() - 0.5);
+      console.log(randomizedArray, 'randomizedArray');
+      let pick3words = randomizedArray.splice(0, 3)
+      console.log(pick3words, 'pick3words');
+      console.log(nextWord.word, 'knownword0');
+      let finalarraywordschoose = pick3words.push(nextWord.Meaning.Meaning)
+      console.log(pick3words, 'pick3words');
+      console.log(nextWord, "nextWord");
+      let randomizeagain = pick3words.sort(() => Math.random() - 0.5);
+      setWordspickChoose(randomizeagain);
       //remove word from setWordsLeftInStack 
       setWordsLeftInStack(prev => prev - 1);
     } else {
@@ -229,14 +248,26 @@ export default function Quiz1() {
 
   return (
     <>
+      <div className="quiz2pickwordsdiv flex flex-row gap-3">
+
+        {(wordspickchoose && wordspickchoose.length > 0) && (
+          wordspickchoose.map((word, index) => (
+            <div className="pill-badge" key={index}>
+              <span>{word}</span>
+            </div>
+          ))
+        )}
+
+
+      </div>
       <div className="quiz1-container mt-10">
         {/*  <h1>Quiz 1</h1> */}
 
         <div className="showwordtotranslate">
           {(!lessoncompletedv && currentquiz1word) && (
             <>
-              <span>currentindex {currentindexis}</span>
-              <p className="text-center">Type the word in German</p>
+
+              <p className="text-center">Match the word from the list</p>
               <p>{wordsleftinstack} / {originalnumberwords}</p>
               <div className="maxdiv pt-10 pb-10 text-center">
                 <span className="quiz1wordtotranslate">{currentquiz1word.word}</span>
@@ -256,11 +287,10 @@ export default function Quiz1() {
             </div>
           )}
         </div>
+
         {(!lessoncompletedv && currentquiz1word) && (
           <>
-            <div className="quiz2pickwordsdiv">
 
-            </div>
             {/*     <div className="quiz1hints">
               <div className="quiz1hintbuttons flex flex-row gap-5 pb-5">
                 <div className="showexplanationbutton">
