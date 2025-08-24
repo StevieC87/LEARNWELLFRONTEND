@@ -229,19 +229,7 @@ export default function Quiz1() {
 
   return (
     <>
-      <div className="quiz2pickwordsdiv flex flex-row gap-3">
 
-        {(wordspickchoose && wordspickchoose.length > 0) && (
-          wordspickchoose.map((word, index) => (
-            <div className="pill-badge" key={index}
-              onClick={() => compareWords(word)}>
-              <span>{word}</span>
-            </div>
-          ))
-        )}
-
-
-      </div>
       <div className="quiz1-container mt-10">
         {/*  <h1>Quiz 1</h1> */}
 
@@ -256,6 +244,20 @@ export default function Quiz1() {
                 {/*   <p>{currentquiz1word.Meaning.Explanation}</p> */}
                 {/*  <span className="quiz1wordtotranslate">{currentquiz1word.word}</span> */}
                 {/*   <p className="pl-5">({wordtype?.toLowerCase()})</p> */}
+              </div>
+
+              <div className="quiz2pickwordsdiv flex flex-row gap-3">
+
+                {(wordspickchoose && wordspickchoose.length > 0) && (
+                  wordspickchoose.map((word, index) => (
+                    <div className="pill-badge" key={index}
+                      onClick={() => compareWords(word)}>
+                      <span>{word}</span>
+                    </div>
+                  ))
+                )}
+
+
               </div>
             </>
 
