@@ -42,6 +42,7 @@ export default function Quiz1() {
   const [currentwordnumberofexamples, setCurrentWordNumberOfExamples] = useState(0);
   const [wordtype, setWordType] = useState("");
   const slug = pathname.split("/").pop();
+  const [originalquizwords, setOriginalQuizwords] = useState([])
 
   const [wordsleftinstack, setWordsLeftInStack] = useState('');
   const [originalnumberwords, setOriginalNumbetwords] = useState('');
@@ -85,7 +86,7 @@ export default function Quiz1() {
         dispatch(setTotalWordsKnown(knownwordsfiltered.length));
         setWordsforquiz1(knownwordsfiltered);
         setCurrentQuiz1Word(knownwordsfiltered[0]);
-
+        setOriginalQuizwords(knownwordsfiltered)
         dispatch(setCurrentWord(knownwordsfiltered[0]));
         dispatch(setisloading(false));
         dispatch(setallknownwordsdata(knownwordsfiltered));
@@ -123,35 +124,15 @@ export default function Quiz1() {
 
   }, [currentquiz1word]);
 
-  const compareWords = (word1, word2) => {
-    console.log(word1, "word1");
-    console.log(word2, "word2");
-    //trim word 2
-    word2 = word2.trim();
+  const compareWords = (clickedword) => {
+    //compare current word translation with clickword 
+
+    let currentwordtranslation = currentquiz1word.Meaning.Meaning
 
     //if word1 includes a /, then either of the words before or after the / can be correct
-    if (word1.includes("/")) {
-      let word1options = word1.split("/").map(option => option.trim());
-      if (word1options.includes(word2)) {
-        console.log("Words match!");
-        setShowCorrect(true);
-        setShowWrong(false);
 
-        //switch to
-        setTimeout(() => {
-          handleNextWord();
-        }, 1000);
 
-        return; // Exit the function early since we found a match
-      } else {
-        console.log("Words do not match.");
-        setShowWrong(true);
-        setShowCorrect(false);
-        return; // Exit the function early since we did not find a match
-      }
-    }
-
-    if (word1 === word2) {
+    if (currentwordtranslation === clickedword) {
       console.log("Words match!");
       setShowCorrect(true);
       setShowWrong(false);
@@ -202,8 +183,8 @@ export default function Quiz1() {
       setRevealAnswerDiv(false);
       setShowExplanation(false);
 
-      let uniquewords = [...new Set(updatedWords.map(word => word.Meaning.Meaning))];
-      let excludecurrentword = new Set([...uniquewords].filter(word => word !== nextWord.word))
+      let uniquewords = [...new Set(originalquizwords.map(word => word.Meaning.Meaning))];
+      let excludecurrentword = new Set([...uniquewords].filter(word => word !== nextWord.Meaning.Meaning))
       console.log(excludecurrentword, 'excludecurrentword');
       let randomizedArray = Array.from(excludecurrentword).sort(() => Math.random() - 0.5);
       console.log(randomizedArray, 'randomizedArray');
@@ -252,7 +233,8 @@ export default function Quiz1() {
 
         {(wordspickchoose && wordspickchoose.length > 0) && (
           wordspickchoose.map((word, index) => (
-            <div className="pill-badge" key={index}>
+            <div className="pill-badge" key={index}
+              onClick={() => compareWords(word)}>
               <span>{word}</span>
             </div>
           ))
@@ -287,7 +269,19 @@ export default function Quiz1() {
             </div>
           )}
         </div>
-
+        <div className="showcorrectwrongdiv">
+          {showcorrect && (
+            <div className="correct-message">
+              <p>Correct!</p>
+            </div>
+          )}
+          {showwrong && (
+            <div className="wrong-message">
+              <p>Wrong! Try again.</p>
+            </div>
+          )
+          }
+        </div>
         {(!lessoncompletedv && currentquiz1word) && (
           <>
 
