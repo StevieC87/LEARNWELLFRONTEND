@@ -44,7 +44,7 @@ const flashcardSlice = createSlice({
     examples: [],
     pauseonnextprev: false,
     showmorebackcard: false,
-    userwordsperlesson: 15,
+    userwordsperlesson: '',
     difficultybuttonclicked: false
   },
 

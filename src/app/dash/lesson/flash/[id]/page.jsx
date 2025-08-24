@@ -6,16 +6,10 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   setAllWords2,
   setCurrentWord,
-  setShowAllWords,
-  setdifficultylevels,
   seterrorNoWords,
   setisloading,
   setallremainingwordsdata,
   setallknownwordsdata,
-  setnumberoffluentwords,
-  setnumberoffamiliarwords,
-  setnumberofuncertainwords,
-  setnumberofnewwords,
   setfluentWORDSArray,
   setfamiliarWORDSArray,
   setuncertainWORDSArray,
@@ -23,14 +17,12 @@ import {
   setTotalWordsKnown,
   setTotalWordsRemaining,
   setdisablediffbuttons,
-  // setoriginalarrayorder,
 } from "@/redux/slices/flashcardSlice";
 import BottomBar from "./components/BottomBar";
 import DifficultyButtons from "./components/DifficultyButtons";
 import ActualFlashcardSentences from "./components/ActualFlashcardSentences";
 import ChooseStack from "./components/ChooseStack";
 import LeftBar from "./components/LeftBar";
-import ProgressBar from "./components/ProgressBar";
 import { usePathname } from "next/navigation";
 import {
   getFlashcardsRemaining,
@@ -40,55 +32,18 @@ import { dynamichunneds } from '@/utilities/arrayswordshunneds';
 
 export default function FlashcardPage() {
   const dispatch = useDispatch();
-
   const pathname = usePathname();
-
   const slug = pathname.split("/").pop();
-  //console.log(slug, "slugsss");
+  console.log(slug, "slugsss");
   if (isNaN(slug)) {
     return <div>error</div>;
   }
   const wordsperlesson = useSelector((state) => state.flashcardSlice.userwordsperlesson);
-  console.log(wordsperlesson, "wordsperlessonwordsperlesson");
-  //first we clean out the redux to not show anything if we switch to another page
+  let wordstart1
+  let wordstart;
+  let wordend
+  let wordstartwordendarray
 
-  /*  */
-
-  let wordstartwordendarray = dynamichunneds(wordsperlesson);
-
-  let wordstart1 = wordstartwordendarray.find((item) => item.id === parseInt(slug));
-  // console.log(wordstart1, "wordstart1");
-  let wordstart = wordstart1.wordstart;
-  // console.log(wordstart, "wordstart");
-  let wordend = wordstart1.wordend;
-  // console.log(wordend, "wordend");
-
-  const hello = useSelector((state) => state.flashcardSlice.hello);
-  //console.log(hello, "hello");
-
-  const allwords = useSelector((state) => state.flashcardSlice.allwords);
-  const currentword = useSelector((state) => state.flashcardSlice.currentword);
-  const showOriginal = useSelector(
-    (state) => state.flashcardSlice.showOriginal
-  );
-  const showTranslation = useSelector(
-    (state) => state.flashcardSlice.showTranslation
-  );
-  const ShowRemainingWords = useSelector(
-    (state) => state.flashcardSlice.ShowRemainingWords
-  );
-  const wordsaved = useSelector((state) => state.flashcardSlice.wordsaved);
-  const isDarkMode = useSelector((state) => state.flashcardSlice.isDarkMode);
-  const difficultylevelSELECTED = useSelector(
-    (state) => state.flashcardSlice.difficultylevelSELECTED
-  );
-  const showallwords3 = useSelector(
-    (state) => state.flashcardSlice.showallwords3
-  );
-  const isloading = useSelector((state) => state.flashcardSlice.isloading);
-  const errorNoWords = useSelector(
-    (state) => state.flashcardSlice.errorNoWords
-  );
   const allremainingwordsdata = useSelector(
     (state) => state.flashcardSlice.allremainingwordsdata
   );
@@ -99,43 +54,20 @@ export default function FlashcardPage() {
     (state) => state.flashcardSlice.showRemainingWords2
   );
 
-  //!replace this with redux after
-  //  const [totalwordsknown, setTotalWordsKnown] = useState(0);
-  // const [totalwordsremaining, setTotalWordsRemaining] = useState(0);
-  const totalwordsknown = useSelector(
-    (state) => state.flashcardSlice.totalwordsknown
-  );
-  const totalwordsremaining = useSelector(
-    (state) => state.flashcardSlice.totalwordsremaining
-  );
 
-  let totalwordsremainingVAR;
-  let totalknownwrodsknownVAR;
+  useEffect(() => {
+    if (wordsperlesson) {
+      console.log(wordsperlesson, "wordsperlessonwordsperlesson");
+      wordstartwordendarray = dynamichunneds(wordsperlesson);
+      wordstart1 = wordstartwordendarray.find((item) => item.id === parseInt(slug));
+      // console.log(wordstart1, "wordstart1");
+      wordstart = wordstart1.wordstart;
+      // console.log(wordstart, "wordstart");
+      wordend = wordstart1.wordend;
+      // console.log(wordend, "wordend");
+    }
+  }, [wordsperlesson])
 
-  //USE EFFECT FUNCTIONS - TO GET WORDS (KNOWN & REMAINING)
-  //GET INITIAL WORDS
-  const getKnownWords = async (wordstart, wordend) => {
-    //alert("000");
-    let knownwords = await getFlashcardsKnownWords(wordstart, wordend);
-    // console.log(knownwords, "knownwords");
-    if (!knownwords || knownwords.length === 0) {
-      //alert("111");
-      return;
-    } else {
-      //alert("2222");
-      return knownwords;
-    }
-  };
-  //GET REMAINING WORDS
-  const getRemainingWords = async (wordstart, wordend) => {
-    let dataknown = await getFlashcardsRemaining(wordstart, wordend);
-    //MOVE THIS SETTERS - to where called
-    if (dataknown || dataknown.length === 0) {
-      return dataknown;
-    } else {
-      return [];
-    }
-  };
   //--------------------------------------------------
   function filterbydifficulty(array, difficulty) {
     let totalbydifficulty = array.filter(
@@ -151,12 +83,31 @@ export default function FlashcardPage() {
       //WE DONT HAVE 'ALL WORDS' ARRAY ANYMORE (that takes either)
 
       //------------GET & SET REMAINING WORDS -----------------------
+      const getKnownWords = async (slug) => {
+        //alert("000");
+        let knownwords = await getFlashcardsKnownWords(slug);
+        // console.log(knownwords, "knownwords");
+        if (!knownwords || knownwords.length === 0) {
+          //alert("111");
+          return;
+        } else {
+          //alert("2222");
+          return knownwords;
+        }
+      };
+      const getRemainingWords = async (slug) => {
+        let dataknown = await getFlashcardsRemaining(slug);
+        //MOVE THIS SETTERS - to where called
+        if (dataknown || dataknown.length === 0) {
+          return dataknown;
+        } else {
+          return [];
+        }
+      };
       let getremainingwords;
-      if (wordstart && wordend) {
-        getremainingwords = await getRemainingWords(wordstart, wordend);
-      } else {
-        return <div>error</div>;
-      }
+
+      getremainingwords = await getRemainingWords(slug);
+
       if (getremainingwords.length > 0) {
         console.log(getremainingwords, "getremainingwords");
         // console.log(getremainingwords, "getremainingwords");
@@ -195,7 +146,7 @@ export default function FlashcardPage() {
       }
       //------------GET & SET  KNOWN WORDS -----------------------
 
-      let getknownwordsf = await getKnownWords(wordstart, wordend);
+      let getknownwordsf = await getKnownWords(slug);
       // alert("hello");
       if (getknownwordsf && getknownwordsf.length > 0) {
         // console.log(getknownwordsf, "getknownwordsf");
@@ -428,3 +379,37 @@ console.log(data, "data"); */
     console.log(flattenedArray, "newarray111");
   }, [difficultylevelSELECTED]);
  */
+
+
+/* const allwords = useSelector((state) => state.flashcardSlice.allwords);
+const currentword = useSelector((state) => state.flashcardSlice.currentword);
+const showOriginal = useSelector(
+ (state) => state.flashcardSlice.showOriginal
+);
+const showTranslation = useSelector(
+ (state) => state.flashcardSlice.showTranslation
+);
+const ShowRemainingWords = useSelector(
+ (state) => state.flashcardSlice.ShowRemainingWords
+);
+const wordsaved = useSelector((state) => state.flashcardSlice.wordsaved);
+const isDarkMode = useSelector((state) => state.flashcardSlice.isDarkMode);
+const difficultylevelSELECTED = useSelector(
+ (state) => state.flashcardSlice.difficultylevelSELECTED
+);
+const showallwords3 = useSelector(
+ (state) => state.flashcardSlice.showallwords3
+);
+const isloading = useSelector((state) => state.flashcardSlice.isloading);
+const errorNoWords = useSelector(
+ (state) => state.flashcardSlice.errorNoWords
+); 
+
+  const totalwordsknown = useSelector(
+    (state) => state.flashcardSlice.totalwordsknown
+  );
+  const totalwordsremaining = useSelector(
+    (state) => state.flashcardSlice.totalwordsremaining
+  );
+
+*/

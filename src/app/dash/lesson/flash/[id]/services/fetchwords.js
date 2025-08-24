@@ -2,9 +2,9 @@
       url = `http://localhost:3001/api/flashcardknownwords/`;
    */
 
-export const getFlashcardsKnownWords = async (wordstart, wordend) => {
+export const getFlashcardsKnownWords = async (slug) => {
   try {
-    let url = `${process.env.NEXT_PUBLIC_API_URL}/api/flashcardknownwords?wordstart=${wordstart}&wordend=${wordend}`;
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/api/flashcardknownwords?lesson=${slug}`;
     const response = await fetch(url, {
       method: "GET",
       headers: {
@@ -33,10 +33,10 @@ export const getFlashcardsKnownWords = async (wordstart, wordend) => {
   /* */
 };
 
-export const getFlashcardsRemaining = async (wordstart, wordend) => {
+export const getFlashcardsRemaining = async (slug) => {
   try {
     console.log("API URL:", process.env.NEXT_PUBLIC_API_URL);
-    let url = `${process.env.NEXT_PUBLIC_API_URL}/api/flashcardremainingSPLITCARDS?wordstart=${wordstart}&wordend=${wordend}`;
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/api/flashcardremainingSPLITCARDS?lesson=${slug}`;
     console.log(url, "urlurlurlurlurlurl");
     const response = await fetch(url, {
       method: "GET",

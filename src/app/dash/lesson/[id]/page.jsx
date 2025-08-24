@@ -1,8 +1,8 @@
 
 import Link from "next/link";
-export default function LessonPage({ params }) {
+export default async function LessonPage({ params }) {
 
-  const lessonid = params.id
+  const lessonid = await params.id
   return (
     <>
 
