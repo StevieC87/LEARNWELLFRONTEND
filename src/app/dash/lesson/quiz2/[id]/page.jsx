@@ -19,7 +19,7 @@ import {
 } from "@/redux/slices/flashcardSlice";
 import customSessionStorage from "@/utilities/customSessionStorage";
 
-export default function Quiz1() {
+export default function Quiz2() {
   const dispatch = useDispatch();
   const pathname = usePathname();
 
@@ -185,7 +185,7 @@ export default function Quiz1() {
       // If it's the first word, just proceed to the next one
       setLessonCompletedv(true)
       customSessionStorage.setItem('wordswithmistaketosaveforreviewQUIZ2', JSON.stringify(wordswithmistaketosaveforreview));
-      console.log(wordswithmistaketosaveforreview, 'wordswithmistaketosaveforreviewQUIZ1');
+      console.log(wordswithmistaketosaveforreview, 'wordswithmistaketosaveforreviewQUIZ2');
     }
     else if (currentIndex < wordsforquiz1.length - 1) {
       const nextWord = wordsforquiz1[currentIndex + 1];
@@ -241,6 +241,7 @@ export default function Quiz1() {
 
   const takelessonagain = () => {
     setLessonCompletedv(false);
+    setWordsforquiz1(originalquizwords)
     setWordsLeftInStack(originalnumberwords);
     setCurrentQuiz1Word(wordsforquiz1[0]);
     setShowExamples(false);
