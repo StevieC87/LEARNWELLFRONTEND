@@ -217,6 +217,25 @@ const ActualFlashcard = (props) => {
       return <div>no words to show</div>;
     }
   };
+  const matchdifficultytocorrectword = (difficulty) => {
+    console.log(difficulty, 'difficulty2332');
+    if (difficulty === 'New') {
+      console.log('jello');
+      return <div className="bottomdiff new"></div> //Didn't Know
+    }
+    else if (difficulty === 'Uncertain') {
+      return <div className="bottomdiff uncertain"> </div> //Unsure
+    }
+    else if (difficulty === 'Familiar') {
+      return <div className="bottomdiff familiar"></div> //Knew it
+    }
+    else if (difficulty === 'Fluent') {
+      return <div className="bottomdiff fluent" ></div> //Never Show Again
+    }
+    else {
+      return "Unknown Difficulty";
+    }
+  }
   return (
     <>
       <div
@@ -310,6 +329,7 @@ const ActualFlashcard = (props) => {
                     )
                   )}
                 </div>
+                {/* here to show the difficulty level if showing covered and oriignal */}
 
               </>
             )}
@@ -329,6 +349,17 @@ const ActualFlashcard = (props) => {
               currentword={currentword}
               othermeanings={othermeaningsArray}
             />
+          )}
+          {!showRemainingWords2 && (
+            <>
+              <div className="mt-4 ">
+                {/* <span>Difficulty: </span> */}
+                <span className="fontbold">
+                  {currentword.difficulty ? matchdifficultytocorrectword(currentword.difficulty) : "Not set"}
+                </span>
+              </div>
+
+            </>
           )}
         </div>
       </div>

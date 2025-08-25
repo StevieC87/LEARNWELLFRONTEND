@@ -1,8 +1,8 @@
 html {
   width: 100vw;
 }
-body {
-}
+
+body {}
 
 a {
   text-decoration: none !important;
@@ -33,6 +33,7 @@ a {
   font-weight: normal;
   font-style: normal;
 }
+
 @font-face {
   font-family: "PermanentMarker";
   src: url("../../public/fonts/PermanentMarker.ttf");
@@ -46,6 +47,7 @@ a {
   font-family: GloriaHallelujah;
   filter: url(#chalk-filter-text);
 }
+
 .cutive {
   font-family: Cutive;
 }
@@ -53,6 +55,7 @@ a {
 .specialelite {
   font-family: SpecialElite;
 }
+
 .marker {
   font-family: PermanentMarker;
 }
@@ -60,15 +63,19 @@ a {
 .white {
   color: white;
 }
+
 .blacktext {
   color: black;
 }
+
 .fontsmall {
   font-size: 8pt;
 }
+
 .fontweightregular {
   font-weight: 400 !important;
 }
+
 .container {
   background-color: #ffffff50;
   border: 1px solid gray;
@@ -76,6 +83,7 @@ a {
   display: grid;
   justify-items: center;
 }
+
 .columnword100 {
   width: 200px;
 }
@@ -85,6 +93,7 @@ a {
   border-radius: 10px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
+
 .titleh1 {
   text-align: center;
 }
@@ -101,15 +110,19 @@ a {
   margin-top: 10px;
   gap: 20px;
 }
+
 .bold {
   font-weight: bold;
 }
+
 .black {
   color: black;
 }
+
 .gray {
   color: gray;
 }
+
 .green {
   color: green;
 }
@@ -117,21 +130,27 @@ a {
 .semibold {
   font-weight: 600;
 }
+
 .fontmedium {
   font-size: 10pt;
 }
+
 .fontsmall {
   font-size: 8pt;
 }
+
 .centertext {
   text-align: center;
 }
+
 .underline {
   text-decoration: underline;
 }
+
 hr.dashed {
   border-top: 3px dashed #bbb;
 }
+
 .eighty {
   width: 80%;
   text-align: center;
@@ -144,6 +163,7 @@ hr.dashed {
 .padtop10 {
   padding-top: 10px;
 }
+
 .centeredhr {
   /* Adjust the width as needed */
   margin: 0 auto;
@@ -152,12 +172,14 @@ hr.dashed {
 .btn {
   font-size: 10pt;
 }
+
 .mybtn {
   padding: 2px 2px 2px 2px !important;
   height: 30px;
   margin-left: 0px;
   color: black !important;
 }
+
 .bold {
   font-weight: bold;
 }
@@ -184,9 +206,11 @@ hr.dashed {
 .chalkborder.redborder {
   --chalk-border-color: red;
 }
+
 .chalkborder.purpleborder {
   --chalk-border-color: purple;
 }
+
 .chalkborder.cyanborder {
   --chalk-border-color: cyan;
 }
@@ -236,6 +260,7 @@ hr.dashed {
   filter: blur(1px) contrast(1.2);
   /*   transform: rotate(1deg) scale(0.99); */
 }
+
 .chalkunderline {
   --chalk-underline-color: white;
   text-decoration: underline;
@@ -264,15 +289,19 @@ hr.dashed {
 .chalkunderline.yellow {
   text-decoration-color: var(--chalkyellow);
 }
+
 .chalkunderline.blue {
   text-decoration-color: var(--chalkblue);
 }
+
 .chalkunderline.red {
   text-decoration-color: var(--chalkred);
 }
+
 .chalkunderline.purple {
   text-decoration-color: var(--chalkpurple);
 }
+
 .chalkunderline.cyan {
   text-decoration-color: var(--chalkcyan);
 }
@@ -326,19 +355,23 @@ hr.dashed {
   font-size: 20pt;
   color: green;
 }
+
 .lessoncardtext {
   /*   font-size: 10pt;
   font-family: cutive; */
 }
+
 .lessoncardtextnumber {
   /* font-family: "SpecialElite" !important;
   font-size: 14pt; */
 }
+
 .typewritebutton {
   /*  position: relative; 
   font-family: "Special Elite", cursive;
   color: black; */
 }
+
 /* .lessoncard {
   background-color: #fff;
   margin: 5px;
@@ -404,4 +437,24 @@ body.dark-mode .mybtn {
 .dashboardcard {
   width: 200px;
   border: 1px solid gray;
+}
+
+.bottomdiff {
+  height: 20px;
+}
+
+.fluent {
+  background: var(--fluent-color);
+}
+
+.familiar {
+  background-color: var(--familiar-color);
+}
+
+.uncertain {
+  background-color: var(--uncertain-color);
+}
+
+.new {
+  background-color: var(--new-color);
 }
