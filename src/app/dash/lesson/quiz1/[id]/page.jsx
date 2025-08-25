@@ -49,7 +49,7 @@ export default function Quiz1() {
   const allknownwordsdata = useSelector((state) => state.flashcardSlice.totalWordsKnown);
   const totalwordsknown = useSelector((state) => state.flashcardSlice.totalwordsknown);
 
-  let wordswithmistaketosaveforreview = []
+  const [wordswithmistaketosaveforreview, setWordsWithMistakeToSaveForReview] = useState([]);
 
   const [showexamples, setShowExamples] = useState(false);
   const [showexamplescount, setShowExamplesCount] = useState(0);
@@ -142,8 +142,7 @@ export default function Quiz1() {
       } else {
         console.log("Words do not match.");
         setShowWrong(true);
-        wordswithmistaketosaveforreview.push(currentquiz1word)
-
+        setWordsWithMistakeToSaveForReview(prev => [...prev, currentquiz1word]);
         setShowCorrect(false);
         return; // Exit the function early since we did not find a match
       }
@@ -165,7 +164,7 @@ export default function Quiz1() {
       setShowWrong(true);
       setShowCorrect(false);
       setShowWrong(true);
-      wordswithmistaketosaveforreview.push(currentquiz1word)
+      setWordsWithMistakeToSaveForReview(prev => [...prev, currentquiz1word]);
       console.log(wordswithmistaketosaveforreview, 'wordswithmistaketosaveforreviewQUIZ1');
       // Handle the case where words do not match
     }

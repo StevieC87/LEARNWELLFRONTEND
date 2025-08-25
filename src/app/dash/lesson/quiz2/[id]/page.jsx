@@ -66,7 +66,10 @@ export default function Quiz2() {
   // console.log(wordstart, "wordstart");
   let wordend = wordstart1.wordend;
   // console.log(wordend, "wordend");
-  let wordswithmistaketosaveforreview = [];
+  const [wordswithmistaketosaveforreview, setWordsWithMistakesToSaveForReview] = useState([
+    { lesson: slug }
+  ]);
+
 
   useEffect(() => {
 
@@ -86,7 +89,7 @@ export default function Quiz2() {
 
         console.log(knownwordsfiltered, "knownwordsfiltered");
         //keep only 3 of total
-        //knownwordsfiltered = knownwordsfiltered.slice(0, 3);
+        knownwordsfiltered = knownwordsfiltered.slice(0, 3);
         console.log(knownwordsfiltered, "knownwordsfiltered");
         dispatch(setTotalWordsKnown(knownwordsfiltered.length));
         setWordsforquiz1(knownwordsfiltered);
@@ -162,7 +165,14 @@ export default function Quiz2() {
     } else {
       console.log("Words do not match.");
       setShowWrong(true);
-      wordswithmistaketosaveforreview.push(currentquiz1word)
+
+      // setWordsWithMistakesToSaveForReview([...wordswithmistaketosaveforreview, currentquiz1word]);
+      setWordsWithMistakesToSaveForReview(prev => {
+        if (!prev.some(word => word.Meaning.Meaning === currentquiz1word.Meaning.Meaning)) {
+          return [...prev, currentquiz1word];
+        }
+        return prev;
+      });
       setShowCorrect(false);
       // Handle the case where words do not match
     }
