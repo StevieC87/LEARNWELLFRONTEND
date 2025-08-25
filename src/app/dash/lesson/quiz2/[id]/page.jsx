@@ -50,6 +50,8 @@ export default function Quiz1() {
 
   const [wordspickchoose, setWordspickChoose] = useState([])
 
+  const [noknownwords, setNoKnownWords] = useState(false);
+
   const inputRef = useRef(null);
   //console.log(slug, "slugsss");
   if (isNaN(slug)) {
@@ -71,6 +73,7 @@ export default function Quiz1() {
       // console.log(knownwords, "knownwords");
       if (!knownwords || knownwords.length === 0) {
         //alert("111");
+        setNoKnownWords(true);
         console.log('nonewowrds');
         return;
       } else {
@@ -232,9 +235,15 @@ export default function Quiz1() {
 
       <div className="quiz1-container mt-10">
         {/*  <h1>Quiz 1</h1> */}
-
+        {noknownwords && (
+          <div className="text-center">
+            <h2>No known words in this lesson!</h2>
+            <p>Please study the flashcards first to have known words for the quiz.</p>
+          </div>
+        )
+        }
         <div className="showwordtotranslate">
-          {(!lessoncompletedv && currentquiz1word) && (
+          {(!lessoncompletedv && currentquiz1word && !noknownwords) && (
             <>
 
               <p className="text-center">Match the word from the list</p>

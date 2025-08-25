@@ -17,6 +17,7 @@ import {
   setTotalWordsKnown,
   setTotalWordsRemaining,
   setdisablediffbuttons,
+  setShowRemainingWords2
 } from "@/redux/slices/flashcardSlice";
 import BottomBar from "./components/BottomBar";
 import DifficultyButtons from "./components/DifficultyButtons";
@@ -78,6 +79,7 @@ export default function FlashcardPage() {
 
   //--------------------------------------------------
   useEffect(() => {
+    dispatch(setShowRemainingWords2(true))
     const fetchwordsBOTH = async () => {
       //AFTER FETCH - WE ONLY LOAD THE WORDS to their RESPECTIVE ARRAY
       //WE DONT HAVE 'ALL WORDS' ARRAY ANYMORE (that takes either)
