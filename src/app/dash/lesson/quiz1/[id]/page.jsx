@@ -33,7 +33,8 @@ import {
   setdisablediffbuttons,
   // setoriginalarrayorder,
 } from "@/redux/slices/flashcardSlice";
-
+import Link from 'next/link';
+import customSessionStorage from "@/utilities/customSessionStorage";
 export default function Quiz1() {
   const dispatch = useDispatch();
   const pathname = usePathname();
@@ -47,6 +48,8 @@ export default function Quiz1() {
   const isLoading = useSelector((state) => state.flashcardSlice.isLoading);
   const allknownwordsdata = useSelector((state) => state.flashcardSlice.totalWordsKnown);
   const totalwordsknown = useSelector((state) => state.flashcardSlice.totalwordsknown);
+
+  let wordswithmistaketosaveforreview = []
 
   const [showexamples, setShowExamples] = useState(false);
   const [showexamplescount, setShowExamplesCount] = useState(0);
@@ -74,14 +77,10 @@ export default function Quiz1() {
   // console.log(wordstartwordendarray, "wordstartwordendarray");
 
   let wordstart1 = wordstartwordendarray.find((item) => item.id === parseInt(slug));
-  // console.log(wordstart1, "wordstart1");
   let wordstart = wordstart1.wordstart;
-  // console.log(wordstart, "wordstart");
   let wordend = wordstart1.wordend;
-  // console.log(wordend, "wordend");
 
   useEffect(() => {
-
     const getknownwordsfromapi = async () => {
       let knownwords = await getFlashcardsKnownWords(slug);
       // console.log(knownwords, "knownwords");
@@ -96,6 +95,7 @@ export default function Quiz1() {
 
         console.log(knownwordsfiltered, "knownwordsfiltered");
         //keep only 3 of total
+        //   knownwordsfiltered = knownwordsfiltered.slice(0, 3);
         console.log(knownwordsfiltered, "knownwordsfiltered");
         dispatch(setTotalWordsKnown(knownwordsfiltered.length));
         setWordsforquiz1(knownwordsfiltered);
@@ -109,10 +109,8 @@ export default function Quiz1() {
 
       }
     }
-
     getknownwordsfromapi()
   }, []);
-
   useEffect(() => {
     setWordType(currentquiz1word?.Meaning.WordType);
     setCurrentQuizWordGerman(currentquiz1word?.word);
@@ -121,7 +119,6 @@ export default function Quiz1() {
     setCurrentWordNumberOfExamples(currentquiz1word?.Meaning?.CommonFields?.Examples?.length || 0);
 
   }, [currentquiz1word]);
-
   const compareWords = (word1, word2) => {
     console.log(word1, "word1");
     console.log(word2, "word2");
@@ -145,6 +142,8 @@ export default function Quiz1() {
       } else {
         console.log("Words do not match.");
         setShowWrong(true);
+        wordswithmistaketosaveforreview.push(currentquiz1word)
+
         setShowCorrect(false);
         return; // Exit the function early since we did not find a match
       }
@@ -165,6 +164,9 @@ export default function Quiz1() {
       console.log("Words do not match.");
       setShowWrong(true);
       setShowCorrect(false);
+      setShowWrong(true);
+      wordswithmistaketosaveforreview.push(currentquiz1word)
+      console.log(wordswithmistaketosaveforreview, 'wordswithmistaketosaveforreviewQUIZ1');
       // Handle the case where words do not match
     }
 
@@ -179,7 +181,9 @@ export default function Quiz1() {
     console.log(currentIndex, "currentIndex");
     console.log(wordsforquiz1.length, "wordsforquiz1.length");
     if (currentIndex === wordsforquiz1.length - 1) {
-      // If it's the first word, just proceed to the next one
+      // If it's the first word, just proceed to the next one.
+      customSessionStorage.setItem('wordswithmistaketosaveforreviewQUIZ1', JSON.stringify(wordswithmistaketosaveforreview));
+      console.log(wordswithmistaketosaveforreview, 'wordswithmistaketosaveforreviewQUIZ1');
       setLessonCompletedv(true)
     }
     else if (currentIndex < wordsforquiz1.length - 1) {
@@ -252,7 +256,7 @@ export default function Quiz1() {
             <div className="lessoncompleteddiv text-center">
               <h2>Lesson Completed!</h2>
               <p className="underline cursor-pointer" onClick={() => takelessonagain()}>Take again!</p>
-              <p className="underline cursor-pointer" >or Do the Next Quiz!</p>
+              <Link href={`../quiz2/${slug}`}><p className="underline cursor-pointer" >or Do the Next Quiz!</p></Link>
             </div>
           )}
         </div>

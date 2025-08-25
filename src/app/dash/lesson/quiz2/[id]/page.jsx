@@ -17,6 +17,7 @@ import {
   setallknownwordsdata,
   setTotalWordsKnown,
 } from "@/redux/slices/flashcardSlice";
+import customSessionStorage from "@/utilities/customSessionStorage";
 
 export default function Quiz1() {
   const dispatch = useDispatch();
@@ -65,6 +66,7 @@ export default function Quiz1() {
   // console.log(wordstart, "wordstart");
   let wordend = wordstart1.wordend;
   // console.log(wordend, "wordend");
+  let wordswithmistaketosaveforreview = [];
 
   useEffect(() => {
 
@@ -99,7 +101,18 @@ export default function Quiz1() {
         let wordstoaddtoarraytochoose;
         //let uniquewordsinArray 
         //first get unique words from knownwordsfiltered array 
-        let uniquewords = [...new Set(knownwordsfiltered.map(word => word.Meaning.Meaning))];
+        let currentwordinGerman = knownwordsfiltered[0].word;
+        let filtersamewords = knownwordsfiltered.filter(word => word.word !== currentwordinGerman);
+        console.log(filtersamewords, 'filtersamewords');
+
+        let uniquewords = [...new Set(filtersamewords.map(word => word.Meaning.Meaning))];
+        console.log(uniquewords, 'uniquewords');
+        //we need to find the meanings of the word that mean the same
+        let currentwordis = knownwordsfiltered[0].Meaning.Meaning;
+
+        //exclude 
+        console.log(currentwordis,);
+
         let excludecurrentword = new Set([...uniquewords].filter(word => word !== knownwordsfiltered[0].Meaning.Meaning))
         console.log(excludecurrentword, 'excludecurrentword');
         let randomizedArray = Array.from(excludecurrentword).sort(() => Math.random() - 0.5);
@@ -149,6 +162,7 @@ export default function Quiz1() {
     } else {
       console.log("Words do not match.");
       setShowWrong(true);
+      wordswithmistaketosaveforreview.push(currentquiz1word)
       setShowCorrect(false);
       // Handle the case where words do not match
     }
@@ -161,6 +175,8 @@ export default function Quiz1() {
     const index = wordsforquiz1.indexOf(currentquiz1word);
     setCurrentIndexis(index + 1);
   }, [currentquiz1word]);
+
+
   const handleNextWord = () => {
     const currentIndex = wordsforquiz1.indexOf(currentquiz1word);
     console.log(currentIndex, "currentIndex");
@@ -168,6 +184,8 @@ export default function Quiz1() {
     if (currentIndex === wordsforquiz1.length - 1) {
       // If it's the first word, just proceed to the next one
       setLessonCompletedv(true)
+      customSessionStorage.setItem('wordswithmistaketosaveforreviewQUIZ2', JSON.stringify(wordswithmistaketosaveforreview));
+      console.log(wordswithmistaketosaveforreview, 'wordswithmistaketosaveforreviewQUIZ1');
     }
     else if (currentIndex < wordsforquiz1.length - 1) {
       const nextWord = wordsforquiz1[currentIndex + 1];
@@ -186,8 +204,20 @@ export default function Quiz1() {
       setRevealAnswerDiv(false);
       setShowExplanation(false);
 
-      let uniquewords = [...new Set(originalquizwords.map(word => word.Meaning.Meaning))];
+      console.log(originalquizwords, 'originalquizwords');
+      let currentwordinGerman = nextWord.word;
+      let filtersamewords = originalquizwords.filter(word => word.word !== currentwordinGerman);
+      console.log(filtersamewords, 'filtersamewords');
+
+      let uniquewords = [...new Set(filtersamewords.map(word => word.Meaning.Meaning))];
+      console.log(uniquewords, 'uniquewords');
+      //we need to find the meanings of the word that mean the same
+      let currentwordis = nextWord.Meaning.Meaning;
+
+      //exclude 
+      console.log(currentwordis,);
       let excludecurrentword = new Set([...uniquewords].filter(word => word !== nextWord.Meaning.Meaning))
+
       console.log(excludecurrentword, 'excludecurrentword');
       let randomizedArray = Array.from(excludecurrentword).sort(() => Math.random() - 0.5);
       console.log(randomizedArray, 'randomizedArray');
@@ -223,6 +253,7 @@ export default function Quiz1() {
     inputRef.current?.focus(); // Refocus the input field
   }
 
+  //,TO SHOW LESSON COMPLETED IF WORDSLEFTINSTACK IS 0
   useEffect(() => {
     if (wordsleftinstack === 0) {
       setLessonCompletedv(true)
@@ -259,10 +290,10 @@ export default function Quiz1() {
 
                 {(wordspickchoose && wordspickchoose.length > 0) && (
                   wordspickchoose.map((word, index) => (
-                    <div className="pill-badge" key={index}
+                    <button className="pill-badge cursor-pointer" key={index}
                       onClick={() => compareWords(word)}>
                       <span>{word}</span>
-                    </div>
+                    </button>
                   ))
                 )}
 
