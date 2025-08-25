@@ -7,7 +7,6 @@ import JSONLDSlice from "../slices/JSONLDSlice";
 import UISlice from "../slices/UISlice";
 import SharedSlice from "../slices/SharedSlice";
 import SpecialSlice from "../slices/SpecialSlice";
-import mySlice from "../slices/mySlice";
 import flashcardSlice from "../slices/flashcardSlice";
 
 const rootReducer = combineReducers({
@@ -18,7 +17,6 @@ const rootReducer = combineReducers({
   UISlice: UISlice,
   SharedSlice: SharedSlice,
   SpecialSlice: SpecialSlice,
-  mySlice: mySlice,
   flashcardSlice: flashcardSlice,
   /* UtilsSlice: UtilsSlice, */
 });

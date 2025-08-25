@@ -329,7 +329,7 @@ export default function UserProfile() {
               <span className="text-red-500">{errormessage}</span>
             </div>
           </div>
-          <div className="mt-4">
+          {/*    <div className="mt-4">
             <span className="poppinsSemiBold">Two-factor Authentication</span>
 
             {!twofactorenabled && (
@@ -338,7 +338,7 @@ export default function UserProfile() {
                   e.preventDefault(); // Prevent default form submission
                   router.push('/dash/users/profile/twofactor');
                 }}
-              /* ?userid=' + useridparams */
+        
               >
                 Enable</button>
             )}
@@ -353,7 +353,7 @@ export default function UserProfile() {
                 Disable
               </button>
             )}
-          </div>
+          </div> */}
 
         </form>
       )}

@@ -72,6 +72,8 @@ const Leftbar = () => {
     );
     dispatch(setnewwordsArray(getnewwordsarray));
   }, [allknownwordsdata]);
+
+
   const addremoveDifficulty = (difficulty) => {
     // alert("addremoveDifficulty");
     //if it exists remove from array of difficulties
