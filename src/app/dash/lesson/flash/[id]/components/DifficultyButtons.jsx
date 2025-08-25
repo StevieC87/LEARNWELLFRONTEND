@@ -68,6 +68,11 @@ const DifficultyButtons = () => {
     (state) => state.flashcardSlice.disablediffbuttons
   );
 
+  const difficultylevels = useSelector(
+    (state) => state.flashcardSlice.difficultylevels
+  );
+  console.log(difficultylevels, "difficultylevels from diffbtns");
+
   const handleChangeWord = () => {
     let currentindex = allwords.indexOf(currentword);
     if (currentindex === allwords.length - 1) {
@@ -80,7 +85,6 @@ const DifficultyButtons = () => {
   };
 
   const submitWord = async (difficulty) => {
-
     dispatch(setdifficultybuttonclicked(true))
     let wordtosubmit = {
       // wordde: currentword.word,
@@ -127,11 +131,42 @@ const DifficultyButtons = () => {
         // console.log(, "currentwordindex1");
         //IF WE ARE SAVING AT SAME DIFFICULTY AS ORIGINAL - dont remove from ALL WORDS
         let existingdifficultyknownword = currentword.difficulty;
+        console.log(existingdifficultyknownword, "existingdifficultyknownword");
         let newdifficulty = difficulty;
-        if (!existingdifficultyknownword === newdifficulty) {
-          let filtered = allwords.filter((word) => word._id !== currentwordid);
-          dispatch(setAllWords2(filtered));
+        console.log(newdifficulty, "newdifficulty");
+        console.log(allwords, "allwordsBEFORECHANGE");
+
+        //ALL WORDS DEPENDS ON WHAT DIFFICULTIES WE ARE SHOWING RIGHT NOW \
+        //so e.g if are dshowing new, and unsure, if we move them within two shouldn tchange, 
+        //but if e.g. we are shwoing new and fluent, and we move it to another one, IT SHOLDNT INCLUDE THIS WORD ANYMORE. 
+        let thisworddifficultylevel = currentword.difficulty;
+        console.log(thisworddifficultylevel, "thisworddifficultylevel");
+        //! here dePENDS IF WE ARE IN WHAT MODE : COVERED OR REMAINIGN
+        if (!showRemainingWords2) {
+
+          if (!difficultylevels.includes(difficulty)) {
+            //if we are showing the difficulty level of the current word - then remove it from allwords
+            let filtered = allwords.filter(
+              (word) => word._id !== currentwordid
+            );
+            dispatch(setAllWords2(filtered));
+            console.log(filtered, "allwordsAFTERCHANGE");
+            if (allwords.length === 1) {
+              alert('one left')
+              dispatch(setCurrentWord({}));
+              dispatch(setAllWords2([]));
+
+            }
+          }
+
         }
+        else if (showRemainingWords2)
+          if (existingdifficultyknownword !== newdifficulty) {
+            let filtered = allwords.filter((word) => word._id !== currentwordid);
+            dispatch(setAllWords2(filtered));
+            console.log(filtered, 'allwordsAFTERCHANGE');
+          }
+
 
       } else {
 
@@ -158,14 +193,10 @@ const DifficultyButtons = () => {
         dispatch(setTotalWordsRemaining(totalwordsremaining - 1));
         dispatch(setallknownwordsdata([...allknownwordsdata, newcurr]));
       }
-      if (showRemainingWords2) {
+      if (allwords.length > 1) {
+        handleChangeWord("next");
       }
-      handleChangeWord("next");
-      /*   setTimeout(() => {
-          dispatch(setWordSaved(false));
-          //   setWordSaved(false);
-          handleChangeWord("next");
-        }, 1000); */
+
     }
     setTimeout(() => {
       dispatch(setdifficultybuttonclicked(false))
