@@ -101,7 +101,6 @@ export default function Quiz4() {
       let knownwords = await getFlashcardsKnownWords(slug);
       // console.log(knownwords, "knownwords");
       if (!knownwords || knownwords.length === 0) {
-        //alert("111");
         return;
       } else {
         //randomise order 
@@ -133,26 +132,21 @@ export default function Quiz4() {
           let randomIndex = Math.floor(Math.random() * examples.length);
           setCurrentExample(examples[randomIndex]);
           setCurrentExampleEnglish(examples[randomIndex].ExampleSentenceEN);
-          //split into individual words 
-          // let wordsarray = filteredExamples[randomIndex].ExampleSentenceDE.split(/[\s.,!?]+/)
-          //   let wordsarray = filteredExamples[randomIndex].ExampleSentenceDE.split(/(\s+|,)/);
-          //  wordsarray = wordsarray.filter(word => !word.includes('.') && word.trim() !== ""); // Remove words with dots and empty strings
-          /*  let wordsarray = examples[randomIndex].ExampleSentenceDE.split(/(\s+|,|\?)/);
-           //wordsarray = wordsarray.filter(word => word.trim() !== "." && word.trim() !== ""); // Remove dots and empty strings
-           wordsarray = wordsarray.filter(word => !word.includes('.') && word.trim() !== ""); // Remove words with dots and empty strings */
+
           let wordsarray = examples[randomIndex].ExampleSentenceDE.split(/(\s+|,|\?)/);
           wordsarray = wordsarray
             .map(word => word.replace(/\./g, "")) // Remove dots from words
             .filter(word => word.trim() !== ""); // Remove empty strings
-          console.log(wordsarray, "wordsarray");
-          console.log(wordsarray, "wordsarray");
-          console.log(wordsarray, "wordsarray");
+          console.log(wordsarray, "wordsarray1");
+          console.log(wordsarray, "wordsarray2");
+          console.log(wordsarray, "wordsarray3");
           setCurrentExampleOrderedWords(wordsarray)
-          setOriginalSentenceWordArrayLength = wordsarray.length;
-          let randomizeorder = wordsarray.sort(() => Math.random() - 0.5);
+          setOriginalSentenceWordArrayLength(wordsarray.length);
+
+          let randomizeorder = [...wordsarray].sort(() => Math.random() - 0.5); // Create a copy before sorting
           console.log(randomizeorder, 'randomizeorder');
           setWordspickChoose(randomizeorder);
-
+          console.log(wordsarray, "wordsarray4");
         } else {
           setCurrentExample(examples[0]);
           setCurrentExampleEnglish(examples[0].ExampleSentenceEN);
@@ -219,18 +213,38 @@ export default function Quiz4() {
 
     setCurrentExampleScrambledreordered((prev) => [...prev, clickedword]);
     //remove from setWordspickChoose
-    setWordspickChoose((prev) => prev.filter(word => word !== clickedword));
+    setWordspickChoose((prev) => {
+      const index = prev.findIndex(word => word === clickedword);
+      if (index !== -1) {
+        return [...prev.slice(0, index), ...prev.slice(index + 1)];
+      }
+      return prev; // If the word is not found, return the array as is
+    });
     let currentword = currentquiz1word.word
     console.log(currentword, 'currentword');
     console.log(clickedword, 'clickedword');
 
   }
 
+  const excludeword = (clickedword) => {
+    setCurrentExampleScrambledreordered((prev) => prev.filter(word => word !== clickedword));
+
+    //remove from setWordspickChoose
+    setWordspickChoose((prev) => [...prev, clickedword]);
+  }
+
 
   useEffect(() => {
     if (currentexamplescrambledreordered) {
+      console.log('seeifmatch');
+      console.log(originalsentencewordsarraylength, 'originalsentencewordsarraylength');
+      console.log(currentexamplescrambledreordered.length, 'currentexamplescrambledreorderedlength');
       if (originalsentencewordsarraylength === currentexamplescrambledreordered.length) {
         // Check if the arrays match
+        console.log('lengthsmatch');
+
+        console.log(currentexampleorderedwords, 'currentexampleorderedwords');
+        console.log(currentexamplescrambledreordered, 'currentexamplescrambledreordered');
         const areArraysEqual = JSON.stringify(currentexampleorderedwords) === JSON.stringify(currentexamplescrambledreordered);
 
         if (areArraysEqual) {
@@ -256,85 +270,37 @@ export default function Quiz4() {
     const index = wordsforquiz1.indexOf(currentquiz1word);
     setCurrentIndexis(index + 1);
   }, [currentquiz1word]);
-  /* const handleNextWord = () => {
+  const handleNextWord = () => {
     const currentIndex = wordsforquiz1.indexOf(currentquiz1word);
-    console.log(currentIndex, "currentIndex");
-    console.log(wordsforquiz1.length, "wordsforquiz1.length");
-    if (currentIndex === wordsforquiz1.length - 1) {
-      // If it's the first word, just proceed to the next one.
-      customSessionStorage.setItem('wordswithmistaketosaveforreviewQUIZ1', JSON.stringify(wordswithmistaketosaveforreview));
-      console.log(wordswithmistaketosaveforreview, 'wordswithmistaketosaveforreviewQUIZ1');
-      setLessonCompletedv(true)
-    }
-    else if (currentIndex < wordsforquiz1.length - 1) {
-      const nextWord = wordsforquiz1[currentIndex + 1];
+    const nextWord = wordsforquiz1[currentIndex + 1];
+    if (currentIndex < wordsforquiz1.length - 1) {
       setCurrentQuiz1Word(nextWord);
-      console.log(nextWord, "nextWord");
-      dispatch(setCurrentWord(nextWord));
-      //hide examples if they are shown
-      setShowExamples(false);
-      setShowExamplesCount(0);
+      setWordsLeftInStack((prev) => prev - 1);
       setShowCorrect(false);
       setShowWrong(false);
-      setRevealAnswerDiv(false);
-      setShowExplanation(false);
-      let examples = nextWord.Meaning?.CommonFields?.Examples;
-      //double check examples contain the word exactly
-      console.log(examples, "examples");
-      if (examples && examples.length > 0) {
-        let filteredExamples = examples.filter(example => example.ExampleSentenceDE.includes(nextWord.word));
-        console.log(filteredExamples, "filteredExamples");
-        if (filteredExamples.length > 0) {
-          // setCurrentExample(filteredExamples[0]);
-          const randomIndex = Math.floor(Math.random() * filteredExamples.length);
-          setCurrentExample(filteredExamples[randomIndex]);
-          setCurrentExampleEnglish(filteredExamples[randomIndex].ExampleSentenceEN);
-          let wordsarray = filteredExamples[randomIndex].ExampleSentenceDE.split(' ')
-          console.log(wordsarray, 'wordsarray');
-          let randomizeorder = wordsarray.sort(() => Math.random() - 0.5);
-          console.log(randomizeorder, 'randomizeorder');
-          setWordspickChoose(randomizeorder);
-        } else {
-          setCurrentExample(examples[0]);
-          setCurrentExampleEnglish(examples[0].ExampleSentenceEN);
-          let wordsarray = examples[0].ExampleSentenceDE.split(' ')
-          console.log(wordsarray, 'wordsarray');
-          let randomizeorder = wordsarray.sort(() => Math.random() - 0.5);
-          console.log(randomizeorder, 'randomizeorder');
-          setWordspickChoose(randomizeorder);
-        }
-      } else {
-        setCurrentExample(null);
-        setCurrentExampleEnglish(null);
-      }
-      console.log(nextWord, "nextWord");
-      let currentwordinGerman = nextWord.word;
-      let filtersamewords = originalquizwords.filter(word => word.word !== currentwordinGerman);
-      console.log(filtersamewords, 'filtersamewords');
-   
-      let uniquewords = [...new Set(filtersamewords.map(word => word.word))];
-      console.log(uniquewords, 'uniquewords');
-      //we need to find the meanings of the word that mean the same
-      let currentwordis = nextWord.word;
-      let excludecurrentword = new Set([...uniquewords].filter(word => word !== currentwordis))
-      console.log(excludecurrentword, 'excludecurrentword');
-      let randomizedArray = Array.from(excludecurrentword).sort(() => Math.random() - 0.5);
-      console.log(randomizedArray, 'randomizedArray');
-      let pick3words = randomizedArray.splice(0, 3)
-      console.log(pick3words, 'pick3words');
-      pick3words.push(currentwordis);
-      console.log(pick3words, 'pick3words');
-      let randomizeagain = pick3words.sort(() => Math.random() - 0.5);
-      setWordspickChoose(randomizeagain);
-      //remove word from setWordsLeftInStack 
-      setWordsLeftInStack(prev => prev - 1);
+      setCurrentExampleScrambledreordered([]);
+
+      let randomIndex = Math.floor(Math.random() * nextWord.Meaning?.CommonFields?.Examples?.length);
+      setCurrentExample(nextWord.Meaning.CommonFields.Examples[randomIndex]);
+      setCurrentExampleEnglish(nextWord.Meaning.CommonFields.Examples[randomIndex].ExampleSentenceEN);
+
+      let wordsarray = nextWord.Meaning.CommonFields.Examples[randomIndex].ExampleSentenceDE.split(/(\s+|,|\?)/);
+      wordsarray = wordsarray
+        .map(word => word.replace(/\./g, "")) // Remove dots from words
+        .filter(word => word.trim() !== ""); // Remove empty strings
+      console.log(wordsarray, "wordsarray1");
+      console.log(wordsarray, "wordsarray2");
+      console.log(wordsarray, "wordsarray3");
+      setCurrentExampleOrderedWords(wordsarray)
+      setOriginalSentenceWordArrayLength(wordsarray.length);
+
+      let randomizeorder = [...wordsarray].sort(() => Math.random() - 0.5); // Create a copy before sorting
+      console.log(randomizeorder, 'randomizeorder');
+      setWordspickChoose(randomizeorder);
     } else {
-      console.log("No more words to show");
+      setWordsLeftInStack(0);
     }
-    // You can also reset the input field if needed
-    setWordInputted("");
-    inputRef.current?.focus(); // Refocus the input field
-  }; */
+  };
 
   const takelessonagain = () => {
     setLessonCompletedv(false);
@@ -369,7 +335,11 @@ export default function Quiz4() {
               <p>{wordsleftinstack} / {originalnumberwords}</p>
               <div className="maxdiv pt-10 pb-10 text-center">
                 {currentexamplescrambledreordered && currentexamplescrambledreordered.length > 0 && currentexamplescrambledreordered.map((word, index) => (
-                  <span key={index}>{word}</span>
+
+                  <button className="pill-badge cursor-pointer" key={index}
+                    onClick={() => excludeword(word)}>
+                    <span>{word}</span>
+                  </button>
                 ))}
                 {/*  <p >{currentexampleEnglish}</p> */}
                 {/*  <span className="quiz1wordtotranslate">
