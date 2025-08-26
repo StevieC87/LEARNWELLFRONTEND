@@ -15,13 +15,17 @@ export default async function LessonPage({ params }) {
           <button className="btn button-primary">Study Flashcards!</button>
         </Link>
         <Link href={`./quiz1/${lessonid}`}>
-          <button className="btn button-primary">Quiz 1</button>
+          <button className="btn button-primary">Word Test</button>
         </Link>
         <Link href={`./quiz2/${lessonid}`}>
-          <button className="btn button-primary">Quiz 2</button>
+          <button className="btn button-primary">Choice Test</button>
         </Link>
         <Link href={`./quiz3/${lessonid}`}>
-          <button className="btn button-primary">Quiz 3</button>
+          <button className="btn button-primary">Sentence Gap</button>
+        </Link>
+        <Link href={`./quiz4/${lessonid}`}>
+          <button className="btn button-primary">Sentence Choice</button>
+
         </Link>
       </div>
 

@@ -89,7 +89,7 @@ export default function Quiz2() {
 
         console.log(knownwordsfiltered, "knownwordsfiltered");
         //keep only 3 of total
-        knownwordsfiltered = knownwordsfiltered.slice(0, 3);
+        //knownwordsfiltered = knownwordsfiltered.slice(0, 3);
         console.log(knownwordsfiltered, "knownwordsfiltered");
         dispatch(setTotalWordsKnown(knownwordsfiltered.length));
         setWordsforquiz1(knownwordsfiltered);
@@ -168,9 +168,10 @@ export default function Quiz2() {
 
       // setWordsWithMistakesToSaveForReview([...wordswithmistaketosaveforreview, currentquiz1word]);
       setWordsWithMistakesToSaveForReview(prev => {
-        if (!prev.some(word => word.Meaning.Meaning === currentquiz1word.Meaning.Meaning)) {
+        //! FIX THIS HERE
+        /* if (!prev.some(word => word.Meaning.Meaning === currentquiz1word.Meaning.Meaning)) {
           return [...prev, currentquiz1word];
-        }
+        } */
         return prev;
       });
       setShowCorrect(false);
