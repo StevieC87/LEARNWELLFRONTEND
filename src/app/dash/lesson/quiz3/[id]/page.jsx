@@ -151,8 +151,13 @@ export default function Quiz3() {
     if (currentexample) {
 
       const word = currentquiz1word.word;
+      // Escape regex special chars in the word
+      const escapedWord = word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+      // Use Unicode regex, match full word
+      const regex = new RegExp(`(?<!\\p{L})${escapedWord}(?!\\p{L})`, "giu");
+
       const sentence = currentexample.ExampleSentenceDE;
-      const regex = new RegExp(`\\b${word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, "gi"); // Escape special characters in the word
       const parts = sentence.split(regex);
 
       const jsx = [];
@@ -173,6 +178,7 @@ export default function Quiz3() {
           );
         }
       });
+
 
 
       setCurrentExampleWithoutWord(jsx);
