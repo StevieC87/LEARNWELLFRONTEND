@@ -116,7 +116,14 @@ export default function Quiz3() {
         //double check examples contain the word exactly
         console.log(examples, "examples");
         if (examples && examples.length > 0) {
-          let filteredExamples = examples.filter(example => example.ExampleSentenceDE.includes(knownwordsfiltered[0].word));
+          /*  let filteredExamples = examples.filter(example => example.ExampleSentenceDE.includes(knownwordsfiltered[0].word)); */
+          let word = knownwordsfiltered[0].word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // escape regex chars
+          let regex = new RegExp(`(?<=^|[^\\p{L}])${word}(?=$|[^\\p{L}])`, "iu");
+
+          let filteredExamples = examples.filter(example =>
+            regex.test(example.ExampleSentenceDE)
+          );
+
           console.log(filteredExamples, "filteredExamples");
           if (filteredExamples.length > 0) {
             //pick a random example
@@ -242,6 +249,8 @@ export default function Quiz3() {
     const index = wordsforquiz1.indexOf(currentquiz1word);
     setCurrentIndexis(index + 1);
   }, [currentquiz1word]);
+
+
   const handleNextWord = () => {
     const currentIndex = wordsforquiz1.indexOf(currentquiz1word);
     console.log(currentIndex, "currentIndex");
@@ -265,10 +274,17 @@ export default function Quiz3() {
       setRevealAnswerDiv(false);
       setShowExplanation(false);
       let examples = nextWord.Meaning?.CommonFields?.Examples;
-      //double check examples contain the word exactly
       console.log(examples, "examples");
+      let word = nextWord.word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // escape regex chars
+      let regex = new RegExp(`(?<=^|[^\\p{L}])${word}(?=$|[^\\p{L}])`, "iu");
+
+
+
       if (examples && examples.length > 0) {
-        let filteredExamples = examples.filter(example => example.ExampleSentenceDE.includes(nextWord.word));
+        let filteredExamples = examples.filter(example =>
+          regex.test(example.ExampleSentenceDE)
+        );
+        // let filteredExamples = examples.filter(example => example.ExampleSentenceDE.includes(nextWord.word));
         console.log(filteredExamples, "filteredExamples");
         if (filteredExamples.length > 0) {
           // setCurrentExample(filteredExamples[0]);
@@ -422,10 +438,10 @@ export default function Quiz3() {
                   <button
                     className="button button-primary button-outline button-narrow"
                     onClick={() => {
-                      setRevealAnswerDiv(prevValue => {
-                        setRevealAnswerDiv(!prevValue);
-                      });
+                      setRevealAnswerDiv(prevValue => !prevValue);
+
                     }}> {revealanswerdiv ? "Hide Answer" : "Show Answer"}
+
                   </button>
                 </div>
               </div>
