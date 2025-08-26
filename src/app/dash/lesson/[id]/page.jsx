@@ -27,6 +27,10 @@ export default async function LessonPage({ params }) {
           <button className="btn button-primary">Sentence Choice</button>
 
         </Link>
+        <Link href={`./quiz5/${lessonid}`}>
+          <button className="btn button-primary">Sentence Builder</button>
+
+        </Link>
       </div>
 
     </>

@@ -293,6 +293,9 @@ export default function Quiz4() {
       console.log(wordsarray, "wordsarray3");
       setCurrentExampleOrderedWords(wordsarray)
       setOriginalSentenceWordArrayLength(wordsarray.length);
+      setShowExamples(false);
+      setRevealAnswerDiv(false);
+      setShowExamplesCount(0);
 
       let randomizeorder = [...wordsarray].sort(() => Math.random() - 0.5); // Create a copy before sorting
       console.log(randomizeorder, 'randomizeorder');
@@ -389,11 +392,7 @@ export default function Quiz4() {
             </div>
             <div className="quiz1hints">
               <div className="quiz1hintbuttons flex flex-row gap-5 pb-5">
-                <div className="showexplanationbutton">
-                  <button className="button button-primary button-outline button-narrow" onClick={() => setShowExplanation(!showExplanation)}>
-                    {showExplanation ? "Hide Explanation" : "Show Explanation"}
-                  </button>
-                </div>
+
                 <div className="showexamplesdiv">
                   {currentwordnumberofexamples > 0 && (
                     <button
@@ -406,7 +405,7 @@ export default function Quiz4() {
                           }
                         }
                       }
-                      }>{showexamples ? "Hide Examples" : "Show Examples"}
+                      }>{showexamples ? "Hide English" : "Show English"}
                     </button>
                   )}
 
@@ -429,7 +428,7 @@ export default function Quiz4() {
                       {currentquiz1word.Meaning?.CommonFields?.Examples?.length > 0 ? (
                         currentquiz1word.Meaning.CommonFields.Examples.slice(0, showexamplescount).map((example, index) => (
 
-                          <li key={index}>{currentexample.ExampleSentenceDE}</li>
+                          <li key={index}>{currentexample.ExampleSentenceEN}</li>
                         ))
                       ) : (
                         <li>No examples available</li>
@@ -445,13 +444,7 @@ export default function Quiz4() {
                   </div>
                 )}
               </div>
-              <div className="showexpl">
-                {showExplanation && (
-                  <div className="explanationdiv">
-                    <p>{currentquiz1word.Meaning?.Explanation || "No explanation available"}</p>
-                  </div>
-                )}
-              </div>
+
             </div>
 
           </>

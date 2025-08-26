@@ -150,14 +150,9 @@ export default function Quiz3() {
     console.log(currentexample, "currentexample");
     if (currentexample) {
 
-      /*   let examplewithoutword = currentexample.ExampleSentenceDE.replace(new RegExp(currentquiz1word.word, 'gi'), '_____');
-        setCurrentExampleWithoutWord(examplewithoutword); */
-      //  const parts = currentexample.ExampleSentenceDE.split(
-      //   new RegExp(`(${currentquiz1word.word})`, "gi")
-      //  );
       const word = currentquiz1word.word;
       const sentence = currentexample.ExampleSentenceDE;
-      const regex = new RegExp(`\\b${word}\\b`, "gi");
+      const regex = new RegExp(`\\b${word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, "gi"); // Escape special characters in the word
       const parts = sentence.split(regex);
 
       const jsx = [];
