@@ -142,14 +142,25 @@ const DifficultyButtons = () => {
         //but if e.g. we are shwoing new and fluent, and we move it to another one, IT SHOLDNT INCLUDE THIS WORD ANYMORE. 
         let thisworddifficultylevel = currentword.difficulty;
         console.log(thisworddifficultylevel, "thisworddifficultylevel");
+
         //! here dePENDS IF WE ARE IN WHAT MODE : COVERED OR REMAINIGN
         if (!showRemainingWords2) {
-
+          // Find currentword id in allwords and change difficulty
+          let updatedAllWords = allwords.map((word) => {
+            if (word._id === currentwordid) {
+              return { ...word, difficulty: difficulty };
+            }
+            return word;
+          });
+          dispatch(setAllWords2(updatedAllWords));
           if (!difficultylevels.includes(difficulty)) {
-            //if we are showing the difficulty level of the current word - then remove it from allwords
+            //d - then remove it from allwords
             let filtered = allwords.filter(
               (word) => word._id !== currentwordid
             );
+
+
+
             dispatch(setAllWords2(filtered));
             console.log(filtered, "allwordsAFTERCHANGE");
             if (allwords.length === 1) {
