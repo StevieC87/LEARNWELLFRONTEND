@@ -71,7 +71,7 @@ const Leftbar = () => {
       (word) => word.difficulty === "New"
     );
     dispatch(setnewwordsArray(getnewwordsarray));
-  }, [allknownwordsdata, showRemainingWords2]);
+  }, [allknownwordsdata]);
 
 
   const addremoveDifficulty = (difficulty) => {

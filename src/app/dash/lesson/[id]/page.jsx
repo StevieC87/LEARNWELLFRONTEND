@@ -3,6 +3,25 @@ import Link from "next/link";
 export default async function LessonPage({ params }) {
 
   const lessonid = await params.id
+
+  const toggleTabs = (tab) => {
+    if (tab === "pagecontent") {
+      setPageContent(true);
+      setSEOVisible(false);
+      setJsonldVisible(false);
+    }
+    else if (tab === "seocontent") {
+      setSEOVisible(true);
+      setPageContent(false);
+      setJsonldVisible(false);
+    }
+
+    else if (tab === "jsonld") {
+      setPageContent(false);
+      setSEOVisible(false);
+      setJsonldVisible(true);
+    }
+  }
   return (
     <>
 

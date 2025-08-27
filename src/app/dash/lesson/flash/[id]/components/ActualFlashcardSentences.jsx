@@ -336,12 +336,14 @@ const ActualFlashcard = (props) => {
           </div>
 
           {!showOriginal && (
-            <button className="mt-10 mb-10 showmorecard button button-primary button-outline button-narrow button-gray"
-              onClick={() => {
-                dispatch(setShowMoreBackCard(!showmorebackcard));
-              }
-              }>{showmorebackcard ? "Hide More" : "Show More"}
-            </button>
+            <div className="grid place-items-center">
+              <button className="mt-10 mb-10 showmorecard button button-primary button-outline button-narrow button-gray"
+                onClick={() => {
+                  dispatch(setShowMoreBackCard(!showmorebackcard));
+                }
+                }>{showmorebackcard ? "Hide More" : "Show More"}
+              </button>
+            </div>
           )}
 
           {(showmorebackcard && !showOriginal) && (

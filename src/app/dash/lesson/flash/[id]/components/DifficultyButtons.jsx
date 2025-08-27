@@ -164,7 +164,6 @@ const DifficultyButtons = () => {
             dispatch(setAllWords2(filtered));
             console.log(filtered, "allwordsAFTERCHANGE");
             if (allwords.length === 1) {
-              alert('one left')
               dispatch(setCurrentWord({}));
               dispatch(setAllWords2([]));
 
