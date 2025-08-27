@@ -260,7 +260,7 @@ const ActualFlashcard = (props) => {
           <img src="/gifs/spinner.gif" alt="loading" />
         ) : allwords.length !== 0 ? ( */}
 
-        <div>
+        <div className="flex flex-col justify-between h-full">
           <div className="flashcardnk123">
             {(allremainingwordsdata.length === 0 && allknownwordsdata.length !== 0 && showRemainingWords2) && (
               ifnowords()
