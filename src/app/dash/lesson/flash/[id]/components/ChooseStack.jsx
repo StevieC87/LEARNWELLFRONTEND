@@ -127,6 +127,13 @@ const ChooseStack = () => {
     }
   };
 
+  useEffect(() => {
+    if (!showRemainingWords2) {
+      changeWordList("known")
+    }
+
+  }, [showRemainingWords2])
+
   const handleSwitchChange = (event) => {
     setSwitchChecked(event.target.checked);
     dispatch(setswitchbuttondeen(event.target.checked));

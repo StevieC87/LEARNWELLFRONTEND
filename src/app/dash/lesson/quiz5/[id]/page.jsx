@@ -96,6 +96,15 @@ export default function Quiz4() {
   let wordstart = wordstart1.wordstart;
   let wordend = wordstart1.wordend;
 
+  const fisherYatesShuffle = (array) => {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  };
+
   useEffect(() => {
     const getknownwordsfromapi = async () => {
       let knownwords = await getFlashcardsKnownWords(slug);
@@ -143,7 +152,7 @@ export default function Quiz4() {
           setCurrentExampleOrderedWords(wordsarray)
           setOriginalSentenceWordArrayLength(wordsarray.length);
 
-          let randomizeorder = [...wordsarray].sort(() => Math.random() - 0.5); // Create a copy before sorting
+          let randomizeorder = fisherYatesShuffle(wordsarray); // Use Fisher-Yates Shuffle
           console.log(randomizeorder, 'randomizeorder');
           setWordspickChoose(randomizeorder);
           console.log(wordsarray, "wordsarray4");
@@ -152,7 +161,7 @@ export default function Quiz4() {
           setCurrentExampleEnglish(examples[0].ExampleSentenceEN);
           let wordsarray = examples[0].ExampleSentenceDE.split(' ')
           console.log(wordsarray, 'wordsarray');
-          let randomizeorder = wordsarray.sort(() => Math.random() - 0.5);
+          let randomizeorder = fisherYatesShuffle(wordsarray); // Use Fisher-Yates Shuffle
           console.log(randomizeorder, 'randomizeorder');
           setWordspickChoose(randomizeorder);
         }
@@ -297,7 +306,7 @@ export default function Quiz4() {
       setRevealAnswerDiv(false);
       setShowExamplesCount(0);
 
-      let randomizeorder = [...wordsarray].sort(() => Math.random() - 0.5); // Create a copy before sorting
+      let randomizeorder = fisherYatesShuffle(wordsarray); // Use Fisher-Yates Shuffle
       console.log(randomizeorder, 'randomizeorder');
       setWordspickChoose(randomizeorder);
     } else {

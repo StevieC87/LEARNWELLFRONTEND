@@ -355,7 +355,7 @@ const ActualFlashcard = (props) => {
               <div className="mt-4 ">
                 {/* <span>Difficulty: </span> */}
                 <span className="fontbold">
-                  {currentword.difficulty ? matchdifficultytocorrectword(currentword.difficulty) : "Not set"}
+                  {currentword?.difficulty ? matchdifficultytocorrectword(currentword?.difficulty) : "Not set"}
                 </span>
               </div>
 

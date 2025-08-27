@@ -56,3 +56,7 @@
 .showwordtotranslate {
   width: 100%;
 }
+
+.showcorrectwrongdiv {
+  min-height: 30px;
+}

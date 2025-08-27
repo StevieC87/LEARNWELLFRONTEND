@@ -226,13 +226,16 @@ export default function FlashcardPage() {
     ) {
       //alert("2");
       dispatch(setdisablediffbuttons(true));
+      dispatch(setShowRemainingWords2(false))
+      //  dispatch(setCurrentWord(allknownwordsdata[0]));
     } else if (
-      allremainingwordsdata.length == 0 &&
+      allremainingwordsdata.length === 0 &&
       allknownwordsdata.length !== 0 &&
       !showRemainingWords2
     ) {
-      // alert("3");
+      // alert("3");  
       dispatch(setdisablediffbuttons(false));
+      //dispatch(setCurrentWord(allknownwordsdata[0]));
     } else if (
       allremainingwordsdata.length !== 0 &&
       allknownwordsdata.length == 0 &&
@@ -240,6 +243,7 @@ export default function FlashcardPage() {
     ) {
       //alert("4");
       dispatch(setdisablediffbuttons(false));
+
     } else if (
       allremainingwordsdata.length !== 0 &&
       allknownwordsdata.length === 0 &&

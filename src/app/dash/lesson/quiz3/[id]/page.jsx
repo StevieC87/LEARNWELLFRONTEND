@@ -331,6 +331,7 @@ export default function Quiz3() {
     }
   }, [wordsleftinstack])
 
+  const germanSpecialCharacters = ["ä", "ö", "ü", "ß", "Ä", "Ö", "Ü"];
 
   return (
     <>
@@ -397,6 +398,7 @@ export default function Quiz3() {
                 Submit
               </button>
             </div>
+
             <div className="showcorrectwrongdiv">
               {showcorrect && (
                 <div className="correct-message">
@@ -409,6 +411,23 @@ export default function Quiz3() {
                 </div>
               )
               }
+            </div>
+            <div className="special-characters">
+              <p>Add Special Characters:</p>
+              <div className="special-characters-buttons">
+                {germanSpecialCharacters.map((char, index) => (
+                  <button
+                    key={index}
+                    className="button button-secondary"
+                    onClick={() => {
+                      setWordInputted((prev) => prev + char);
+                      inputRef.current?.focus(); // Refocus the input field
+                    }}
+                  >
+                    {char}
+                  </button>
+                ))}
+              </div>
             </div>
             <div className="quiz1hints">
               <div className="quiz1hintbuttons flex flex-row gap-5 pb-5">

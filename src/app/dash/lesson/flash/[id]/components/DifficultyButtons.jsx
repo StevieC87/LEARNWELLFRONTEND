@@ -79,6 +79,7 @@ const DifficultyButtons = () => {
       dispatch(setCurrentWord(allwords[0]));
       dispatch(setOriginal(true));
     } else {
+
       dispatch(setCurrentWord(allwords[currentindex + 1]));
       dispatch(setOriginal(true));
     }
