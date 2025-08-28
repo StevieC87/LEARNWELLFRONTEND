@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getFlashcardsRemaining,
   getFlashcardsKnownWords,
-} from "../../flash/[id]/services/fetchwords";
+} from "../flash/services/fetchwords";
 import { dynamichunneds } from '@/utilities/arrayswordshunneds';
 
 import { usePathname } from "next/navigation";
@@ -35,6 +35,7 @@ import {
 } from "@/redux/slices/flashcardSlice";
 import Link from 'next/link';
 import customSessionStorage from "@/utilities/customSessionStorage";
+
 export default function Quiz1() {
   const dispatch = useDispatch();
   const pathname = usePathname();
@@ -75,11 +76,11 @@ export default function Quiz1() {
   }
   let wordstartwordendarray = dynamichunneds(userwordsperlesson || 15);
   // console.log(wordstartwordendarray, "wordstartwordendarray");
-
   let wordstart1 = wordstartwordendarray.find((item) => item.id === parseInt(slug));
   let wordstart = wordstart1.wordstart;
   let wordend = wordstart1.wordend;
 
+  //. =====================================X
   useEffect(() => {
     const getknownwordsfromapi = async () => {
       let knownwords = await getFlashcardsKnownWords(slug);
@@ -111,6 +112,8 @@ export default function Quiz1() {
     }
     getknownwordsfromapi()
   }, []);
+
+  //. =====================================
   useEffect(() => {
     setWordType(currentquiz1word?.Meaning.WordType);
     setCurrentQuizWordGerman(currentquiz1word?.word);
@@ -119,6 +122,8 @@ export default function Quiz1() {
     setCurrentWordNumberOfExamples(currentquiz1word?.Meaning?.CommonFields?.Examples?.length || 0);
 
   }, [currentquiz1word]);
+
+  //. =====================================
   const compareWords = (word1, word2) => {
     console.log(word1, "word1");
     console.log(word2, "word2");
@@ -170,11 +175,15 @@ export default function Quiz1() {
     }
 
   }
+
+  //. =====================================
   const [currentindexis, setCurrentIndexis] = useState(0);
   useEffect(() => {
     const index = wordsforquiz1.indexOf(currentquiz1word);
     setCurrentIndexis(index + 1);
   }, [currentquiz1word]);
+
+  //. =====================================
   const handleNextWord = () => {
     const currentIndex = wordsforquiz1.indexOf(currentquiz1word);
     console.log(currentIndex, "currentIndex");
@@ -208,7 +217,7 @@ export default function Quiz1() {
     setWordInputted("");
     inputRef.current?.focus(); // Refocus the input field
   };
-
+  //. =====================================
   const takelessonagain = () => {
     setLessonCompletedv(false);
     setWordsLeftInStack(originalnumberwords);
@@ -222,19 +231,18 @@ export default function Quiz1() {
     setShowExplanation(false);
     inputRef.current?.focus(); // Refocus the input field
   }
-
+  //. =====================================
   useEffect(() => {
     if (wordsleftinstack === 0) {
       setLessonCompletedv(true)
     }
   }, [wordsleftinstack])
 
+  const germanSpecialCharacters = ["ä", "ö", "ü", "ß", "Ä", "Ö", "Ü"];
 
   return (
     <>
       <div className="quiz1-container mt-10">
-        {/*  <h1>Quiz 1</h1> */}
-
         <div className="showwordtotranslate">
           {(!lessoncompletedv && currentquiz1word) && (
             <>
@@ -243,9 +251,7 @@ export default function Quiz1() {
               <p>{wordsleftinstack} / {originalnumberwords}</p>
               <div className="maxdiv pt-10 pb-10 text-center">
                 <span className="quiz1wordtotranslate">{currentquiz1word.Meaning.Meaning}</span>
-                {/*   <p>{currentquiz1word.Meaning.Explanation}</p> */}
-                {/*  <span className="quiz1wordtotranslate">{currentquiz1word.word}</span> */}
-                {/*   <p className="pl-5">({wordtype?.toLowerCase()})</p> */}
+
               </div>
             </>
 
@@ -294,6 +300,23 @@ export default function Quiz1() {
               >
                 Submit
               </button>
+            </div>
+            <div className="special-characters">
+              <p>Add Special Characters:</p>
+              <div className="special-characters-buttons">
+                {germanSpecialCharacters.map((char, index) => (
+                  <button
+                    key={index}
+                    className="button button-secondary"
+                    onClick={() => {
+                      setWordInputted((prev) => prev + char);
+                      inputRef.current?.focus(); // Refocus the input field
+                    }}
+                  >
+                    {char}
+                  </button>
+                ))}
+              </div>
             </div>
             <div className="showcorrectwrongdiv">
               {showcorrect && (

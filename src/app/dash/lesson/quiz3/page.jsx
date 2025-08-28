@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getFlashcardsRemaining,
   getFlashcardsKnownWords,
-} from "../../flash/[id]/services/fetchwords";
+} from "../flash/services/fetchwords";
 import { dynamichunneds } from '@/utilities/arrayswordshunneds';
 
 import { usePathname } from "next/navigation";
@@ -35,7 +35,7 @@ import {
 } from "@/redux/slices/flashcardSlice";
 import Link from 'next/link';
 import customSessionStorage from "@/utilities/customSessionStorage";
-export default function Quiz4() {
+export default function Quiz3() {
   const dispatch = useDispatch();
   const pathname = usePathname();
 
@@ -49,8 +49,7 @@ export default function Quiz4() {
   const allknownwordsdata = useSelector((state) => state.flashcardSlice.totalWordsKnown);
   const totalwordsknown = useSelector((state) => state.flashcardSlice.totalwordsknown);
 
-
-  const [wordswithmistaketosaveforreview, setWordsWithMistakesToSaveForReview] = useState([]);
+  const [wordswithmistaketosaveforreview, setWordsWithMistakeToSaveForReview] = useState([]);
 
   const [showexamples, setShowExamples] = useState(false);
   const [showexamplescount, setShowExamplesCount] = useState(0);
@@ -72,19 +71,12 @@ export default function Quiz4() {
   const [currentexamplewithoutword, setCurrentExampleWithoutWord] = useState(null);
   const [currentexampleEnglish, setCurrentExampleEnglish] = useState(null);
 
-  const [originalquizwords, setOriginalQuizwords] = useState([])
-
-
-  const [wordspickchoose, setWordspickChoose] = useState([])
-
-
   const userwordsperlesson = useSelector((state) => state.flashcardSlice.userwordsperlesson);
   const inputRef = useRef(null);
   //console.log(slug, "slugsss");
-  /*  if (isNaN(slug)) {
-     return <div>error</div>;
-   : null
-   } */
+  if (isNaN(slug)) {
+    return <div>error</div>;
+  }
   let wordstartwordendarray = dynamichunneds(userwordsperlesson || 15);
   // console.log(wordstartwordendarray, "wordstartwordendarray");
 
@@ -118,13 +110,20 @@ export default function Quiz4() {
         dispatch(setallknownwordsdata(knownwordsfiltered));
         setWordsLeftInStack(knownwordsfiltered.length);
         setOriginalNumbetwords(knownwordsfiltered.length);
-        setOriginalQuizwords(knownwordsfiltered)
+
         //we need to get the examples from them 
         let examples = knownwordsfiltered[0].Meaning?.CommonFields?.Examples;
         //double check examples contain the word exactly
         console.log(examples, "examples");
         if (examples && examples.length > 0) {
-          let filteredExamples = examples.filter(example => example.ExampleSentenceDE.includes(knownwordsfiltered[0].word));
+          /*  let filteredExamples = examples.filter(example => example.ExampleSentenceDE.includes(knownwordsfiltered[0].word)); */
+          let word = knownwordsfiltered[0].word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // escape regex chars
+          let regex = new RegExp(`(?<=^|[^\\p{L}])${word}(?=$|[^\\p{L}])`, "iu");
+
+          let filteredExamples = examples.filter(example =>
+            regex.test(example.ExampleSentenceDE)
+          );
+
           console.log(filteredExamples, "filteredExamples");
           if (filteredExamples.length > 0) {
             //pick a random example
@@ -140,30 +139,6 @@ export default function Quiz4() {
           setCurrentExample(null);
           setCurrentExampleEnglish(null);
         }
-        let currentwordinGerman = knownwordsfiltered[0].word;
-        let filtersamewords = knownwordsfiltered.filter(word => word.word !== currentwordinGerman);
-        console.log(filtersamewords, 'filtersamewords');
-
-        let uniquewords = [...new Set(filtersamewords.map(word => word.word))];
-        console.log(uniquewords, 'uniquewords');
-        //we need to find the meanings of the word that mean the same
-        let currentwordis = knownwordsfiltered[0].word;
-
-        //exclude 
-        console.log(currentwordis,);
-
-        let excludecurrentword = new Set([...uniquewords].filter(word => word !== knownwordsfiltered[0].word))
-        console.log(excludecurrentword, 'excludecurrentword');
-        let randomizedArray = Array.from(excludecurrentword).sort(() => Math.random() - 0.5);
-        console.log(randomizedArray, 'randomizedArray');
-        let pick3words = randomizedArray.splice(0, 3)
-        console.log(pick3words, 'pick3words');
-        console.log(currentword, 'currentwordword');
-        console.log(knownwordsfiltered[0].word, 'knownword0');
-        let finalarraywordschoose = pick3words.push(knownwordsfiltered[0].word)
-        console.log(pick3words, 'pick3words');
-        let randomizeagain = pick3words.sort(() => Math.random() - 0.5);
-        setWordspickChoose(randomizeagain);
 
       }
     }
@@ -182,46 +157,119 @@ export default function Quiz4() {
     console.log(currentexample, "currentexample");
     if (currentexample) {
 
-      /*   let examplewithoutword = currentexample.ExampleSentenceDE.replace(new RegExp(currentquiz1word.word, 'gi'), '_____');
-        setCurrentExampleWithoutWord(examplewithoutword); */
-      //  const parts = currentexample.ExampleSentenceDE.split(
-      //   new RegExp(`(${currentquiz1word.word})`, "gi")
-      //  );
       const word = currentquiz1word.word;
-      const sentence = currentexample.ExampleSentenceDE;
-      const regex = new RegExp(`\\b${word}\\b`, "gi");
-      const parts = sentence.split(regex);
+      // Escape regex special chars in the word
+      const escapedWord = word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      console.log(escapedWord, "escapedWord");
+      let regex;
+      let slashwordchosen;
+      if (escapedWord.includes('/')) {
+        //if it includes a /, then split it into two words and make a regex that matches either of them
+        const parts = escapedWord.split('/').map(part => part.trim());
+        console.log(parts, 'partsparts');
+        //  regex = new RegExp(`(?<!\\p{L})(${parts.join('|')})(?!\\p{L})`, "giu");
+        parts.forEach((part, index) => {
+          //check if sentence contains this part 
+          let regex = new RegExp(`(?<!\\p{L})${part}(?!\\p{L})`, "iu");
+          console.log(regex, 'regexinpartsloop');
+          const matches = currentexample.ExampleSentenceDE.match(regex);
+          if (matches && matches.length > 0) {
+            console.log(part, 'partpart');
+            const sentence = currentexample.ExampleSentenceDE;
+            const parts = sentence.split(regex);
+            const jsx = [];
+            let matchCount = 0;
 
-      const jsx = [];
-      let matchCount = 0;
+            parts.forEach((part, i) => {
+              jsx.push(part);
+              if (i < parts.length - 1) {
+                jsx.push(
+                  <span
+                    key={`blank-${matchCount++}`}
+                    style={{
+                      borderBottom: "2px solid black",
+                      display: "inline-block",
+                      width: '40px',
+                      /*  width: word.length * 12, */
+                    }}
+                  />
+                );
+              }
+            });
+            setCurrentExampleWithoutWord(jsx);
 
-      parts.forEach((part, i) => {
-        jsx.push(part);
-        if (i < parts.length - 1) {
-          jsx.push(
-            <span
-              key={`blank-${matchCount++}`}
-              style={{
-                borderBottom: "2px solid black",
-                display: "inline-block",
-                width: word.length * 12,
-              }}
-            />
-          );
-        }
-      });
+
+            console.log(`Chosen slash word: ${slashwordchosen}`);
+          }
+
+          console.log(`Part ${index}: ${part}`);
+        })
 
 
-      setCurrentExampleWithoutWord(jsx);
+        //  regex = new RegExp(`(?<!\\p{L})(${parts.join('|')})(?!\\p{L})`, "giu"); // Updated regex to match either word
+      } else {
+        // Use Unicode regex, match full word
+        regex = new RegExp(`(?<!\\p{L})${escapedWord}(?!\\p{L})`, "giu");
+        const sentence = currentexample.ExampleSentenceDE;
+        const parts = sentence.split(regex);
+
+        const jsx = [];
+        let matchCount = 0;
+
+        parts.forEach((part, i) => {
+          jsx.push(part);
+          if (i < parts.length - 1) {
+            jsx.push(
+              <span
+                key={`blank-${matchCount++}`}
+                style={{
+                  borderBottom: "2px solid black",
+                  display: "inline-block",
+                  width: '40px',
+                  //width: word.length * 12,
+                }}
+              />
+            );
+          }
+        });
+        setCurrentExampleWithoutWord(jsx);
+      }
+
+
     } else {
       setCurrentExampleWithoutWord(null);
     }
   }, [currentexample, currentquiz1word]);
-  const compareWords = (clickedword) => {
-    let currentword = currentquiz1word.word
-    console.log(currentword, 'currentword');
-    console.log(clickedword, 'clickedword');
-    if (currentword === clickedword) {
+  const compareWords = (word1, word2) => {
+    console.log(word1, "word1");
+    console.log(word2, "word2");
+    //trim word 2
+    word2 = word2.trim();
+
+    //if word1 includes a /, then either of the words before or after the / can be correct
+    if (word1.includes("/")) {
+      let word1options = word1.split("/").map(option => option.trim());
+      if (word1options.includes(word2)) {
+        console.log("Words match!");
+        setShowCorrect(true);
+        setShowWrong(false);
+
+        //switch to
+        setTimeout(() => {
+          handleNextWord();
+        }, 1000);
+
+        return; // Exit the function early since we found a match
+      } else {
+        console.log("Words do not match.");
+        setShowWrong(true);
+        setWordsWithMistakeToSaveForReview(prev => [...prev, currentquiz1word]);
+        setShowCorrect(false);
+        return; // Exit the function early since we did not find a match
+      }
+    }
+
+    if (word1 === word2) {
       console.log("Words match!");
       setShowCorrect(true);
       setShowWrong(false);
@@ -235,21 +283,21 @@ export default function Quiz4() {
     } else {
       console.log("Words do not match.");
       setShowWrong(true);
-
-      // setWordsWithMistakesToSaveForReview([...wordswithmistaketosaveforreview, currentquiz1word]);
-      setWordsWithMistakesToSaveForReview(prev => {
-
-        return prev;
-      });
       setShowCorrect(false);
-      // Handle the case where w
+      setShowWrong(true);
+      setWordsWithMistakeToSaveForReview(prev => [...prev, currentquiz1word]);
+      console.log(wordswithmistaketosaveforreview, 'wordswithmistaketosaveforreviewQUIZ1');
+      // Handle the case where words do not match
     }
+
   }
   const [currentindexis, setCurrentIndexis] = useState(0);
   useEffect(() => {
     const index = wordsforquiz1.indexOf(currentquiz1word);
     setCurrentIndexis(index + 1);
   }, [currentquiz1word]);
+
+
   const handleNextWord = () => {
     const currentIndex = wordsforquiz1.indexOf(currentquiz1word);
     console.log(currentIndex, "currentIndex");
@@ -273,10 +321,17 @@ export default function Quiz4() {
       setRevealAnswerDiv(false);
       setShowExplanation(false);
       let examples = nextWord.Meaning?.CommonFields?.Examples;
-      //double check examples contain the word exactly
       console.log(examples, "examples");
+      let word = nextWord.word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // escape regex chars
+      let regex = new RegExp(`(?<=^|[^\\p{L}])${word}(?=$|[^\\p{L}])`, "iu");
+
+
+
       if (examples && examples.length > 0) {
-        let filteredExamples = examples.filter(example => example.ExampleSentenceDE.includes(nextWord.word));
+        let filteredExamples = examples.filter(example =>
+          regex.test(example.ExampleSentenceDE)
+        );
+        // let filteredExamples = examples.filter(example => example.ExampleSentenceDE.includes(nextWord.word));
         console.log(filteredExamples, "filteredExamples");
         if (filteredExamples.length > 0) {
           // setCurrentExample(filteredExamples[0]);
@@ -292,24 +347,7 @@ export default function Quiz4() {
         setCurrentExampleEnglish(null);
       }
       console.log(nextWord, "nextWord");
-      let currentwordinGerman = nextWord.word;
-      let filtersamewords = originalquizwords.filter(word => word.word !== currentwordinGerman);
-      console.log(filtersamewords, 'filtersamewords');
 
-      let uniquewords = [...new Set(filtersamewords.map(word => word.word))];
-      console.log(uniquewords, 'uniquewords');
-      //we need to find the meanings of the word that mean the same
-      let currentwordis = nextWord.word;
-      let excludecurrentword = new Set([...uniquewords].filter(word => word !== currentwordis))
-      console.log(excludecurrentword, 'excludecurrentword');
-      let randomizedArray = Array.from(excludecurrentword).sort(() => Math.random() - 0.5);
-      console.log(randomizedArray, 'randomizedArray');
-      let pick3words = randomizedArray.splice(0, 3)
-      console.log(pick3words, 'pick3words');
-      pick3words.push(currentwordis);
-      console.log(pick3words, 'pick3words');
-      let randomizeagain = pick3words.sort(() => Math.random() - 0.5);
-      setWordspickChoose(randomizeagain);
       //remove word from setWordsLeftInStack 
       setWordsLeftInStack(prev => prev - 1);
     } else {
@@ -340,6 +378,7 @@ export default function Quiz4() {
     }
   }, [wordsleftinstack])
 
+  const germanSpecialCharacters = ["ä", "ö", "ü", "ß", "Ä", "Ö", "Ü"];
 
   return (
     <>
@@ -349,25 +388,22 @@ export default function Quiz4() {
         <div className="showwordtotranslate">
           {(!lessoncompletedv && currentquiz1word) && (
             <>
-              <p className="text-center">Pick the word</p>
+              <span>currentindex {currentindexis}</span>
+              <p className="text-center">Type the word in German</p>
               <p>{wordsleftinstack} / {originalnumberwords}</p>
               <div className="maxdiv pt-10 pb-10 text-center">
-                <p >{currentexampleEnglish}</p>
-                <span className="quiz1wordtotranslate">
-                  {showcorrect ?
-                    currentexample.ExampleSentenceDE : currentexamplewithoutword
-                  }
-                </span>
-                {/*    {currentexamplewithoutword}</span> */}
+                <span className="quiz1wordtotranslate">{currentexamplewithoutword}</span>
                 {/*   <p>{currentquiz1word.Meaning.Explanation}</p> */}
                 {/*  <span className="quiz1wordtotranslate">{currentquiz1word.word}</span> */}
                 {/*   <p className="pl-5">({wordtype?.toLowerCase()})</p> */}
               </div>
             </>
+
+
           )}
           {(lessoncompletedv) && (
             <div className="lessoncompleteddiv text-center">
-              <h2>Lesson Completed!</h2>
+              <h2>Quiz3 Completed!</h2>
               <p className="underline cursor-pointer" onClick={() => takelessonagain()}>Take again!</p>
               <Link href={`../quiz2/${slug}`}><p className="underline cursor-pointer" >or Do the Next Quiz!</p></Link>
             </div>
@@ -375,16 +411,41 @@ export default function Quiz4() {
         </div>
         {(!lessoncompletedv && currentquiz1word) && (
           <>
-            <div className="quiz2pickwordsdiv flex flex-row gap-3">
-              {(wordspickchoose && wordspickchoose.length > 0) && (
-                wordspickchoose.map((word, index) => (
-                  <button className="pill-badge cursor-pointer" key={index}
-                    onClick={() => compareWords(word)}>
-                    <span>{word}</span>
-                  </button>
-                ))
-              )}
+            <div className="quiz1inputarea">
+              <input
+                ref={inputRef}
+                type="text"
+                className="quiz1input"
+                value={wordinputted}
+                placeholder="Type your answer here"
+                autoFocus
+                onChange={(e) => {
+                  setWordInputted(e.target.value);
+                  console.log(e.target.value, "input value");
+                }}
+                onBlur={(e) => {
+                  setWordInputted(e.target.value);
+                  console.log(e.target.value, "input value");
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    setWordInputted(e.target.value);
+                    compareWords(currentquiz1word.word, wordinputted);
+                  }
+                }}
+              />
+              <button
+                className="button button-primary"
+                onClick={(e) => {
+                  // Handle submit action
+                  console.log("Submit button clicked");
+                  compareWords(currentquiz1word.word, wordinputted);
+                }}
+              >
+                Submit
+              </button>
             </div>
+
             <div className="showcorrectwrongdiv">
               {showcorrect && (
                 <div className="correct-message">
@@ -397,6 +458,23 @@ export default function Quiz4() {
                 </div>
               )
               }
+            </div>
+            <div className="special-characters">
+              <p>Add Special Characters:</p>
+              <div className="special-characters-buttons">
+                {germanSpecialCharacters.map((char, index) => (
+                  <button
+                    key={index}
+                    className="button button-secondary"
+                    onClick={() => {
+                      setWordInputted((prev) => prev + char);
+                      inputRef.current?.focus(); // Refocus the input field
+                    }}
+                  >
+                    {char}
+                  </button>
+                ))}
+              </div>
             </div>
             <div className="quiz1hints">
               <div className="quiz1hintbuttons flex flex-row gap-5 pb-5">
@@ -426,10 +504,10 @@ export default function Quiz4() {
                   <button
                     className="button button-primary button-outline button-narrow"
                     onClick={() => {
-                      setRevealAnswerDiv(prevValue => {
-                        setRevealAnswerDiv(!prevValue);
-                      });
+                      setRevealAnswerDiv(prevValue => !prevValue);
+
                     }}> {revealanswerdiv ? "Hide Answer" : "Show Answer"}
+
                   </button>
                 </div>
               </div>
@@ -464,7 +542,8 @@ export default function Quiz4() {
                 )}
               </div>
             </div>
-
+            <div className="quiz1nextworddiv">
+            </div>
           </>
         )}
       </div >

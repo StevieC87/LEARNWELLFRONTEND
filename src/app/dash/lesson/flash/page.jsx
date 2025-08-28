@@ -31,10 +31,13 @@ import {
 } from "./services/fetchwords";
 import { dynamichunneds } from '@/utilities/arrayswordshunneds';
 
+
 export default function FlashcardPage() {
   const dispatch = useDispatch();
+
   const pathname = usePathname();
   const slug = pathname.split("/").pop();
+
   console.log(slug, "slugsss");
   if (isNaN(slug)) {
     return <div>error</div>;
@@ -257,7 +260,7 @@ export default function FlashcardPage() {
   return (
     <div className="flashmain mt-8" style={{ minHeight: "100vh" }}>
 
-      <h3>Words {wordstart} - {wordend} </h3>
+      {/*  <h3>Words {wordstart} - {wordend} </h3> */}
       {/*  {totalwordsknown}
       {totalwordsremaining} */}
       {/*  <div className="flashcardwrapper"> */}
@@ -265,7 +268,7 @@ export default function FlashcardPage() {
         className={`flashcardwrapper ${!showRemainingWords2 ? "flashcardwrapperleft" : ""
           }`}
       >
-        <div className="chooseWordStack mt-5">
+        <div className="chooseWordStack">
           <ChooseStack />
         </div>
         <div className="leftbar mt-5 mb-5">{!showRemainingWords2 && <LeftBar />}</div>
