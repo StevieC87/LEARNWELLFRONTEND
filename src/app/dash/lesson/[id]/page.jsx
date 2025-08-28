@@ -70,6 +70,12 @@ export default function LessonPage({ params }) {
       setQuiz4page(false);
       setQuiz5page(true);
     }
+
+
+
+  }
+  function callBackchangetab(tab) {
+    toggleTabs(tab)
   }
   return (
     <>
@@ -83,10 +89,10 @@ export default function LessonPage({ params }) {
       </div>
 
       {flashpage && <FlashcardPage lessonid={lessonid} />}
-      {quiz1page && <Quiz1 lessonid={lessonid} />}
-      {quiz2page && <Quiz2 lessonid={lessonid} />}
-      {quiz3page && <Quiz3 lessonid={lessonid} />}
-      {quiz4page && <Quiz4 lessonid={lessonid} />}
+      {quiz1page && <Quiz1 lessonid={lessonid} callBackchangetabprop={callBackchangetab} />}
+      {quiz2page && <Quiz2 lessonid={lessonid} callBackchangetabprop={callBackchangetab} />}
+      {quiz3page && <Quiz3 lessonid={lessonid} callBackchangetabprop={callBackchangetab} />}
+      {quiz4page && <Quiz4 lessonid={lessonid} callBackchangetabprop={callBackchangetab} />}
       {quiz5page && <Quiz5 lessonid={lessonid} />}
 
       {/* WE NEED TO CHECK IF ALL THE FLASHCARDS WERE STUDIED IN THE STACK FIRST */}

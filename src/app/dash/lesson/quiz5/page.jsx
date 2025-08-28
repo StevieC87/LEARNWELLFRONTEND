@@ -343,9 +343,9 @@ export default function Quiz5() {
         <div className="showwordtotranslate">
           {(!lessoncompletedv && currentquiz1word) && (
             <>
-              <p className="text-center">Pick the word</p>
+              <p className="text-center">Unscramble the sentence</p>
               <p>{wordsleftinstack} / {originalnumberwords}</p>
-              <div className="maxdiv pt-10 pb-10 text-center">
+              <div className="quiz5showsentencediv text-center">
                 {currentexamplescrambledreordered && currentexamplescrambledreordered.length > 0 && currentexamplescrambledreordered.map((word, index) => (
 
                   <button className="pill-badge cursor-pointer" key={index}
@@ -379,7 +379,7 @@ export default function Quiz5() {
             <div className="quiz2pickwordsdiv flex flex-row gap-3">
               {(wordspickchoose && wordspickchoose.length > 0) && (
                 wordspickchoose.map((word, index) => (
-                  <button className="pill-badge cursor-pointer" key={index}
+                  <button className="pill-badge cursor-pointer noselect" key={index}
                     onClick={() => includeword(word)}>
                     <span>{word}</span>
                   </button>
@@ -423,9 +423,7 @@ export default function Quiz5() {
                   <button
                     className="button button-primary button-outline button-narrow"
                     onClick={() => {
-                      setRevealAnswerDiv(prevValue => {
-                        setRevealAnswerDiv(!prevValue);
-                      });
+                      setRevealAnswerDiv((prev) => !prev)
                     }}> {revealanswerdiv ? "Hide Answer" : "Show Answer"}
                   </button>
                 </div>
@@ -448,7 +446,7 @@ export default function Quiz5() {
                 )}
                 {revealanswerdiv && (
                   <div className="revealanswer">
-                    <p className="text-center quiz1wordtotranslate pt-10 pb-10">{currentquiz1word.word}
+                    <p className="text-center quiz1wordtotranslate pt-10 pb-10">{currentexample.ExampleSentenceDE}
                       {/* {currentquiz1word.Meaning?.CommonFields?.TranslationDE} */}</p>
                   </div>
                 )}

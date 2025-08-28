@@ -35,11 +35,11 @@ import {
 } from "@/redux/slices/flashcardSlice";
 import Link from 'next/link';
 import customSessionStorage from "@/utilities/customSessionStorage";
-export default function Quiz3() {
+export default function Quiz3(props) {
   const dispatch = useDispatch();
   const pathname = usePathname();
 
-
+  const { callBackchangetabprop } = props;
   const [wordsforquiz1, setWordsforquiz1] = useState([]);
   const [currentquiz1word, setCurrentQuiz1Word] = useState(null);
   const [currentquizwordGerman, setCurrentQuizWordGerman] = useState(null);
@@ -405,7 +405,7 @@ export default function Quiz3() {
             <div className="lessoncompleteddiv text-center">
               <h2>Quiz3 Completed!</h2>
               <p className="underline cursor-pointer" onClick={() => takelessonagain()}>Take again!</p>
-              <Link href={`../quiz2/${slug}`}><p className="underline cursor-pointer" >or Do the Next Quiz!</p></Link>
+              <p className="underline cursor-pointer" onClick={() => callBackchangetabprop('quiz4')}>or Do the Next Quiz!</p>
             </div>
           )}
         </div>

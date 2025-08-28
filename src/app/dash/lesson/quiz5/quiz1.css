@@ -113,3 +113,18 @@
 .showwordtotranslate {
   width: 100%;
 }
+
+.quiz5showsentencediv {
+  height: 60px;
+}
+
+.noselect {
+  user-select: none;
+  /* Standard */
+  -webkit-user-select: none;
+  /* Safari/Chrome */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* IE/Edge */
+}

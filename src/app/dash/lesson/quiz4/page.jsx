@@ -35,11 +35,12 @@ import {
 } from "@/redux/slices/flashcardSlice";
 import Link from 'next/link';
 import customSessionStorage from "@/utilities/customSessionStorage";
-export default function Quiz4() {
+export default function Quiz4(props) {
   const dispatch = useDispatch();
   const pathname = usePathname();
 
 
+  const { callBackchangetabprop } = props;
   const [wordsforquiz1, setWordsforquiz1] = useState([]);
   const [currentquiz1word, setCurrentQuiz1Word] = useState(null);
   const [currentquizwordGerman, setCurrentQuizWordGerman] = useState(null);
@@ -188,31 +189,84 @@ export default function Quiz4() {
       //   new RegExp(`(${currentquiz1word.word})`, "gi")
       //  );
       const word = currentquiz1word.word;
-      const sentence = currentexample.ExampleSentenceDE;
-      const regex = new RegExp(`\\b${word}\\b`, "gi");
-      const parts = sentence.split(regex);
+      // Escape regex special chars in the word
+      const escapedWord = word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      console.log(escapedWord, "escapedWord");
+      let regex;
+      let slashwordchosen;
+      if (escapedWord.includes('/')) {
+        //if it includes a /, then split it into two words and make a regex that matches either of them
+        const parts = escapedWord.split('/').map(part => part.trim());
+        console.log(parts, 'partsparts');
+        //  regex = new RegExp(`(?<!\\p{L})(${parts.join('|')})(?!\\p{L})`, "giu");
+        parts.forEach((part, index) => {
+          //check if sentence contains this part 
+          let regex = new RegExp(`(?<!\\p{L})${part}(?!\\p{L})`, "iu");
+          console.log(regex, 'regexinpartsloop');
+          const matches = currentexample.ExampleSentenceDE.match(regex);
+          if (matches && matches.length > 0) {
+            console.log(part, 'partpart');
+            const sentence = currentexample.ExampleSentenceDE;
+            const parts = sentence.split(regex);
+            const jsx = [];
+            let matchCount = 0;
 
-      const jsx = [];
-      let matchCount = 0;
+            parts.forEach((part, i) => {
+              jsx.push(part);
+              if (i < parts.length - 1) {
+                jsx.push(
+                  <span
+                    key={`blank-${matchCount++}`}
+                    style={{
+                      borderBottom: "2px solid black",
+                      display: "inline-block",
+                      width: '40px',
+                      /*  width: word.length * 12, */
+                    }}
+                  />
+                );
+              }
+            });
+            setCurrentExampleWithoutWord(jsx);
 
-      parts.forEach((part, i) => {
-        jsx.push(part);
-        if (i < parts.length - 1) {
-          jsx.push(
-            <span
-              key={`blank-${matchCount++}`}
-              style={{
-                borderBottom: "2px solid black",
-                display: "inline-block",
-                width: word.length * 12,
-              }}
-            />
-          );
-        }
-      });
+
+            console.log(`Chosen slash word: ${slashwordchosen}`);
+          }
+
+          console.log(`Part ${index}: ${part}`);
+        })
 
 
-      setCurrentExampleWithoutWord(jsx);
+        //  regex = new RegExp(`(?<!\\p{L})(${parts.join('|')})(?!\\p{L})`, "giu"); // Updated regex to match either word
+      } else {
+        // Use Unicode regex, match full word
+        regex = new RegExp(`(?<!\\p{L})${escapedWord}(?!\\p{L})`, "giu");
+        const sentence = currentexample.ExampleSentenceDE;
+        const parts = sentence.split(regex);
+
+        const jsx = [];
+        let matchCount = 0;
+
+        parts.forEach((part, i) => {
+          jsx.push(part);
+          if (i < parts.length - 1) {
+            jsx.push(
+              <span
+                key={`blank-${matchCount++}`}
+                style={{
+                  borderBottom: "2px solid black",
+                  display: "inline-block",
+                  width: '40px',
+                  //width: word.length * 12,
+                }}
+              />
+            );
+          }
+        });
+        setCurrentExampleWithoutWord(jsx);
+      }
+
+
     } else {
       setCurrentExampleWithoutWord(null);
     }
@@ -369,7 +423,7 @@ export default function Quiz4() {
             <div className="lessoncompleteddiv text-center">
               <h2>Lesson Completed!</h2>
               <p className="underline cursor-pointer" onClick={() => takelessonagain()}>Take again!</p>
-              <Link href={`../quiz2/${slug}`}><p className="underline cursor-pointer" >or Do the Next Quiz!</p></Link>
+              <p className="underline cursor-pointer" onClick={() => callBackchangetabprop('quiz5')}>or Do the Next Quiz!</p>
             </div>
           )}
         </div>
@@ -378,7 +432,7 @@ export default function Quiz4() {
             <div className="quiz2pickwordsdiv flex flex-row gap-3">
               {(wordspickchoose && wordspickchoose.length > 0) && (
                 wordspickchoose.map((word, index) => (
-                  <button className="pill-badge cursor-pointer" key={index}
+                  <button className="pill-badge cursor-pointer noselect" key={index}
                     onClick={() => compareWords(word)}>
                     <span>{word}</span>
                   </button>
