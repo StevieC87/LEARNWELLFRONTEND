@@ -10,32 +10,124 @@ const Extrafields = () => {
     <div className="extrafields fontmedium">
       {currentword && currentword.word && (
         <>
-          {/* <hr className="dotted"></hr> */}
-          {/* <div className="fontmedium mb-4">
-            <span className="semibold">Explanation:</span>{" "}
-            <span>{currentword?.Meaning?.Explanation}</span>
+          {currentword?.Meaning?.WordType && (
+            <>
+              <span className="semibold ">Word type: </span>
+              <span>{currentword?.Meaning?.WordType}</span>
 
-          </div> */}
+            </>
+          )}
+          {currentword?.Meaning?.BeginnerTips?.WhenToUse && (
+            <div className="fontmedium">
+              <span className="semibold ">When to use: </span>
+              <span> {currentword?.Meaning?.BeginnerTips?.WhenToUse}</span>
+
+            </div>
+          )}
+
+          {currentword?.Meaning.BeginnerTips.BeginnerWarning && (
+            <div className="fontmedium">
+              <span className="semibold ">Beginner Warning: </span>
+              <span> {currentword?.Meaning?.BeginnerTips?.BeginnerWarning}</span>
+
+            </div>
+          )}
+          {currentword?.Meaning?.Explanation && (
+            <div className="fontmedium">
+              <span className="semibold ">Explanation: </span>
+              <span>{currentword?.Meaning?.Explanation}</span>
+            </div>
+          )}
 
           {currentword?.Meaning?.CommonFields?.UsageNotes && (
             <div className="fontmedium">
               <span className="semibold ">Usage Notes: </span>
               <span> {currentword?.Meaning?.CommonFields?.UsageNotes}</span>
+            </div>
+          )}
+          {currentword?.Meaning?.LiteralMeaning && (
+            <div className="fontmedium mb-4">
+              <span className="semibold ">Literal Meaning: </span>
+              <span>{currentword?.Meaning?.LiteralMeaning}</span>
+            </div>
+          )}
+          {currentword?.Meaning?.CommonFields?.WordRegister && (
+            <div className="fontmedium">
+              <span className="semibold ">Word Register: </span>
+              <span> {currentword?.Meaning?.CommonFields?.WordRegister}</span>
 
             </div>
           )}
+          {currentword?.Meaning?.BeginnerTips?.TypicalPairings && currentword?.Meaning?.BeginnerTips?.TypicalPairings.length > 0 && (
+            <>
+              <div className="fontmedium">
+                <span className="semibold ">Typical Pairings: </span>
+                <ul>
+                  {currentword?.Meaning?.BeginnerTips?.TypicalPairings.map((pairing, index) => (
+                    <li key={index}>{pairing}</li>
+                  ))}
+                </ul>
+              </div>
+            </>
+          )}
 
-          {/*    <hr className="dotted  centeredhr padtop10"></hr> */}
+
+
+          {currentword?.Meaning?.CommonFields?.Synonyms && currentword?.Meaning?.CommonFields?.Synonyms.length > 0 && (
+            <>
+              <div className="fontmedium">
+                <span className="semibold ">Synonyms: </span>
+                <ul>
+                  {currentword?.Meaning?.CommonFields?.Synonyms.map((synonym, index) => (
+                    <li key={index}>{synonym}</li>
+                  ))}
+                </ul>
+              </div>
+            </>
+          )}
+
+          {currentword?.Meaning?.CommonFields?.Antonyms && currentword?.Meaning?.CommonFields?.Antonyms.length > 0 && (
+            <>
+              <div className="fontmedium">
+                <span className="semibold ">Antonyms: </span>
+                <ul>
+                  {currentword?.Meaning?.CommonFields?.Antonyms.map((antonym, index) => (
+                    <li key={index}>{antonym}</li>
+                  ))}
+                </ul>
+              </div>
+            </>
+          )}
+
+          {currentword.Meaning?.CommonFields?.Collocations && currentword.Meaning.CommonFields.Collocations.length > 0 && (
+            <>
+              <div className="fontmedium">
+                <span className="semibold ">Collocations: </span>
+                <ul>
+                  {currentword.Meaning.CommonFields.Collocations.map((collocation, index) => (
+                    <li key={index}>{collocation}</li>
+                  ))}
+                </ul>
+              </div>
+            </>
+          )}
+
+
+
+
+
+
           {currentword?.Meaning?.BaseForm && (
             <>
               {currentword.Meaning.BaseForm !== currentword.word && (
                 <>
-                  <p>Base Form: {currentword?.Meaning?.BaseForm}</p>
-                  <hr className="dotted  centeredhr padtop10"></hr>
+                  <span className="semibold">Base Form: </span>
+                  <span> {currentword?.Meaning?.BaseForm}</span>
                 </>
               )}
             </>
           )}
+
           {currentword?.Meaning?.CommonErrors?.length > 0 && (
             <>
               <span className="semibold">Common Errors: </span>
@@ -55,35 +147,14 @@ const Extrafields = () => {
                   </div>
                 </div>
               ))}
-              <hr className="dotted  centeredhr padtop10"></hr>
+
             </>
           )}
 
-          <p>Word Type: {currentword?.Meaning?.WordType}</p>
 
-          {currentword?.Meaning?.CommonFields["Word Register"] && (
-            <>
-              <p>
-                Register: {currentword?.Meaning?.CommonFields["Word Register"]}
-              </p>
-            </>
-          )}
 
-          {currentword?.Meaning?.CommonFields?.Synonyms && (
-            <>
-              <hr className="dotted  centeredhr padtop10"></hr>
-              <p>Synonyms: {currentword?.Meaning.CommonFields?.Synonyms}</p>
-            </>
-          )}
-          {currentword?.Meaning?.CommonFields?.Antonyms && (
-            <>
-              <hr className="dotted  centeredhr padtop10"></hr>
-              <p>Antonyms: {currentword?.Meaning.Antonyms}</p>
-            </>
-          )}
           {currentword?.Meaning?.CommonFields?.FixedExpressions && (
             <>
-              <hr className="dotted  centeredhr padtop10"></hr>
               <p>Fixed Expressions:</p>
               {currentword?.Meaning?.CommonFields?.FixedExpressions.map((expression, index) => (
                 <div key={index}>
@@ -93,71 +164,76 @@ const Extrafields = () => {
 
               ))}
             </>
+
           )}
 
-          {currentword?.Meaning?.Collocations?.length > 0 && (
+          {currentword?.Meaning?.CommonFields?.IdiomaticMeanings && currentword?.Meaning?.CommonFields?.IdiomaticMeanings.length > 0 && (
             <>
-              <span>Collocations: </span>
-              {currentword?.Meaning.Collocations.map((collocation, i) => (
-                <div key={i}><span>{collocation}</span></div>
-              ))}
-              <hr className="dotted  centeredhr padtop10"></hr>
+              <div className="fontmedium">
+                <span className="semibold ">Idiomatic Meanings: </span>
+                <ul>
+                  {currentword?.Meaning?.CommonFields?.IdiomaticMeanings.map((idiom, index) => (
+                    <div key={index}>
+                      <li >{idiom.Meaning}</li>
+                      <li >{idiom.ExampleDE}</li>
+                      <li >{idiom.ExampleEN}</li>
+                    </div>
+
+                  ))}
+                </ul>
+              </div>
             </>
           )}
 
-          {(currentword?.Meaning?.WordType === "Pronoun" || currentword?.Meaning?.WordType === "pronoun" &&
-            currentword?.Meaning?.Pronoun) && (
+
+
+          {currentword?.Meaning?.CommonFields?.FalseFriends && currentword?.Meaning?.CommonFields?.FalseFriends.length > 0 && (
+            <>
+
+              <div className="fontmedium">
+                <span className="semibold ">False Friends: </span>
+                <ul>
+                  {currentword?.Meaning?.CommonFields?.FalseFriends.map((falsefriend, index) => (
+                    <li key={index}>{falsefriend}</li>
+                  ))}
+                </ul>
+              </div>
+            </>
+          )}
+
+
+          {currentword?.Meaning?.WordType === "pronoun" &&
+            currentword?.Meaning?.Pronoun && (
               <div>
-                <h4 className="centertext">Declined Forms:</h4>
-                <div className="twocolumntable">
-                  {(currentword.Meaning.Pronoun.DeclinedForms?.Singular || currentword.Meaning.CommonFields.DeclinedForms?.Singular) && (
-                    <div>
-                      <h5>Singular:</h5>
-                      <p>
-                        Nom:{" "}
-                        {currentword?.Meaning?.Pronoun?.DeclinedForms?.Singular?.Nom}
-                        {currentword?.Meaning?.CommonFields?.DeclinedForms?.Singular?.Nom}
-                      </p>
-                      <p>
-                        Gen:{" "}
-                        {currentword.Meaning.Pronoun.DeclinedForms.Singular.Gen}
-                        {currentword?.Meaning?.CommonFields?.DeclinedForms?.Singular?.Nom}                      </p>
-                      <p>
-                        Dat:{" "}
-                        {currentword.Meaning.Pronoun.DeclinedForms.Singular.Dat}
-                        {currentword?.Meaning?.CommonFields?.DeclinedForms?.Singular?.Nom}
-                      </p>
-                      <p>
-                        Akk:{" "}
-                        {currentword.Meaning.Pronoun.DeclinedForms.Singular.Akk}
-                        {currentword?.Meaning?.CommonFields?.DeclinedForms?.Singular?.Nom}
-                      </p>
-                    </div>
-                  )}
-                  {currentword.Meaning.Pronoun.DeclinedForms?.Plural && (
-                    <div>
-                      <h5>Plural:</h5>
-                      <p>
-                        Nom:{" "}
-                        {currentword.Meaning.Pronoun.DeclinedForms.Plural.Nom}
-                      </p>
-                      <p>
-                        Gen:{" "}
-                        {currentword.Meaning.Pronoun.DeclinedForms.Plural.Gen}
-                      </p>
-                      <p>
-                        Dat:{" "}
-                        {currentword.Meaning.Pronoun.DeclinedForms.Plural.Dat}
-                      </p>
-                      <p>
-                        Akk:{" "}
-                        {currentword.Meaning.Pronoun.DeclinedForms.Plural.Akk}
-                      </p>
-                    </div>
-                  )}
-                </div>
+                <h4>Pronoun Details:</h4>
+
+                <p>Type: {currentword.Meaning.Pronoun.Type}</p>
+                <p>Person: {currentword.Meaning.Pronoun.Person}</p>
+                <p>Reflexive: {currentword.Meaning.Pronoun.Reflexive ? "Yes" : "No"}</p>
+
+                <h4>Declined Forms:</h4>
+                {currentword.Meaning.Pronoun.DeclinedForms?.Singular && (
+                  <div>
+                    <h5>Singular:</h5>
+                    <p>Nominative: {currentword.Meaning.Pronoun.DeclinedForms.Singular?.Nom}</p>
+                    <p>Genitive: {currentword.Meaning.Pronoun.DeclinedForms.Singular?.Gen}</p>
+                    <p>Dative: {currentword.Meaning.Pronoun.DeclinedForms.Singular?.Dat}</p>
+                    <p>Accusative: {currentword.Meaning.Pronoun.DeclinedForms.Singular?.Akk}</p>
+                  </div>
+                )}
+
+                {currentword.Meaning.Pronoun.DeclinedForms?.Plural && (
+                  <div>
+                    <h5>Plural:</h5>
+                    <p>Nominative: {currentword.Meaning.Pronoun.DeclinedForms.Plural?.Nom}</p>
+                    <p>Genitive: {currentword.Meaning.Pronoun.DeclinedForms.Plural?.Gen}</p>
+                    <p>Dative: {currentword.Meaning.Pronoun.DeclinedForms.Plural?.Dat}</p>
+                    <p>Accusative: {currentword.Meaning.Pronoun.DeclinedForms.Plural?.Akk}</p>
+                  </div>
+                )}
               </div>
             )}
+
 
           {currentword?.Meaning?.WordType === "Noun" &&
             currentword?.Meaning?.Noun && (
@@ -200,37 +276,229 @@ const Extrafields = () => {
               </div>
             )}
 
-          {currentword?.Meaning?.WordType === "Verb" &&
+          {currentword?.Meaning?.WordType === "verb" &&
             currentword?.Meaning?.Verb && (
               <div>
                 <h4>Verb Details:</h4>
-                <h4>Present Tense:</h4>
-                <p>Ich: {currentword.Meaning.Verb.PresentTense?.ich}</p>
-                <p>Du: {currentword.Meaning.Verb.PresentTense?.du}</p>
-                <p>
-                  Er/Sie/Es:{" "}
-                  {currentword.Meaning.Verb.PresentTense?.["er/sie/es"]}
-                </p>
-                <p>Wir: {currentword.Meaning.Verb.PresentTense?.wir}</p>
-                <p>Ihr: {currentword.Meaning.Verb.PresentTense?.ihr}</p>
-                <p>Sie: {currentword.Meaning.Verb.PresentTense?.sie}</p>
-                <h4>Past Participle:</h4>
-                <p>
-                  Participle:{" "}
-                  {currentword.Meaning.Verb.PastParticiple?.Participle}
-                </p>
-                <p>
-                  Auxiliary:{" "}
-                  {currentword.Meaning.Verb.PastParticiple?.Auxiliary}
-                </p>
-                <h4>Imperative:</h4>
-                <p>Du: {currentword.Meaning.Verb.Imperative?.du}</p>
-                <p>Wir: {currentword.Meaning.Verb.Imperative?.wir}</p>
-                <p>Ihr: {currentword.Meaning.Verb.Imperative?.ihr}</p>
+                {currentword?.Meaning?.Verb?.PresentTense && (
+                  <>
+                    <h4>Present Tense:</h4>
+                    <p>Ich: {currentword.Meaning.Verb.PresentTense?.ich}</p>
+                    <p>Du: {currentword.Meaning.Verb.PresentTense?.du}</p>
+                    <p>Er/Sie/Es: {currentword.Meaning.Verb.PresentTense?.["er/sie/es"]}</p>
+                    <p>Wir: {currentword.Meaning.Verb.PresentTense?.wir}</p>
+                    <p>Ihr: {currentword.Meaning.Verb.PresentTense?.ihr}</p>
+                    <p>Sie: {currentword.Meaning.Verb.PresentTense?.sie}</p>
+                  </>
+                )}
+                {currentword?.Meaning?.Verb?.Praeteritum && (
+                  <>
+                    <h4>Präteritum:</h4>
+                    <p>Ich: {currentword.Meaning.Verb.Praeteritum?.ich}</p>
+                    <p>Du: {currentword.Meaning.Verb.Praeteritum?.du}</p>
+                    <p>Er/Sie/Es: {currentword.Meaning.Verb.Praeteritum?.["er/sie/es"]}</p>
+                    <p>Wir: {currentword.Meaning.Verb.Praeteritum?.wir}</p>
+                    <p>Ihr: {currentword.Meaning.Verb.Praeteritum?.ihr}</p>
+                    <p>Sie: {currentword.Meaning.Verb.Praeteritum?.sie}</p>
+                  </>
+                )}
+
+                {currentword?.Meaning?.Verb?.PastParticiple && (
+                  <>
+                    <h4>Past Participle:</h4>
+                    <p>Participle: {currentword.Meaning.Verb.PastParticiple?.Participle}</p>
+                    <p>Auxiliary: {currentword.Meaning.Verb.PastParticiple?.Auxiliary}</p>
+                  </>
+                )}
+
+                {currentword?.Meaning?.Verb?.FutureForm && (
+                  <>
+                    <h4>Future Form:</h4>
+                    <p>{currentword.Meaning.Verb.FutureForm}</p>
+                  </>
+                )}
+
+                {currentword?.Meaning?.Verb?.SeparablePrefix && (
+                  <>
+                    <h4>Imperative:</h4>
+                    <p>Du: {currentword.Meaning.Verb.Imperative?.du}</p>
+                    <p>Wir: {currentword.Meaning.Verb.Imperative?.wir}</p>
+                    <p>Ihr: {currentword.Meaning.Verb.Imperative?.ihr}</p>
+                  </>
+                )}
+
+                {currentword?.Meaning?.Verb?.Reflexive && (
+                  <>
+                    <h4>Reflexive:</h4>
+                    <p>{currentword.Meaning.Verb.Reflexive ? "Yes" : "No"}</p>
+                  </>
+                )}
+
+
+                {(currentword.Meaning.Verb.ModalVerbCompatibility?.CompatibleModalVerbs && currentword.Meaning.Verb.ModalVerbCompatibility?.CompatibleModalVerbs.length > 0) && (
+                  <>
+                    <h4>Compatible Modal Verbs:</h4>
+                    <ul>
+                      {currentword.Meaning.Verb.ModalVerbCompatibility?.CompatibleModalVerbs?.map(
+                        (verb, idx) => (
+                          <li key={idx}>{verb}</li>
+                        )
+                      )}
+                    </ul>
+                  </>
+                )}
               </div>
             )}
 
-          {currentword?.Meaning?.WordType === "Adjective" &&
+          {currentword?.Meaning?.WordType === "article" &&
+            currentword?.Meaning?.Article && (
+              <div>
+                <h4>Article Details:</h4>
+
+                <h4>Nominative:</h4>
+                <p>Masculine: {currentword.Meaning.Article.Nominative?.m}</p>
+                <p>Feminine: {currentword.Meaning.Article.Nominative?.f}</p>
+                <p>Neuter: {currentword.Meaning.Article.Nominative?.n}</p>
+                <p>Plural: {currentword.Meaning.Article.Nominative?.pl}</p>
+
+                <h4>Accusative:</h4>
+                <p>Masculine: {currentword.Meaning.Article.Accusative?.m}</p>
+                <p>Feminine: {currentword.Meaning.Article.Accusative?.f}</p>
+                <p>Neuter: {currentword.Meaning.Article.Accusative?.n}</p>
+                <p>Plural: {currentword.Meaning.Article.Accusative?.pl}</p>
+
+                <h4>Dative:</h4>
+                <p>Masculine: {currentword.Meaning.Article.Dative?.m}</p>
+                <p>Feminine: {currentword.Meaning.Article.Dative?.f}</p>
+                <p>Neuter: {currentword.Meaning.Article.Dative?.n}</p>
+                <p>Plural: {currentword.Meaning.Article.Dative?.pl}</p>
+
+                <h4>Genitive:</h4>
+                <p>Masculine: {currentword.Meaning.Article.Genitive?.m}</p>
+                <p>Feminine: {currentword.Meaning.Article.Genitive?.f}</p>
+                <p>Neuter: {currentword.Meaning.Article.Genitive?.n}</p>
+                <p>Plural: {currentword.Meaning.Article.Genitive?.pl}</p>
+
+                <h4>Other Info:</h4>
+                <p>Definiteness: {currentword.Meaning.Article.Definiteness}</p>
+                <p>Paradigm: {currentword.Meaning.Article.Paradigm}</p>
+              </div>
+            )}
+
+
+          {currentword?.Meaning?.WordType === "article" &&
+            currentword?.Meaning?.Article && (
+              <div>
+                <h4>Article Details:</h4>
+
+                {currentword?.Meaning?.Article?.Nominative &&
+                  Object.keys(currentword.Meaning.Article.Nominative).length > 0 && (
+                    <>
+                      <h4>Nominative:</h4>
+                      <p>Masculine: {currentword.Meaning.Article.Nominative?.m}</p>
+                      <p>Feminine: {currentword.Meaning.Article.Nominative?.f}</p>
+                      <p>Neuter: {currentword.Meaning.Article.Nominative?.n}</p>
+                      <p>Plural: {currentword.Meaning.Article.Nominative?.pl}</p>
+                    </>
+                  )}
+
+                {currentword?.Meaning?.Article?.Accusative && (
+                  <>
+                    <h4>Accusative:</h4>
+                    <p>Masculine: {currentword.Meaning.Article.Accusative?.m}</p>
+                    <p>Feminine: {currentword.Meaning.Article.Accusative?.f}</p>
+                    <p>Neuter: {currentword.Meaning.Article.Accusative?.n}</p>
+                    <p>Plural: {currentword.Meaning.Article.Accusative?.pl}</p>
+                  </>
+                )}
+
+                {currentword.Meaning.Article.Dative && (
+                  <>
+                    <h4>Dative:</h4>
+                    <p>Masculine: {currentword.Meaning.Article.Dative?.m}</p>
+                    <p>Feminine: {currentword.Meaning.Article.Dative?.f}</p>
+                    <p>Neuter: {currentword.Meaning.Article.Dative?.n}</p>
+                    <p>Plural: {currentword.Meaning.Article.Dative?.pl}</p>
+                  </>
+                )}
+
+                {currentword.Meaning.Article.Genitive && (
+                  <>
+                    <h4>Genitive:</h4>
+                    <p>Masculine: {currentword.Meaning.Article.Genitive?.m}</p>
+                    <p>Feminine: {currentword.Meaning.Article.Genitive?.f}</p>
+                    <p>Neuter: {currentword.Meaning.Article.Genitive?.n}</p>
+                    <p>Plural: {currentword.Meaning.Article.Genitive?.pl}</p>
+                  </>
+                )}
+
+                {(currentword.Meaning.Article.Definiteness ||
+                  currentword.Meaning.Article.Paradigm) && (
+                    <>
+                      <h4>Other Info:</h4>
+                      <p>Definiteness: {currentword.Meaning.Article.Definiteness}</p>
+                      <p>Paradigm: {currentword.Meaning.Article.Paradigm}</p>
+                    </>
+                  )}
+              </div>
+            )}
+
+          {currentword?.Meaning?.WordType === "adjective" &&
+            currentword?.Meaning?.Adjective && (
+              <div>
+                <h4>Adjective Details:</h4>
+
+                {currentword.Meaning.Adjective.Comparative && (
+                  <p>Comparative: {currentword.Meaning.Adjective.Comparative}</p>
+                )}
+
+                {(currentword.Meaning.Adjective.Superlative?.Predicative ||
+                  currentword.Meaning.Adjective.Superlative?.Attributive) && (
+                    <>
+                      <h4>Superlative:</h4>
+                      {currentword.Meaning.Adjective.Superlative?.Predicative && (
+                        <p>
+                          Predicative:{" "}
+                          {currentword.Meaning.Adjective.Superlative.Predicative}
+                        </p>
+                      )}
+                      {currentword.Meaning.Adjective.Superlative?.Attributive && (
+                        <div>
+                          <h5>Attributive:</h5>
+                          <p>
+                            Masculine:{" "}
+                            {currentword.Meaning.Adjective.Superlative.Attributive?.m}
+                          </p>
+                          <p>
+                            Feminine:{" "}
+                            {currentword.Meaning.Adjective.Superlative.Attributive?.f}
+                          </p>
+                          <p>
+                            Neuter:{" "}
+                            {currentword.Meaning.Adjective.Superlative.Attributive?.n}
+                          </p>
+                          <p>
+                            Plural:{" "}
+                            {currentword.Meaning.Adjective.Superlative.Attributive?.pl}
+                          </p>
+                        </div>
+                      )}
+                    </>
+                  )}
+
+                {currentword.Meaning.Adjective.AdverbialUsage !== undefined && (
+                  <>
+                    <h4>Adverbial Usage:</h4>
+                    <p>
+                      {currentword.Meaning.Adjective.AdverbialUsage ? "Yes" : "No"}
+                    </p>
+                  </>
+                )}
+              </div>
+            )}
+
+
+          {/*  {currentword?.Meaning?.WordType === "Adjective" &&
             currentword.Adjective && (
               <div>
                 <h4>Adjective Details:</h4>
@@ -281,7 +549,7 @@ const Extrafields = () => {
                   {currentword.Meaning.Adjective.Superlative?.Predicative}
                 </p>
               </div>
-            )}
+            )} */}
 
           {currentword?.Meaning?.WordType === "Adverb" &&
             currentword.Adverb && (
@@ -346,7 +614,6 @@ export default Extrafields;
 }
 {
   /* <div>
-            <hr className="dotted"></hr>
             <div className="fontmedium underline semibold">Examples:</div>
             <div className="examples fontmedium">
               {currentword?.Meaning?.CommonFields?.Examples?.map(
@@ -363,7 +630,6 @@ export default Extrafields;
                           example.ExampleSentenceEN}{" "}
                       </li>
                     </div>
-                    <hr className="dotted  centeredhr padtop10"></hr>
                   </div>
                 )
               )}

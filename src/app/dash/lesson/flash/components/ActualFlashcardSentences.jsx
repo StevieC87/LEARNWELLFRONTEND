@@ -239,7 +239,7 @@ const ActualFlashcard = (props) => {
   return (
     <>
       <div
-        className={`noselect skeletoncenterinner ${showOriginal ? "" : "skeletoncenterinnerINV"
+        className={` skeletoncenterinner ${showOriginal ? "" : "skeletoncenterinnerINV"
           }`}
         onClick={(e) => {
           if (
@@ -252,7 +252,7 @@ const ActualFlashcard = (props) => {
           ) {
             e.stopPropagation();
           } else {
-            fliptoEnglish();
+            //  fliptoEnglish();
           }
         }}
       >
@@ -282,7 +282,7 @@ const ActualFlashcard = (props) => {
                       )}
                       <div className="fontmedium mb-4">
                         {/*   <span className="semibold">Explanation:</span> */}
-                        <span>{currentword?.Meaning?.Explanation}</span>
+                        <span>{currentword?.Meaning?.BeginnerTips?.BeginnerExplanation}</span>
                       </div>
                     </>
                   )}
@@ -364,7 +364,7 @@ const ActualFlashcard = (props) => {
             </>
           )}
         </div>
-      </div>
+      </div >
 
 
     </>
