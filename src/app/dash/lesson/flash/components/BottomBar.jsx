@@ -83,9 +83,9 @@ const BottomBar = () => {
   }, [currentword, allwords]);
 
   return (
-    <div className="bottomBarbottom ">
+    <div className="bottomBarbottom noselect">
       <button
-        className="btn mybtn prevnext"
+        className="btn mybtn prevnext "
         onClick={() => handleChangeWord("prev")}
       >
         Prev

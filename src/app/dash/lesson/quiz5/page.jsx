@@ -33,7 +33,6 @@ import {
   setdisablediffbuttons,
   // setoriginalarrayorder,
 } from "@/redux/slices/flashcardSlice";
-import Link from 'next/link';
 import customSessionStorage from "@/utilities/customSessionStorage";
 export default function Quiz5() {
   const dispatch = useDispatch();
@@ -97,11 +96,14 @@ export default function Quiz5() {
   let wordend = wordstart1.wordend;
 
   const fisherYatesShuffle = (array) => {
-    const shuffled = [...array];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
+    let shuffled;
+    do {
+      shuffled = [...array];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+    } while (JSON.stringify(shuffled) === JSON.stringify(array));
     return shuffled;
   };
 
@@ -236,8 +238,14 @@ export default function Quiz5() {
   }
 
   const excludeword = (clickedword) => {
-    setCurrentExampleScrambledreordered((prev) => prev.filter(word => word !== clickedword));
-
+    setCurrentExampleScrambledreordered((prev) => {
+      const index = prev.findIndex(word => word === clickedword);
+      if (index !== -1) {
+        // Remove the first occurrence of the word
+        return [...prev.slice(0, index), ...prev.slice(index + 1)];
+      }
+      return prev; // If the word is not found, return the array as is
+    });
     //remove from setWordspickChoose
     setWordspickChoose((prev) => [...prev, clickedword]);
   }
@@ -370,7 +378,7 @@ export default function Quiz5() {
             <div className="lessoncompleteddiv text-center">
               <h2>Lesson Completed!</h2>
               <p className="underline cursor-pointer" onClick={() => takelessonagain()}>Take again!</p>
-              <Link href={`../quiz2/${slug}`}><p className="underline cursor-pointer" >or Do the Next Quiz!</p></Link>
+
             </div>
           )}
         </div>

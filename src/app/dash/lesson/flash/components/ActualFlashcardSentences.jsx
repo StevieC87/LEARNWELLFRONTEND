@@ -239,7 +239,7 @@ const ActualFlashcard = (props) => {
   return (
     <>
       <div
-        className={`skeletoncenterinner ${showOriginal ? "" : "skeletoncenterinnerINV"
+        className={`noselect skeletoncenterinner ${showOriginal ? "" : "skeletoncenterinnerINV"
           }`}
         onClick={(e) => {
           if (

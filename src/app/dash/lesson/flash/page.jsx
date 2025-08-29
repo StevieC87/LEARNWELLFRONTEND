@@ -238,6 +238,7 @@ export default function FlashcardPage() {
     ) {
       // alert("3");  
       dispatch(setdisablediffbuttons(false));
+
       //dispatch(setCurrentWord(allknownwordsdata[0]));
     } else if (
       allremainingwordsdata.length !== 0 &&
@@ -246,6 +247,8 @@ export default function FlashcardPage() {
     ) {
       //alert("4");
       dispatch(setdisablediffbuttons(false));
+      dispatch(setShowRemainingWords2(true))
+
 
     } else if (
       allremainingwordsdata.length !== 0 &&
@@ -254,6 +257,8 @@ export default function FlashcardPage() {
     ) {
       // alert("5");
       dispatch(setdisablediffbuttons(true));
+      dispatch(setShowRemainingWords2(true))
+
     }
   }, [showRemainingWords2, allremainingwordsdata, allknownwordsdata]);
   // --------------------------------------------------

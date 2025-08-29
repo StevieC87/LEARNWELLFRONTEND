@@ -219,14 +219,14 @@ const DifficultyButtons = () => {
     <>
       <div className="bottombartoptop">
         <button
-          className="btn mybtn diffic-btn buttonSaveWord fluentbtn"
+          className="noselect btn mybtn diffic-btn buttonSaveWord fluentbtn"
           onClick={() => submitWord("Fluent")}
           disabled={disablediffbuttons}
         >
           Never Show Again
         </button>
         <button
-          className="btn mybtn diffic-btn buttonSaveWord familiarbtn"
+          className="noselect btn mybtn diffic-btn buttonSaveWord familiarbtn"
           onClick={() => submitWord("Familiar")}
           disabled={disablediffbuttons}
         >
@@ -234,14 +234,14 @@ const DifficultyButtons = () => {
         </button>{" "}
 
         <button
-          className="btn mybtn diffic-btn buttonSaveWord uncertainbtn"
+          className="noselect btn mybtn diffic-btn buttonSaveWord uncertainbtn"
           onClick={() => submitWord("Uncertain")}
           disabled={disablediffbuttons}
         >
           Unsure
         </button>
         <button
-          className="btn mybtn diffic-btn buttonSaveWord newbtn"
+          className="noselect btn mybtn diffic-btn buttonSaveWord newbtn"
           onClick={() => submitWord("New")}
           disabled={disablediffbuttons}
         >

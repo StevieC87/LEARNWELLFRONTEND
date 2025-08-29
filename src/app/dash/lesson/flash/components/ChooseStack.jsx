@@ -144,7 +144,7 @@ const ChooseStack = () => {
     <>
       <div className="chooseWordStackInner">
         <button
-          className={`cursor-pointer button  ${showRemainingWords2 ? "button-outline button-narrow button-gray" : "button-primary button-narrow button-gray button-gray-filled "}`}
+          className={`noselect cursor-pointer button  ${showRemainingWords2 ? "button-outline button-narrow button-gray" : "button-primary button-narrow button-gray button-gray-filled "}`}
 
           onClick={() => {
             if (allknownwordsdata.length > 0) {
@@ -155,7 +155,7 @@ const ChooseStack = () => {
           Covered ({allknownwordsdata.length})
         </button>
         <button
-          className={` cursor-pointer  ml-3 button ${!showRemainingWords2 ? "button-outline button-narrow button-gray" : "button-primary button-narrow button-gray button-gray-filled "}`}
+          className={`noselect cursor-pointer  ml-3 button ${!showRemainingWords2 ? "button-outline button-narrow button-gray" : "button-primary button-narrow button-gray button-gray-filled "}`}
 
           onClick={() => changeWordList("remaining")}
         >

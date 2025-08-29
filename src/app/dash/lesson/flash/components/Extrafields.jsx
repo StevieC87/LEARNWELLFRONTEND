@@ -17,13 +17,13 @@ const Extrafields = () => {
 
           </div> */}
 
-          {/*  {currentword?.Meaning?.CommonFields?.UsageNotes && (
+          {currentword?.Meaning?.CommonFields?.UsageNotes && (
             <div className="fontmedium">
               <span className="semibold ">Usage Notes: </span>
               <span> {currentword?.Meaning?.CommonFields?.UsageNotes}</span>
 
             </div>
-          )} */}
+          )}
 
           {/*    <hr className="dotted  centeredhr padtop10"></hr> */}
           {currentword?.Meaning?.BaseForm && (
@@ -81,6 +81,19 @@ const Extrafields = () => {
               <p>Antonyms: {currentword?.Meaning.Antonyms}</p>
             </>
           )}
+          {currentword?.Meaning?.CommonFields?.FixedExpressions && (
+            <>
+              <hr className="dotted  centeredhr padtop10"></hr>
+              <p>Fixed Expressions:</p>
+              {currentword?.Meaning?.CommonFields?.FixedExpressions.map((expression, index) => (
+                <div key={index}>
+                  <p>DE:{expression.ExpressionDE}</p>
+                  <p>EN:{expression.ExpressionEN}</p>
+                </div>
+
+              ))}
+            </>
+          )}
 
           {currentword?.Meaning?.Collocations?.length > 0 && (
             <>
@@ -92,29 +105,32 @@ const Extrafields = () => {
             </>
           )}
 
-          {currentword?.Meaning?.WordType === "Pronoun" &&
-            currentword?.Meaning?.Pronoun && (
+          {(currentword?.Meaning?.WordType === "Pronoun" || currentword?.Meaning?.WordType === "pronoun" &&
+            currentword?.Meaning?.Pronoun) && (
               <div>
                 <h4 className="centertext">Declined Forms:</h4>
                 <div className="twocolumntable">
-                  {currentword.Meaning.Pronoun.DeclinedForms?.Singular && (
+                  {(currentword.Meaning.Pronoun.DeclinedForms?.Singular || currentword.Meaning.CommonFields.DeclinedForms?.Singular) && (
                     <div>
                       <h5>Singular:</h5>
                       <p>
                         Nom:{" "}
-                        {currentword.Meaning.Pronoun.DeclinedForms.Singular.Nom}
+                        {currentword?.Meaning?.Pronoun?.DeclinedForms?.Singular?.Nom}
+                        {currentword?.Meaning?.CommonFields?.DeclinedForms?.Singular?.Nom}
                       </p>
                       <p>
                         Gen:{" "}
                         {currentword.Meaning.Pronoun.DeclinedForms.Singular.Gen}
-                      </p>
+                        {currentword?.Meaning?.CommonFields?.DeclinedForms?.Singular?.Nom}                      </p>
                       <p>
                         Dat:{" "}
                         {currentword.Meaning.Pronoun.DeclinedForms.Singular.Dat}
+                        {currentword?.Meaning?.CommonFields?.DeclinedForms?.Singular?.Nom}
                       </p>
                       <p>
                         Akk:{" "}
                         {currentword.Meaning.Pronoun.DeclinedForms.Singular.Akk}
+                        {currentword?.Meaning?.CommonFields?.DeclinedForms?.Singular?.Nom}
                       </p>
                     </div>
                   )}
