@@ -252,7 +252,7 @@ const ActualFlashcard = (props) => {
           ) {
             e.stopPropagation();
           } else {
-            //  fliptoEnglish();
+            // fliptoEnglish();
           }
         }}
       >
@@ -364,7 +364,7 @@ const ActualFlashcard = (props) => {
             </>
           )}
         </div>
-      </div >
+      </div>
 
 
     </>
