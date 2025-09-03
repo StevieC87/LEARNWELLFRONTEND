@@ -1,3 +1,13 @@
 .card {
     max-width: 200px;
 }
+
+@media screen and (max-width: 830px) {
+    td {
+        max-width: calc((100vw - 200px) / 4);
+        word-wrap: break-word;
+        /* Ensure long words wrap to the next line */
+        word-break: break-word;
+        /* For better compatibility */
+    }
+}
