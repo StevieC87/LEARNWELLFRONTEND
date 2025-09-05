@@ -22,6 +22,7 @@
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.58.1",
     "react-redux": "^9.2.0",
+    "sortablejs": "^1.15.6",
     "svgmap": "^2.12.2"
   },
   "devDependencies": {
