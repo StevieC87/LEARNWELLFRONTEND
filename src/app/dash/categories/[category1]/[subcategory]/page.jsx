@@ -13,7 +13,9 @@ export default function Category1() {
     const sortablesRef = useRef({});
 
     // Fetch data
+
     useEffect(() => {
+
         const fetchspecificcatwords = async () => {
             const subcategoryURLENCODE = encodeURIComponent(subcategory);
             const res = await fetch(
@@ -29,7 +31,7 @@ export default function Category1() {
                 return acc;
             }, {}); */
             //  console.log(grouped, 'grouped');
-            console.log(data.querysubcategorywords);
+            console.log(data.querysubcategorywords, 'dataquerysubcategorywords');
             setGroupedWords(data.querysubcategorywords);
         };
         fetchspecificcatwords();
@@ -43,10 +45,8 @@ export default function Category1() {
 
             {groupedWords.map((category) => (
                 <div key={category} className="mb-6">
-                    <h2 className="text-lg font-bold mb-2">{category || 'Uncategorised'}</h2>
-
-
-                    {/*      <WordsTable category1={category1} subcategory={category} ></WordsTable> */}
+                    {/*   <h2 className="text-lg font-bold mb-2">{category || 'Uncategorised'}</h2> */}
+                    <WordsTable category1={category1} subcategory={subcategory} subsubcategory={category}></WordsTable>
                 </div>
             ))}
         </div>

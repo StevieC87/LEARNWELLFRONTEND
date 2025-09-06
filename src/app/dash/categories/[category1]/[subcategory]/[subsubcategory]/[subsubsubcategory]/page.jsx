@@ -2,11 +2,12 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import Sortable from 'sortablejs';
 import { useParams } from 'next/navigation';
-import '../../../categories.css';
-import WordsTable from '../../../wordsshowsubsubtable'
+import '../../../../categories.css';
+import WordsTable from '../../../../wordsshowsubsubtable'
 
 export default function SubSubCategory() {
-    const { category1, subcategory, subsubcategory } = useParams();
+    const { category1, subcategory, subsubcategory, subsubsubcategory = '' } = useParams();
+    console.log(subsubsubcategory, 'subsubsubcategorysubsubsubcategorysubsubsubcategory');
     console.log(subsubcategory, 'subsubcategorysubsubcategorysubsubcategory');
     const [groupedWords, setGroupedWords] = useState({});
     const tableRefs = useRef({});
@@ -32,21 +33,10 @@ export default function SubSubCategory() {
 
     return (
         <>
-            <h2>  {decodeURIComponent(subsubcategory)}</h2>
-            {groupedWords && groupedWords.length > 0 && groupedWords.map((category) => (
-                <div key={category} className="mb-6">
+            <h2>{decodeURIComponent(subsubsubcategory)}</h2>
+            <WordsTable category1={category1} subcategory={subcategory} subsubcategory={subsubcategory} subsubsubcategory={subsubsubcategory}></WordsTable>
 
-
-                    {category !== '\\N' && (
-                        <h2 className="text-lg font-bold mb-2">
-                            {category || 'Uncategorised'}</h2>
-                    )}
-
-                    <WordsTable category1={category1} subcategory={subcategory} subsubcategory={subsubcategory} subsubsubcategory={category}></WordsTable>
-                </div>
-            ))}
         </>
-        /*  <WordsTable category1={category1} subcategory={subcategory} subsubcategory={subsubcategory}></WordsTable> */
     )
 
 }

@@ -5,94 +5,69 @@ import { useParams } from 'next/navigation';
 import './categories.css';
 
 export default function WordsTable(props) {
-    const { category1 = '', subcategory = '', subsubcategory = '' } = props;
-    console.log(category1, subcategory, subsubcategory);
+    const { category1 = '', subcategory = '', subsubcategory = '', subsubsubcategory = '', subsubsubsubcategory = '' } = props;
+    console.log(props, 'props');
+    console.log(category1, subcategory, subsubcategory, subsubsubcategory, subsubsubsubcategory, 'categories11');
     const [groupedWords, setGroupedWords] = useState({});
-    const tableRefs = useRef({});
-    const sortablesRef = useRef({});
+    const [words, SetWords] = useState([])
+    const tableRef = useRef(null); // Single table reference
+    const sortableRef = useRef(null); // Single Sortable instance
 
     // Fetch data
     useEffect(() => {
         const fetchspecificsubcatwords = async () => {
             const subcategoryURLENCODE = encodeURIComponent(subcategory);
             const subsubcategoryURLENCODE = encodeURIComponent(subsubcategory);
+            const subsubsubcategoryURLENCODE = encodeURIComponent(subsubsubcategory);
+            const subsubsubsubcategoryURLENCODE = encodeURIComponent(subsubsubsubcategory);
+
+
             const res = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/api/fetchspecificwords?category1=${category1}&subcategory=${subcategoryURLENCODE}&subsubcategory=${subsubcategoryURLENCODE}`,
+                `${process.env.NEXT_PUBLIC_API_URL}/api/fetchspecificwords?category1=${category1}&subcategory=${subcategoryURLENCODE}&subsubcategory=${subsubcategoryURLENCODE}&subsubsubcategory=${subsubsubcategoryURLENCODE}&subsubsubsubcategory=${subsubsubsubcategoryURLENCODE}`,
                 { method: 'GET', headers: { 'Content-Type': 'application/json' } }
             );
             const data = await res.json();
-            console.log(data, 'data');
+            console.log(data, 'data111');
+            SetWords(data.querysubcategorywords)
 
-            const grouped = data.querysubcategorywords.reduce((acc, word) => {
-                const key = word.Category3 && word.Category3 !== '\\N' ? word.Category3 : '';
-                if (!acc[key]) acc[key] = [];
-                acc[key].push(word);
-                return acc;
-            }, {});
-            setGroupedWords(grouped);
+            setGroupedWords(data.querysubcategorywords);
+            console.log(data.querysubcategorywords, 'querysubcategorywords');
         };
         fetchspecificsubcatwords();
     }, [category1, subcategory]);
 
-    // Drag-end handler (within one group)
-    const handleDragEnd = useCallback((evt, category) => {
+    // Drag-end handler for the entire table
+    const handleDragEnd = useCallback((evt) => {
         const { oldIndex, newIndex } = evt;
         if (oldIndex == null || newIndex == null || oldIndex === newIndex) return;
 
         setGroupedWords(prev => {
-            const current = prev[category] ? [...prev[category]] : [];
+            const current = [...prev];
             const [moved] = current.splice(oldIndex, 1);
             current.splice(newIndex, 0, moved);
             const updated = current.map((w, i) => ({ ...w, order_number: i + 1 }));
             updateOrderInBackend(updated);
-            return { ...prev, [category]: updated };
+            return updated;
         });
     }, []);
 
-    // Create/destroy Sortable instances exactly once per tbody
-    const attachSortable = useCallback((category, el) => {
-        const prevEl = tableRefs.current[category];
-
-        // Element removed: destroy instance
-        if (!el) {
-            if (sortablesRef.current[category]) {
-                sortablesRef.current[category].destroy();
-                delete sortablesRef.current[category];
-            }
-            if (prevEl) delete tableRefs.current[category];
-            return;
-        }
-
-        // Same element already initialised
-        if (prevEl === el && sortablesRef.current[category]) return;
-
-        // If element changed, destroy old instance first
-        if (sortablesRef.current[category]) {
-            sortablesRef.current[category].destroy();
-            delete sortablesRef.current[category];
-        }
-
-        tableRefs.current[category] = el;
-
-        sortablesRef.current[category] = Sortable.create(el, {
-            animation: 150,
-            draggable: 'tr.sortable-row',
-            onEnd: (evt) => handleDragEnd(evt, category),
-            axis: 'y', // Restrict sorting to vertical movement
-            handle: '.sortable-row', // Optional: Add a handle for dragging
-
-
-        });
-    }, [handleDragEnd]);
-
-    // Destroy all on unmount (covers StrictMode double effects)
+    // Attach Sortable to the table
     useEffect(() => {
+        if (tableRef.current) {
+            sortableRef.current = Sortable.create(tableRef.current, {
+                animation: 150,
+                draggable: 'tr.sortable-row',
+                onEnd: handleDragEnd,
+                axis: 'y', // Restrict sorting to vertical movement
+                handle: '.sortable-row', // Optional: Add a handle for dragging
+            });
+        }
+
         return () => {
-            Object.values(sortablesRef.current).forEach(inst => inst?.destroy());
-            sortablesRef.current = {};
-            tableRefs.current = {};
+            sortableRef.current?.destroy();
+            sortableRef.current = null;
         };
-    }, []);
+    }, [handleDragEnd]);
 
     const updateOrderInBackend = async (updatedWords) => {
         try {
@@ -108,37 +83,29 @@ export default function WordsTable(props) {
 
     return (
         <div>
-            <h1>{category1}</h1>
-            <h2 className="text-2xl font-bold mb-4">{decodeURIComponent(subcategory)}</h2>
+            <table className="table-auto border-collapse border border-gray-400 w-full">
+                <thead>
+                    <tr>
+                        <th className="border border-gray-400 px-4 py-2">Order</th>
+                        <th className="border border-gray-400 px-4 py-2">English</th>
+                        <th className="border border-gray-400 px-4 py-2">French</th>
+                        <th className="border border-gray-400 px-4 py-2">German</th>
+                        <th className="border border-gray-400 px-4 py-2">Greek</th>
+                    </tr>
+                </thead>
 
-            {Object.entries(groupedWords).map(([category, rows]) => (
-                <div key={category} className="mb-6">
-                    <h2 className="text-lg font-bold mb-2">{category || 'Uncategorised'}</h2>
-
-                    <table className="table-auto border-collapse border border-gray-400 w-full">
-                        <thead>
-                            <tr>
-                                <th className="border border-gray-400 px-4 py-2">Order</th>
-                                <th className="border border-gray-400 px-4 py-2">English</th>
-                                <th className="border border-gray-400 px-4 py-2">French</th>
-                                <th className="border border-gray-400 px-4 py-2">German</th>
-                                <th className="border border-gray-400 px-4 py-2">Greek</th>
-                            </tr>
-                        </thead>
-                        <tbody ref={(el) => attachSortable(category, el)}>
-                            {rows.map((word) => (
-                                <tr key={word.id || word._id} className="sortable-row">
-                                    <td className="border border-gray-400 px-4 py-2">{word.order_number}</td>
-                                    <td className="border border-gray-400 px-4 py-2">{word.ENWord}</td>
-                                    <td className="border border-gray-400 px-4 py-2">{word.FRWord}</td>
-                                    <td className="border border-gray-400 px-4 py-2">{word.DEWord}</td>
-                                    <td className="border border-gray-400 px-4 py-2">{word.GRWord}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            ))}
+                <tbody ref={tableRef}>
+                    {words && words.length > 0 && words.map((word, index) => (
+                        <tr key={word.id || word._id} className="sortable-row">
+                            <td className="border border-gray-400 px-4 py-2">{word.order_number}</td>
+                            <td className="border border-gray-400 px-4 py-2">{word.ENWord}</td>
+                            <td className="border border-gray-400 px-4 py-2">{word.FRWord}</td>
+                            <td className="border border-gray-400 px-4 py-2">{word.DEWord}</td>
+                            <td className="border border-gray-400 px-4 py-2">{word.GRWord}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
     );
 }
