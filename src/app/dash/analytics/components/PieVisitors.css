@@ -1,0 +1,52 @@
+.piechartdiv {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 220px;
+}
+
+.piechartcanvas {
+  max-width: 120px;
+  max-height: 120px;
+}
+
+.piechartdiv-trafficsource {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 325px;
+  padding: 10px;
+}
+.piecharttrafficsource {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  align-items: center;
+  height: 325px;
+}
+
+.colorboxpiecharttraffic {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  display: inline-block;
+  border-radius: 50%;
+}
+
+.colorboxpiecharttraffic.directcb {
+  background-color: #1f77b4; /* Green */
+}
+.colorboxpiecharttraffic.searchcb {
+  background-color: #2ca02c; /* Blue */
+}
+.colorboxpiecharttraffic.socialcb {
+  background-color: #d62728;
+}
+.colorboxpiecharttraffic.campaigncb {
+  background-color: #ff7f0e;
+}
+.colorboxpiecharttraffic.othertrcd {
+  background-color: #9467bd;
+}

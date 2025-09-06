@@ -51,11 +51,12 @@ export default function Category1() {
                         return (
 
                             <div key={i} className="  flex flex-col items-start justify-center ">
+                                <div className="font-bold">{subcategory}</div>
                                 <Link
                                     href={`${encodeURIComponent(category1)}/${encodeURIComponent(subcategory)}`}
                                     key={i}
                                     className="grow-0"
-                                > <div className="font-bold">{subcategory}</div> </Link>
+                                > </Link>
                                 {matchedSubcategory && matchedSubcategory.category3.length > 0 ? (
                                     <ul className="mt-2 ml-10">
                                         {matchedSubcategory.category3.map((subsubcategory, index) => {

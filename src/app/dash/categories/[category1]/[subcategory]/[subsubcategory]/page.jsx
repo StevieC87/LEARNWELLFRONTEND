@@ -32,7 +32,7 @@ export default function SubSubCategory() {
 
     return (
         <>
-            <h2>  {decodeURIComponent(subsubcategory)}</h2>
+
             {groupedWords && groupedWords.length > 0 && groupedWords.map((category) => (
                 <div key={category} className="mb-6">
 
