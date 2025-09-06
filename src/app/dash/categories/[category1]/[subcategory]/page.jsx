@@ -40,7 +40,7 @@ export default function Category1() {
     return (
         <div>
             <h1>{category1}</h1>
-            aaa
+
             <h2 className="text-2xl font-bold mb-4">{decodeURIComponent(subcategory)}</h2>
 
             {groupedWords.map((category) => (
