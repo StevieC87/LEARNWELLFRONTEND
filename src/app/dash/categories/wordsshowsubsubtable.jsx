@@ -7,7 +7,11 @@ import './categories.css';
 export default function WordsTable(props) {
     const { category1 = '', subcategory = '', subsubcategory = '', subsubsubcategory = '', subsubsubsubcategory = '' } = props;
     console.log(props, 'props');
-    console.log(category1, subcategory, subsubcategory, subsubsubcategory, subsubsubsubcategory, 'categories11');
+    console.log(category1, 'categories11');
+    console.log(subcategory, 'subcategory11');
+    console.log(subsubcategory, 'subsubcategory11');
+    console.log(subsubsubcategory, 'subsubsubcategory11');
+    console.log(subsubsubsubcategory, 'subsubsubsubcategory11');
     const [groupedWords, setGroupedWords] = useState({});
     const [words, SetWords] = useState([])
     const tableRef = useRef(null); // Single table reference
@@ -83,6 +87,10 @@ export default function WordsTable(props) {
 
     return (
         <div>
+
+
+            {subsubcategory && <h3 className="text-xl font-bold mb-4">{decodeURIComponent(subsubcategory)}</h3>}
+            {subsubsubsubcategory && <h3 className="text-xl font-bold mb-4">{decodeURIComponent(subsubsubsubcategory)}</h3>}
             <table className="table-auto border-collapse border border-gray-400 w-full">
                 <thead>
                     <tr>

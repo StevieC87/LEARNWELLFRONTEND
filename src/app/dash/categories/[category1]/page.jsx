@@ -11,6 +11,7 @@ export default function Category1() {
     const [subcategories, setSubCategories] = useState([]);
     const [subsubcategories, setSubSubCategories] = useState([]);
     const [subsubsubcategories, setSubSubSubCategories] = useState([]);
+    const [openCategories, setOpenCategories] = useState({}); // State to manage accordion
 
     useEffect(() => {
         const fetchspecificcat = async () => {
@@ -24,25 +25,21 @@ export default function Category1() {
                 console.log('nowork');
             }
             const data = await response.json();
-            console.log(data, 'data2222');
             setWordsSubCat(data.words);
             setSubCategories(data.subcategories);
-            console.log(data.subcategoriesWithCategory3, 'subcategoriesWithCategory3');
             setSubSubCategories(data.subcategoriesWithCategory3);
             setSubSubSubCategories(data.subsubcategories4);
-            console.log(data.subsubcategories4, 'subsubcategories4');
         };
         fetchspecificcat();
     }, [category1]);
-    const isRealValue = (v) => {
-        if (v == null) return false;               // null or undefined
-        const s = String(v).trim();
-        if (!s) return false;                      // empty string
-        if (s.toLowerCase() === 'undefined') return false;
-        if (s.toLowerCase() === 'null') return false;
-        if (/^\\+n$/i.test(s)) return false;       // \N, \\N, \\\N, etc. (any backslashes + N)
-        return true;
+
+    const toggleAccordion = (key) => {
+        setOpenCategories((prev) => ({
+            ...prev,
+            [key]: !prev[key],
+        }));
     };
+
     return (
         <div>
             <h1>Category: {category1}</h1>
@@ -53,57 +50,89 @@ export default function Category1() {
                         const matchedSubcategory = subsubcategories.find(
                             (item) => item.subcategory === subcategory
                         );
+                        const subcategoryKey = `subcategory-${i}`;
                         return (
                             <div key={i} className="flex flex-col items-start justify-center">
-                                <Link
-                                    href={`${encodeURIComponent(category1)}/${encodeURIComponent(subcategory)}`}
-                                    className="grow-0"
-                                >
-                                    <div className="font-bold">{subcategory}</div>
-                                </Link>
-                                {matchedSubcategory && matchedSubcategory.category3.length > 0 ? (
-                                    <ul className="mt-2 ml-10">
-                                        {matchedSubcategory.category3
-                                            .filter((subsubcategory) => subsubcategory && subsubcategory !== '\\N')
-                                            .map((subsubcategory, index) => {
-                                                const matchedSubsubcategory = subsubsubcategories.find(
-                                                    (item) => item.category3 === subsubcategory
-                                                );
-
-                                                return (
-                                                    <div className="yes" key={index}>
-                                                        <li className="text-gray-600">
-                                                            <Link href={`${category1}/${encodeURIComponent(subcategory)}/${encodeURIComponent(subsubcategory)}`}>
-                                                                {subsubcategory !== '\\N' &&
-                                                                    (
-                                                                        subsubcategory
+                                <div className="flex items-center">
+                                    {matchedSubcategory && matchedSubcategory.category3.length > 1 ? (
+                                        <button
+                                            className="mr-2"
+                                            onClick={() => toggleAccordion(subcategoryKey)}
+                                        >
+                                            {openCategories[subcategoryKey] ? '▼' : '▶'}
+                                        </button>
+                                    ) : (
+                                        <div className="mr-2 w-4 h-4 rounded-full bg-black"></div> // Circle placeholder
+                                    )}
+                                    <Link
+                                        href={`${encodeURIComponent(category1)}/${encodeURIComponent(subcategory)}`}
+                                        className="font-bold"
+                                    >
+                                        {subcategory}
+                                    </Link>
+                                </div>
+                                {openCategories[subcategoryKey] && (
+                                    <>
+                                        {matchedSubcategory && matchedSubcategory.category3.length > 0 ? (
+                                            <ul className="mt-2 ml-10">
+                                                {matchedSubcategory.category3
+                                                    .filter(
+                                                        (subsubcategory) =>
+                                                            subsubcategory &&
+                                                            subsubcategory !== '\\N' &&
+                                                            matchedSubcategory.category3.length > 1
+                                                    )
+                                                    .map((subsubcategory, index) => {
+                                                        const matchedSubsubcategory = subsubsubcategories.find(
+                                                            (item) => item.category3 === subsubcategory
+                                                        );
+                                                        const subsubcategoryKey = `${subcategoryKey}-subsubcategory-${index}`;
+                                                        return (
+                                                            <div key={index}>
+                                                                <div className="flex items-center">
+                                                                    {matchedSubsubcategory && matchedSubsubcategory.category4.length > 1 ? (
+                                                                        <button
+                                                                            className="mr-2"
+                                                                            onClick={() => toggleAccordion(subsubcategoryKey)}
+                                                                        >
+                                                                            {openCategories[subsubcategoryKey] ? '▼' : '▶'}
+                                                                        </button>
+                                                                    ) : (
+                                                                        <div className="mr-2 w-4 h-4 rounded-full bg-black"></div> // Circle placeholder
                                                                     )}
-
-                                                            </Link>
-                                                            {matchedSubsubcategory && matchedSubsubcategory.category4.length > 0 && (
-                                                                <ul className="mt-2 ml-10">
-                                                                    {matchedSubsubcategory.category4
-                                                                        .filter((subsubsubcategory) => subsubsubcategory && subsubsubcategory !== '\\N')
-                                                                        .map((subsubsubcategory, idx) => (
-                                                                            <li key={idx} className="text-gray-600">
-                                                                                <Link href={`${category1}/${encodeURIComponent(subcategory)}/${encodeURIComponent(subsubcategory)}/${encodeURIComponent(subsubsubcategory)}`}>
-                                                                                    {subsubsubcategory !== 'default' &&
-                                                                                        (
-                                                                                            subsubsubcategory
-                                                                                        )}
-
-                                                                                </Link>
-                                                                            </li>
-                                                                        ))}
-                                                                </ul>
-                                                            )}
-                                                        </li>
-                                                    </div>
-                                                );
-                                            })}
-                                    </ul>
-                                ) : (
-                                    <p className="text-gray-500 text-xs mt-2">No category3 available</p>
+                                                                    <Link
+                                                                        href={`${category1}/${encodeURIComponent(subcategory)}/${encodeURIComponent(subsubcategory)}`}
+                                                                        className="text-gray-600"
+                                                                    >
+                                                                        {subsubcategory}
+                                                                    </Link>
+                                                                </div>
+                                                                {openCategories[subsubcategoryKey] && matchedSubsubcategory && matchedSubsubcategory.category4.length > 0 && (
+                                                                    <ul className="mt-2 ml-10">
+                                                                        {matchedSubsubcategory.category4
+                                                                            .filter(
+                                                                                (subsubsubcategory) =>
+                                                                                    subsubsubcategory &&
+                                                                                    subsubsubcategory !== '\\N' &&
+                                                                                    matchedSubsubcategory.category4.length > 1
+                                                                            )
+                                                                            .map((subsubsubcategory, idx) => (
+                                                                                <li key={idx} className="text-gray-600">
+                                                                                    <Link href={`${category1}/${encodeURIComponent(subcategory)}/${encodeURIComponent(subsubcategory)}/${encodeURIComponent(subsubsubcategory)}`}>
+                                                                                        {subsubsubcategory}
+                                                                                    </Link>
+                                                                                </li>
+                                                                            ))}
+                                                                    </ul>
+                                                                )}
+                                                            </div>
+                                                        );
+                                                    })}
+                                            </ul>
+                                        ) : (
+                                            <p className="text-gray-500 text-xs mt-2">No category3 available</p>
+                                        )}
+                                    </>
                                 )}
                             </div>
                         );
