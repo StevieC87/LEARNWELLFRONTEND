@@ -143,29 +143,31 @@ const ChooseStack = () => {
   return (
     <>
       <div className="chooseWordStackInner">
-        <button
-          className={`noselect cursor-pointer button  ${showRemainingWords2 ? "button-outline button-narrow button-gray" : "button-primary button-narrow button-gray button-gray-filled "}`}
+        <div className='flex flex-row justify-start'>
+          <button
+            className={`noselect cursor-pointer button  ${showRemainingWords2 ? "button-outline button-narrow button-gray" : "button-primary button-narrow button-gray button-gray-filled "}`}
 
-          onClick={() => {
-            if (allknownwordsdata.length > 0) {
-              changeWordList("known")
-            }
-          }}
-        >
-          Covered ({allknownwordsdata.length})
-        </button>
-        <button
-          className={`noselect cursor-pointer  ml-3 button ${!showRemainingWords2 ? "button-outline button-narrow button-gray" : "button-primary button-narrow button-gray button-gray-filled "}`}
+            onClick={() => {
+              if (allknownwordsdata.length > 0) {
+                changeWordList("known")
+              }
+            }}
+          >
+            Covered ({allknownwordsdata.length})
+          </button>
+          <button
+            className={`noselect cursor-pointer  ml-3 button ${!showRemainingWords2 ? "button-outline button-narrow button-gray" : "button-primary button-narrow button-gray button-gray-filled "}`}
 
-          onClick={() => changeWordList("remaining")}
-        >
-          Remaining ({allremainingwordsdata.length})
-        </button>
+            onClick={() => changeWordList("remaining")}
+          >
+            Remaining ({allremainingwordsdata.length})
+          </button>
+        </div>
         {/*  <div className="playpause">
           <AudioMode />
         </div> */}
         {!showRemainingWords2 && (
-          <div className="form-check form-switch switchgrid">
+          <div className="form-check">{/*  form-switch switchgrid */}
 
             <div>
               <label htmlFor=""> {switchchecked ? "Standard" : "Reverse"} </label>

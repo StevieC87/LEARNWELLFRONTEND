@@ -62,7 +62,7 @@
 .chooseWordStackInner {
   display: flex;
   flex-direction: row;
-  justify-content: start;
+  justify-content: space-between;
   gap: 0;
   width: 100%;
   max-width: 700px;

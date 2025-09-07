@@ -179,6 +179,28 @@ const ActualFlashcard = (props) => {
     }
   }, [currentword]);
 
+  useEffect(() => {
+    if (!showOriginal) {
+      if (!switchbuttondeen) {
+        //WORDS IF STADNARD, CARD FKIPPED TO ENGLIHS, THEN SWITCH TO REVERSE - >WIL SHOW ENGLISH
+        dispatch(setOriginal(true));
+        setExpandedIndex(false);
+      }
+      else {
+
+        dispatch(setOriginal(true));
+        setExpandedIndex(true);
+
+      }
+
+      // setOriginal(false);
+    } else if (showOriginal) {
+
+      dispatch(setOriginal(true));
+      setExpandedIndex(false);
+      /// setOriginal(true);
+    }
+  }, [switchbuttondeen])
 
   //FETCH MP3
   //wordorexample = word or example
@@ -283,7 +305,9 @@ const ActualFlashcard = (props) => {
                       )}
                       <div className="fontmedium mb-4">
                         {/*   <span className="semibold">Explanation:</span> */}
-                        <span>{currentword?.Meaning?.BeginnerTips?.BeginnerExplanation}</span>
+                        {switchbuttondeen && (
+                          <span>{currentword?.Meaning?.BeginnerTips?.BeginnerExplanation}</span>
+                        )}
                       </div>
                     </>
                   )}
