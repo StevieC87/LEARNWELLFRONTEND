@@ -252,7 +252,7 @@ const ActualFlashcard = (props) => {
           ) {
             e.stopPropagation();
           } else {
-            // fliptoEnglish();
+            fliptoEnglish();
           }
         }}
       >

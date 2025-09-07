@@ -45,7 +45,8 @@ const flashcardSlice = createSlice({
     pauseonnextprev: false,
     showmorebackcard: false,
     userwordsperlesson: '',
-    difficultybuttonclicked: false
+    difficultybuttonclicked: false,
+    activetab: 'flashcard'
   },
 
   reducers: {
@@ -138,6 +139,9 @@ const flashcardSlice = createSlice({
     },
     setdifficultybuttonclicked: (state, action) => {
       state.difficultybuttonclicked = action.payload;
+    },
+    setactivetab: (state, action) => {
+      state.activetab = action.payload;
     }
   },
 });
@@ -174,7 +178,8 @@ export const {
   setpauseonnextprev,
   setShowMoreBackCard,
   setuserwordsperlesson,
-  setdifficultybuttonclicked
+  setdifficultybuttonclicked,
+  setactivetab
 } = flashcardSlice.actions;
 
 export default flashcardSlice.reducer;

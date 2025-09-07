@@ -11,6 +11,7 @@ import { dynamichunneds } from '@/utilities/arrayswordshunneds';
 
 import { usePathname } from "next/navigation";
 import { get } from "http";
+
 import {
   setAllWords2,
   setCurrentWord,
@@ -31,6 +32,7 @@ import {
   setTotalWordsKnown,
   setTotalWordsRemaining,
   setdisablediffbuttons,
+  setactivetab
   // setoriginalarrayorder,
 } from "@/redux/slices/flashcardSlice";
 import Link from 'next/link';
@@ -39,8 +41,7 @@ import customSessionStorage from "@/utilities/customSessionStorage";
 export default function Quiz1(props) {
   const dispatch = useDispatch();
   const pathname = usePathname();
-
-  const { callBackchangetabprop } = props;
+  const activetab = useSelector((state) => state.flashcardSlice.activetab);
   const [wordsforquiz1, setWordsforquiz1] = useState([]);
   const [currentquiz1word, setCurrentQuiz1Word] = useState(null);
   const [currentquizwordGerman, setCurrentQuizWordGerman] = useState(null);
@@ -261,7 +262,8 @@ export default function Quiz1(props) {
             <div className="lessoncompleteddiv text-center">
               <h2>Lesson Completed!</h2>
               <p className="underline cursor-pointer" onClick={() => takelessonagain()}>Take again!</p>
-              <p className="underline cursor-pointer" onClick={() => callBackchangetabprop('quiz2')} >or Do the Next Quiz!</p>
+              <p className="underline cursor-pointer" onClick={() => dispatch(setactivetab('quiz2'))} >or Do the Next Quiz!</p>
+
             </div>
           )}
         </div>

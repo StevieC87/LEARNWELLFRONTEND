@@ -16,6 +16,7 @@ import {
   setisloading,
   setallknownwordsdata,
   setTotalWordsKnown,
+  setactivetab
 } from "@/redux/slices/flashcardSlice";
 import customSessionStorage from "@/utilities/customSessionStorage";
 
@@ -23,7 +24,6 @@ export default function Quiz2(props) {
   const dispatch = useDispatch();
   const pathname = usePathname();
 
-  const { callBackchangetabprop } = props;
   const [wordsforquiz1, setWordsforquiz1] = useState([]);
   const [currentquiz1word, setCurrentQuiz1Word] = useState(null);
   const [currentquizwordGerman, setCurrentQuizWordGerman] = useState(null);
@@ -320,7 +320,7 @@ export default function Quiz2(props) {
             <div className="lessoncompleteddiv text-center">
               <h2>Lesson Completed!</h2>
               <p className="underline cursor-pointer" onClick={() => takelessonagain()}>Take again!</p>
-              <p className="underline cursor-pointer" onClick={() => callBackchangetabprop('quiz3')} >or Do the Next Quiz!</p>
+              <p className="underline cursor-pointer" onClick={() => dispatch(setactivetab('quiz3'))} >or Do the Next Quiz!</p>
             </div>
           )}
         </div>

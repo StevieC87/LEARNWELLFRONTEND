@@ -31,6 +31,8 @@ import {
   setTotalWordsKnown,
   setTotalWordsRemaining,
   setdisablediffbuttons,
+  setactivetab
+
   // setoriginalarrayorder,
 } from "@/redux/slices/flashcardSlice";
 import Link from 'next/link';
@@ -39,7 +41,6 @@ export default function Quiz3(props) {
   const dispatch = useDispatch();
   const pathname = usePathname();
 
-  const { callBackchangetabprop } = props;
   const [wordsforquiz1, setWordsforquiz1] = useState([]);
   const [currentquiz1word, setCurrentQuiz1Word] = useState(null);
   const [currentquizwordGerman, setCurrentQuizWordGerman] = useState(null);
@@ -405,7 +406,7 @@ export default function Quiz3(props) {
             <div className="lessoncompleteddiv text-center">
               <h2>Quiz3 Completed!</h2>
               <p className="underline cursor-pointer" onClick={() => takelessonagain()}>Take again!</p>
-              <p className="underline cursor-pointer" onClick={() => callBackchangetabprop('quiz4')}>or Do the Next Quiz!</p>
+              <p className="underline cursor-pointer" onClick={() => dispatch(setactivetab('quiz4'))}>or Do the Next Quiz!</p>
             </div>
           )}
         </div>
