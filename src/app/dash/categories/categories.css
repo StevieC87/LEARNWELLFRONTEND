@@ -2,6 +2,10 @@
     max-width: 200px;
 }
 
+.inputeditinput {
+    width: 100px;
+}
+
 @media screen and (max-width: 830px) {
     td {
         max-width: calc((100vw - 200px) / 4);
