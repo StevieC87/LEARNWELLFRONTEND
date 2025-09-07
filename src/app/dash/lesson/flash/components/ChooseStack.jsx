@@ -166,11 +166,15 @@ const ChooseStack = () => {
         </div> */}
         {!showRemainingWords2 && (
           <div className="form-check form-switch switchgrid">
-            <div>
 
-            </div>
             <div>
-              <input
+              <label htmlFor=""> {switchchecked ? "Standard" : "Reverse"} </label>
+              <label className="switch">
+                <input type="checkbox" onChange={handleSwitchChange}
+                  checked={switchchecked} />
+                <span className="slider round"></span>
+              </label>
+              {/*  <input
                 className="form-check-input"
                 type="checkbox"
                 id="flexSwitchCheckChecked"
@@ -184,9 +188,12 @@ const ChooseStack = () => {
                 htmlFor="flexSwitchCheckChecked"
               >
                 {switchchecked ? "Standard" : "Reverse"}
-              </label>
+              </label> */}
+
+
             </div>
           </div>
+
         )}
       </div>
     </>
