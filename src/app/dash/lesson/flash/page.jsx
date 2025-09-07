@@ -57,7 +57,9 @@ export default function FlashcardPage() {
   const showRemainingWords2 = useSelector(
     (state) => state.flashcardSlice.showRemainingWords2
   );
-
+  const activetab = useSelector(
+    (state) => state.flashcardSlice.activetab
+  )
 
   useEffect(() => {
     if (wordsperlesson) {
@@ -82,92 +84,37 @@ export default function FlashcardPage() {
 
   //--------------------------------------------------
   useEffect(() => {
-    dispatch(setShowRemainingWords2(true))
-    const fetchwordsBOTH = async () => {
-      //AFTER FETCH - WE ONLY LOAD THE WORDS to their RESPECTIVE ARRAY
-      //WE DONT HAVE 'ALL WORDS' ARRAY ANYMORE (that takes either)
+    if (activetab === 'flashcard') {
 
-      //------------GET & SET REMAINING WORDS -----------------------
-      const getKnownWords = async (slug) => {
-        //alert("000");
-        let knownwords = await getFlashcardsKnownWords(slug);
-        // console.log(knownwords, "knownwords");
-        if (!knownwords || knownwords.length === 0) {
-          //alert("111");
-          return;
-        } else {
-          //alert("2222");
-          return knownwords;
-        }
-      };
-      const getRemainingWords = async (slug) => {
-        let dataknown = await getFlashcardsRemaining(slug);
-        //MOVE THIS SETTERS - to where called
-        if (dataknown || dataknown.length === 0) {
-          return dataknown;
-        } else {
-          return [];
-        }
-      };
-      let getremainingwords;
+      // dispatch(setShowRemainingWords2(true))
+      const fetchwordsBOTH = async () => {
+        //AFTER FETCH - WE ONLY LOAD THE WORDS to their RESPECTIVE ARRAY
+        //WE DONT HAVE 'ALL WORDS' ARRAY ANYMORE (that takes either)
 
-      getremainingwords = await getRemainingWords(slug);
-
-      if (getremainingwords.length > 0) {
-        console.log(getremainingwords, "getremainingwords");
-        // console.log(getremainingwords, "getremainingwords");
-        // setTotalWordsRemaining(getremainingwords.length);
-        dispatch(setTotalWordsRemaining(getremainingwords.length));
-        //WE PUT ALL REMAINING WORDS IN ARRAY REDUX
-
-        //i want to randomise the order of the array words
-
-        //dispatch(setoriginalarrayorder(getremainingwords));
-        /*    let randomisedArray = getremainingwords.sort(() => Math.random() - 0.5);
-           console.log(randomisedArray, "randomisedArrayaaaaaa"); */
-        //  dispatch(setallremainingwordsdata(randomisedArray));
-        //  dispatch(setAllWords2(randomisedArray));
-        dispatch(setallremainingwordsdata(getremainingwords));
-        dispatch(setAllWords2(getremainingwords));
-        //  console.log(getremainingwords[0], "getremainingwords[0]");
-        dispatch(setCurrentWord(getremainingwords[0]));
-        dispatch(setisloading(false));
-        //! keep THIS FOR NOW - check again
-      } else {
-        dispatch(seterrorNoWords(true));
-        dispatch(setallremainingwordsdata([]));
-        dispatch(setAllWords2([]));
-        // dispatch(setallremainingwordsdata(getremainingwords));
-        // dispatch(setAllWords2(getremainingwords));
-        //  console.log(getremainingwords[0], "getremainingwords[0]");
-        dispatch(setCurrentWord({}));
-        dispatch(setisloading(false));
-        //  if (showRemainingWords2) {
-        //
-        // }
-        console.log("NO REMAINING WORDS");
-        // return [];
-      }
-      //------------GET & SET  KNOWN WORDS -----------------------
-
-      let getknownwordsf = await getKnownWords(slug);
-      // alert("hello");
-      if (getknownwordsf && getknownwordsf.length > 0) {
-        // console.log(getknownwordsf, "getknownwordsf");
-        // setTotalWordsKnown(getknownwordsf.length);
-        dispatch(setTotalWordsKnown(getknownwordsf.length));
-
-        //WE PUT ALL KNOWS WORDS IN ARRAY REDUX
-        //dispatch(setAllWords2(getknownwordsf));
-        dispatch(setallknownwordsdata(getknownwordsf));
-        //dispatch(setCurrentWord(getknownwordsf[0]));
-        if (!showRemainingWords2) {
-          dispatch(seterrorNoWords(true));
-        }
-
-        dispatch(setisloading(false));
-
-        //CREATE ARRAY OF WORDS FOR EACH DIFFICULTY LEVEL
+        //------------GET & SET REMAINING WORDS -----------------------
+        const getKnownWords = async (slug) => {
+          //alert("000");
+          let knownwords = await getFlashcardsKnownWords(slug);
+          // console.log(knownwords, "knownwords");
+          if (!knownwords || knownwords.length === 0) {
+            //alert("111");
+            return;
+          } else {
+            //alert("2222");
+            return knownwords;
+          }
+        };
+        const getRemainingWords = async (slug) => {
+          let dataknown = await getFlashcardsRemaining(slug);
+          //MOVE THIS SETTERS - to where called
+          if (dataknown || dataknown.length === 0) {
+            return dataknown;
+          } else {
+            return [];
+          }
+        };
+        let getremainingwords = await getRemainingWords(slug);
+        let getknownwordsf = await getKnownWords(slug);
         let fluentWORDS1 = getknownwordsf.filter(
           (word) => word.difficulty === "Fluent"
         );
@@ -185,82 +132,143 @@ export default function FlashcardPage() {
         dispatch(setfamiliarWORDSArray(familiarWORDS));
         dispatch(setuncertainWORDSArray(uncertainWORDS));
         dispatch(setnewwordsArray(newwords));
+        let newarrayNOfluent = getknownwordsf.filter(
+          (word) => word.difficulty !== "Fluent"
+        );
 
-        // console.log(fluentWORDS1, "fluentwords444333");
-        // console.log(familiarWORDS, "familiarwords");
-        // console.log(uncertainWORDS, "uncertainwords");
-        // console.log(newwords, "newwords");
 
-        //! keep THIS FOR NOW - check again
-      } else {
-        // alert("no known words found");
-        dispatch(setallknownwordsdata([]));
-        dispatch(seterrorNoWords(true));
-        console.log("NO KNOWN WORDS");
-        return [];
-      }
+        if (getremainingwords.length > 0) {
+          console.log(getremainingwords, "getremainingwords");
+          // console.log(getremainingwords, "getremainingwords");
+          // setTotalWordsRemaining(getremainingwords.length);
+          dispatch(setTotalWordsRemaining(getremainingwords.length));
+          //WE PUT ALL REMAINING WORDS IN ARRAY REDUX
 
-      //--------------GET & SET REMAINING WORDS -------------------
+          //i want to randomise the order of the array words
 
-      //--------------------------------------------------
-      //ARRAY OF KNOWN WORDS BY DIFFICULTY LEVEL
-      //!CAN ADD THIS TO REDUX LATER
-      let knownfluentwords = filterbydifficulty(getknownwordsf, "Fluent");
-      let knownfamiliarwords = filterbydifficulty(getknownwordsf, "Familiar");
-      let knownuncertainwords = filterbydifficulty(getknownwordsf, "Uncertain");
-      let knownnewwords = filterbydifficulty(getknownwordsf, "New");
+          //dispatch(setoriginalarrayorder(getremainingwords));
+          /*    let randomisedArray = getremainingwords.sort(() => Math.random() - 0.5);
+             console.log(randomisedArray, "randomisedArrayaaaaaa"); */
+          //  dispatch(setallremainingwordsdata(randomisedArray));
+          //  dispatch(setAllWords2(randomisedArray));
+          dispatch(setallremainingwordsdata(getremainingwords));
+          dispatch(setAllWords2(getremainingwords));
+          //  console.log(getremainingwords[0], "getremainingwords[0]");
+          dispatch(setCurrentWord(getremainingwords[0]));
+          dispatch(setisloading(false));
+          //! keep THIS FOR NOW - check again
+        } else if (getremainingwords.length === 0) {
 
-      // setShowAllWords3(showallwords2);
-    };
-    fetchwordsBOTH();
-  }, []);
+          dispatch(seterrorNoWords(true));
+          dispatch(setallremainingwordsdata([]));
+          dispatch(setAllWords2(getknownwordsf));
+          // dispatch(setallremainingwordsdata(getremainingwords));
+          // dispatch(setAllWords2(getremainingwords));
+          //  console.log(getremainingwords[0], "getremainingwords[0]");
+          dispatch(setCurrentWord(newarrayNOfluent[0]));
+          dispatch(setisloading(false));
+          //  if (showRemainingWords2) {
+          //
+          // }
+          console.log("NO REMAINING WORDS");
+          // return [];
+        }
+        //------------GET & SET  KNOWN WORDS -----------------------
+
+
+        // alert("hello");
+        if (getknownwordsf && getknownwordsf.length > 0) {
+          // console.log(getknownwordsf, "getknownwordsf");
+          // setTotalWordsKnown(getknownwordsf.length);
+          dispatch(setTotalWordsKnown(getknownwordsf.length));
+
+          //WE PUT ALL KNOWS WORDS IN ARRAY REDUX
+          //dispatch(setAllWords2(getknownwordsf));
+          dispatch(setallknownwordsdata(getknownwordsf));
+          //dispatch(setCurrentWord(getknownwordsf[0]));
+          if (!showRemainingWords2) {
+            dispatch(seterrorNoWords(true));
+          }
+
+          dispatch(setisloading(false));
+
+          //CREATE ARRAY OF WORDS FOR EACH DIFFICULTY LEVEL
+
+          // console.log(fluentWORDS1, "fluentwords444333");
+          // console.log(familiarWORDS, "familiarwords");
+          // console.log(uncertainWORDS, "uncertainwords");
+          // console.log(newwords, "newwords");
+
+          //! keep THIS FOR NOW - check again
+        } else {
+          // alert("no known words found");
+          dispatch(setallknownwordsdata([]));
+          dispatch(seterrorNoWords(true));
+          console.log("NO KNOWN WORDS");
+          return [];
+        }
+
+        //--------------GET & SET REMAINING WORDS -------------------
+
+        //--------------------------------------------------
+        //ARRAY OF KNOWN WORDS BY DIFFICULTY LEVEL
+        //!CAN ADD THIS TO REDUX LATER
+
+
+        // setShowAllWords3(showallwords2);
+      };
+
+      fetchwordsBOTH();
+    }
+  }, [activetab]);
 
   //DISABLE DIFFICULTY BUTTONS when no remaining words - only covered - avoid bugs
   useEffect(() => {
     //WE WANT TO WAIT A BIT UNTIL THE DATA IS FETCHED
+    if (activetab === 'flashcard') {
+      if (allremainingwordsdata.length == 0 && allknownwordsdata.length === 0) {
+        dispatch(setdisablediffbuttons(true));
+        //alert("1");
+      } else if (
+        allremainingwordsdata.length === 0 &&
+        allknownwordsdata.length !== 0 &&
+        showRemainingWords2
+      ) {
+        //alert("2");
+        dispatch(setdisablediffbuttons(true));
+        dispatch(setShowRemainingWords2(false))
+        //  dispatch(setCurrentWord(allknownwordsdata[0]));
+      } else if (
+        allremainingwordsdata.length === 0 &&
+        allknownwordsdata.length !== 0 &&
+        !showRemainingWords2
+      ) {
+        // alert("3");  
+        dispatch(setdisablediffbuttons(false));
 
-    if (allremainingwordsdata.length == 0 && allknownwordsdata.length === 0) {
-      dispatch(setdisablediffbuttons(true));
-      //alert("1");
-    } else if (
-      allremainingwordsdata.length === 0 &&
-      allknownwordsdata.length !== 0 &&
-      showRemainingWords2
-    ) {
-      //alert("2");
-      dispatch(setdisablediffbuttons(true));
-      dispatch(setShowRemainingWords2(false))
-      //  dispatch(setCurrentWord(allknownwordsdata[0]));
-    } else if (
-      allremainingwordsdata.length === 0 &&
-      allknownwordsdata.length !== 0 &&
-      !showRemainingWords2
-    ) {
-      // alert("3");  
-      dispatch(setdisablediffbuttons(false));
-
-      //dispatch(setCurrentWord(allknownwordsdata[0]));
-    } else if (
-      allremainingwordsdata.length !== 0 &&
-      allknownwordsdata.length == 0 &&
-      showRemainingWords2
-    ) {
-      //alert("4");
-      dispatch(setdisablediffbuttons(false));
-      dispatch(setShowRemainingWords2(true))
+        //dispatch(setCurrentWord(allknownwordsdata[0]));
+      } else if (
+        allremainingwordsdata.length !== 0 &&
+        allknownwordsdata.length == 0 &&
+        showRemainingWords2
+      ) {
+        //alert("4");
+        dispatch(setdisablediffbuttons(false));
+        dispatch(setShowRemainingWords2(true))
 
 
-    } else if (
-      allremainingwordsdata.length !== 0 &&
-      allknownwordsdata.length === 0 &&
-      !showRemainingWords2
-    ) {
-      // alert("5");
-      dispatch(setdisablediffbuttons(true));
-      dispatch(setShowRemainingWords2(true))
+      } else if (
+        allremainingwordsdata.length !== 0 &&
+        allknownwordsdata.length === 0 &&
+        !showRemainingWords2
+      ) {
+        // alert("5");
+        dispatch(setdisablediffbuttons(true));
+        dispatch(setShowRemainingWords2(true))
 
+      }
     }
-  }, [showRemainingWords2, allremainingwordsdata, allknownwordsdata]);
+  }, [showRemainingWords2, allremainingwordsdata, allknownwordsdata, activetab]);
   // --------------------------------------------------
   return (
     <div className="flashmain mt-8" style={{ minHeight: "100vh" }}>
