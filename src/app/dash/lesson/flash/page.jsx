@@ -115,26 +115,30 @@ export default function FlashcardPage() {
         };
         let getremainingwords = await getRemainingWords(slug);
         let getknownwordsf = await getKnownWords(slug);
-        let fluentWORDS1 = getknownwordsf.filter(
-          (word) => word.difficulty === "Fluent"
-        );
-        let familiarWORDS = getknownwordsf.filter(
-          (word) => word.difficulty === "Familiar"
-        );
-        let uncertainWORDS = getknownwordsf.filter(
-          (word) => word.difficulty === "Uncertain"
-        );
-        let newwords = getknownwordsf.filter(
-          (word) => word.difficulty === "New"
-        );
+        let newarrayNOfluent
+        if (getknownwordsf && getknownwordsf.length > 0) {
+          let fluentWORDS1 = getknownwordsf.filter(
+            (word) => word.difficulty === "Fluent"
+          );
+          let familiarWORDS = getknownwordsf.filter(
+            (word) => word.difficulty === "Familiar"
+          );
+          let uncertainWORDS = getknownwordsf.filter(
+            (word) => word.difficulty === "Uncertain"
+          );
+          let newwords = getknownwordsf.filter(
+            (word) => word.difficulty === "New"
+          );
 
-        dispatch(setfluentWORDSArray(fluentWORDS1));
-        dispatch(setfamiliarWORDSArray(familiarWORDS));
-        dispatch(setuncertainWORDSArray(uncertainWORDS));
-        dispatch(setnewwordsArray(newwords));
-        let newarrayNOfluent = getknownwordsf.filter(
-          (word) => word.difficulty !== "Fluent"
-        );
+          dispatch(setfluentWORDSArray(fluentWORDS1));
+          dispatch(setfamiliarWORDSArray(familiarWORDS));
+          dispatch(setuncertainWORDSArray(uncertainWORDS));
+          dispatch(setnewwordsArray(newwords));
+
+          newarrayNOfluent = getknownwordsf.filter(
+            (word) => word.difficulty !== "Fluent"
+          );
+        }
 
 
         if (getremainingwords.length > 0) {
@@ -165,7 +169,12 @@ export default function FlashcardPage() {
           // dispatch(setallremainingwordsdata(getremainingwords));
           // dispatch(setAllWords2(getremainingwords));
           //  console.log(getremainingwords[0], "getremainingwords[0]");
-          dispatch(setCurrentWord(newarrayNOfluent[0]));
+          if (getknownwordsf && getknownwordsf.length > 0) {
+            dispatch(setCurrentWord(newarrayNOfluent[0]));
+          }
+          else {
+            dispatch(setCurrentWord({}));
+          }
           dispatch(setisloading(false));
           //  if (showRemainingWords2) {
           //
