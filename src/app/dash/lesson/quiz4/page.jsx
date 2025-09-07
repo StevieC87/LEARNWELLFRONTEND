@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from "react";
-import "./quiz1.css";
+import "../quiz1/quiz1.css";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getFlashcardsRemaining,
@@ -456,7 +456,7 @@ export default function Quiz4(props) {
             <div className="quiz1hints">
               <div className="quiz1hintbuttons flex flex-row gap-5 pb-5">
                 <div className="showexplanationbutton">
-                  <button className="button button-primary button-outline button-narrow" onClick={() => setShowExplanation(!showExplanation)}>
+                  <button className="button button-primary button-outline button-narrow textminimise" onClick={() => setShowExplanation(!showExplanation)}>
                     {showExplanation ? "Hide Explanation" : "Show Explanation"}
                   </button>
                 </div>

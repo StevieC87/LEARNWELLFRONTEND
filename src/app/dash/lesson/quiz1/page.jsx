@@ -11,7 +11,7 @@ import { dynamichunneds } from '@/utilities/arrayswordshunneds';
 
 import { usePathname } from "next/navigation";
 import { get } from "http";
-
+import SubmitButton from '../quizcomponents/Submit'
 import {
   setAllWords2,
   setCurrentWord,
@@ -125,7 +125,10 @@ export default function Quiz1(props) {
   }, [currentquiz1word]);
 
   //. =====================================
-  const compareWords = (word1, word2) => {
+  const compareWords = () => {
+
+    let word1 = currentquiz1word.word
+    let word2 = wordinputted
     console.log(word1, "word1");
     console.log(word2, "word2");
     //trim word 2
@@ -247,7 +250,6 @@ export default function Quiz1(props) {
         <div className="showwordtotranslate">
           {(!lessoncompletedv && currentquiz1word) && (
             <>
-              <span>currentindex {currentindexis}</span>
               <p className="text-center">Type the word in German</p>
               <p>{wordsleftinstack} / {originalnumberwords}</p>
               <div className="maxdiv pt-10 pb-10 text-center">
@@ -288,20 +290,21 @@ export default function Quiz1(props) {
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     setWordInputted(e.target.value);
-                    compareWords(currentquiz1word.word, wordinputted);
+                    compareWords();
                   }
                 }}
               />
-              <button
+              <SubmitButton callbackfunction={compareWords}></SubmitButton>
+              {/*    <button
                 className="button button-primary"
                 onClick={(e) => {
                   // Handle submit action
                   console.log("Submit button clicked");
-                  compareWords(currentquiz1word.word, wordinputted);
+                  compareWords();
                 }}
               >
                 Submit
-              </button>
+              </button> */}
             </div>
             <div className="special-characters">
               <p>Add Special Characters:</p>
@@ -335,15 +338,15 @@ export default function Quiz1(props) {
             </div>
             <div className="quiz1hints">
               <div className="quiz1hintbuttons flex flex-row gap-5 pb-5">
-                <div className="showexplanationbutton">
-                  <button className="button button-primary button-outline button-narrow" onClick={() => setShowExplanation(!showExplanation)}>
+                <div className="showexplanationbutton ">
+                  <button className="button button-primary button-outline button-narrow textminimise" onClick={() => setShowExplanation(!showExplanation)}>
                     {showExplanation ? "Hide Explanation" : "Show Explanation"}
                   </button>
                 </div>
                 <div className="showexamplesdiv">
                   {currentwordnumberofexamples > 0 && (
                     <button
-                      className="button button-primary button-outline button-narrow "
+                      className="button button-primary button-outline button-narrow textminimise"
                       onClick={() => {
                         setShowExamples(!showexamples)
                         if (!showexamples) {

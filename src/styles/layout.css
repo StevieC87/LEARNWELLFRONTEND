@@ -12,6 +12,7 @@
   min-height: 100vh;
   max-width: 1000px;
 }
+
 .adminwrapperdiv {
   display: grid;
   /*  grid-template-columns: var(--adminsidebarwidth) 1fr; */
@@ -39,9 +40,11 @@
     height: 100%;
   }
 }
+
 @media screen and (max-width: 768px) {
   .maincontent {
-    width: 100vw;
+    /*    width: 100vw; */
+    width: 100%;
     padding: 0px;
   }
 }

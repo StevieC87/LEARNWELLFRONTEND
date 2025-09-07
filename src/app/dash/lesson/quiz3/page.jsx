@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from "react";
-import "./quiz1.css";
+import "../quiz1/quiz1.css";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getFlashcardsRemaining,
@@ -37,6 +37,7 @@ import {
 } from "@/redux/slices/flashcardSlice";
 import Link from 'next/link';
 import customSessionStorage from "@/utilities/customSessionStorage";
+import SubmitButton from '../quizcomponents/Submit'
 export default function Quiz3(props) {
   const dispatch = useDispatch();
   const pathname = usePathname();
@@ -241,7 +242,10 @@ export default function Quiz3(props) {
       setCurrentExampleWithoutWord(null);
     }
   }, [currentexample, currentquiz1word]);
-  const compareWords = (word1, word2) => {
+  const compareWords = () => {
+    //word1, word2
+    let word1 = currentquiz1word.word
+    let word2 = wordinputted
     console.log(word1, "word1");
     console.log(word2, "word2");
     //trim word 2
@@ -389,7 +393,6 @@ export default function Quiz3(props) {
         <div className="showwordtotranslate">
           {(!lessoncompletedv && currentquiz1word) && (
             <>
-              <span>currentindex {currentindexis}</span>
               <p className="text-center">Type the word in German</p>
               <p>{wordsleftinstack} / {originalnumberwords}</p>
               <div className="maxdiv pt-10 pb-10 text-center">
@@ -431,11 +434,11 @@ export default function Quiz3(props) {
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     setWordInputted(e.target.value);
-                    compareWords(currentquiz1word.word, wordinputted);
+                    compareWords();
                   }
                 }}
               />
-              <button
+              {/*  <button
                 className="button button-primary"
                 onClick={(e) => {
                   // Handle submit action
@@ -444,7 +447,8 @@ export default function Quiz3(props) {
                 }}
               >
                 Submit
-              </button>
+              </button> */}
+              <SubmitButton callbackfunction={compareWords}></SubmitButton>
             </div>
 
             <div className="showcorrectwrongdiv">
@@ -480,7 +484,7 @@ export default function Quiz3(props) {
             <div className="quiz1hints">
               <div className="quiz1hintbuttons flex flex-row gap-5 pb-5">
                 <div className="showexplanationbutton">
-                  <button className="button button-primary button-outline button-narrow" onClick={() => setShowExplanation(!showExplanation)}>
+                  <button className="button button-primary button-outline button-narrow textminimise" onClick={() => setShowExplanation(!showExplanation)}>
                     {showExplanation ? "Hide Explanation" : "Show Explanation"}
                   </button>
                 </div>

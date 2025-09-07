@@ -90,12 +90,12 @@ export default function LessonPage({ params }) {
   return (
     <>
       <div className="formtabs flex flex-row">
-        <button onClick={(e) => toggleTabs('flashcard')} className={`${activetab === 'flashcard' ? 'activetab' : ''} button button-outline tabbutton`}>Flashcards</button>
-        <button onClick={(e) => toggleTabs('quiz1')} className={`${activetab === 'quiz1' ? 'activetab' : ''} button button-outline tabbutton`}>Quiz 1</button>
-        <button onClick={(e) => toggleTabs('quiz2')} className={`${activetab === 'quiz2' ? 'activetab' : ''} button button-outline tabbutton`}>Quiz 2</button>
-        <button onClick={(e) => toggleTabs('quiz3')} className={`${activetab === 'quiz3' ? 'activetab' : ''} button button-outline tabbutton`}>Quiz 3</button>
-        <button onClick={(e) => toggleTabs('quiz4')} className={`${activetab === 'quiz4' ? 'activetab' : ''} button button-outline tabbutton`}>Quiz 4</button>
-        <button onClick={(e) => toggleTabs('quiz5')} className={`${activetab === 'quiz5' ? 'activetab' : ''} button button-outline tabbutton`}>Quiz 5</button>
+        <button onClick={(e) => toggleTabs('flashcard')} className={`${activetab === 'flashcard' ? 'activetab' : ''} button button-outline tabbutton`}><span className="textminimise">Flashcards</span></button>
+        <button onClick={(e) => toggleTabs('quiz1')} className={`${activetab === 'quiz1' ? 'activetab' : ''} button button-outline tabbutton`}><span className="textminimise">Quiz1</span></button>
+        <button onClick={(e) => toggleTabs('quiz2')} className={`${activetab === 'quiz2' ? 'activetab' : ''} button button-outline tabbutton`}><span className="textminimise">Quiz2</span></button>
+        <button onClick={(e) => toggleTabs('quiz3')} className={`${activetab === 'quiz3' ? 'activetab' : ''} button button-outline tabbutton`}><span className="textminimise">Quiz3</span></button>
+        <button onClick={(e) => toggleTabs('quiz4')} className={`${activetab === 'quiz4' ? 'activetab' : ''} button button-outline tabbutton`}><span className="textminimise">Quiz4</span></button>
+        <button onClick={(e) => toggleTabs('quiz5')} className={`${activetab === 'quiz5' ? 'activetab' : ''} button button-outline tabbutton`}><span className="textminimise">Quiz5</span></button>
       </div>
 
       {activetab === 'flashcard' && <FlashcardPage lessonid={lessonid} />}

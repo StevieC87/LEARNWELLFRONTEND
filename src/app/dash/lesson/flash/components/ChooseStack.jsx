@@ -153,14 +153,14 @@ const ChooseStack = () => {
               }
             }}
           >
-            Covered ({allknownwordsdata.length})
+            Seen ({allknownwordsdata.length})
           </button>
           <button
             className={`noselect cursor-pointer  ml-3 button ${!showRemainingWords2 ? "button-outline button-narrow button-gray" : "button-primary button-narrow button-gray button-gray-filled "}`}
 
             onClick={() => changeWordList("remaining")}
           >
-            Remaining ({allremainingwordsdata.length})
+            Unseen ({allremainingwordsdata.length})
           </button>
         </div>
         {/*  <div className="playpause">

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from "react";
-import "./quiz1.css";
+import "../quiz1/quiz1.css";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getFlashcardsRemaining,

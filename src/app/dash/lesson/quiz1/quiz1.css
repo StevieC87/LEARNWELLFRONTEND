@@ -56,3 +56,32 @@
 .showwordtotranslate {
   width: 100%;
 }
+
+.quiz2pickwordsdiv {
+  justify-content: center
+}
+
+.showcorrectwrongdiv {
+  min-height: 30px;
+}
+
+.quiz5showsentencediv {
+  height: 60px;
+}
+
+.special-characters-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+@media screen and (max-width: 432px) {
+  .quiz1-container {
+
+    width: 100%;
+  }
+
+  .quizsubmit {
+    padding: 5px
+  }
+
+}
