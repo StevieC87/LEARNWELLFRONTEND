@@ -319,9 +319,14 @@ const ActualFlashcard = (props) => {
                           <>
                             <div className="flex flex-col justify-between w-full">
                               <span>{example.ExampleSentenceEN}</span>
-                              <span className="examplegermanenglishside"> {example.ExampleSentenceDE}</span>
+
+
+                              {((showOriginal && switchbuttondeen) || (!showOriginal && switchbuttondeen) || (!showOriginal && !switchbuttondeen)) && (
+                                <span className="examplegermanenglishside"> {example.ExampleSentenceDE}</span>
+                              )}
                             </div>
                           </>
+
                         )}
 
                         <div>
