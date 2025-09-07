@@ -169,7 +169,7 @@ const ChooseStack = () => {
             <div>
 
             </div>
-            {/*  <div>
+            <div>
               <input
                 className="form-check-input"
                 type="checkbox"
@@ -185,7 +185,7 @@ const ChooseStack = () => {
               >
                 {switchchecked ? "Standard" : "Reverse"}
               </label>
-            </div> */}
+            </div>
           </div>
         )}
       </div>

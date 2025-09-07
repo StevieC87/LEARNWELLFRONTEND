@@ -270,9 +270,10 @@ const ActualFlashcard = (props) => {
             {((allremainingwordsdata.length > 0 && showRemainingWords2) || (allknownwordsdata.length > 0 && !showRemainingWords2) && currentword?.word) && (
               <>
                 <div className=" wordde">
-                  {showOriginal ? (
+                  {((showOriginal && switchbuttondeen) || (!showOriginal && !switchbuttondeen)) && (
                     <span className="semibold">{currentword.word}</span>
-                  ) : (
+                  )}
+                  {((showOriginal && !switchbuttondeen) || (showOriginal && !switchbuttondeen) || (!showOriginal && switchbuttondeen)) && (
                     <>
                       <p className="semibold wordde"> {currentword?.Meaning?.Meaning}</p>
                       {currentword?.Meaning?.Noun?.Gender && (
@@ -292,7 +293,7 @@ const ActualFlashcard = (props) => {
                     (example, index) => (
                       <div key={index} className="examplediv">
 
-                        {showOriginal ? (
+                        {((showOriginal && switchbuttondeen) || (!showOriginal && !switchbuttondeen)) && (
                           <>
                             <div className="flex flex-row items-center gap-4 justify-between w-full">
                               <span>{example.ExampleSentenceDE}</span>
@@ -313,7 +314,8 @@ const ActualFlashcard = (props) => {
                             </div>
 
                           </>
-                        ) : (
+                        )}
+                        {((showOriginal && !switchbuttondeen) || (showOriginal && !switchbuttondeen) || (!showOriginal && switchbuttondeen)) && (
                           <>
                             <div className="flex flex-col justify-between w-full">
                               <span>{example.ExampleSentenceEN}</span>
