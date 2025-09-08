@@ -67,11 +67,28 @@ export default function Category1() {
             const data = await response.json();
             setWordsSubCat(data.words);
             setSubCategories(data.subcategories);
+            console.log(data.subcategories, 'data.subcategories');
             setSubSubCategories(data.subcategoriesWithCategory3);
+            console.log(data.subcategoriesWithCategory3, 'data.subcategoriesWithCategory3');
             setSubSubSubCategories(data.subsubcategories4);
+            console.log(data.subsubcategories4, 'data.subsubcategories4');
         };
         fetchspecificcat();
     }, [category1]);
+
+    // Helpers to build stable keys (avoid index-based collisions)
+    const subKey = (c2) => `c2:${c2}`;
+    const c3Key = (c2, c3) => `c3:${c2}::${c3}`;
+
+    // Utility: does a given (Category2, Category3) have any Category4 children?
+    const hasC4Children = (c2, c3) =>
+        subsubsubcategories.some(
+            (item) =>
+                item.category2 === c2 &&
+                item.category3 === c3 &&
+                item.category4 &&
+                item.category4.filter(v => v && v !== '\\N').length > 0
+        );
 
     return (
         <div>
@@ -79,15 +96,21 @@ export default function Category1() {
             <Link href={`${category1}/allwords?category1=${encodeURIComponent(category1)}`}>All Category Words</Link>
             {subcategories && subcategories.length > 0 ? (
                 <div className="flex flex-col flex-wrap items-start">
-                    {subcategories.map((subcategory, i) => {
+                    {subcategories.map((subcategory) => {
                         const matchedSubcategory = subsubcategories.find(
                             (item) => item.subcategory === subcategory
                         );
-                        const subcategoryKey = `subcategory-${i}`;
+                        const subcategoryKey = subKey(subcategory);
+                        const category3List = matchedSubcategory
+                            ? matchedSubcategory.category3.filter(
+                                (c3) => c3 && c3 !== '\\N' && matchedSubcategory.category3.length > 1
+                            )
+                            : [];
+
                         return (
-                            <div key={i} className="flex flex-col items-start justify-center">
+                            <div key={subcategory} className="flex flex-col items-start justify-center">
                                 <div className="flex items-center">
-                                    {matchedSubcategory && matchedSubcategory.category3.length > 1 ? (
+                                    {category3List.length > 0 ? (
                                         <button
                                             className="mr-2"
                                             onClick={() => toggleAccordion(subcategoryKey)}
@@ -95,7 +118,7 @@ export default function Category1() {
                                             {openCategories[subcategoryKey] ? '▼' : '▶'}
                                         </button>
                                     ) : (
-                                        <div className="mr-2 w-4 h-4 rounded-full bg-black"></div> // Circle placeholder
+                                        <div className="mr-2 w-4 h-4 rounded-full bg-black"></div>
                                     )}
                                     <Link
                                         href={`${encodeURIComponent(category1)}/${encodeURIComponent(subcategory)}`}
@@ -104,68 +127,68 @@ export default function Category1() {
                                         {subcategory}
                                     </Link>
                                 </div>
-                                {openCategories[subcategoryKey] && (
-                                    <>
-                                        {matchedSubcategory && matchedSubcategory.category3.length > 0 ? (
-                                            <ul className="mt-2 ml-10">
-                                                {matchedSubcategory.category3
-                                                    .filter(
-                                                        (subsubcategory) =>
-                                                            subsubcategory &&
-                                                            subsubcategory !== '\\N' &&
-                                                            matchedSubcategory.category3.length > 1
-                                                    )
-                                                    .map((subsubcategory, index) => {
-                                                        const matchedSubsubcategory = subsubsubcategories.find(
-                                                            (item) => item.category3 === subsubcategory
-                                                        );
-                                                        const subsubcategoryKey = `${subcategoryKey}-subsubcategory-${index}`;
-                                                        return (
-                                                            <div key={index}>
-                                                                <div className="flex items-center">
-                                                                    {matchedSubsubcategory && matchedSubsubcategory.category4.length > 1 ? (
-                                                                        <button
-                                                                            className="mr-2"
-                                                                            onClick={() => toggleAccordion(subsubcategoryKey)}
+
+                                {openCategories[subcategoryKey] && category3List.length > 0 && (
+                                    <ul className="mt-2 ml-10">
+                                        {category3List.map((subsubcategory) => {
+                                            const subsubcategoryKey = c3Key(subcategory, subsubcategory);
+
+                                            // Find the exact (Category2, Category3) node
+                                            const matchedSubsubcategory = subsubsubcategories.find(
+                                                (item) =>
+                                                    item.category2 === subcategory &&
+                                                    item.category3 === subsubcategory
+                                            );
+
+                                            const rawC4 = matchedSubsubcategory ? matchedSubsubcategory.category4 : [];
+                                            const c4List = rawC4 && rawC4.length > 1
+                                                ? rawC4.filter(
+                                                    (c4) => c4 && c4 !== '\\N'
+                                                )
+                                                : [];
+
+                                            const showC4Toggle = c4List.length > 0;
+
+                                            return (
+                                                <li key={subsubcategoryKey} className="mb-1">
+                                                    <div className="flex items-center">
+                                                        {showC4Toggle ? (
+                                                            <button
+                                                                className="mr-2"
+                                                                onClick={() => toggleAccordion(subsubcategoryKey)}
+                                                            >
+                                                                {openCategories[subsubcategoryKey] ? '▼' : '▶'}
+                                                            </button>
+                                                        ) : (
+                                                            <div className="mr-2 w-4 h-4 rounded-full bg-black"></div>
+                                                        )}
+                                                        <Link
+                                                            href={`${category1}/${encodeURIComponent(subcategory)}/${encodeURIComponent(subsubcategory)}`}
+                                                            className="text-gray-600"
+                                                        >
+                                                            {subsubcategory}
+                                                        </Link>
+                                                    </div>
+
+                                                    {showC4Toggle &&
+                                                        openCategories[subsubcategoryKey] &&
+                                                        c4List.length > 0 && (
+                                                            <ul className="mt-2 ml-10">
+                                                                {c4List.map((subsubsubcategory, idx) => (
+                                                                    <li key={`${subsubcategoryKey}-c4-${idx}`} className="text-gray-600">
+                                                                        <Link
+                                                                            href={`${category1}/${encodeURIComponent(subcategory)}/${encodeURIComponent(subsubcategory)}/${encodeURIComponent(subsubsubcategory)}`}
                                                                         >
-                                                                            {openCategories[subsubcategoryKey] ? '▼' : '▶'}
-                                                                        </button>
-                                                                    ) : (
-                                                                        <div className="mr-2 w-4 h-4 rounded-full bg-black"></div> // Circle placeholder
-                                                                    )}
-                                                                    <Link
-                                                                        href={`${category1}/${encodeURIComponent(subcategory)}/${encodeURIComponent(subsubcategory)}`}
-                                                                        className="text-gray-600"
-                                                                    >
-                                                                        {subsubcategory}
-                                                                    </Link>
-                                                                </div>
-                                                                {openCategories[subsubcategoryKey] && matchedSubsubcategory && matchedSubsubcategory.category4.length > 0 && (
-                                                                    <ul className="mt-2 ml-10">
-                                                                        {matchedSubsubcategory.category4
-                                                                            .filter(
-                                                                                (subsubsubcategory) =>
-                                                                                    subsubsubcategory &&
-                                                                                    subsubsubcategory !== '\\N' &&
-                                                                                    matchedSubsubcategory.category4.length > 1
-                                                                            )
-                                                                            .map((subsubsubcategory, idx) => (
-                                                                                <li key={idx} className="text-gray-600">
-                                                                                    <Link href={`${category1}/${encodeURIComponent(subcategory)}/${encodeURIComponent(subsubcategory)}/${encodeURIComponent(subsubsubcategory)}`}>
-                                                                                        {subsubsubcategory}
-                                                                                    </Link>
-                                                                                </li>
-                                                                            ))}
-                                                                    </ul>
-                                                                )}
-                                                            </div>
-                                                        );
-                                                    })}
-                                            </ul>
-                                        ) : (
-                                            <p className="text-gray-500 text-xs mt-2">No category3 available</p>
-                                        )}
-                                    </>
+                                                                            {subsubsubcategory}
+                                                                        </Link>
+                                                                    </li>
+                                                                ))}
+                                                            </ul>
+                                                        )}
+                                                </li>
+                                            );
+                                        })}
+                                    </ul>
                                 )}
                             </div>
                         );
