@@ -49,6 +49,7 @@ export default function WordsTable(props) {
             sortableRef.current = Sortable.create(tableRef.current, {
                 animation: 150,
                 draggable: 'tr.sortable-row',
+                handle: '.drag-handle',
                 onEnd: handleDragEnd,
                 axis: 'y',
             });
@@ -90,11 +91,13 @@ export default function WordsTable(props) {
                 body: JSON.stringify(editedWord),
             });
             if (res.ok) {
-                const updatedWords = words.map((word) =>
-                    word.id === editedWord.id || word._id === editedWord._id ? editedWord : word
+                setWords((prevWords) =>
+                    prevWords.map((word) =>
+                        word.id === editingRowId || word._id === editingRowId ? editedWord : word
+                    )
                 );
-                setWords(updatedWords);
                 setEditingRowId(null);
+                setEditedWord({});
             } else {
                 console.error('Failed to update word');
             }
@@ -123,12 +126,18 @@ export default function WordsTable(props) {
     };
 
     const handleInputChange = (e, field) => {
-        setEditedWord({ ...editedWord, [field]: e.target.value });
+        if (editingRowId) {
+            setEditedWord((prevEditedWord) => ({
+                ...prevEditedWord,
+                [field]: e.target.value,
+            }));
+        }
     };
 
     return (
         <div>
-            {subcategory && <h3 className="text-xl font-bold mb-4">{decodeURIComponent(subcategory)}</h3>}
+            {/*  {subcategory && <h3 className="text-xl font-bold mb-4">{decodeURIComponent(subcategory)}</h3>} */}
+
             <table className="table-auto border-collapse border border-gray-400 w-full">
                 <thead>
                     <tr>
@@ -146,13 +155,13 @@ export default function WordsTable(props) {
                     </tr>
                 </thead>
                 <tbody ref={tableRef}>
-                    {words.map((word) => (
-                        <tr key={word.id || word._id} className="sortable-row">
-                            <td className="border border-gray-400 px-4 py-2">
+                    {words.map((word, index) => (
+                        <tr key={`${word.id || word._id}-${index}`} className="sortable-row">
+                            <td className="border border-gray-400 px-4 py-2 drag-handle">
                                 {editingRowId === word.id || editingRowId === word._id ? (
                                     <input
                                         type="text"
-                                        value={editedWord.order_number}
+                                        value={editedWord.order_number || ''}
                                         onChange={(e) => handleInputChange(e, 'order_number')}
                                         className="inputeditinput"
                                     />
@@ -164,7 +173,7 @@ export default function WordsTable(props) {
                                 {editingRowId === word.id || editingRowId === word._id ? (
                                     <input
                                         type="text"
-                                        value={editedWord.ENWord}
+                                        value={editedWord.ENWord || ''}
                                         onChange={(e) => handleInputChange(e, 'ENWord')}
                                         className="inputeditinput"
                                     />
