@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation';
 import '../categories.css'
@@ -11,7 +11,47 @@ export default function Category1() {
     const [subcategories, setSubCategories] = useState([]);
     const [subsubcategories, setSubSubCategories] = useState([]);
     const [subsubsubcategories, setSubSubSubCategories] = useState([]);
-    const [openCategories, setOpenCategories] = useState({}); // State to manage accordion
+
+    // Persistence key (scoped to this page + category1)
+    const storageKey = (cat) => `accordionState:${cat}`;
+
+    // Replace previous openCategories state & effects with a single controlled block
+    const [openCategories, setOpenCategories] = useState({});
+    const restoredRef = useRef(false);
+
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        // Restore only once per category change
+        restoredRef.current = false;
+        try {
+            const saved = localStorage.getItem(storageKey(category1));
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                if (parsed && typeof parsed === 'object') {
+                    setOpenCategories(parsed);
+                    restoredRef.current = true;
+                }
+            }
+        } catch { /* ignore corrupt */ }
+    }, [category1]);
+
+    const persist = (next) => {
+        try { localStorage.setItem(storageKey(category1), JSON.stringify(next)); } catch { /* quota ignore */ }
+    };
+
+    const toggleAccordion = (key) => {
+        setOpenCategories(prev => {
+            const updated = { ...prev, [key]: !prev[key] };
+            persist(updated);
+            return updated;
+        });
+    };
+
+    // Optional helper (e.g. attach to a debug button) to reset stored state
+    const resetOpenState = () => {
+        setOpenCategories({});
+        try { localStorage.removeItem(storageKey(category1)); } catch { /* ignore */ }
+    };
 
     useEffect(() => {
         const fetchspecificcat = async () => {
@@ -32,13 +72,6 @@ export default function Category1() {
         };
         fetchspecificcat();
     }, [category1]);
-
-    const toggleAccordion = (key) => {
-        setOpenCategories((prev) => ({
-            ...prev,
-            [key]: !prev[key],
-        }));
-    };
 
     return (
         <div>
