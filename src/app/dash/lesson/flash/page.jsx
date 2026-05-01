@@ -28,18 +28,20 @@ import { usePathname } from "next/navigation";
 import {
   getFlashcardsRemaining,
   getFlashcardsKnownWords,
+  getRecapWords,
 } from "./services/fetchwords";
 import { dynamichunneds } from '@/utilities/arrayswordshunneds';
 
 
-export default function FlashcardPage() {
+export default function FlashcardPage({ fromLesson, toLesson } = {}) {
   const dispatch = useDispatch();
 
   const pathname = usePathname();
   const slug = pathname.split("/").pop();
+  const isRecapMode = !!fromLesson && !!toLesson;
 
   console.log(slug, "slugsss");
-  if (isNaN(slug)) {
+  if (!isRecapMode && isNaN(slug)) {
     return <div>error</div>;
   }
   const wordsperlesson = useSelector((state) => state.flashcardSlice.userwordsperlesson);
@@ -85,6 +87,41 @@ export default function FlashcardPage() {
   //--------------------------------------------------
   useEffect(() => {
     if (activetab === 'flashcard') {
+
+      if (isRecapMode) {
+        const fetchRecap = async () => {
+          const data = await getRecapWords(fromLesson, toLesson);
+          if (!data) return;
+          const { remaining = [], known = [] } = data;
+          const nonFluent = known.filter((w) => w.difficulty !== 'Fluent');
+          const fluentWORDS = known.filter((w) => w.difficulty === 'Fluent');
+          const familiarWORDS = known.filter((w) => w.difficulty === 'Familiar');
+          const uncertainWORDS = known.filter((w) => w.difficulty === 'Uncertain');
+          const newwords = known.filter((w) => w.difficulty === 'New');
+          dispatch(setfluentWORDSArray(fluentWORDS));
+          dispatch(setfamiliarWORDSArray(familiarWORDS));
+          dispatch(setuncertainWORDSArray(uncertainWORDS));
+          dispatch(setnewwordsArray(newwords));
+          dispatch(setTotalWordsKnown(nonFluent.length));
+          dispatch(setallknownwordsdata(nonFluent));
+          // merge remaining (unseen) + non-fluent known as the recap deck
+          const recapDeck = [...remaining, ...nonFluent];
+          if (recapDeck.length > 0) {
+            dispatch(setTotalWordsRemaining(recapDeck.length));
+            dispatch(setallremainingwordsdata(recapDeck));
+            dispatch(setAllWords2(recapDeck));
+            dispatch(setCurrentWord(recapDeck[0]));
+          } else {
+            dispatch(seterrorNoWords(true));
+            dispatch(setallremainingwordsdata([]));
+            dispatch(setAllWords2([]));
+            dispatch(setCurrentWord({}));
+          }
+          dispatch(setisloading(false));
+        };
+        fetchRecap();
+        return;
+      }
 
       // dispatch(setShowRemainingWords2(true))
       const fetchwordsBOTH = async () => {
@@ -302,7 +339,7 @@ export default function FlashcardPage() {
       <div className="skeletonWrapper">
         <div className="skeletonCenter">
 
-          <ActualFlashcardSentences wordnostart={parseInt(slug)} />
+          <ActualFlashcardSentences wordnostart={isRecapMode ? fromLesson : parseInt(slug)} />
         </div>
 
         <div className="botttombar">

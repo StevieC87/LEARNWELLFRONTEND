@@ -31,6 +31,7 @@ export default function Quiz2(props) {
   const currentword = useSelector((state) => state.flashcardSlice.currentWord);
   const isLoading = useSelector((state) => state.flashcardSlice.isLoading);
   const allknownwordsdata = useSelector((state) => state.flashcardSlice.totalWordsKnown);
+  const recapKnownWordsArray = useSelector((state) => state.flashcardSlice.allknownwordsdata);
   const totalwordsknown = useSelector((state) => state.flashcardSlice.totalwordsknown);
 
   const [showexamples, setShowExamples] = useState(false);
@@ -55,18 +56,15 @@ export default function Quiz2(props) {
   const [noknownwords, setNoKnownWords] = useState(false);
 
   const inputRef = useRef(null);
-  //console.log(slug, "slugsss");
-  if (isNaN(slug)) {
-    return <div>error</div>;
+  const isRecapMode = isNaN(slug);
+  let wordstart = 0;
+  let wordend = 0;
+  if (!isRecapMode) {
+    let wordstartwordendarray = dynamichunneds(20);
+    let wordstart1 = wordstartwordendarray.find((item) => item.id === parseInt(slug));
+    wordstart = wordstart1?.wordstart || 0;
+    wordend = wordstart1?.wordend || 0;
   }
-  let wordstartwordendarray = dynamichunneds(20);
-
-  let wordstart1 = wordstartwordendarray.find((item) => item.id === parseInt(slug));
-  // console.log(wordstart1, "wordstart1");
-  let wordstart = wordstart1.wordstart;
-  // console.log(wordstart, "wordstart");
-  let wordend = wordstart1.wordend;
-  // console.log(wordend, "wordend");
   const [wordswithmistaketosaveforreview, setWordsWithMistakesToSaveForReview] = useState([
     { lesson: slug }
   ]);
@@ -75,6 +73,19 @@ export default function Quiz2(props) {
   useEffect(() => {
 
     const getknownwordsfromapi = async () => {
+      if (isRecapMode) {
+        if (recapKnownWordsArray && recapKnownWordsArray.length > 0) {
+          const filtered = recapKnownWordsArray.filter(w => w.difficulty !== 'Fluent');
+          setWordsforquiz1(filtered);
+          setCurrentQuiz1Word(filtered[0]);
+          dispatch(setCurrentWord(filtered[0]));
+          dispatch(setisloading(false));
+          dispatch(setallknownwordsdata(filtered));
+          setWordsLeftInStack(filtered.length);
+          setOriginalNumbetwords(filtered.length);
+        }
+        return;
+      }
       let knownwords = await getFlashcardsKnownWords(slug);
       // console.log(knownwords, "knownwords");
       if (!knownwords || knownwords.length === 0) {

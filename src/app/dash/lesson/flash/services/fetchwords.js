@@ -60,6 +60,24 @@ export const getFlashcardsRemaining = async (slug) => {
   }
 };
 
+export const getRecapWords = async (fromLesson, toLesson) => {
+  try {
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/api/recapwords?fromLesson=${fromLesson}&toLesson=${toLesson}`;
+    const response = await fetch(url, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    });
+    if (!response.ok) {
+      console.log("Error fetching recap words");
+      return null;
+    }
+    return await response.json();
+  } catch (error) {
+    console.log("Error fetching recap words", error);
+  }
+};
+
 export const flashcardsUserSaveWord = async (wordtosubmit) => {
   console.log(wordtosubmit, "wordtosubmit555555");
   let wordtosubmit1 = wordtosubmit;
@@ -76,7 +94,7 @@ export const flashcardsUserSaveWord = async (wordtosubmit) => {
         },
         body: JSON.stringify(wordtosubmit1),
         credentials: "include", // Include credentials for session management
-      }
+      },
     );
     const data = await response.json();
     if (!response.ok) {

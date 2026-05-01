@@ -5,7 +5,7 @@ import Link from 'next/link';
 import GetUrlParams from '../../hooks/GetURLParamsClient';
 import PostAnalytics from '../../hooks/PostAnalytics';
 import { useSelector } from 'react-redux';
-import ReduxProvider from "../ReduxProvider";
+import ReduxProvider from "../redux/ReduxProvider";
 
 
 // issue: if declines conset - RETRIGGERS BASIC ANALYTICS - FIX 

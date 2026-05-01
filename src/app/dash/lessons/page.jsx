@@ -9,6 +9,10 @@ export default function Lessons() {
   const [progresswordstack, setProgresswordstack] = useState([]);
 
   const [wordstodayOBJ, setWordstodayOBJ] = useState({});
+  const [activeTab, setActiveTab] = useState(0);
+  const TAB_SIZE = 50;
+  const MINI_INTERVAL = 5;
+  const MEGA_INTERVAL = 15;
 
 
   async function fetchprogresswordstack() {
@@ -97,54 +101,85 @@ export default function Lessons() {
 
 
 
+  const tabs = progresswordstack.length > 0
+    ? Array.from({ length: Math.ceil(progresswordstack.length / TAB_SIZE) }, (_, i) => ({
+      label: `${i * TAB_SIZE + 1}–${Math.min((i + 1) * TAB_SIZE, progresswordstack.length)}`,
+    }))
+    : [];
+
+  const visibleStack = progresswordstack.slice(
+    activeTab * TAB_SIZE,
+    (activeTab + 1) * TAB_SIZE
+  );
+
+  const tabOffset = activeTab * TAB_SIZE;
+
+  function buildDisplayList(stacks, offset) {
+    const list = [];
+    for (let i = 0; i < stacks.length; i++) {
+      const g = offset + i + 1;
+      list.push({ type: 'lesson', lesson: stacks[i], g });
+      if (g % MEGA_INTERVAL === 0) {
+        list.push({ type: 'mega', fromLesson: g - 9, toLesson: g });
+      } else if (g % MINI_INTERVAL === 0) {
+        list.push({ type: 'mini', fromLesson: g - 4, toLesson: g });
+      }
+    }
+    return list;
+  }
+
+  const displayList = buildDisplayList(visibleStack, tabOffset);
+
   return (
     <>
-      {/*  <h1 className="gloria dboard text-center chalkunderline yellow ">Lessons </h1> */}
       <h1 className="text-center">Lessons </h1>
+
+      {tabs.length > 1 && (
+        <div className="lessonTabs">
+          {tabs.map((tab, i) => (
+            <button
+              key={i}
+              className={`lessonTab${activeTab === i ? ' lessonTabActive' : ''}`}
+              onClick={() => setActiveTab(i)}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+      )}
+
       <div className="lessoncardFlex">
-        {progresswordstack && progresswordstack.length > 0 ? (
-
-          progresswordstack.map((stack, index) => (
-            <Link href={`./lesson/${index + 1}`} key={index}>
-              <div className="lessoncard  " >{ }
-                <div className="text-center">Lesson {index + 1}</div>
-                <div className="lessoncardtext">
-                  {stack.lessoncompleted === "Completed" && (
-                    <span className="marker checktext">✔ Completed</span>
-                  )}
-                  {/* //Not started  In progress */}
-                  {stack.lessoncompleted === "In progress" && (
-                    <span className="marker inprogresstext">In progress</span>
-                  )}
-                  {stack.lessoncompleted === "Not started" && (
-                    <span className="marker notstartedtext">Not started</span>
-                  )}
-
-
-                  {/*  <p>{stack.totallength}</p>
-                  {stack.totallength > 95 ? <span className="marker checktext">✔</span> : ''}
-                  <p>Fluent: <span className="bold lessoncardtextnumber">{stack.fluent}</span></p>
-                  <p>Familiar: <span className="bold lessoncardtextnumber">{stack.familiar}</span></p>
-                  <p>Uncertain: <span className="bold lessoncardtextnumber">{stack.uncertain}</span></p>
-                  <p>New: <span className="bold lessoncardtextnumber">{stack.newword}</span></p> */}
+        {displayList.length > 0 ? displayList.map((item) => {
+          if (item.type === 'lesson') {
+            const { lesson, g } = item;
+            return (
+              <Link href={`./lesson/${g}`} key={`lesson-${g}`}>
+                <div className="lessoncard">
+                  <div className="text-center">Lesson {g}</div>
+                  <div className="lessoncardtext">
+                    {lesson.lessoncompleted === 'Completed' && <span className="marker checktext">✔ Completed</span>}
+                    {lesson.lessoncompleted === 'In progress' && <span className="marker inprogresstext">In progress</span>}
+                    {lesson.lessoncompleted === 'Not started' && <span className="marker notstartedtext">Not started</span>}
+                  </div>
                 </div>
-                <div>
-                  {/*     <button href="/#" className="typewritebutton" onClick={(e) => {
-                  e.stopPropagation();
-                  router.push('/review');
-                  }}>Review</button> */}
+              </Link>
+            );
+          }
+          const recapId = `${item.type}-${item.fromLesson}-${item.toLesson}`;
+          return (
+            <Link href={`./lesson/recap/${recapId}`} key={`recap-${recapId}`}>
+              <div className={`lessoncard ${item.type === 'mega' ? 'megaRecapCard' : 'miniRecapCard'}`}>
+                <div className="text-center recapCardTitle">
+                  {item.type === 'mini' ? '⚡ Mini Recap' : '🔥 Mega Recap'}
+                </div>
+                <div className="lessoncardtext">
+                  <span className="recapRange">L{item.fromLesson}–{item.toLesson}</span>
                 </div>
               </div>
             </Link>
-          ))
-        ) : (
-          <div className="">
-          </div>
-        )
-        }
-
+          );
+        }) : <div></div>}
       </div>
-
     </>
-  )
+  );
 }
