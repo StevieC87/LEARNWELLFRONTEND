@@ -73,6 +73,7 @@ export default function WordsTable(props) {
                 { method: 'GET', headers: { 'Content-Type': 'application/json' } }
             );
             const data = await res.json();
+            console.log(data, 'datafetchspecificwords');
             setWords(data.querysubcategorywords);
         };
         fetchspecificsubcatwords();

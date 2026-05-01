@@ -65,6 +65,8 @@ export default function Category1() {
                 console.log('nowork');
             }
             const data = await response.json();
+            console.log(data, 'datadatadata22');
+            console.log(data.words, 'data.words');
             setWordsSubCat(data.words);
             setSubCategories(data.subcategories);
             console.log(data.subcategories, 'data.subcategories');
@@ -121,7 +123,8 @@ export default function Category1() {
                                         <div className="mr-2 w-4 h-4 rounded-full bg-black"></div>
                                     )}
                                     <Link
-                                        href={`${encodeURIComponent(category1)}/${encodeURIComponent(subcategory)}`}
+                                        //encodeURIComponent(
+                                        href={`${category1}/${encodeURIComponent(subcategory)}`}
                                         className="font-bold"
                                     >
                                         {subcategory}
