@@ -1,62 +1,543 @@
+/* The dashboard reserves rail space; tablet expansion never resizes its content. */
 .slidemenuouterdiv {
-  background-color: #eef2f6;
-  border-right: 1px solid lightgray;
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+  min-width: 0;
 }
 
-.slidemenu {
-  z-index: 9998;
-  position: fixed;
-  padding-top: 40px;
-  top: 0;
-  left: 0;
-  /* Set a fixed width for the slide-in menu */
-  /* width: 100%; */
-  width: 150px;
-  height: 100%;
-  background-color: #eef2f6;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transform: translateX(-100%); /* Start off-screen */
-  transition: transform 0.3s ease-in-out;
+.responsive-sidebar {
+  --nav-label-opacity: 1;
+  /* Desktop makes it sticky (min-width: 1036px below); it is hidden narrower. */
+  position: static;
+  z-index: 45;
+  width: 220px;
+  max-height: none;
+  overscroll-behavior: contain;
+  /* Hidden nowrap labels overflow the 70px rail; clip them so they can't catch hover over the content. */
+  overflow-x: clip;
+  border-radius: 8px;
+  transition: width 220ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 220ms ease;
 }
 
-.slidemenu.closed {
-  transform: translateX(-150px); /* Keep it off-screen when closed */
+.verticalnav.card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 12px 0;
+  min-height: 100%;
+  position: relative;
+  /* The 1px frame is drawn by ::before so the card surface stays untouched. */
+  border-color: transparent;
+  /* Keeps the peek's fill while the rail closes, or the page flashes through it. */
+  transition: box-shadow 220ms ease, background-color 220ms ease;
 }
 
-.slidemenu.open {
-  /*  transform: translateX(0); */ /* Slide into view when open */
-  /*   transform: translateX(0%); */
-  transform: translateX(0px);
+/* A neutral frame shared with the workspace and flyouts. Drawn on the
+   aside so it stays fixed while the navigation scrolls inside it. */
+.responsive-sidebar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--ui-border);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
-.sidebartext {
-  font-size: 1.5rem;
-  padding-left: 10px;
+/* A quiet navigation surface; overlay depth is added only while peeking. */
+.responsive-sidebar {
+  border-radius: var(--ui-card-radius, 1rem);
 }
+
+.responsive-sidebar .verticalnav.card {
+  border-radius: inherit;
+  background-color: var(--ui-subtle);
+  background-image: none;
+  box-shadow: 0 1px 3px rgb(16 24 40 / 5%);
+}
+
+/* Solid in dark mode too, so an expanded rail never shows content through. */
+body.dark-mode .responsive-sidebar .verticalnav.card {
+  background-color: color-mix(in srgb, var(--ui-card) 95%, var(--ui-fg)) !important;
+}
+
+.verticalnav .logonavbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  height: 40px;
+  padding-left: 19px;
+  margin-bottom: 12px;
+  white-space: nowrap;
+}
+
 .sidebarlinkforicon {
   display: flex;
   flex-direction: row;
   align-items: center;
-  /*  padding: 10px; */
-
-  text-decoration: none;
+  flex-shrink: 0;
+  gap: 16px;
+  padding: 0 25px;
+  justify-content: flex-start;
+  width: 100%;
+  height: 40px;
+  white-space: nowrap;
+  text-align: left;
 }
 
-.maincontent-mobile {
-  transform: translateX(var(--adminsidebarwidth));
-}
-.maincontent-blur {
-  filter: blur(2px);
-  /*   background-color: rgba(109, 109, 109, 0.7); */
-}
-.sidenav {
-  height: 100vh;
-  width: var(--adminsidebarwidth);
-  background-color: #eef2f6;
+.sidebarlinkforicon svg {
+  flex: 0 0 16px;
 }
 
-.sidenavh1 {
-  color: white;
+.sidebartext {
+  flex: 0 0 auto;
+}
+
+/* Crystal, the default tab shape (tabStyle.js): the open page is a face of the
+   same stone as the section tabs (sitehealth.css). The face fans into wedges in
+   its group's colour, tinted over transparent so it sits on the light card, the
+   dark wash and the peek's solid fill alike.
+
+   The face is a pseudo-element reaching --nav-seam past the row, so its edges
+   can slant while the row keeps its 40px and its text stays put. The cycle of
+   four below varies the cut from row to row; it was made for every row being a
+   face, with seams meeting, and still counts `of a, .nav-section`. */
+:root[data-tab-style="crystal"] .verticalnav {
+  --nav-seam: 5px;
+  --nav-facet-tint-1: 10%;
+  --nav-facet-tint-2: 14%;
+  --nav-facet-tint-3: 18%;
+  --nav-facet-glint: rgb(255 255 255 / 85%);
+}
+
+:root[data-tab-style="crystal"] body.dark-mode .verticalnav {
+  --nav-facet-tint-1: 12%;
+  --nav-facet-tint-2: 16%;
+  --nav-facet-tint-3: 20%;
+  --nav-facet-glint: rgb(255 255 255 / 22%);
+}
+
+:root[data-tab-style="crystal"] .verticalnav > a.sidebarlinkforicon {
+  position: relative;
+  isolation: isolate;
+}
+
+/* Only the open page is a face. A face on every row was too loud ("too much"),
+   so the rest of the rail stays plain and the colour marks where you are. */
+:root[data-tab-style="crystal"] .verticalnav > a.sidebarlinkforicon[aria-current="page"]::before {
+  --nav-facet-1: color-mix(in srgb, var(--nav-facet-cut) var(--nav-facet-tint-1), transparent);
+  --nav-facet-2: color-mix(in srgb, var(--nav-facet-cut) var(--nav-facet-tint-2), transparent);
+  --nav-facet-3: color-mix(in srgb, var(--nav-facet-cut) var(--nav-facet-tint-3), transparent);
+  --nav-ridge-foot: min(var(--nav-foot-l), var(--nav-foot-r));
+  content: "";
+  position: absolute;
+  inset: calc(-1 * var(--nav-seam)) 0;
+  z-index: -1;
+  pointer-events: none;
+  clip-path: polygon(0 var(--nav-head-l), 100% var(--nav-head-r), 100% calc(100% - var(--nav-foot-r)), 0 calc(100% - var(--nav-foot-l)));
+  /* The ridge along the foot: the same trick as the tabs, a box the size of the
+     slant so the 50% line runs corner to corner. */
+  background:
+    linear-gradient(var(--nav-ridge-dir), transparent calc(50% - 1px), var(--nav-facet-glint) 50%, transparent calc(50% + 1px))
+      left 0 bottom var(--nav-ridge-foot) / 100% calc(max(var(--nav-foot-l), var(--nav-foot-r)) - var(--nav-ridge-foot)) no-repeat,
+    conic-gradient(from var(--nav-fan-from) at var(--nav-fan-at),
+      var(--nav-facet-1) 0 var(--nav-fan-1), var(--nav-facet-2) 0 var(--nav-fan-2), var(--nav-facet-3) 0 var(--nav-fan-3), var(--nav-facet-1) 0);
+}
+
+:root[data-tab-style="crystal"] .verticalnav > :nth-child(odd of a, .nav-section) { --nav-ridge-dir: to top right; }
+:root[data-tab-style="crystal"] .verticalnav > :nth-child(even of a, .nav-section) { --nav-ridge-dir: to bottom right; }
+
+:root[data-tab-style="crystal"] .verticalnav > :nth-child(4n + 1 of a, .nav-section) {
+  --nav-head-l: 8px; --nav-head-r: 3px; --nav-foot-l: 8px; --nav-foot-r: 1px;
+  --nav-fan-from: 270deg; --nav-fan-at: 34% 100%; --nav-fan-1: 48deg; --nav-fan-2: 112deg; --nav-fan-3: 180deg;
+}
+
+:root[data-tab-style="crystal"] .verticalnav > :nth-child(4n + 2 of a, .nav-section) {
+  --nav-head-l: 2px; --nav-head-r: 9px; --nav-foot-l: 3px; --nav-foot-r: 9px;
+  --nav-fan-from: 90deg; --nav-fan-at: 70% 0; --nav-fan-1: 62deg; --nav-fan-2: 128deg; --nav-fan-3: 180deg;
+}
+
+:root[data-tab-style="crystal"] .verticalnav > :nth-child(4n + 3 of a, .nav-section) {
+  --nav-head-l: 7px; --nav-head-r: 1px; --nav-foot-l: 7px; --nav-foot-r: 2px;
+  --nav-fan-from: 90deg; --nav-fan-at: 22% 0; --nav-fan-1: 40deg; --nav-fan-2: 104deg; --nav-fan-3: 180deg;
+}
+
+:root[data-tab-style="crystal"] .verticalnav > :nth-child(4n of a, .nav-section) {
+  --nav-head-l: 3px; --nav-head-r: 8px; --nav-foot-l: 2px; --nav-foot-r: 7px;
+  --nav-fan-from: 270deg; --nav-fan-at: 64% 100%; --nav-fan-1: 70deg; --nav-fan-2: 124deg; --nav-fan-3: 180deg;
+}
+
+/* One colour to a group, the heading included, so the rail reads as a stone per
+   group. Not the logo's colours: those bunch together and gold and orange turn
+   the same brown on the dark rail. What counts is that a group differs from the
+   next one, since the collapsed rail has no heading text between them, so warm
+   and cool alternate down the rail from Home's blue above the first heading. A
+   group is found by counting headings: each rule takes over from its heading
+   on, so this order must follow the menu's. */
+:root[data-tab-style="crystal"] .verticalnav {
+  --nav-facet-cut: #3d8bff;
+}
+
+:root[data-tab-style="crystal"] .verticalnav > :nth-child(1 of .nav-section),
+:root[data-tab-style="crystal"] .verticalnav > :nth-child(1 of .nav-section) ~ * { --nav-facet-cut: #ff6a3d; }
+:root[data-tab-style="crystal"] .verticalnav > :nth-child(2 of .nav-section),
+:root[data-tab-style="crystal"] .verticalnav > :nth-child(2 of .nav-section) ~ * { --nav-facet-cut: #12c4b4; }
+:root[data-tab-style="crystal"] .verticalnav > :nth-child(3 of .nav-section),
+:root[data-tab-style="crystal"] .verticalnav > :nth-child(3 of .nav-section) ~ * { --nav-facet-cut: #9d5cf6; }
+:root[data-tab-style="crystal"] .verticalnav > :nth-child(4 of .nav-section),
+:root[data-tab-style="crystal"] .verticalnav > :nth-child(4 of .nav-section) ~ * { --nav-facet-cut: #3ecf5a; }
+:root[data-tab-style="crystal"] .verticalnav > :nth-child(5 of .nav-section),
+:root[data-tab-style="crystal"] .verticalnav > :nth-child(5 of .nav-section) ~ * { --nav-facet-cut: #f43f6e; }
+
+/* The group's colour lives in its heading, and in the divider that stands in
+   for it on the collapsed rail. */
+:root[data-tab-style="crystal"] .verticalnav > .nav-section {
+  color: color-mix(in srgb, var(--nav-facet-cut) 70%, var(--ui-fg));
+}
+
+:root[data-tab-style="crystal"] .verticalnav > .nav-section::before {
+  border-top-color: color-mix(in srgb, var(--nav-facet-cut) 45%, transparent);
+}
+
+/* The colour alone isn't enough, so the open page has a bar too, the only mark
+   the labelless collapsed rail has room for. No grey: it would show the row's
+   square corners through the face's slanted seams. */
+:root[data-tab-style="crystal"] .verticalnav > a.sidebarlinkforicon[aria-current="page"] {
+  background: none;
+  box-shadow: inset 3px 0 0 var(--nav-facet-cut);
+}
+
+.verticalnav .nav-label {
+  display: inline-block;
+  white-space: nowrap;
+  opacity: var(--nav-label-opacity, 1);
+  /* Opening waits until the rail has room, so labels don't fade in clipped. */
+  transition: opacity 150ms ease 90ms;
+}
+
+.responsive-sidebar[data-desktop-collapsed="true"] .nav-label {
+  transition-delay: 0ms;
+}
+
+.sidebar-toggle {
+  cursor: pointer;
+}
+
+.verticalnav .sidebarlinkforicon:hover {
+  background: rgb(127 127 127 / 10%);
+}
+
+.verticalnav .sidebarlinkforicon[aria-current="page"] {
+  background: var(--ui-accent-soft);
+  font-weight: 600;
+}
+
+.verticalnav :is(a, button):focus-visible,
+.mobile-nav-close:focus-visible,
+.mobile-nav-trigger:focus-visible {
+  outline: 2px solid var(--ui-accent) !important;
+  outline-offset: -3px;
+}
+
+.verticalnav .sidebar-logout {
+  display: block;
+  width: 100%;
+  height: 40px;
+  padding: 0;
+  margin: 8px 0 0;
+  overflow: hidden;
+}
+
+.verticalnav .sidebar-logout .sidebarlinkforicon {
+  justify-content: flex-start;
+}
+
+/* Edit menu (SlideMenuContent.jsx): hidden pages stay drawn while editing,
+   faded and struck through, so a click brings them back. */
+.verticalnav .menu-edit-toggle {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.verticalnav [data-menu-hidden] {
+  opacity: 0.45;
+}
+
+.verticalnav [data-menu-hidden] .nav-label {
+  text-decoration: line-through;
+}
+
+.verticalnav .menu-edit-note {
+  margin: 4px 0 0;
+  padding: 0 12px;
+  color: var(--ui-muted);
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: normal;
+}
+
+/* On the body, not in the sidebar: collapsed, that is only 70px wide. */
+.logout-failed {
+  position: fixed;
+  left: 1.6rem;
+  bottom: 1.6rem;
+  z-index: var(--z-index-modal, 1050);
+  max-width: min(32rem, calc(100vw - 3.2rem));
+  margin: 0;
+  padding: 1.2rem 1.6rem;
+  border: 1px solid var(--ui-danger);
+  border-radius: 1rem;
+  background: var(--background-color);
+  color: var(--ui-fg);
+  font-size: var(--ui-text);
+  line-height: 1.5;
+}
+
+body.dark-mode .logout-failed {
+  background: var(--backgrounddark);
+}
+
+/* The page-width choice (LayoutWidth.jsx) caps the whole frame at 960px at its
+   narrowest, so on a screen no wider than that every option looks the same. */
+@media (max-width: 960px) {
+  .verticalnav .layout-width-toggle {
+    display: none;
+  }
+}
+
+.verticalnav .customsiteselecttrigger {
+  width: 100%;
+  height: 40px;
+  padding: 0 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 0;
+  border: 0;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.verticalnav .customsiteselecttrigger:hover {
+  background: rgb(127 127 127 / 10%);
+}
+
+@media (min-width: 1036px) {
+  /* The rail uses the workspace's top inset and stays put
+     while the page scrolls; a menu longer than the window scrolls inside
+     itself, with the open page's entry brought into view
+     (SlideMenuDesktop.jsx). In the page's flow it started flush with the
+     window's top edge and ran the height of all its entries, some 1,850px,
+     so a short page grew an empty tail to match it. The page's own top
+     (.maincontent, layout.css) is level with it. */
+  .responsive-sidebar {
+    position: sticky;
+    top: var(--dashboard-top-gap, 1rem);
+    align-self: start;
+    height: calc(100dvh - 2 * var(--dashboard-top-gap, 1rem));
+    border-radius: var(--ui-card-radius, 1rem);
+  }
+
+  .responsive-sidebar > div {
+    height: 100%;
+  }
+
+  .responsive-sidebar .verticalnav.card {
+    border-radius: inherit;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden auto;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+  }
+
+  /* A column of fixed height squeezes its entries to fit rather than
+     overflowing; they keep their height and the rail scrolls instead. */
+  .responsive-sidebar .verticalnav.card > * {
+    flex-shrink: 0;
+  }
+
+  .responsive-sidebar[data-desktop-collapsed="true"] {
+    width: 70px;
+    --nav-label-opacity: 0;
+  }
+
+  /* Kept open (sidebarBoot.js): the server draws the rail, so this holds the
+     open width until the menu has loaded and agrees. The toggle clears it. */
+  :root[data-sidebar-kept-open] .responsive-sidebar[data-desktop-collapsed="true"] {
+    width: 220px;
+    --nav-label-opacity: 1;
+  }
+
+  /* Drop the chevron so the 20px content box fits the favicon. */
+  .responsive-sidebar[data-desktop-collapsed="true"] .customsiteselecttrigger>svg {
+    display: none;
+  }
+
+  .responsive-sidebar[data-desktop-collapsed="true"] .customsiteselecttrigger>[data-slot="select-value"] {
+    flex: 1 1 auto;
+    min-width: 16px;
+  }
+
+  /* Open on hover: the rail lays over the page instead of pushing it, so its
+     grid column stays 70px (layout.css). Its z-index applies while static
+     because it's a grid item. The shadow is the nav's, since the aside runs the
+     whole page height and the nav stops short of it, so the aside can't clip. */
+  .responsive-sidebar[data-desktop-peek="true"] {
+    overflow-x: visible;
+  }
+
+  .responsive-sidebar[data-desktop-peek="true"] .verticalnav.card {
+    box-shadow: 12px 8px 28px rgb(0 0 0 / 18%);
+  }
+
+}
+
+/* Flat selection fill. Keep the existing indicator geometry and movement
+   while removing the glass highlights and inset shadows. */
+:root :is(.responsive-sidebar[data-desktop-collapsed="true"], .responsive-sidebar[data-desktop-peek="true"], .mobile-nav-drawer) .verticalnav > a.sidebarlinkforicon[aria-current="page"] {
+  position: relative;
+  background: none;
+  box-shadow: none;
+}
+
+:root :is(.responsive-sidebar[data-desktop-collapsed="true"], .responsive-sidebar[data-desktop-peek="true"], .mobile-nav-drawer) .verticalnav > a.sidebarlinkforicon[aria-current="page"]::before {
+  content: none;
+}
+
+:root :is(.responsive-sidebar[data-desktop-collapsed="true"], .responsive-sidebar[data-desktop-peek="true"], .mobile-nav-drawer) .verticalnav > a.sidebarlinkforicon[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  /* Centred on the 16px icon, which starts 25px in. A radius of half the
+     height rather than 50%, so it stays round at the ends as it stretches
+     into the pill below. */
+  top: 3px;
+  left: 16px;
+  width: 34px;
+  height: 34px;
+  border-radius: 17px;
+  pointer-events: none;
+  background: var(--ui-accent-soft);
+  box-shadow: none;
+  /* In step with the rail opening (.responsive-sidebar's width). */
+  transition: left 220ms cubic-bezier(0.2, 0.8, 0.2, 1), width 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* With labels visible the same tint extends behind the whole row. */
+:root :is(.responsive-sidebar[data-desktop-peek="true"], .mobile-nav-drawer) .verticalnav > a.sidebarlinkforicon[aria-current="page"] {
+  isolation: isolate;
+}
+
+:root :is(.responsive-sidebar[data-desktop-peek="true"], .mobile-nav-drawer) .verticalnav > a.sidebarlinkforicon[aria-current="page"]::after {
+  z-index: -1;
+  left: 10px;
+  width: calc(100% - 20px);
+  background-image: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .verticalnav > a.sidebarlinkforicon::after {
+    transition: none !important;
+  }
+}
+
+.verticalnav > a.sidebarlinkforicon[data-drop-held]::after {
+  opacity: 0;
+}
+
+@media (min-width: 769px) and (max-width: 1035px) {
+
+  /* .responsive-sidebar {
+    width: 70px;
+    --nav-label-opacity: 0;
+  }
+
+  .responsive-sidebar[data-tablet-expanded="true"] {
+    width: 220px;
+    --nav-label-opacity: 1;
+    box-shadow: 12px 8px 28px rgb(0 0 0 / 18%);
+  } */
+  .responsive-sidebar {
+    display: none;
+  }
+
+  /* .maincontent sits in column 2, so keep a zero-width column 1. */
+  .outerlayoutdiv {
+    --adminsidebarwidth: 0px;
+  }
+
+  .adminwrapperdiv {
+    grid-template-columns: 0 minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .responsive-sidebar {
+    display: none;
+  }
+}
+
+.mobile-nav-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 46;
+  /* No dimming: the page stays as it was and the drawer's own shadow sets it
+     apart (a dark wash flashing in read as abrupt). It's still here to take
+     the tap that closes the menu. */
+  background: transparent;
+}
+
+.mobile-nav-drawer {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 47;
+  width: min(280px, calc(100vw - 48px));
+  height: 100dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--ui-subtle);
+  box-shadow: 1px 0 0 rgb(15 23 42 / 6%), 10px 0 30px rgb(15 23 42 / 12%);
+  /* Glides in and settles, rather than snapping: a long, soft ease-out. */
+  animation: nav-drawer-in 380ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+body.dark-mode .mobile-nav-drawer {
+  background: var(--backgrounddark, #171717);
+  box-shadow: 1px 0 0 rgb(255 255 255 / 6%), 10px 0 30px rgb(0 0 0 / 45%);
+}
+
+.mobile-nav-drawer[data-state="closed"] {
+  animation: nav-drawer-out 260ms cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+.mobile-nav-drawer .verticalnav.card {
+  border: 0;
+  border-radius: 0;
+}
+
+.mobile-nav-close {
+  position: absolute;
+  top: 12px;
+  right: 8px;
+  width: 40px;
+  height: 40px;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+.mobile-nav-trigger {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
 }
 
 .titlebuttons {
@@ -65,4 +546,229 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px;
+}
+
+@keyframes nav-drawer-in {
+  from {
+    transform: translateX(-100%);
+    opacity: 0.6;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes nav-drawer-out {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  to {
+    transform: translateX(-100%);
+    opacity: 0.6;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .responsive-sidebar,
+  .verticalnav .nav-label {
+    transition: none;
+  }
+
+  .mobile-nav-drawer {
+    animation: none;
+  }
+}
+
+/* Sidebar group heading; collapsed rail swaps the label for a divider line. */
+.verticalnav .nav-section {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  flex-shrink: 0;
+  height: 28px;
+  margin-top: 8px;
+  padding: 0 25px 4px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #9ca3af;
+}
+
+.verticalnav .nav-section::before {
+  content: "";
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  top: 50%;
+  border-top: 1px solid rgb(127 127 127 / 25%);
+  opacity: calc(1 - var(--nav-label-opacity, 1));
+  transition: opacity 150ms ease;
+}
+/* A sidebar entry's tabs beside it on hover (NavFlyout.jsx). In a portal on
+   <body>: the sidebar clips its overflow. The dark fill is the peek's. */
+.nav-flyout {
+  position: fixed;
+  z-index: 60;
+  min-width: 200px;
+  max-height: calc(100vh - 16px);
+  overflow-y: auto;
+  padding: 6px;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-card-radius);
+  background: var(--ui-card);
+  box-shadow: 0 8px 24px rgb(16 24 40 / 12%), 0 2px 6px rgb(16 24 40 / 6%);
+  font-size: 14px;
+  animation: nav-flyout-in 120ms ease-out;
+}
+
+body.dark-mode .nav-flyout {
+  background: var(--ui-card);
+  box-shadow: 0 12px 32px rgb(0 0 0 / 45%);
+}
+
+@keyframes nav-flyout-in {
+  from { opacity: 0; transform: translateX(-4px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-flyout { animation: none; }
+}
+
+.nav-flyout-title {
+  padding: 4px 10px 6px;
+  color: var(--ui-muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.nav-flyout a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: 6px;
+  color: var(--ui-fg);
+  white-space: nowrap;
+}
+
+.nav-flyout a:hover,
+.nav-flyout a:focus-visible {
+  background: rgb(127 127 127 / 12%);
+  outline: none;
+}
+
+.nav-flyout a[aria-current="page"] {
+  background: rgb(127 127 127 / 16%);
+  font-weight: 600;
+}
+
+.nav-flyout .sh-tab-icon {
+  flex: none;
+  color: var(--tab-icon-hue, currentColor);
+}
+
+/* The drawer's version, and the desktop sidebar's while it's kept open
+   (NavFlyout.jsx sub): a ▸ on the entry's row, laid over its right end so the
+   link stays a direct child of the nav (the crystal rules above select it that
+   way), and the tabs listed under it, hung from a guide line that runs down
+   from the entry's icon. */
+.verticalnav .nav-sub-toggle {
+  position: relative;
+  align-self: flex-end;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 40px;
+  margin-top: -40px;
+  border-radius: 6px;
+  color: var(--ui-muted);
+  cursor: pointer;
+}
+
+.verticalnav .nav-sub-toggle:hover {
+  color: var(--ui-fg);
+  background: rgb(127 127 127 / 12%);
+}
+
+.verticalnav .nav-sub-toggle svg {
+  transition: transform 150ms ease;
+}
+
+.verticalnav .nav-sub-toggle[aria-expanded="true"] svg {
+  transform: rotate(90deg);
+}
+
+/* The line sits under the icon's middle: the row's 25px padding plus half its
+   16px icon. The tabs' glyphs then start where the entries' labels do. */
+.verticalnav .nav-sub {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin: 0 10px 6px 32px;
+  padding-left: 12px;
+  border-left: 1px solid rgb(127 127 127 / 40%);
+  font-size: 14px;
+}
+
+.verticalnav .nav-sub a {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 8px;
+  min-height: 32px;
+  padding: 0 10px;
+  border-radius: 6px;
+  color: var(--ui-fg);
+}
+
+.verticalnav .nav-sub .sh-tab-icon {
+  flex: none;
+  color: var(--tab-icon-hue, currentColor);
+}
+
+.verticalnav .nav-sub a > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.verticalnav .nav-sub a:hover {
+  background: rgb(127 127 127 / 10%);
+}
+
+.verticalnav .nav-sub a[aria-current="page"] {
+  background: rgb(127 127 127 / 14%);
+  font-weight: 600;
+}
+
+/* The open tab's stretch of the guide line, in the accent. */
+.verticalnav .nav-sub a[aria-current="page"]::before {
+  content: "";
+  position: absolute;
+  left: -13.5px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  border-radius: 1px;
+  background: var(--ui-accent);
+}
+
+/* A tab pinned as an entry of its own (NavFlyout.jsx pinnedTabs): its tab
+   glyph, in the tab's colour, where the other entries have theirs. */
+.verticalnav .nav-pinned .sh-tab-icon {
+  color: var(--tab-icon-hue, currentColor);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .verticalnav .nav-sub-toggle svg { transition: none; }
 }

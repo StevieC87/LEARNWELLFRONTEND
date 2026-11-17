@@ -1,0 +1,175 @@
+/* Two-factor setup; cards, buttons and fields come from styles/kit.css. */
+.tfa-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  max-width: 76rem;
+  width: 100%;
+  font-size: var(--ui-text);
+}
+.tfa-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  align-self: flex-start;
+  color: var(--ui-muted);
+  font-size: var(--ui-text-sm);
+  text-decoration: none;
+}
+.tfa-back:hover {
+  color: var(--ui-fg);
+}
+.tfa-icon {
+  color: var(--ui-accent-ink);
+}
+.tfa-steps {
+  margin: 0;
+  padding: 0.8rem 0 0;
+  list-style: none;
+}
+.tfa-step {
+  display: flex;
+  gap: 1.6rem;
+  padding: 2rem 2.4rem;
+  border-top: 1px solid var(--ui-border);
+}
+.tfa-num {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 2.8rem;
+  height: 2.8rem;
+  border-radius: 50%;
+  background: var(--ui-accent-soft);
+  color: var(--ui-accent-ink);
+  font-size: var(--ui-text-sm);
+  font-weight: 600;
+}
+.tfa-step-body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 0.8rem;
+  min-width: 0;
+}
+.tfa-step-body h4,
+.tfa-done h4 {
+  margin: 0.3rem 0 0;
+  color: var(--ui-fg);
+  font-size: var(--ui-text-lg);
+  font-weight: 600;
+}
+.tfa-pair {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2.4rem;
+  margin-top: 0.8rem;
+}
+.tfa-qr {
+  display: grid;
+  place-items: center;
+  width: 20.8rem;
+  height: 20.8rem;
+  padding: 1.2rem;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius);
+  background: #fff;
+}
+.tfa-qr canvas {
+  grid-area: 1 / 1;
+  max-width: 100%;
+  height: auto !important;
+}
+.tfa-qr.is-loading canvas {
+  visibility: hidden;
+}
+.tfa-qr > span {
+  grid-area: 1 / 1;
+}
+.tfa-key {
+  display: flex;
+  flex: 1 1 24rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.8rem;
+  min-width: 0;
+}
+.tfa-key-value {
+  display: block;
+  width: 100%;
+  padding: 1rem 1.2rem;
+  border: 1px dashed var(--ui-border);
+  border-radius: var(--ui-radius-sm);
+  background: var(--ui-subtle);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: var(--ui-text);
+  letter-spacing: 0.04em;
+  line-height: 1.7;
+  word-break: break-word;
+}
+.tfa-verify {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.4rem;
+}
+.tfa-code {
+  width: 16rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: var(--ui-text-xl);
+  letter-spacing: 0.4em;
+  text-align: center;
+}
+.tfa-code::placeholder {
+  color: var(--ui-muted);
+  opacity: 0.45;
+}
+.tfa-done {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.4rem;
+}
+.tfa-done-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--ui-success) 12%, transparent);
+  color: var(--ui-success);
+}
+@media (max-width: 600px) {
+  .tfa-step {
+    padding: 1.6rem;
+  }
+  .tfa-num {
+    display: none;
+  }
+}
+
+.tfa-recovery {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+.tfa-recovery h4 {
+  margin: 0;
+}
+.tfa-recovery-list {
+  display: grid;
+  grid-template-columns: repeat(2, max-content);
+  gap: 6px 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tfa-recovery-saved {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

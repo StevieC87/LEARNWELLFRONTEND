@@ -1,47 +1,132 @@
 :root {
-  /* --adminwrapperflexiblegridtcolumns: 200px 1fr; */
-  --adminwrapperflexiblegridtcolumns: 200px calc(100vw - 200px);
+  --adminwrapperflexiblegridtcolumns: 220px minmax(0, 1fr);
 }
 
 .outerlayoutdiv {
+  --adminsidebarwidth: 70px;
+  --dashboard-top-gap: 1rem;
+  --dashboard-rail-gap: 1.2rem;
   display: grid;
   /*  flex-direction: column; */
-  grid-template-columns: 1fr;
+  /* minmax(0, …), as in .adminwrapperdiv below: a plain 1fr is minmax(auto, 1fr),
+     whose floor is the min-content width of the header and the wrapper, so one
+     wide row inside either of them stretches the whole page past the viewport. */
+  grid-template-columns: minmax(0, 1fr);
   justify-self: center;
   justify-items: center;
   min-height: 100vh;
-  max-width: 1000px;
+  width: 100%;
+  max-width: var(--maxlayoutwidth);
 }
+
+/* The page-width choice on Home (LayoutWidth.jsx). Narrow is the default, so it
+   is the cap without the attribute too: no wider frame before hydration. */
+:root:not([data-layout-width]) .outerlayoutdiv { max-width: 1100px; }
+:root[data-layout-width="compact"] .outerlayoutdiv { max-width: 960px; }
+:root[data-layout-width="wide"] .outerlayoutdiv { max-width: 1600px; }
+:root[data-layout-width="full"] .outerlayoutdiv { max-width: none; }
+
 .adminwrapperdiv {
   display: grid;
-  /*  grid-template-columns: var(--adminsidebarwidth) 1fr; */
-  grid-template-columns: var(--adminwrapperflexiblegridtcolumns);
-  /*   align-items: center; */
-  /*   min-height: 100vh;
-  width: 100vw; */
+  width: 100%;
+  grid-template-columns: var(--adminsidebarwidth) minmax(0, 1fr);
+  /* Same timing as .responsive-sidebar's width, so the page moves with the
+     rail instead of jumping 150px before the rail has started to grow. */
+  transition: grid-template-columns 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .adminwrapperdiv { transition: none; }
 }
 
 .maincontent {
-  /* width: 100%; */
-  height: calc(100vh - 32px);
-  transform: translateX(0);
-  transition: transform 0.3s ease-in-out;
+  grid-column: 2 / 3;
+  width: 100%;
+  min-width: 0;
+  /*  height: calc(100vh - 32px); */
+  /* Nothing here may set transform, filter, backdrop-filter, perspective,
+     contain or will-change. Any of them makes .maincontent the containing
+     block for every position: fixed descendant, and every dialog in the
+     dashboard is a fixed descendant: inset: 0 would then cover this element
+     (min-height is taller than the window) instead of the window, so a
+     centred dialog lands below the fold on a long page. It also made
+     .maincontent a stacking context, which trapped dialogs underneath the
+     z-index: 40 header. There used to be a `transform: translateX(0)` here
+     for a slide-menu animation the menu no longer uses — it moves the grid
+     column's width instead. */
   transition: background-color 0.3s ease-in-out;
-  padding: 20px;
+  padding: 0px 0px 0px 10px;
   min-height: calc(100vh + 100px);
+  display: flex;
+  flex-direction: column;
 }
+
+
+@media screen and (min-width: 1025px) {
+  .outerlayoutdiv { --adminsidebarwidth: 220px; }
+  /* A hover peek keeps the 70px column and opens over the page (slidemenu.css).
+     Widening the column on hover moved all of .maincontent on every frame of
+     the transition, about 0.25 of layout shift per hover and back, and a hover
+     isn't input, so the browser counts the lot. Clicking the toggle still
+     widens it: that shift is exempt, and it's what the click asked for. */
+  .outerlayoutdiv:has(.responsive-sidebar[data-desktop-collapsed="true"]),
+  .outerlayoutdiv:has(.responsive-sidebar[data-desktop-peek="true"]) {
+    --adminsidebarwidth: 70px;
+  }
+  /* Kept open (Navbar/sidebarBoot.js): the open column from the first paint. */
+  :root[data-sidebar-kept-open] .outerlayoutdiv:has(.responsive-sidebar) {
+    --adminsidebarwidth: 220px;
+  }
+}
+
+/* Give both columns the same top edge. The workspace no longer has its own
+   top offset; one shared inset also works when the header changes height. */
+@media screen and (min-width: 1036px) {
+  .adminwrapperdiv {
+    padding-top: var(--dashboard-top-gap);
+    align-items: start;
+  }
+  .maincontent {
+    padding: 0 0 0 var(--dashboard-rail-gap);
+  }
+}
+
 
 @media screen and (min-width: 768px) {
   .outerlayoutdiv {
     display: flex;
     flex-direction: column;
-    width: 100vw;
+    width: 100%;
     height: 100%;
   }
+
+
 }
-@media screen and (max-width: 768px) {
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
   .maincontent {
-    width: 100vw;
+    width: 100%;
+    padding: 0 10px;
+    justify-self: start;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .outerlayoutdiv { --adminsidebarwidth: 0px; }
+  .maincontent {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .adminwrapperdiv {
+    grid-template-columns: 0 minmax(0, 1fr);
+
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .maincontent {
+    width: 100%;
     padding: 0px;
   }
 }

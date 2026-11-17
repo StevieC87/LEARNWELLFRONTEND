@@ -1,0 +1,8 @@
+.rangedivinput {
+  max-width: 375px;
+}
+
+input[type="range"] {
+  width: 300px;
+  accent-color: var(--primary-color);
+}

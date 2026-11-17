@@ -4,19 +4,34 @@ const SlideMenuSlice = createSlice({
   name: "SlideMenuSlice",
   initialState: {
     hello: "hello",
-    isSideNavOpen: false,
+    isMobileNavOpen: false,
+    isTabletNavOpen: false,
+    buttonexpandtablet: false,
   },
 
   reducers: {
     sethello: (state, action) => {
-      state.helloobj.hello = action.payload;
+      state.hello = action.payload;
     },
-    setIsSideNavOpen: (state, action) => {
-      state.isSideNavOpen = action.payload;
+    setIsMobileNavOpen: (state, action) => {
+      state.isMobileNavOpen = action.payload;
+    },
+    setIsTabletNavOpen: (state, action) => {
+      state.isTabletNavOpen = action.payload;
+    },
+
+    setIsButtonExpandTablet: (state, action) => {
+      state.buttonexpandtablet = typeof action.payload === "boolean"
+        ? action.payload
+        : !state.buttonexpandtablet;
     },
   },
 });
 
-export const { setIsSideNavOpen } = SlideMenuSlice.actions;
+export const {
+  setIsMobileNavOpen,
+  setIsTabletNavOpen,
+  setIsButtonExpandTablet,
+} = SlideMenuSlice.actions;
 
 export default SlideMenuSlice.reducer;

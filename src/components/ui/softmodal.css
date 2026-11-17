@@ -1,0 +1,131 @@
+/* SoftModal.jsx: a dialog with a fixed head and foot and its body scrolling
+   between them. Opening eases in: the page dims over a moment and the dialog
+   rises a little and settles, rather than appearing all at once. Opened from
+   a button, SoftModal.jsx swaps the rise for growing out of that button. */
+.softmodal-overlay {
+  overscroll-behavior: contain;
+  animation: softmodal-fade 0.2s ease-out;
+}
+.softmodal-overlay .softmodal {
+  animation: softmodal-rise 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+/* Shrinking back into its button: clicks already reach the page under it. */
+.softmodal-overlay.is-closing {
+  pointer-events: none;
+}
+@keyframes softmodal-fade {
+  from { background-color: rgba(0, 0, 0, 0); }
+}
+@keyframes softmodal-rise {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+}
+
+.modalinner.softmodal {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--ui-border);
+  border-radius: 1.2rem;
+  box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.45);
+  outline: none;
+}
+.modalinner.softmodal.is-tall {
+  height: min(720px, calc(100dvh - 48px));
+}
+
+.softmodal-head {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+  padding: 1.6rem 2rem;
+  border-bottom: 1px solid var(--ui-border);
+}
+.softmodal-head h2 {
+  margin: 0;
+  font-size: var(--ui-text-lg);
+  font-weight: 600;
+}
+.softmodal-close {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 3.2rem;
+  height: 3.2rem;
+  margin-left: auto;
+  border: 0;
+  border-radius: 0.8rem;
+  background: none;
+  color: inherit;
+  opacity: 0.7;
+  cursor: pointer;
+}
+.softmodal-close:hover {
+  background: var(--ui-subtle);
+  opacity: 1;
+}
+
+.softmodal-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2.2rem;
+  min-height: 0;
+  padding: 2rem;
+  overflow-y: auto;
+  /* Scrolling past the end stays here, not the page underneath. */
+  overscroll-behavior: contain;
+}
+
+.softmodal-foot {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1.2rem 2rem;
+  border-top: 1px solid var(--ui-border);
+}
+
+@media (max-width: 600px) {
+  .softmodal-head {
+    flex-wrap: wrap;
+  }
+  .softmodal-head .ui-tabs {
+    order: 3;
+    width: 100%;
+  }
+  /* Narrower tabs sharing the row, so three fit on a phone without the last
+     one scrolling out of sight. */
+  .softmodal-head .ui-tabs > .ui-tab {
+    flex: 1 0 auto;
+    justify-content: center;
+    padding-inline: 0.8rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .softmodal-overlay,
+  .softmodal-overlay .softmodal {
+    animation: none;
+  }
+}
+
+/* A body that changes with a tab (bodyKey) fades in as it changes. */
+.softmodal-body.is-keyed {
+  animation: softmodal-body-in var(--motion-normal) ease-out;
+}
+@keyframes softmodal-body-in {
+  from { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .softmodal-body.is-keyed {
+    animation: none;
+  }
+}
+
+/* A dialog that is only a question and its answers (ModalYesNo): the head
+   and foot meet, with one line between them. */
+.softmodal-head + .softmodal-foot {
+  border-top: 0;
+}

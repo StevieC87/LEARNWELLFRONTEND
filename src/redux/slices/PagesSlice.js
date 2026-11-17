@@ -99,7 +99,6 @@ export const {
   setSlugDuplicateWarning,
   setTriggerSEORefresh,
   setHasChanges,
-  updateArrayField,
   setCurrentImageField,
 } = PagesSlice.actions;
 

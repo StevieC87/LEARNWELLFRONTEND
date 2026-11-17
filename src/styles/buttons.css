@@ -3,75 +3,217 @@
     display: inline-block;
     cursor: pointer;
   }
+
+  /* The legacy button. It takes its colours from the same kit.css tokens as
+     .ui-btn, so both button families stay in step in light and dark mode. */
   .button {
-    padding: 4px 7px;
-    font-size: 16px;
-    font-weight: 00;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 0.8rem 1.5rem;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.2;
     text-align: center;
     text-decoration: none;
-    border: 2px solid transparent;
-    border-radius: 4px;
-    transition: all 0.3s ease-in-out;
-    background-color: #5bcaec;
-    color: #ffffff;
-    border-color: #5bcaec;
-    font-family: PoppinsSemiBold !important;
+    border: 1px solid transparent;
+    border-radius: var(--ui-radius-sm, 0.6rem);
+    transition:
+      background-color 0.15s ease,
+      border-color 0.15s ease,
+      color 0.15s ease,
+      box-shadow 0.15s ease,
+      transform 0.15s ease;
     align-self: flex-start;
   }
+
+  /* A ring rather than no outline at all: keyboard users need to see where
+     they are, and the ring sits outside the button so it never shifts layout. */
+  .button:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--ui-ring, rgba(255, 159, 28, 0.4));
+  }
+
+  /* Same gradient, edge light and shadow as .ui-btn-primary (kit.css). The
+     plain colour stays underneath for anything that overrides only it. */
+  .button_default {
+    background-color: var(--ui-accent, #ff9f1c);
+    background-image: var(--ui-accent-grad, none);
+    color: var(--ui-on-accent, #102d43);
+    border-color: transparent;
+    box-shadow: var(--ui-accent-shadow, none);
+  }
+
+  .button_default:hover:not(:disabled) {
+    background-color: var(--ui-accent-hover, #f7900f);
+    background-image: var(--ui-accent-grad-hover, none);
+    box-shadow: var(--ui-accent-shadow-hover, none);
+    transform: translateY(-1px);
+  }
+
+  .button_default:active:not(:disabled) {
+    transform: translateY(0);
+    filter: brightness(0.95);
+  }
+
+  .button_cancel {
+    background-color: #6c757d;
+    color: #ffffff;
+    border-color: #6c757d;
+  }
+
+  .button_destructive {
+    background-color: var(--ui-danger, #dc3545);
+    color: #ffffff;
+    border-color: var(--ui-danger, #dc3545);
+  }
+
+  .button_destructive:hover:not(:disabled) {
+    filter: brightness(0.92);
+  }
+
+  .button_circle {
+    border-radius: 50%;
+    padding: 0px;
+  }
+
+  .button_outline {
+    background-color: transparent;
+    border-color: var(--ui-accent, #ff9f1c);
+    color: var(--ui-accent-ink, #102d43);
+  }
+
+  .button_graydash {
+    background-color: var(--ui-subtle, #f8f9fa);
+    color: var(--ui-fg, #333333);
+    border: 1px solid var(--ui-border, #ced4da);
+    padding: 0.4rem 0.9rem;
+  }
+
+  .button_graydash:hover:not(:disabled) {
+    border-color: var(--ui-accent, #ff9f1c);
+    color: var(--ui-accent-ink, #102d43);
+  }
+
+  .button_slim {
+    padding: 0.4rem 1rem;
+    font-size: 13px;
+  }
+
+  .button_outline:hover:not(:disabled) {
+    background-color: var(--ui-accent, #ff9f1c);
+    border-color: var(--ui-accent, #ff9f1c);
+    color: var(--ui-on-accent, #102d43);
+  }
+
+  /* The red border on a blue-grey fill was a typo, not a style. */
+  .button_secondary {
+    background-color: var(--ui-card, #ffffff);
+    color: var(--ui-fg, #333333);
+    border-color: var(--ui-border, #d1d5db);
+  }
+
+  .button_secondary:hover:not(:disabled) {
+    background-color: var(--ui-subtle, #f1f3f5);
+  }
+
+  .button_ghost {
+    background-color: transparent;
+    color: var(--ui-accent-ink, #102d43);
+    border-color: transparent;
+  }
+
+  .button_ghost:hover:not(:disabled) {
+    background-color: var(--ui-accent-soft, rgba(255, 159, 28, 0.14));
+  }
+
   .button-wide {
     width: 100%;
   }
+
   .button-thick {
     padding: 10px 20px;
   }
+
   /* Primary button */
   .button-primary {
+    background-color: var(--ui-accent);
+    color: var(--ui-on-accent);
   }
+
   .button-primary:hover {
-    background-color: #0056b3;
-    border-color: #0056b3;
+    background-color: var(--ui-accent-hover);
+    border-color: var(--ui-accent-hover);
   }
+
   .button-primary:active {
-    background-color: #004494;
-    border-color: #004494;
+    background-color: var(--ui-accent-active);
+    border-color: var(--ui-accent-active);
   }
+
   /* Secondary button */
   .button-secondary {
     background-color: #6c757d;
     color: #ffffff;
     border-color: #6c757d;
   }
+
   .button-secondary:hover {
     background-color: #545b62;
     border-color: #545b62;
   }
+
   .button-secondary:active {
     background-color: #3e444a;
     border-color: #3e444a;
   }
+
   /* Outline button */
   .button-outline {
     background-color: transparent;
-    color: #5bcaec;
-    border-color: #5bcaec;
+    color: var(--ui-accent-ink, #102d43);
+    border-color: var(--ui-accent, #ff9f1c);
   }
+
   .button-thin {
-    border: 1px solid #5bcaec;
+    border: 1px solid var(--ui-accent, #ff9f1c);
   }
+
   .button-noborder {
     border: none;
   }
+
   .button-outline:hover {
-    background-color: #5bcaec;
-    color: #ffffff;
+    background-color: var(--ui-accent, #ff9f1c);
+    color: var(--ui-on-accent, #102d43);
   }
+
   .button-outline:active {
-    background-color: #0056b3;
-    border-color: #0056b3;
+    background-color: var(--ui-accent-hover);
+    border-color: var(--ui-accent-hover);
   }
+
+  .button_transparent {
+    background-color: transparent;
+    padding: 0px;
+
+    border-color: transparent !important;
+    border: none !important;
+  }
+
+  .button_transparent:hover::after,
+  .button_transparent:active::after,
+  .button_transparent:focus::after,
+  .button_transparent:focus-visible {
+    border-color: transparent !important;
+    border: none !important;
+    outline: none;
+  }
+
   /* Disabled button */
   button:disabled {
-    opacity: 0.5;
+    opacity: 0.55;
     cursor: not-allowed;
   }
 

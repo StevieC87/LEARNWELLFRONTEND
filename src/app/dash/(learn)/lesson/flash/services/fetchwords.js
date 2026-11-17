@@ -1,0 +1,107 @@
+/* ${process.env.NEXT_PUBLIC_API_URL}/api/flashcardremaining/
+      url = `${process.env.NEXT_PUBLIC_API_URL}/api/flashcardknownwords/`;
+   */
+
+export const getFlashcardsKnownWords = async (slug) => {
+  try {
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/api/flashcardknownwords?lesson=${slug}`;
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include", // Include credentials for session management
+    });
+    if (!response.ok) {
+      console.log("Error fetching (known) flashcards");
+      return null;
+    }
+
+    const data = await response.json();
+    if (data) {
+      if (Array.isArray(data) && data.length > 0) {
+        // console.log(data.length, 'dataLENGTH');
+        // console.log(data, "data123123123");
+        return data;
+      } else {
+        return null;
+      }
+    }
+  } catch (error) {
+    console.log("Error fetching (known) flashcards" + error);
+  }
+  /* */
+};
+
+export const getFlashcardsRemaining = async (slug) => {
+  try {
+    console.log("API URL:", process.env.NEXT_PUBLIC_API_URL);
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/api/flashcardremainingSPLITCARDS?lesson=${slug}`;
+    console.log(url, "urlurlurlurlurlurl");
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      console.log("Error fetching (remaining) flashcards");
+    }
+
+    const data = await response.json();
+    if (data) {
+      console.log(data, "data123123123");
+    }
+    return data;
+  } catch (error) {
+    console.log("Error fetching (remaining) flashcards", error);
+  }
+};
+
+export const getRecapWords = async (fromLesson, toLesson) => {
+  try {
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/api/recapwords?fromLesson=${fromLesson}&toLesson=${toLesson}`;
+    const response = await fetch(url, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    });
+    if (!response.ok) {
+      console.log("Error fetching recap words");
+      return null;
+    }
+    return await response.json();
+  } catch (error) {
+    console.log("Error fetching recap words", error);
+  }
+};
+
+export const flashcardsUserSaveWord = async (wordtosubmit) => {
+  console.log(wordtosubmit, "wordtosubmit555555");
+  let wordtosubmit1 = wordtosubmit;
+  let stringified = JSON.stringify(wordtosubmit1);
+  console.log(stringified, "stringified");
+  console.log(wordtosubmit1, "wordtosubmit2222444");
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/flashcardsusersaveword/`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(wordtosubmit1),
+        credentials: "include", // Include credentials for session management
+      },
+    );
+    const data = await response.json();
+    if (!response.ok) {
+      console.log("Error saving flashcard word");
+    }
+    return data;
+  } catch (error) {
+    console.log("Error saving flashcard word", error);
+  }
+};

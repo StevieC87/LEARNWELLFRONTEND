@@ -16,6 +16,8 @@
 
 # next.js
 /.next/
+# the deploy script's two build folders and its note of which one is live
+/.next-*
 /out/
 
 # production

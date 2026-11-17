@@ -13,11 +13,10 @@ const JSONLDSlice = createSlice({
     },
     //blocksandfields
     updateBlocksAndFields(state, action) {
+      // Replaces rather than appends, so a second fetch landing after one
+      // clean can't list every block twice.
       const { schemablocks } = action.payload;
-      /*  if (!Array.isArray(state.blocksandfields)) {
-        state.blocksandfields = [];
-      } */
-      state.blocksandfields.push(...schemablocks);
+      state.blocksandfields = Array.isArray(schemablocks) ? schemablocks : [];
     },
     changeBlocksAndFieldsblockupdatefield(state, action) {
       const { blocknameparentblock, name, content, type } = action.payload;

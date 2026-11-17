@@ -34,3 +34,7 @@
 .fade-in2.visible {
   opacity: 1;
 }
+
+.smooth {
+  transition: all 0.25s ease;
+}

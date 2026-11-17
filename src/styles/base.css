@@ -1,14 +1,20 @@
 @layer base {
   html {
-    font-size: 62.5%; /* 1rem = 10px */
+    font-size: 62.5%;
+    scrollbar-gutter: stable;
+    scrollbar-gutter: stable both-edges;
+    overflow-y: scroll;
+    /* 1rem = 10px */
   }
 
   .newclasstest {
     color: blue;
   }
+
   .newclassoriginal {
     color: purple;
   }
+
   /* Universal Reset */
   *,
   *::before,
@@ -17,11 +23,22 @@
     padding: 0;
     box-sizing: border-box;
   }
+
   /* Apply Base Styles */
   body {
     background-color: var(--background-color);
     color: var(--text-color);
-    font-family: var(--font-base);
+    /* font-family: var(--font-base); */
+    /*  font-family: var(--font-source-sans-3) !important; */
+    /* font-family: var(--satoshi) !important; */
+    /* You can switch to other fonts as needed */
+    /* font-family: var(--geist) !important; */
+    /* font-family: var(--IBMPlexSans) !important; */
+    /* font-family: var(--JetBrainsMono) !important; */
+    /* font-family: var(--MonaSans) !important; */
+    /* font-family: var(--PlusJakartaSans) !important; */
+    /* --app-font is the viewer's pick (components/layout/appearance.css). */
+    font-family: var(--app-font, var(--PublicSans)) !important;
     font-size: var(--font-size-medium);
     line-height: 1.5;
     scroll-behavior: smooth;
@@ -29,9 +46,18 @@
     display: grid;
     /*  flex-direction: column; */
     grid-template-columns: 1fr;
+    padding: 0px;
     /*   min-height: 100vh; */
+    margin: 0;
+    -webkit-overflow-scrolling: touch;
+
     /* Add space for sticky footer */
   }
+
+  body[data-scroll-locked] {
+    margin-right: 0 !important;
+  }
+
   /*  .adminwrapperdiv {
     display: flex;
     flex-direction: row;
@@ -45,10 +71,196 @@
     background-size: 400% 400%;
     animation: gradient 15s ease infinite;
   }
-}
 
-@media screen and (max-width: 768px) {
-  body {
-    padding-bottom: 80px; /* Adjust font size for smaller screens */
+  .backgroundcolor {
+    background-color: var(--background-color);
+  }
+
+
+  html.light-mode {
+    background-color: var(--backgroundlight) !important;
+  }
+
+  html.dark-mode {
+    background-color: var(--backgrounddark) !important;
+  }
+
+  body.light-mode {
+    background-color: var(--backgroundlight) !important;
+    color: var(--textcolorLightMode);
+
+
+  }
+
+  body.dark-mode {
+    /* Navy by default; a Background picked in Profile → Appearance sets
+       --page-dark (appearance.css). */
+    background-color: var(--page-dark, #0B1724) !important;
+    color: var(--textcolorDarkMode) !important;
+
+    /* A faint seam: the light-mode borders read as white rules. No stripes,
+       as in light mode (ui.css). */
+    table:not(.ui-table, .ux-table) :is(th, td) {
+      border-color: rgba(255, 255, 255, 0.08) !important;
+    }
+
+    /* Cards sit one step above the page, with an edge dark enough to read as a
+       seam rather than the light `#e0e0e0` border .card carries for light mode.
+       The inputs and selects below sit a step darker, on the kit's --ui-input
+       (the same fill as .ui-input); .chip stays on --backgrounddarkgray. */
+    .card {
+      background-color: var(--ui-card) !important;
+      border: 1px solid var(--ui-border) !important;
+      box-shadow: none;
+    }
+
+    /* Settings' Danger zone keeps its red-tinted edge (settings.css), which
+       the !important above would otherwise turn grey. */
+    .settings-card.is-danger {
+      border-color: color-mix(in srgb, var(--ui-danger) 35%, transparent) !important;
+    }
+
+    /* The analytics page keeps its grey cards: its look is its own. */
+    .analyticsoutderflexdiv .card {
+      background-color: #24272d !important;
+      border: 1px solid #373d46 !important;
+    }
+
+    /* The chart card has no edge in light mode (analytics.css); its unlayered
+       !important cannot beat the one above, so the override lives here. */
+    .card.linechartcard {
+      border: 0 !important;
+    }
+
+    /* Nested in the grid's card, the chart shows that card's colour and tint. */
+    .card .card.linechartcard {
+      background-color: transparent !important;
+    }
+
+    /* The main chart's metrics text colour (analytics.css has the light copy). */
+    .card[data-card-text] .analyticsquickdatabox :is(.analyticsquickdataboxdata, .analyticsquickdataboxlabel) {
+      color: var(--card-text) !important;
+    }
+
+    .appheader {
+      /*  background-color: var(--backgrounddarkgray) !important; */
+    }
+
+    .snippetpre {
+      background: #2c2f35 !important;
+    }
+
+
+    .text-gray-700 {
+      color: var(--textcolorDarkMode) !important;
+    }
+
+    .activecharttext {
+      color: var(--textcolorDarkMode) !important;
+    }
+
+    .analyticscardactive {
+      color: var(--textcolorDarkMode) !important;
+      text-decoration: underline var(--textcolorDarkMode) !important;
+    }
+
+    /* Card header tabs, on every card. These have to live here rather than
+       beside the rest of the card header styling in analytics.css: that file is
+       unlayered, and an `!important` inside a layer beats an unlayered one, so
+       the blanket `.analyticscardactive` rule above can only be taken off them
+       from this layer - which is why they were still drawn as underlined text
+       in dark mode while light mode got the segmented control. */
+    .analyticsCardGrid :is(div, span):has(> .analyticscardactive, > .analyticscardinactive) {
+      background: var(--ui-tab-track) !important;
+    }
+
+    /* The kit's dark glass thumb, as on every other switch (kit.css). */
+    .analyticsCardGrid .analyticscardactive {
+      background: var(--ui-tab-on) !important;
+      color: #e8edf3 !important;
+      text-decoration: none !important;
+      box-shadow: var(--ui-tab-on-shadow) !important;
+    }
+
+    .analyticsCardGrid .analyticscardinactive {
+      color: #929ba8 !important;
+    }
+
+    /* Restated because the rule above outranks the shared hover colour. */
+    .analyticsCardGrid .analyticscardinactive:hover {
+      color: #e8edf3 !important;
+    }
+
+    .modal-content {
+      background-color: var(--backgrounddarkgray) !important;
+      color: var(--textcolorDarkMode) !important;
+    }
+
+    .chip {
+      /*  background-color: transparent !important; */
+      background-color: var(--backgrounddarkgray) !important;
+      color: var(--textcolorDarkMode) !important;
+    }
+
+    .chip .remove-x {
+      color: var(--textcolorDarkMode) !important;
+    }
+
+    .chip:hover {
+      border: 1px solid var(--textcolorDarkMode) !important;
+    }
+
+    /* The toolbar's Ask AI box wears the Casio key colours (analytics.css),
+       and PagePicker's input sits borderless inside its own box (kit.css);
+       a layered !important here would beat either at any specificity. */
+    /* A soft edge rather than a white outline, and color-scheme so the
+       browser draws its own parts (number spinners, date icons) dark too. */
+    input:not(.dashsearch-input, .ui-pagepicker-input) {
+      background-color: var(--ui-input) !important;
+      color: var(--textcolorDarkMode) !important;
+      border: 1px solid rgba(255, 255, 255, 0.16) !important;
+      color-scheme: dark;
+    }
+
+    :is(input:not(.dashsearch-input, .ui-pagepicker-input), select):focus {
+      border-color: var(--ui-accent) !important;
+    }
+
+    .darkmode {
+      background-color: var(--backgrounddark) !important;
+      color: var(--textcolorDarkMode) !important;
+    }
+
+    select {
+      background-color: var(--ui-input) !important;
+      border: 1px solid rgba(255, 255, 255, 0.16) !important;
+      color-scheme: dark;
+    }
+
+    /* --ui-input is translucent, and the browser paints the native popup over
+       white from it: pale grey behind white text. The popup needs opaque. */
+    select option,
+    select optgroup {
+      background-color: #24272d;
+      color: var(--textcolorDarkMode);
+    }
+
+    .bookmarklistitem:hover {
+      background-color: #4e4e4e !important;
+    }
+
+    select {
+      color: var(--textcolorDarkMode) !important;
+    }
+
+
+  }
+
+
+  @media screen and (max-width: 768px) {
+    body {
+      padding-bottom: 80px;
+      /* Adjust font size for smaller screens */
+    }
   }
 }

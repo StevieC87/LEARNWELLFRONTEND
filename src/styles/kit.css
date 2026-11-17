@@ -1,0 +1,2165 @@
+/*
+  UI kit: small, shared building blocks (buttons, fields, cards, notes).
+  Change the look of every page that uses them by editing the tokens below.
+  1rem = 10px in this app, so 1.4rem = 14px. Nothing here goes below 1.2rem.
+
+  Buttons   .ui-btn + .ui-btn-primary | .ui-btn-secondary | .ui-btn-danger | .ui-btn-link
+            size: .ui-btn-sm, icon-only: .ui-btn-icon
+  Fields    .ui-field > .ui-label + control + .ui-help
+            controls: .ui-input (input/select/textarea), .ui-input-sm (narrow), .ui-mono
+            checkbox/radio row: .ui-check
+            colour row: .ui-swatches > .ui-swatch (+ .is-on, .is-default, .is-custom)
+            pages: .ui-pagepicker (components/ui/PagePicker.jsx)
+  Page      .ui-page: the page's own column, 2rem between what it stacks
+  Cards     .ui-card > .ui-card-head (h3 + p) / .ui-card-body / .ui-card-foot
+            .ui-empty: a card body with nothing in it yet (centred line + button)
+  Text      .ui-help (muted), .ui-status (+ .is-error/.is-success/.is-warning)
+  Blocks    .ui-note (info box), .ui-code (code block), .ui-badge, .ui-actions (button row)
+            .ui-inline (a field and its button on one line)
+            .ui-meter > span (progress bar)
+            .ui-infodot (an "i" beside a heading; detail in a panel under it)
+            .ui-menupanel (a small form that looks like the menu it opened from)
+            + .ui-menupanel-label (its title)
+  Tabs      .ui-tabs > .ui-tab (+ .is-on), links or buttons
+  Steps     .ui-steps: a setup flow, rail + open step (components/ui/Steps.jsx)
+  Tables    .ui-table (cells: .ui-cell-sub for a muted second line,
+            .ui-cell-actions for the row's buttons, right-aligned;
+            a sortable header: th[aria-sort] > button.ui-sort)
+            .ui-pager > .ui-btn (page numbers under a list)
+  Row actions .ui-btn-quiet (+ .is-danger): text-only buttons; automatic for
+            secondary buttons in a table cell
+  Numbers   .ui-stats > .ui-stat > .ui-stat-label + .ui-stat-value + .ui-stat-note
+*/
+:root {
+  /* The brand: navy text (the goose), slate for secondary text, and the
+     goose's orange as the one accent — buttons, selected controls, chart
+     highlights. Green and red stay for success and errors only. */
+  --ui-fg: #102d43;
+  --ui-muted: #526477;
+  --ui-border: #e2e5ea;
+  --ui-card: #ffffff;
+  --ui-subtle: #f6f7f9;
+  --ui-input: #ffffff;
+  --ui-accent: #ff9f1c;
+  --ui-accent-hover: #f7900f;
+  --ui-accent-active: #e68200;
+  --ui-accent-soft: rgba(255, 159, 28, 0.14);
+  --ui-ring: rgba(255, 159, 28, 0.4);
+  /* Section colours (Fold's `kind`): the icon tile on a builder section, so a
+     kind of section ("Look", "Where") has the same colour on every page. They
+     mark what a section is about, never state: selection and focus stay the
+     accent, success and errors green and red. */
+  --ui-tone-sky: #0284c7;
+  --ui-tone-blue: #2563eb;
+  --ui-tone-indigo: #4f46e5;
+  --ui-tone-violet: #7c3aed;
+  --ui-tone-pink: #db2777;
+  --ui-tone-rose: #e11d48;
+  --ui-tone-amber: #d97706;
+  --ui-tone-green: #16a34a;
+  --ui-tone-teal: #0d9488;
+  --ui-tone-slate: #475569;
+  --ui-tone-tint: 13%;
+  /* The accent as text (links, the open tab's label, a highlighted figure).
+     Orange on white is 2:1, so light mode writes it in the brand navy and
+     leaves the orange to fills; dark mode can use the orange itself. */
+  --ui-accent-ink: #102d43;
+  /* Text that sits on top of --ui-accent: navy, in both modes. It holds
+     6.9:1 on the orange and 6:1 on the deepest end of the gradient. */
+  --ui-on-accent: #102d43;
+  /* Primary buttons: a light goose orange into a deeper one, a hairline of
+     light on the top edge, and a warm shadow rather than a grey one. */
+  --ui-accent-grad: linear-gradient(135deg, #ffab36 0%, #f7900f 100%);
+  --ui-accent-grad-hover: linear-gradient(135deg, #ff9f1c 0%, #f08400 100%);
+  --ui-accent-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 1px 2px rgba(16, 45, 67, 0.16), 0 4px 12px -2px rgba(247, 144, 15, 0.4);
+  --ui-accent-shadow-hover: inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    0 2px 4px rgba(16, 45, 67, 0.16), 0 8px 20px -4px rgba(247, 144, 15, 0.5);
+  /* A touch of the tabs' glass on buttons: a sheen down the top half of a
+     primary, and a secondary lit along its top edge, a shade deeper at its
+     foot, sitting on a soft shadow. Kept faint on purpose. */
+  --ui-btn-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0) 55%);
+  --ui-btn-face: linear-gradient(180deg, #fff 0%, #f6f7f9 100%);
+  --ui-btn-face-hover: linear-gradient(180deg, #fff 0%, #eef0f3 100%);
+  --ui-btn-lift: inset 0 1px 0 #fff, 0 1px 2px rgba(16, 24, 40, 0.06), 0 2px 6px -2px rgba(16, 24, 40, 0.1);
+  --ui-btn-lift-hover: inset 0 1px 0 #fff, 0 1px 2px rgba(16, 24, 40, 0.08), 0 4px 10px -3px rgba(16, 24, 40, 0.14);
+  --ui-danger: #dc2626;
+  --ui-danger-soft: #fef2f2;
+  --ui-success: #15803d;
+  --ui-warning: #b45309;
+  --ui-code-bg: #0f172a;
+  --ui-code-fg: #e2e8f0;
+
+  /* A card whose data is still in flight. The veil washes the stale rows out
+     toward the card's own background so a reader scanning a page of cards can
+     tell at a glance which ones are not ready; the tint pulses over it and the
+     chip carries the spinner. See components/card-loading.css. */
+  --ui-loading-veil: rgba(255, 255, 255, 0.62);
+  --ui-loading-tint: rgba(91, 100, 114, 0.1);
+  --ui-loading-chip: rgba(255, 255, 255, 0.96);
+  --ui-loading-chip-shadow: rgba(17, 24, 39, 0.12);
+
+  /* .ui-tabs: a switch. The track is a groove; the open tab is a pane of
+     glass on it: a pale sheen down its face, a lit top edge, a soft drop. */
+  --ui-tab-track: #ececec;
+  --ui-tab-track-edge: inset 0 1px 2px rgba(15, 23, 42, 0.08), inset 0 0 0 1px rgba(15, 23, 42, 0.03);
+  --ui-tab-hover: rgba(15, 23, 42, 0.04);
+  --ui-tab-on: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.78) 100%);
+  --ui-tab-on-shadow: inset 0 1px 0 #fff, inset 0 -1px 0 rgba(15, 23, 42, 0.04),
+    0 0 0 0.5px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.08), 0 3px 8px -2px rgba(15, 23, 42, 0.14);
+
+  /* On/off switches (.switch > .slider, styles/forms.css), the same glass:
+     a groove, lit from above when on, and a glass knob the colour shows
+     through at its edges. */
+  --ui-switch-off: #d4d6db;
+  --ui-switch-groove: inset 0 1px 3px rgba(15, 23, 42, 0.18), inset 0 0 0 1px rgba(15, 23, 42, 0.05);
+  --ui-switch-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0) 55%);
+  --ui-switch-knob: radial-gradient(120% 90% at 30% 20%, #fff 0%, rgba(255, 255, 255, 0.92) 45%, rgba(255, 255, 255, 0.72) 100%);
+  --ui-switch-knob-shadow: inset 0 1px 0 #fff, inset 0 -1px 1px rgba(15, 23, 42, 0.06),
+    0 0 0 0.5px rgba(15, 23, 42, 0.1), 0 2px 4px rgba(15, 23, 42, 0.16), 0 4px 10px -3px rgba(15, 23, 42, 0.2);
+
+  --ui-radius: 0.8rem;
+  --ui-radius-sm: 0.6rem;
+  --ui-control-h: 3.8rem;
+  /* Card corners and inner spacing: .ui-card here, the older .card in ui.css.
+     Profile → Appearance's Density and Corners change these (appearance.css). */
+  --ui-card-radius: 1rem;
+  --ui-card-pad-x: 2.4rem;
+  --ui-card-pad-y: 2rem;
+  --card-pad: 1.2rem;
+
+  --ui-text-xs: 1.2rem;
+  --ui-text-sm: 1.3rem;
+  --ui-text: 1.4rem;
+  --ui-text-lg: 1.6rem;
+  --ui-text-xl: 1.8rem;
+}
+
+body.dark-mode {
+  --ui-fg: #f3f6fa;
+  --ui-muted: #a3b0c0;
+  --ui-border: rgba(255, 255, 255, 0.12);
+  /* A faint lift over the page, so a card reads as a surface of its own
+     rather than an outline on the background. Mixed from the page colour,
+     so it follows the Background the viewer picked (appearance.css), and
+     solid, so a popover drawn with it hides what is under it. The legacy
+     .card is this colour too (base.css): one card colour everywhere. */
+  --ui-card: color-mix(in srgb, var(--page-dark, #0b1724) 95.5%, #fff);
+  --ui-subtle: rgba(255, 255, 255, 0.04);
+  --ui-input: rgba(0, 0, 0, 0.2);
+  --ui-accent: #ff9f1c;
+  --ui-accent-hover: #ffb347;
+  --ui-accent-active: #f08400;
+  --ui-accent-soft: rgba(255, 159, 28, 0.12);
+  --ui-ring: rgba(255, 159, 28, 0.35);
+  --ui-tone-sky: #38bdf8;
+  --ui-tone-blue: #60a5fa;
+  --ui-tone-indigo: #818cf8;
+  --ui-tone-violet: #a78bfa;
+  --ui-tone-pink: #f472b6;
+  --ui-tone-rose: #fb7185;
+  --ui-tone-amber: #fbbf24;
+  --ui-tone-green: #4ade80;
+  --ui-tone-teal: #2dd4bf;
+  --ui-tone-slate: #94a3b8;
+  --ui-tone-tint: 18%;
+  /* 8:1 on the dark card, so the orange can be text here. */
+  --ui-accent-ink: #ff9f1c;
+  --ui-on-accent: #102d43;
+  /* Dark mode glows instead of casting a shadow. */
+  --ui-accent-grad: linear-gradient(135deg, #ffab36 0%, #f7900f 100%);
+  --ui-accent-grad-hover: linear-gradient(135deg, #ffbb5c 0%, #ff9f1c 100%);
+  --ui-accent-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 0 0 1px rgba(255, 171, 54, 0.3), 0 6px 18px -6px rgba(255, 159, 28, 0.5);
+  --ui-accent-shadow-hover: inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    0 0 0 1px rgba(255, 171, 54, 0.45), 0 8px 26px -6px rgba(255, 159, 28, 0.65);
+  --ui-btn-face: linear-gradient(180deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.025) 100%);
+  --ui-btn-face-hover: linear-gradient(180deg, rgba(255, 255, 255, 0.11) 0%, rgba(255, 255, 255, 0.05) 100%);
+  --ui-btn-lift: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 2px 6px -2px rgba(0, 0, 0, 0.5);
+  --ui-btn-lift-hover: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 4px 12px -3px rgba(0, 0, 0, 0.6);
+  --ui-danger: #f87171;
+  --ui-danger-soft: rgba(248, 113, 113, 0.08);
+  --ui-success: #4ade80;
+  /* Yellow rather than amber: amber sits too close to the orange accent. */
+  --ui-warning: #facc15;
+  --ui-code-bg: rgba(0, 0, 0, 0.35);
+
+  --ui-loading-veil: rgba(27, 30, 36, 0.62);
+  --ui-loading-tint: rgba(255, 255, 255, 0.06);
+  --ui-loading-chip: #2b2f36;
+  --ui-loading-chip-shadow: rgba(0, 0, 0, 0.4);
+
+  --ui-tab-track: rgba(0, 0, 0, 0.22);
+  --ui-tab-track-edge: inset 0 1px 2px rgba(0, 0, 0, 0.35), inset 0 0 0 1px var(--ui-border);
+  --ui-tab-hover: rgba(255, 255, 255, 0.05);
+  --ui-tab-on: linear-gradient(180deg, rgba(255, 255, 255, 0.17) 0%, rgba(255, 255, 255, 0.07) 100%);
+  --ui-tab-on-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 4px 12px -4px rgba(0, 0, 0, 0.55);
+
+  --ui-switch-off: rgba(255, 255, 255, 0.12);
+  --ui-switch-groove: inset 0 1px 3px rgba(0, 0, 0, 0.45), inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --ui-switch-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 55%);
+  --ui-switch-knob: radial-gradient(120% 90% at 30% 20%, #fff 0%, rgba(240, 242, 247, 0.92) 50%, rgba(220, 224, 232, 0.8) 100%);
+  --ui-switch-knob-shadow: inset 0 1px 0 #fff, inset 0 -1px 1px rgba(0, 0, 0, 0.1),
+    0 2px 4px rgba(0, 0, 0, 0.35), 0 4px 10px -3px rgba(0, 0, 0, 0.5);
+}
+
+/* ---------- Buttons ---------- */
+.ui-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  height: var(--ui-control-h);
+  padding: 0 1.6rem;
+  border: 1px solid transparent;
+  border-radius: var(--ui-radius-sm);
+  background: transparent;
+  color: inherit;
+  font-size: var(--ui-text);
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.ui-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--ui-ring);
+}
+
+.ui-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.ui-btn-primary {
+  background: var(--ui-btn-sheen), var(--ui-accent-grad);
+  border-color: transparent;
+  color: var(--ui-on-accent);
+  box-shadow: var(--ui-accent-shadow);
+  transition: box-shadow 0.15s, transform 0.15s, filter 0.15s;
+}
+
+.ui-btn-primary:hover:not(:disabled) {
+  background: var(--ui-btn-sheen), var(--ui-accent-grad-hover);
+  box-shadow: var(--ui-accent-shadow-hover);
+  transform: translateY(-1px);
+}
+
+.ui-btn-primary:active:not(:disabled) {
+  transform: translateY(0);
+  filter: brightness(0.95);
+}
+
+.ui-btn-secondary {
+  border-color: var(--ui-border);
+  background: var(--ui-card) var(--ui-btn-face);
+  color: var(--ui-fg);
+  box-shadow: var(--ui-btn-lift);
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s, box-shadow 0.15s;
+}
+
+.ui-btn-secondary:hover:not(:disabled) {
+  background: var(--ui-card) var(--ui-btn-face-hover);
+  box-shadow: var(--ui-btn-lift-hover);
+}
+
+.ui-btn-danger {
+  background: var(--ui-danger);
+  border-color: var(--ui-danger);
+  color: #fff;
+}
+
+.ui-btn-danger:hover:not(:disabled) {
+  filter: brightness(0.92);
+}
+
+.ui-btn-link {
+  height: auto;
+  padding: 0;
+  color: var(--ui-accent-ink);
+}
+
+.ui-btn-link:hover:not(:disabled) {
+  text-decoration: underline;
+}
+
+/* A row's own actions (Show code, Delete, Add): text until the pointer is on
+   it, so a long list isn't a column of boxes. Every secondary button in a
+   table cell gets this look; elsewhere add .ui-btn-quiet. Delete-type actions
+   add .is-danger and turn red on hover only. */
+.ui-btn-quiet,
+:is(.ui-table, .ux-table) td .ui-btn-secondary {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+  color: var(--ui-muted);
+}
+
+.ui-btn-quiet:hover:not(:disabled),
+.ui-btn-quiet:focus-visible,
+:is(.ui-table, .ux-table) td .ui-btn-secondary:hover:not(:disabled) {
+  background: var(--ui-subtle);
+  color: var(--ui-fg);
+}
+
+/* No lift under the pointer either; focus keeps its ring (.ui-btn). */
+.ui-btn-quiet:hover:not(:disabled, :focus-visible),
+:is(.ui-table, .ux-table) td .ui-btn-secondary:hover:not(:disabled, :focus-visible) {
+  box-shadow: none;
+}
+
+.ui-btn-quiet.is-danger:hover:not(:disabled) {
+  color: var(--ui-danger);
+}
+
+.ui-btn-sm {
+  height: 3rem;
+  padding: 0 1.1rem;
+  font-size: var(--ui-text-sm);
+}
+
+.ui-btn-icon {
+  width: var(--ui-control-h);
+  padding: 0;
+}
+
+.ui-btn-sm.ui-btn-icon {
+  width: 3rem;
+}
+
+/* ---------- Fields ---------- */
+.ui-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.ui-label {
+  margin: 0;
+  color: var(--ui-fg);
+  font-size: var(--ui-text);
+  font-weight: 500;
+}
+
+/* Small text that stays readable (12px+): use these, not Tailwind's text-sm/xs (7.5–8.75px here, since 1rem = 10px). */
+.ui-text-sm {
+  font-size: var(--ui-text-sm);
+}
+
+.ui-text-xs {
+  font-size: var(--ui-text-xs);
+}
+
+.ui-help {
+  margin: 0;
+  color: var(--ui-muted);
+  font-size: var(--ui-text-sm);
+  /* Inside a .ui-field <label> it would inherit forms.css's bold label. */
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* A row of colours to pick from: round chips, the chosen one ringed. .is-default
+   is a worded chip for "no colour of its own"; .is-custom holds a colour input
+   and opens the browser's picker. */
+.ui-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  align-items: center;
+  min-height: var(--ui-control-h);
+}
+
+.ui-swatch {
+  width: 2.8rem;
+  height: 2.8rem;
+  padding: 0;
+  border: 2px solid var(--ui-card);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px var(--ui-border);
+  cursor: pointer;
+}
+
+.ui-swatch.is-on {
+  box-shadow: 0 0 0 2px var(--ui-fg);
+}
+
+.ui-swatch.is-default {
+  width: auto;
+  height: 2.8rem;
+  padding: 0 1.2rem;
+  border-radius: 999px;
+  background: var(--ui-subtle);
+  color: var(--ui-muted);
+  font-size: var(--ui-text-sm);
+  font-weight: 600;
+}
+
+.ui-swatch.is-default.is-on {
+  color: var(--ui-fg);
+}
+
+.ui-swatch.is-custom {
+  position: relative;
+  overflow: hidden;
+  background: conic-gradient(#ef4444, #eab308, #22c55e, #06b6d4, #3b82f6, #a855f7, #ef4444);
+}
+
+.ui-swatch.is-custom input {
+  position: absolute;
+  inset: -0.5rem;
+  width: 150%;
+  height: 150%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.ui-input {
+  width: 100%;
+  min-width: 0;
+  height: var(--ui-control-h);
+  margin: 0;
+  padding: 0 1.2rem;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-sm);
+  background: var(--ui-input);
+  color: inherit;
+  font-size: var(--ui-text);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+textarea.ui-input {
+  height: auto;
+  min-height: 10rem;
+  padding: 1rem 1.2rem;
+  line-height: 1.6;
+  resize: vertical;
+}
+
+.ui-input:focus {
+  outline: none;
+  border-color: var(--ui-accent);
+  box-shadow: 0 0 0 3px var(--ui-ring);
+}
+
+.ui-input:disabled {
+  background: var(--ui-subtle);
+  color: var(--ui-muted);
+  cursor: not-allowed;
+}
+
+body.dark-mode .ui-input {
+  color-scheme: dark;
+}
+
+.ui-input-sm {
+  width: 14rem;
+}
+
+/* Dropdowns (select.ui-input): drawn by us, open list included, where the
+   browser lets CSS style a select (Chrome's `appearance: base-select`);
+   elsewhere they stay the browser's own. The list is the same glass as the
+   tab switch: a frosted panel that drops in, the chosen option a raised
+   glass row with a tick, the others lighting up under the pointer. */
+@supports (appearance: base-select) {
+  select.ui-input:not([multiple], [size]),
+  select.ui-input:not([multiple], [size])::picker(select) {
+    appearance: base-select;
+  }
+
+  select.ui-input:not([multiple], [size]) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0 1rem 0 1.2rem;
+    cursor: pointer;
+  }
+
+  select.ui-input:not([multiple], [size]):hover:not(:disabled) {
+    border-color: color-mix(in srgb, var(--ui-fg) 22%, transparent);
+  }
+
+  select.ui-input::picker-icon {
+    content: "";
+    flex: none;
+    width: 1rem;
+    height: 1rem;
+    margin-left: auto;
+    background: var(--ui-muted);
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' d='M3.5 6l4.5 4.5L12.5 6'/%3E%3C/svg%3E") center / contain no-repeat;
+    transition: rotate var(--motion-normal) var(--motion-ease);
+  }
+
+  select.ui-input:open::picker-icon {
+    rotate: 180deg;
+  }
+
+  /* Opt-in for a value that can be long (a site name): put
+     <button type="button"><selectedcontent /></button> first in the select and
+     the chosen text ends in "…" before the arrow instead of pushing it out.
+     Browsers without base-select ignore the button. */
+  select.ui-input > button {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+  }
+
+  select.ui-input selectedcontent {
+    display: block;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  select.ui-input::picker(select) {
+    min-width: anchor-size(width);
+    margin-block: 0.4rem;
+    padding: 0.4rem;
+    border: 1px solid var(--ui-border);
+    border-radius: var(--ui-radius);
+    background: color-mix(in srgb, var(--ui-card, #fff) 80%, transparent);
+    backdrop-filter: blur(16px) saturate(1.6);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 2px 6px rgba(16, 24, 40, 0.08),
+      0 14px 34px -10px rgba(16, 24, 40, 0.28);
+    color: var(--ui-fg);
+    font-size: var(--ui-text-sm);
+    scrollbar-width: thin;
+    opacity: 0;
+    translate: 0 -0.4rem;
+    scale: 0.98;
+    transform-origin: top center;
+    transition: opacity var(--motion-normal) ease, translate var(--motion-slow) var(--motion-ease),
+      scale var(--motion-slow) var(--motion-ease), overlay var(--motion-slow) allow-discrete,
+      display var(--motion-slow) allow-discrete;
+  }
+
+  select.ui-input:open::picker(select) {
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+  }
+
+  @starting-style {
+    select.ui-input:open::picker(select) {
+      opacity: 0;
+      translate: 0 -0.4rem;
+      scale: 0.98;
+    }
+  }
+
+  select.ui-input option {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    min-height: 3.2rem;
+    padding: 0.5rem 1rem;
+    border-radius: var(--ui-radius-sm);
+    background: transparent;
+    color: var(--ui-fg);
+    line-height: 1.4;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+  }
+
+  select.ui-input option:is(:hover, :focus-visible) {
+    outline: none;
+    background: var(--ui-tab-hover);
+  }
+
+  select.ui-input option:checked {
+    background: var(--ui-tab-on);
+    box-shadow: var(--ui-tab-on-shadow);
+    font-weight: 600;
+  }
+
+  select.ui-input option::checkmark {
+    order: 1;
+    margin-left: auto;
+    color: var(--ui-accent-ink);
+  }
+
+  select.ui-input option:disabled {
+    color: var(--ui-muted);
+    cursor: not-allowed;
+  }
+
+  /* Above base.css's dark select rules, written for the browser's own list. */
+  body.dark-mode select.ui-input::picker(select) {
+    background: color-mix(in srgb, #1f2228 82%, transparent);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 14px 34px -10px rgba(0, 0, 0, 0.7);
+  }
+
+  body.dark-mode select.ui-input option {
+    background: transparent;
+    color: var(--ui-fg);
+  }
+
+  body.dark-mode select.ui-input option:is(:hover, :focus-visible) {
+    background: var(--ui-tab-hover);
+  }
+
+  body.dark-mode select.ui-input option:checked {
+    background: var(--ui-tab-on);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    select.ui-input::picker(select),
+    select.ui-input::picker-icon {
+      transition: none;
+    }
+  }
+}
+
+.ui-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: var(--ui-text-sm);
+}
+
+.ui-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  margin: 0;
+  color: var(--ui-fg);
+  font-size: var(--ui-text);
+  font-weight: 400;
+  line-height: 1.45;
+  cursor: pointer;
+}
+
+.ui-check input {
+  flex: 0 0 auto;
+  width: 1.6rem;
+  height: 1.6rem;
+  margin: 0.15rem 0 0;
+  accent-color: var(--ui-accent);
+}
+
+.ui-checks {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* PagePicker: chosen paths as chips inside one input-like box, the site's
+   pages suggested in a list under it. */
+.ui-pagepicker {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.ui-pagepicker-box {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: var(--ui-control-h);
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-sm);
+  background: var(--ui-input);
+  cursor: text;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.ui-pagepicker-box:focus-within {
+  border-color: var(--ui-accent);
+  box-shadow: 0 0 0 3px var(--ui-ring);
+}
+
+.ui-pagepicker.is-invalid .ui-pagepicker-box {
+  border-color: var(--ui-danger);
+}
+
+.ui-pagepicker.is-disabled .ui-pagepicker-box {
+  background: var(--ui-subtle);
+  cursor: default;
+}
+
+/* forms.css gives every input a border and a focus glow; base.css's dark-mode
+   input rule leaves .ui-pagepicker-input out for the same reason. */
+.ui-pagepicker-box .ui-pagepicker-input {
+  flex: 1 1 14rem;
+  min-width: 0;
+  height: 2.8rem;
+  margin: 0;
+  padding: 0 0.6rem;
+  border: 0;
+  border-radius: 0;
+  outline: none;
+  background: transparent;
+  box-shadow: none;
+  color: inherit;
+}
+
+body.dark-mode .ui-pagepicker-box .ui-pagepicker-input {
+  color-scheme: dark;
+}
+
+.ui-pagepicker-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  max-width: 100%;
+  padding: 0.2rem 0.2rem 0.2rem 1rem;
+  border: 1px solid var(--ui-border);
+  border-radius: 99rem;
+  background: var(--ui-subtle);
+  color: var(--ui-fg);
+}
+
+.ui-pagepicker-chip .ui-mono {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ui-pagepicker-chip button {
+  flex: none;
+  width: 2.2rem;
+  height: 2.2rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--ui-muted);
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.ui-pagepicker-chip button:hover {
+  background: var(--ui-accent-soft);
+  color: var(--ui-fg);
+}
+
+.ui-pagepicker-empty {
+  padding: 0 0.6rem;
+  color: var(--ui-muted);
+  font-size: var(--ui-text-sm);
+}
+
+.ui-pagepicker-list {
+  /* Fixed, not absolute, for the same reason as .ui-infodot-panel; PagePicker
+     sets top/left/width on open. */
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10002;
+  max-height: 30rem;
+  margin: 0;
+  padding: 0.4rem;
+  overflow-y: auto;
+  list-style: none;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius);
+  background: var(--ui-card);
+  color: var(--ui-fg);
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 8px 24px rgba(16, 24, 40, 0.12);
+  scrollbar-width: thin;
+}
+
+body.dark-mode .ui-pagepicker-list {
+  background: #1f2228;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+.ui-pagepicker-option {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1.2rem;
+  padding: 0.7rem 0.8rem;
+  border-radius: var(--ui-radius-sm);
+  cursor: pointer;
+}
+
+.ui-pagepicker-option .ui-mono {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ui-pagepicker-option[aria-selected="true"] {
+  background: var(--ui-subtle);
+}
+
+body.dark-mode .ui-pagepicker-option[aria-selected="true"] {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.ui-pagepicker-option.is-group .ui-mono {
+  color: var(--ui-accent-ink);
+}
+
+.ui-pagepicker-meta {
+  flex: none;
+  color: var(--ui-muted);
+  font-size: var(--ui-text-xs);
+  white-space: nowrap;
+}
+
+.ui-pagepicker-status {
+  padding: 0.7rem 0.8rem;
+  color: var(--ui-muted);
+  font-size: var(--ui-text-sm);
+}
+
+@media (max-width: 760px) {
+  /* The meta text would squeeze the path to nothing on a phone. */
+  .ui-pagepicker-option {
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+}
+
+/* ---------- Cards ---------- */
+.ui-page {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  min-width: 0;
+}
+
+.ui-empty {
+  align-items: center;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  text-align: center;
+}
+
+.ui-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-card-radius);
+  background: var(--ui-card);
+  color: var(--ui-fg);
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.07), 0 1px 2px rgba(16, 24, 40, 0.04);
+  overflow: hidden;
+}
+
+.ui-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.6rem;
+  padding: var(--ui-card-pad-y) var(--ui-card-pad-x) 0;
+}
+
+.ui-card-head h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0;
+  color: var(--ui-fg);
+  font-size: var(--ui-text-lg);
+  font-weight: 600;
+}
+
+.ui-card-head p {
+  margin: 0.4rem 0 0;
+  color: var(--ui-muted);
+  font-size: var(--ui-text);
+  line-height: 1.5;
+}
+
+.ui-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+  padding: var(--ui-card-pad-y) var(--ui-card-pad-x) calc(var(--ui-card-pad-y) + 0.4rem);
+}
+
+.ui-card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  padding: calc(var(--ui-card-pad-y) * 0.7) var(--ui-card-pad-x);
+  border-top: 1px solid var(--ui-border);
+  background: var(--ui-subtle);
+}
+
+.ui-divider {
+  height: 1px;
+  margin: 0;
+  border: 0;
+  background: var(--ui-border);
+}
+
+@media (max-width: 760px) {
+
+  .ui-card-head,
+  .ui-card-body,
+  .ui-card-foot {
+    padding-left: min(1.6rem, var(--ui-card-pad-x));
+    padding-right: min(1.6rem, var(--ui-card-pad-x));
+  }
+}
+
+/* Fold (components/ui/Fold.jsx): a builder section in its own card, closed to
+   its header (icon, title, a chip saying what's set) and opened by clicking it.
+   The open one is ringed in the accent, so it's clear which one you're in. */
+.ui-fold {
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius);
+  background: var(--ui-card);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.ui-fold[open] {
+  border-color: color-mix(in srgb, var(--ui-accent) 55%, var(--ui-border));
+  box-shadow: 0 0 0 3px var(--ui-accent-soft);
+}
+
+.ui-fold>summary {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-height: 5.2rem;
+  padding: 0.9rem 1.4rem;
+  border-radius: calc(var(--ui-radius) - 1px);
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+  transition: background 0.15s;
+}
+
+/* No overflow: hidden on the box, so menus inside it (e.g. "Add a condition") aren't clipped. */
+.ui-fold[open]>summary {
+  border-bottom: 1px solid var(--ui-border);
+  border-radius: calc(var(--ui-radius) - 1px) calc(var(--ui-radius) - 1px) 0 0;
+}
+
+.ui-fold>summary::-webkit-details-marker {
+  display: none;
+}
+
+/* The chevron, at the far end. */
+.ui-fold>summary::after {
+  content: "";
+  flex: none;
+  width: 0.7rem;
+  height: 0.7rem;
+  margin: 0 0.4rem 0.3rem auto;
+  border-right: 2px solid var(--ui-muted);
+  border-bottom: 2px solid var(--ui-muted);
+  transform: rotate(45deg);
+  transition: transform 0.15s;
+}
+
+.ui-fold[open]>summary::after {
+  margin-bottom: -0.3rem;
+  transform: rotate(-135deg);
+}
+
+.ui-fold>summary:hover {
+  background: var(--ui-subtle);
+}
+
+.ui-fold>summary:focus-visible {
+  outline: 2px solid var(--ui-ring);
+  outline-offset: 2px;
+}
+
+/* The section's kind, in its own colour (--tone, set by Fold). */
+.ui-fold-icon {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 3.2rem;
+  height: 3.2rem;
+  border-radius: var(--ui-radius-sm);
+  background: color-mix(in srgb, var(--tone) var(--ui-tone-tint), transparent);
+  color: var(--tone);
+}
+
+.ui-fold-title {
+  flex: 0 1 auto;
+  min-width: 0;
+  color: var(--ui-fg);
+  font-size: var(--ui-text-lg);
+  font-weight: 600;
+}
+
+/* Shrinks long before the title does, so on a phone the chip gives way and
+   the title wraps only once it's gone. */
+.ui-fold-summary {
+  flex: 0 1000 auto;
+  min-width: 0;
+  overflow: hidden;
+  padding: 0.2rem 0.9rem;
+  border-radius: 99rem;
+  background: var(--ui-subtle);
+  box-shadow: inset 0 0 0 1px var(--ui-border);
+  color: var(--ui-muted);
+  font-size: var(--ui-text-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Builder (every widget builder: forms, surveys, notices, feedback,
+   testimonials, the cookie banner): its sections beside a preview that stays
+   in view. The preview drops below once the box can't hold both side by side;
+   it wraps on the box's own width, not the window's, so a sidebar kept open
+   doesn't push it under. */
+/* The card clips rather than hides its overflow: `hidden` makes the card the
+   box the sticky preview sticks inside, and the card never scrolls, so the
+   preview would scroll away with the page. `clip` still rounds the corners. */
+.ui-card:has(.ui-builder) {
+  overflow: clip;
+}
+
+.ui-builder {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.4rem 3rem;
+  align-items: flex-start;
+}
+
+.ui-builder-main {
+  display: flex;
+  flex: 999 1 36rem;
+  flex-direction: column;
+  gap: 1.4rem;
+  min-width: 0;
+}
+
+.ui-builder-preview {
+  position: sticky;
+  top: 2rem;
+  display: flex;
+  flex: 1 1 36rem;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+}
+
+/* Steps (components/ui/Steps.jsx): a setup flow, the steps in a row joined
+   by a line, above the open one so that step has the full width. Each title
+   sits under its dot; narrow (a fold, a phone), only the dots show. */
+.ui-steps {
+  container-type: inline-size;
+}
+
+.ui-steps-inner {
+  display: grid;
+  gap: 2.4rem;
+}
+
+.ui-steps-inner > * {
+  min-width: 0;
+}
+
+.ui-steps-rail {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ui-steps-item {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  margin: 0;
+}
+
+/* The line across to the next dot: accent once this step is behind you. */
+.ui-steps-item:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: calc(1.1rem - 1px);
+  left: 2.6rem;
+  right: 0.4rem;
+  height: 2px;
+  background: var(--ui-border);
+}
+
+.ui-steps-item.is-done:not(:last-child)::after {
+  background: var(--ui-accent);
+}
+
+.ui-steps-item > button {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.8rem;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ui-muted);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ui-steps-item > button:hover .ui-steps-title,
+.ui-steps-item.is-open .ui-steps-title {
+  color: var(--ui-accent-ink);
+}
+
+.ui-steps-item > button:focus-visible {
+  outline: 2px solid var(--ui-ring);
+  outline-offset: 2px;
+  border-radius: var(--ui-radius-sm);
+}
+
+.ui-steps-dot {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  border: 2px solid var(--ui-border);
+  border-radius: 50%;
+  background: var(--ui-card);
+  color: var(--ui-muted);
+  font-size: var(--ui-text-xs);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.ui-steps-item.is-open .ui-steps-dot {
+  border-color: var(--ui-accent);
+  color: var(--ui-accent-ink);
+}
+
+.ui-steps-item.is-done .ui-steps-dot {
+  border-color: var(--ui-accent);
+  background: var(--ui-accent);
+  color: var(--ui-on-accent);
+}
+
+.ui-steps-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  max-width: 100%;
+  min-width: 0;
+  padding-right: 1.6rem;
+}
+
+.ui-steps-title {
+  color: var(--ui-fg);
+  font-weight: 500;
+}
+
+.ui-steps-item.is-open .ui-steps-title {
+  font-weight: 600;
+}
+
+.ui-steps-summary {
+  overflow: hidden;
+  color: var(--ui-muted);
+  font-size: var(--ui-text-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ui-steps-heading {
+  scroll-margin-top: 8rem;
+  margin: 0 0 1.2rem;
+  color: var(--ui-fg);
+  font-size: var(--ui-text-xl);
+  font-weight: 600;
+}
+
+.ui-steps-heading:focus {
+  outline: none;
+}
+
+.ui-steps-nav {
+  margin-top: 2.4rem;
+  padding-top: 1.6rem;
+  border-top: 1px solid var(--ui-border);
+}
+
+@container (max-width: 639px) {
+  /* Out of sight but still each button's name for a screen reader. */
+  .ui-steps-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .ui-steps-item:last-child {
+    flex: none;
+  }
+}
+
+.ui-fold[open]>summary .ui-fold-summary {
+  display: none;
+}
+
+.ui-fold-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  padding: 1.6rem;
+}
+
+/* ---------- Text, notes, code ---------- */
+.ui-status {
+  color: var(--ui-muted);
+  font-size: var(--ui-text-sm);
+}
+
+.ui-status.is-error {
+  color: var(--ui-danger);
+}
+
+.ui-status.is-success {
+  color: var(--ui-success);
+}
+
+.ui-status.is-warning {
+  color: var(--ui-warning);
+}
+
+/* ---------- Feedback on the control itself ---------- */
+/* Labels that take turns in one button (Copy / Copied, Save / Saving… /
+   Saved; components/ui/CopyButton.jsx and SaveButton.jsx): stacked in one
+   cell, so the button is as wide as the longest and nothing beside it moves. */
+.ui-swap {
+  display: inline-grid;
+}
+
+.ui-swap > * {
+  display: inline-flex;
+  grid-area: 1 / 1;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.ui-swap > [aria-hidden="true"] {
+  visibility: hidden;
+}
+
+/* The tick that replaces an icon when something worked. */
+.ui-pop {
+  animation: ui-pop 0.22s cubic-bezier(0.2, 0.9, 0.3, 1.3);
+}
+
+@keyframes ui-pop {
+  from { transform: scale(0.4); opacity: 0; }
+}
+
+/* Buttons outside the kit aren't flex and have no gap: keep a Copy button's
+   icon off its label there too. */
+:not(.ui-btn) > svg + .ui-swap {
+  margin-left: 0.6rem;
+}
+
+[data-copy="copied"],
+[data-save="saved"] {
+  color: var(--ui-success);
+}
+
+[data-copy="failed"] {
+  color: var(--ui-danger);
+}
+
+/* On the accent the label keeps its own colour: green or red on blue is
+   hard to read, and the tick and words already say it. */
+.ui-btn-primary:is([data-save="saved"], [data-copy]) {
+  color: var(--ui-on-accent);
+}
+
+/* A field the person has left with something wrong in it (hooks/useFieldCheck.js),
+   and the line under it saying what. */
+input[aria-invalid="true"],
+textarea[aria-invalid="true"],
+select[aria-invalid="true"] {
+  border-color: var(--ui-danger);
+}
+
+input[aria-invalid="true"]:focus,
+textarea[aria-invalid="true"]:focus {
+  border-color: var(--ui-danger);
+  box-shadow: 0 0 0 3px var(--ui-danger-soft);
+}
+
+.ui-field-error {
+  display: block;
+  margin-top: 0.4rem;
+  color: var(--ui-danger);
+  font-size: var(--ui-text-sm);
+}
+
+.ui-field-note {
+  display: block;
+  margin-top: 0.4rem;
+  color: var(--ui-muted);
+  font-size: var(--ui-text-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-pop {
+    animation: none;
+  }
+}
+
+.ui-note {
+  display: flex;
+  gap: 1rem;
+  padding: 1.2rem 1.4rem;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius);
+  background: var(--ui-subtle);
+  color: var(--ui-muted);
+  font-size: var(--ui-text-sm);
+  line-height: 1.55;
+}
+
+/* A flex item's min-width is its content's by default, so a .ui-code inside
+   would widen the box past the page instead of scrolling. */
+.ui-note>div {
+  min-width: 0;
+}
+
+.ui-note>svg {
+  flex: 0 0 auto;
+  margin-top: 0.2rem;
+  color: var(--ui-accent-ink);
+}
+
+.ui-note strong,
+.ui-note-title {
+  color: var(--ui-fg);
+  font-weight: 600;
+}
+
+.ui-note ul {
+  margin: 0.4rem 0 0;
+  padding-left: 1.8rem;
+  list-style: disc;
+}
+
+.ui-note li+li {
+  margin-top: 0.3rem;
+}
+
+.ui-note p {
+  margin: 0.6rem 0 0;
+}
+
+.ui-note.is-accent {
+  border-color: var(--ui-ring);
+  background: var(--ui-accent-soft);
+}
+
+.ui-note.is-danger {
+  border-color: rgba(220, 38, 38, 0.3);
+  background: var(--ui-danger-soft);
+}
+
+/* An "i" that holds the explanation a heading or a notice would otherwise
+   spell out in full. The button is small enough to sit inside a line of text;
+   the panel is positioned against .ui-infodot, so it follows the button. */
+.ui-infodot {
+  position: relative;
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.ui-infodot-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  padding: 0;
+  /* The accent at rest, not --ui-border: a grey hairline on the tinted
+     background of a .ui-note is too faint to read as something to press. */
+  border: 1px solid var(--ui-accent);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ui-accent-ink);
+  font-size: 1.1rem;
+  font-weight: 600;
+  font-style: italic;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.ui-infodot-btn:hover {
+  background: var(--ui-accent-soft);
+}
+
+.ui-infodot-btn:focus-visible {
+  outline: 2px solid var(--ui-accent);
+  outline-offset: 2px;
+}
+
+.ui-infodot-btn[aria-expanded="true"] {
+  border-color: var(--ui-accent);
+  background: var(--ui-accent-soft);
+  color: var(--ui-accent-ink);
+}
+
+.ui-infodot-panel {
+  /* Fixed, not absolute: .ui-card is `overflow: hidden` and would crop a panel
+     positioned against the button. InfoDot sets top/left on open. */
+  position: fixed;
+  top: 0;
+  left: 0;
+  /* Above .navbar1, the 32px bar fixed to the bottom of the window at
+     z-index: 10001; InfoDot also keeps the panel clear of its height. */
+  z-index: 10002;
+  display: grid;
+  gap: 0.8rem;
+  width: max-content;
+  max-width: min(34rem, calc(100vw - 3.2rem));
+  /* Body text, even when the dot sits inside a bold label or heading. */
+  font-weight: 400;
+  max-height: calc(100vh - 9.6rem);
+  overflow-y: auto;
+  padding: 1.2rem 1.4rem;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius);
+  background: var(--ui-card);
+  color: var(--ui-muted);
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 8px 24px rgba(16, 24, 40, 0.12);
+  font-size: var(--ui-text-sm);
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.55;
+  text-align: left;
+  white-space: normal;
+}
+
+body.dark-mode .ui-infodot-panel {
+  background: #1f2228;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+.ui-code {
+  margin: 0;
+  padding: 1.2rem 1.4rem;
+  border-radius: var(--ui-radius-sm);
+  background: var(--ui-code-bg);
+  color: var(--ui-code-fg);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: var(--ui-text-sm);
+  line-height: 1.6;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+:where(.ui-card, .ui-note, .ui-help, .ui-check) code {
+  padding: 0.1rem 0.5rem;
+  border-radius: 0.4rem;
+  background: rgba(128, 128, 128, 0.14);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.92em;
+}
+
+.ui-secret {
+  padding: 0.9rem 1.2rem;
+  border: 1px dashed var(--ui-border);
+  border-radius: var(--ui-radius-sm);
+  background: var(--ui-subtle);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: var(--ui-text-sm);
+  word-break: break-all;
+}
+
+.ui-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.9rem;
+  border: 1px solid var(--ui-border);
+  border-radius: 99rem;
+  color: var(--ui-muted);
+  font-size: var(--ui-text-xs);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.ui-badge.is-success {
+  border-color: transparent;
+  background: rgba(21, 128, 61, 0.12);
+  color: var(--ui-success);
+}
+
+.ui-badge.is-danger {
+  border-color: transparent;
+  background: var(--ui-danger-soft);
+  color: var(--ui-danger);
+}
+
+.ui-badge.is-warning {
+  border-color: transparent;
+  background: color-mix(in srgb, var(--ui-warning) 12%, transparent);
+  color: var(--ui-warning);
+}
+
+.ui-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* A field and its button on one line (a search, a look-up). */
+.ui-inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.8rem;
+}
+.ui-inline > .ui-input {
+  flex: 1 1 24rem;
+  width: auto;
+  min-width: 0;
+}
+
+.ui-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem 1.6rem;
+}
+
+.ui-meter {
+  height: 0.8rem;
+  border-radius: 99rem;
+  background: rgba(128, 128, 128, 0.18);
+  overflow: hidden;
+}
+
+.ui-meter>span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--ui-accent);
+}
+
+/* Striped as well as amber, so "behind" never reads as the orange accent's
+   "on track" by colour alone. */
+.ui-meter.is-warning>span {
+  background: repeating-linear-gradient(135deg, var(--ui-warning) 0 0.6rem,
+      color-mix(in srgb, var(--ui-warning) 84%, var(--ui-card)) 0.6rem 1.2rem);
+}
+
+.ui-meter.is-danger>span {
+  background: var(--ui-danger);
+}
+
+.ui-link {
+  color: var(--ui-accent-ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* Setting with an on/off switch: text on the left, switch on the right. */
+.ui-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.6rem;
+  padding: 1.4rem 1.6rem;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius);
+}
+
+.ui-toggle .ui-label {
+  display: block;
+}
+
+.ui-toggle .ui-help {
+  margin-top: 0.2rem;
+}
+
+.ui-toggle .switch {
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+/* A switch that saves on its own, with "Saving…" / "Saved" before it. */
+.ui-toggle-end {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Hidden labels for screen readers. Tailwind's .sr-only is absolute with no
+   offsets, so it sits where it would have been; with no positioned box
+   around it (a table in a scroll box, usually) it escapes the scroll box and
+   makes the page wider than a phone. Pinned to the corner it can't, and it is
+   clipped to nothing either way. */
+.sr-only { top: 0; left: 0; }
+
+/* ---------- Table ---------- */
+/* A wide table on a phone scrolls sideways inside this, not the page. */
+.ui-scroll-x { max-width: 100%; overflow-x: auto; }
+/* Data tables. .ux-table is the older name for the same look. The site-wide
+   table rules in ui.css (coloured header, striped rows) don't apply here. */
+.ui-table,
+.ux-table {
+  width: 100%;
+  margin: 0;
+  border-collapse: collapse;
+  font-size: var(--ui-text-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+:is(.ui-table, .ux-table) th {
+  padding: 0 1.2rem 0.8rem;
+  border: 0;
+  border-bottom: 1px solid var(--ui-border);
+  background: none;
+  color: var(--ui-muted);
+  font-size: var(--ui-text-xs);
+  font-weight: 600;
+  letter-spacing: normal;
+  text-align: left;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+:is(.ui-table, .ux-table) td {
+  padding: 1.1rem 1.2rem;
+  border: 0;
+  border-bottom: 1px solid var(--ui-border);
+  color: var(--ui-fg);
+  vertical-align: middle;
+}
+
+.ux-table td {
+  white-space: nowrap;
+}
+
+:is(.ui-table, .ux-table) :is(th, td):first-child {
+  padding-left: 0;
+}
+
+:is(.ui-table, .ux-table) :is(th, td):last-child {
+  padding-right: 0;
+}
+
+:is(.ui-table, .ux-table) tr,
+:is(.ui-table, .ux-table) tr:nth-child(even),
+:is(.ui-table, .ux-table) tr:hover {
+  background: none;
+}
+
+:is(.ui-table, .ux-table) tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+:is(.ui-table, .ux-table) a {
+  color: var(--ui-accent-ink);
+  text-decoration: none;
+}
+
+:is(.ui-table, .ux-table) a:hover {
+  text-decoration: underline;
+}
+
+/* The row's own buttons, last in the row. A table cell, never a flex box:
+   a flex <td> stops being a cell, and its line no longer meets the row's. */
+:is(.ui-table, .ux-table) .ui-cell-actions {
+  text-align: right;
+  white-space: nowrap;
+}
+:is(.ui-table, .ux-table) .ui-cell-actions > * + * {
+  margin-left: 0.4rem;
+}
+
+/* Fields in a row are a size smaller than in a form, so the row stays a
+   row. */
+:is(.ui-table, .ux-table) .ui-input {
+  height: 3.2rem;
+  padding: 0 0.8rem;
+  font-size: var(--ui-text-sm);
+}
+
+/* A column the table sorts by: the header is a button, its arrow shows the
+   order, and only the sorted column's arrow is drawn (aria-sort on the th). */
+.ui-sort {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.ui-sort:hover {
+  color: var(--ui-fg);
+}
+.ui-sort:focus-visible {
+  outline: 2px solid var(--ui-ring);
+  outline-offset: 2px;
+  border-radius: 0.2rem;
+}
+.ui-sort::after {
+  content: "";
+  width: 0;
+  height: 0;
+  border: 0.4rem solid transparent;
+  opacity: 0;
+}
+th[aria-sort="ascending"] .ui-sort::after {
+  border-bottom-color: currentColor;
+  margin-top: -0.4rem;
+  opacity: 1;
+}
+th[aria-sort="descending"] .ui-sort::after {
+  border-top-color: currentColor;
+  margin-top: 0.4rem;
+  opacity: 1;
+}
+
+/* Page numbers under a list. */
+.ui-pager {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.ui-pager .ui-btn {
+  min-width: 3.2rem;
+  height: 3.2rem;
+  padding: 0 0.8rem;
+}
+
+/* A file picker's button, drawn as a secondary button. */
+input[type="file"]::file-selector-button {
+  height: 3.6rem;
+  margin-right: 1.2rem;
+  padding: 0 1.4rem;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-sm);
+  background: var(--ui-btn-face);
+  box-shadow: var(--ui-btn-lift);
+  color: var(--ui-fg);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+input[type="file"]::file-selector-button:hover {
+  background: var(--ui-btn-face-hover);
+}
+
+/* A muted second line under a cell's main text. */
+.ui-cell-sub {
+  display: block;
+  max-width: 32rem;
+  margin-top: 0.2rem;
+  overflow: hidden;
+  color: var(--ui-muted);
+  font-size: var(--ui-text-xs);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Headline numbers: a row of label / value / note tiles. */
+.ui-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius);
+  overflow: hidden;
+}
+
+.ui-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 1.4rem 1.6rem;
+  box-shadow: -1px 0 0 var(--ui-border);
+}
+
+.ui-stat-label {
+  color: var(--ui-muted);
+  font-size: var(--ui-text-sm);
+  font-weight: 500;
+}
+
+.ui-stat-value {
+  color: var(--ui-fg);
+  font-size: 2.6rem;
+  font-weight: 600;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+}
+
+.ui-stat-note {
+  color: var(--ui-muted);
+  font-size: var(--ui-text-sm);
+}
+
+.ui-eyebrow {
+  margin: 0;
+  color: var(--ui-muted);
+  font-size: var(--ui-text-sm);
+  font-weight: 600;
+}
+
+/* Tabs: every secondary tab row in the app, a page's views or a card's
+   switch alike. Drawn as a switch however many options it holds: a capsule
+   groove, the current option a glass thumb on it that slides across
+   (components/ui/TabSlide.jsx). Section tabs above a page (.sh-tabs) are the only other kind: those are
+   underlined, so a row of these under them reads as one level down.
+   .is-compact for a switch inside a card; .ui-tab-count for a number. */
+.ui-tabs {
+  display: flex;
+  width: fit-content;
+  max-width: 100%;
+  gap: 2px;
+  padding: 3px;
+  overflow-x: auto;
+  border-radius: 99rem;
+  background: var(--ui-tab-track);
+  box-shadow: var(--ui-tab-track-edge);
+  scrollbar-width: none;
+}
+
+.ui-tab {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 1.6rem;
+  border: 0;
+  border-radius: 99rem;
+  background: none;
+  color: var(--ui-muted);
+  font-size: var(--ui-text-sm);
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.ui-tab:hover {
+  background: var(--ui-tab-hover);
+  color: var(--ui-fg);
+}
+
+.ui-tab.is-on {
+  background: var(--ui-tab-on);
+  color: var(--ui-fg);
+  font-weight: 600;
+  box-shadow: var(--ui-tab-on-shadow);
+  backdrop-filter: blur(6px) saturate(1.4);
+}
+
+.ui-tab .sh-tab-icon {
+  flex: none;
+  color: var(--tab-icon-hue, currentColor);
+}
+
+.ui-tabs.is-compact .ui-tab {
+  padding: 0.3rem 0.9rem;
+  font-size: var(--ui-text-xs);
+}
+
+.ui-tab-count {
+  min-width: 1.8rem;
+  padding: 0 0.5rem;
+  border-radius: 99rem;
+  background: var(--ui-accent-soft);
+  color: var(--ui-accent-ink);
+  font-size: var(--ui-text-xs);
+  font-weight: 600;
+  line-height: 1.8rem;
+  text-align: center;
+}
+
+/* PageTopbar (components/dashboard/PageTopbar.jsx): the Analytics top
+   bar on every other dashboard page, so the period is top left everywhere.
+   Its look comes from .datecontrols.topbar in analytics.css. */
+.pagetopbar {
+  /* margin-bottom: 1.6rem;  */
+  margin-bottom: 0rem;
+}
+/* With the period button moved up into the title row and no filter applied,
+   the bar is left holding nothing (or only an empty chip row). Still in the
+   page's flex column it doubled the column's gap, which on replays/heatmaps
+   opened a 4rem hole between the tabs and the first card. */
+.pagetopbar:not(:has(> :not(.filterbar-chips:empty))) {
+  display: none;
+}
+/* Menus and select lists: every Radix dropdown and select (components/ui),
+   found by their data-slot, so each page's menu looks the same. */
+[data-slot="dropdown-menu-content"],
+[data-slot="dropdown-menu-sub-content"],
+[data-slot="select-content"],
+.ui-menupanel {
+  min-width: 18rem;
+  padding: 0.4rem;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius);
+  background: var(--ui-card) !important;
+  color: var(--ui-fg) !important;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 8px 24px rgba(16, 24, 40, 0.12);
+  font-size: var(--ui-text-sm);
+  scrollbar-width: thin;
+  /* A phone is narrower than a menu with its submenu beside it. */
+  max-width: calc(100vw - 1.6rem);
+}
+
+body.dark-mode [data-slot="dropdown-menu-content"],
+body.dark-mode [data-slot="dropdown-menu-sub-content"],
+body.dark-mode [data-slot="select-content"],
+body.dark-mode .ui-menupanel {
+  background: #1f2228 !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+[data-slot="select-content"] [data-slot="select-viewport"],
+[data-slot="select-content"]>div {
+  margin: 0;
+}
+
+[data-slot="dropdown-menu-item"],
+[data-slot="dropdown-menu-checkbox-item"],
+[data-slot="dropdown-menu-radio-item"],
+[data-slot="dropdown-menu-sub-trigger"],
+[data-slot="select-item"] {
+  min-height: 3rem;
+  padding: 0.5rem 0.8rem;
+  border-radius: var(--ui-radius-sm);
+  color: var(--ui-fg) !important;
+  background: transparent !important;
+  font-size: var(--ui-text-sm) !important;
+  font-weight: 400;
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+/* Room on the left for the tick or dot. */
+[data-slot="dropdown-menu-checkbox-item"],
+[data-slot="dropdown-menu-radio-item"] {
+  padding-left: 2.8rem;
+}
+
+[data-slot="dropdown-menu-checkbox-item"]>span:first-child,
+[data-slot="dropdown-menu-radio-item"]>span:first-child {
+  left: 0.9rem;
+  color: var(--ui-accent-ink);
+}
+
+[data-slot="dropdown-menu-item"]:hover,
+[data-slot="dropdown-menu-item"][data-highlighted],
+[data-slot="dropdown-menu-checkbox-item"][data-highlighted],
+[data-slot="dropdown-menu-radio-item"][data-highlighted],
+[data-slot="dropdown-menu-sub-trigger"][data-highlighted],
+[data-slot="dropdown-menu-sub-trigger"][data-state="open"],
+[data-slot="select-item"][data-highlighted] {
+  background: var(--ui-subtle) !important;
+}
+
+body.dark-mode [data-slot="dropdown-menu-item"][data-highlighted],
+body.dark-mode [data-slot="dropdown-menu-checkbox-item"][data-highlighted],
+body.dark-mode [data-slot="dropdown-menu-radio-item"][data-highlighted],
+body.dark-mode [data-slot="dropdown-menu-sub-trigger"][data-highlighted],
+body.dark-mode [data-slot="select-item"][data-highlighted] {
+  background: rgba(255, 255, 255, 0.07) !important;
+}
+
+/* The chosen one: accent text, not just a dot. */
+[data-slot="dropdown-menu-radio-item"][data-state="checked"],
+[data-slot="select-item"][data-state="checked"] {
+  color: var(--ui-accent-ink) !important;
+  font-weight: 500;
+}
+
+[data-slot="select-item"] [data-slot="select-item-indicator"] {
+  color: var(--ui-accent-ink);
+}
+
+/* Section names: small, muted caps. */
+[data-slot="dropdown-menu-label"],
+[data-slot="select-label"],
+.ui-menupanel-label {
+  padding: 0.8rem 0.8rem 0.3rem;
+  color: var(--ui-muted);
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+[data-slot="dropdown-menu-separator"],
+[data-slot="select-separator"] {
+  height: 1px;
+  margin: 0.4rem -0.4rem;
+  background: var(--ui-border);
+}
+
+/* A label right after a separator needs no extra top space. */
+[data-slot="dropdown-menu-separator"]+[data-slot="dropdown-menu-label"] {
+  padding-top: 0.5rem;
+}
+
+/* A submenu's current value, muted, right before its arrow. */
+[data-slot="dropdown-menu-sub-trigger"] .menu-hint,
+[data-slot="dropdown-menu-item"] .menu-hint {
+  margin-left: auto;
+  padding-left: 1.6rem;
+  color: var(--ui-muted);
+  font-size: var(--ui-text-xs);
+}
+
+[data-slot="dropdown-menu-sub-trigger"] .menu-hint+svg {
+  margin-left: 0.4rem;
+}
+
+[data-slot="dropdown-menu-sub-trigger"][data-disabled] {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* The primary buttons' hover lift (here and .button_default in buttons.css). */
+@media (prefers-reduced-motion: reduce) {
+
+  .ui-btn-primary:hover:not(:disabled),
+  .button_default:hover:not(:disabled) {
+    transform: none;
+  }
+}
+/* A page title's section icon (components/layout/PageIcon.jsx): the sidebar's
+   glyph and colour, sized to the heading it sits in. */
+.page-icon {
+  display: inline-block;
+  width: 0.85em;
+  height: 0.85em;
+  margin-right: 0.3em;
+  vertical-align: -0.08em;
+  flex: none;
+  line-height: 1;
+}
+
+/* Motion. The timings every animation shares; src/lib/motion.js holds the
+   same numbers for animations run from code, so change the two together.
+   Pressing a control gives it a small give. It uses `scale` rather than
+   `transform`, which sits on top of a transform a control already has (a
+   primary button's hover lift, a centring translate) instead of replacing it.
+   Nothing here moves unless someone presses it. */
+:root {
+  --motion-quick: 120ms;
+  --motion-normal: 200ms;
+  --motion-slow: 280ms;
+  --motion-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:is(.ui-btn, .ui-tab, .section-ctrl-btn) {
+  transition-property: background-color, border-color, color, box-shadow, transform, filter, scale;
+  transition-duration: 0.15s, 0.15s, 0.15s, 0.15s, 0.15s, 0.15s, var(--motion-quick);
+}
+:is(.ui-btn, .ui-tab, .section-ctrl-btn):active:not(:disabled) {
+  scale: 0.97;
+}
+
+/* The tab highlight sliding from the tab that was on to the one now on
+   (components/ui/TabSlide.jsx): a copy of the new tab's highlight, drawn
+   under the tabs' labels while it moves. */
+/* Tabs the viewer drags into their own order (components/layout/
+   ReorderableTabs.jsx): the tab a drag would land on, and the status line
+   that reads the move out. */
+.ui-tabs > [data-reorder-target] {
+  outline: 2px dashed var(--tab-icon-hue, var(--ui-fg));
+  outline-offset: -3px;
+}
+.sh-tab-order-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.ui-tabs[data-tab-sliding] {
+  isolation: isolate;
+}
+[data-tab-sliding] > :is(.ui-tab, .analyticscardactive, .analyticscardinactive) {
+  position: relative;
+  z-index: 1;
+}
+.ui-tab-slider {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+/* The same for a section's tabs (the line under the open one) and the
+   collapsed side rail (the drop on the open page's icon), both drawn over. */
+.sh-tab-slider,
+.nav-drop-slider {
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :is(.ui-btn, .ui-tab, .section-ctrl-btn):active:not(:disabled) {
+    scale: none;
+  }
+}
+
+/* DocLink.jsx: a link to one of our guides, a small book icon then underlined
+   text. .is-icon is the icon alone, beside a page title. */
+.ui-doclink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--ui-accent-ink);
+}
+.ui-doclink > span {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.ui-doclink > svg {
+  flex-shrink: 0;
+}
+.ui-doclink.is-icon {
+  justify-content: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  margin-left: 0.4rem;
+  border-radius: 999px;
+  color: var(--ui-muted);
+  vertical-align: middle;
+}
+.ui-doclink.is-icon:hover,
+.ui-doclink.is-icon:focus-visible {
+  color: var(--ui-accent-ink);
+  background: var(--ui-subtle);
+}

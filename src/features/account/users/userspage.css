@@ -1,0 +1,26 @@
+/* Users (app/dash/(workspace)/users/page.jsx). 1rem = 10px. */
+.users-page {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.users-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+.users-toolbar .ui-input {
+  width: auto;
+  margin: 0;
+}
+.users-toolbar .users-search {
+  flex: 1 1 22rem;
+  max-width: 32rem;
+}
+/* Wider than the page on a phone: the table scrolls, not the page. */
+.users-scroll {
+  overflow-x: auto;
+}
+.users-table td {
+  white-space: nowrap;
+}

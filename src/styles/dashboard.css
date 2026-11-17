@@ -1,0 +1,179 @@
+/* Shared dashboard content treatment. Global navigation keeps its own styling.
+   Reuse the kit's theme, density and corner tokens for both card families. */
+.maincontent {
+  --card-pad: var(--ui-card-pad-y) var(--ui-card-pad-x);
+  --dashboard-card-shadow: 0 1px 3px rgb(16 24 40 / 5%);
+  --dashboard-heading-size: 1.8rem;
+}
+
+/* The page is already a white sheet, so a card on it is a box in a box: a
+   faint hairline is enough to set it apart, with no shadow. Status banners
+   keep their own coloured border. */
+.maincontent :is(.card, .ui-card) {
+  border-color: color-mix(in srgb, var(--ui-fg) 6%, transparent);
+  box-shadow: none;
+}
+
+/* Legacy cards put padding on the surface; kit cards pad head/body/foot. */
+.maincontent .card {
+  padding: var(--card-pad);
+}
+
+.maincontent :is(.perf-card-title, .cardanalyticstitletext, .ui-card-head h3) {
+  font-size: var(--dashboard-heading-size);
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+.maincontent :is(.perf-card-head, .analyticscardtitle) {
+  margin-bottom: 1.6rem;
+}
+
+.maincontent :is(.ui-card-head p, .ui-help, .perf-muted) {
+  line-height: 1.55;
+}
+
+/* Calm surfaces for actions in content cards. These variables are not used
+   by the tabs, sidebar, date picker or navigation selection treatments. */
+.maincontent :is(.card, .ui-card, .ui-page, dialog) {
+  --ui-accent-grad: linear-gradient(var(--ui-accent), var(--ui-accent));
+  --ui-accent-grad-hover: linear-gradient(var(--ui-accent-hover), var(--ui-accent-hover));
+  --ui-btn-sheen: linear-gradient(transparent, transparent);
+  --ui-accent-shadow: 0 1px 2px rgb(16 24 40 / 8%);
+  --ui-accent-shadow-hover: 0 2px 4px rgb(16 24 40 / 10%);
+  --ui-btn-face: linear-gradient(var(--ui-card), var(--ui-card));
+  --ui-btn-face-hover: linear-gradient(var(--ui-subtle), var(--ui-subtle));
+  --ui-btn-lift: 0 1px 2px rgb(16 24 40 / 4%);
+  --ui-btn-lift-hover: 0 1px 3px rgb(16 24 40 / 7%);
+}
+
+/* A visible outline survives each button variant's own shadow. */
+.maincontent :is(.ui-btn, .button):focus-visible {
+  outline: 2px solid var(--ui-accent-ink);
+  outline-offset: 3px;
+}
+
+.maincontent .ui-empty {
+  gap: 1.6rem;
+  padding-block: 4.8rem;
+}
+
+.maincontent .ui-empty > p {
+  max-width: 52ch;
+  margin-inline: auto;
+  line-height: 1.6;
+}
+
+/* One workspace contains the heading, navigation and page content. Do not
+   clip overflow or create a containing block: dialogs and menus live here. */
+.maincontent:has(> .dashboard-workspace) {
+  min-height: 0;
+}
+
+.dashboard-workspace {
+  min-width: 0;
+  min-height: calc(100dvh - 7rem);
+  padding: var(--card-pad);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-card-radius);
+  background: var(--ui-card);
+  box-shadow: var(--dashboard-card-shadow);
+}
+
+.maincontent .dashboard-workspace .sh-tabs {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  margin: 0 0 2rem;
+  gap: 1.6rem;
+}
+
+/* Full page data sections use dividers, rather than a stack of raised boxes.
+   Nested cards and independently useful settings panels keep their grouping. */
+.dashboard-workspace .analyticsCardGrid > .card,
+.dashboard-workspace > .card {
+  padding: 2.4rem 0;
+  border: 0;
+  border-top: 1px solid var(--ui-border);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* Analytics' top bar is a row of the page, not a box inside it, and the first
+   section under it needs no divider: the bar already ends the head. */
+.dashboard-workspace .datecontrols.topbar.card {
+  margin-top: 0;
+  padding: 0 0 1.6rem;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.dashboard-workspace .datecontrols.topbar.card + * > .card:first-child,
+.dashboard-workspace .analyticsCardGrid > .card:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.dashboard-workspace .analyticsCardGrid {
+  row-gap: 0.8rem;
+  column-gap: 2.4rem;
+}
+
+/* Metrics are a readable strip of figures, with no nested grey tiles. */
+.dashboard-workspace .err-tiles {
+  gap: 1.6rem 2.4rem;
+}
+
+.dashboard-workspace .err-tiles > .err-tile {
+  padding: 0.8rem 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.dashboard-workspace .err-tile-label {
+  color: var(--ui-muted);
+  opacity: 1;
+}
+
+.dashboard-workspace .err-tile-value {
+  margin-block: 0.8rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Keep the user's compact-density choice meaningful. */
+:root[data-density="compact"] .maincontent {
+  --dashboard-heading-size: 1.6rem;
+}
+
+:root[data-density="compact"] .maincontent :is(.perf-card-head, .analyticscardtitle) {
+  margin-bottom: 1.2rem;
+}
+
+@media (max-width: 760px) {
+  .maincontent {
+    --card-pad: min(1.6rem, var(--ui-card-pad-y)) min(1.6rem, var(--ui-card-pad-x));
+  }
+
+  .maincontent .ui-empty {
+    padding-block: 3.2rem;
+  }
+
+  .dashboard-workspace .analyticsCardGrid {
+    column-gap: 1.6rem;
+  }
+}
+
+/* A view that is one full-width card would draw a box in the workspace box,
+   padding twice: the sheet already frames it, so the card drops its own. */
+.dashboard-workspace .perf-grid > .card.perf-card-full:only-child {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}

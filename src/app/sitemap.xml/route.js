@@ -3,13 +3,15 @@ export async function GET() {
   //const pages = await fetchPages(); // static pages
 
   const fetchpagesposts = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/seo/sitemapdynamic`,
+    `${process.env.INTERNAL_SITE_URL}/seo/sitemapdynamic`,
     {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
+      cache: "no-store",
     }
+
   );
   if (!fetchpagesposts.ok) {
     // return new Response('Failed to fetch posts and pages', { status: 500 });
@@ -31,14 +33,14 @@ export async function GET() {
   const body = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   ${changeDatetoYYYYMMDD
-    .map(
-      (entry) => `
+      .map(
+        (entry) => `
   <url>
     <loc>${process.env.NEXT_PUBLIC_FRONTENDURL}${entry.slugpath}</loc>
     <lastmod>${entry.updatedAt}</lastmod>
   </url>`
-    )
-    .join("")}
+      )
+      .join("")}
 </urlset>`;
 
   return new Response(body, {

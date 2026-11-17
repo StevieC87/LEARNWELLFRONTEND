@@ -1,0 +1,418 @@
+/* Profile page; cards, buttons and fields come from styles/kit.css. */
+.profile-page {
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+  max-width: 108rem;
+  width: 100%;
+  font-size: var(--ui-text);
+}
+
+/* The account fields are drawn by the shared FieldRenderer; give them the kit look here. */
+.profile-fields .fielddivblock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-width: 48rem;
+  margin: 0;
+}
+.profile-fields .fielddivblock label {
+  margin: 0;
+  color: var(--ui-fg);
+  font-size: var(--ui-text);
+  font-weight: 500;
+}
+.profile-fields .fielddivblock input,
+.profile-fields .fielddivblock select,
+.profile-fields .fielddivblock textarea {
+  width: 100%;
+  height: var(--ui-control-h);
+  padding: 0 1.2rem;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-sm);
+  background: var(--ui-input);
+  color: inherit;
+  font-size: var(--ui-text);
+}
+.profile-fields .fielddivblock textarea {
+  height: auto;
+  min-height: 10rem;
+  padding: 1rem 1.2rem;
+}
+.profile-fields .fielddivblock input:focus,
+.profile-fields .fielddivblock select:focus,
+.profile-fields .fielddivblock textarea:focus {
+  outline: none;
+  border-color: var(--ui-accent);
+  box-shadow: 0 0 0 3px var(--ui-ring);
+}
+.profile-fields .fielddivblock p {
+  font-size: var(--ui-text-sm);
+}
+.profile-role {
+  width: 22rem;
+}
+
+/* Setting rows: what it is on the left, its button on the right. */
+.profile-rows {
+  display: flex;
+  flex-direction: column;
+  padding: 1.2rem 0 0;
+}
+.profile-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.6rem;
+  flex-wrap: wrap;
+  padding: calc(var(--ui-card-pad-y) * 0.8) var(--ui-card-pad-x);
+  border-top: 1px solid var(--ui-border);
+}
+/* The text takes the room, so the button or switch stays on the right and
+   only drops under it on a really narrow card. */
+.profile-row > div:first-child {
+  flex: 1 1 24rem;
+  min-width: 0;
+}
+.profile-row > .switch {
+  flex: 0 0 auto;
+  margin: 0;
+}
+/* A switch is small enough to stay beside its text at any width. */
+.profile-row:has(> .switch) {
+  flex-wrap: nowrap;
+}
+.profile-row .ui-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.profile-row .ui-help {
+  margin-top: 0.2rem;
+}
+/* A line straight in the list (none yet, couldn't load, saved) lines up with
+   the heading and the rows instead of touching the card's edge. */
+.profile-rows > .ui-help,
+.profile-rows > .ui-status {
+  margin: 0;
+  padding: 0 var(--ui-card-pad-x) calc(var(--ui-card-pad-y) * 0.8);
+}
+.profile-danger {
+  border-color: rgba(220, 38, 38, 0.35);
+}
+.profile-danger .ui-card-head h3 {
+  color: var(--ui-danger);
+}
+.profile-danger .profile-row {
+  border-top-color: rgba(220, 38, 38, 0.2);
+  background: var(--ui-danger-soft);
+}
+@media (max-width: 760px) {
+  .profile-row {
+    padding: 1.4rem 1.6rem;
+  }
+  .profile-rows > .ui-help,
+  .profile-rows > .ui-status {
+    padding: 0 1.6rem 1.4rem;
+  }
+}
+
+/* Appearance (components/Appearance.jsx): a row of choices, the picked one
+   outlined in the accent. The tab shapes wrap under their label on a narrow
+   card. */
+.appearance-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+.appearance-choice {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  min-height: var(--ui-control-h);
+  padding: 0 1.2rem;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-sm);
+  background: var(--ui-card);
+  color: var(--ui-fg);
+  font-size: var(--ui-text);
+  cursor: pointer;
+}
+.appearance-choice:hover {
+  border-color: color-mix(in srgb, var(--ui-accent) 45%, var(--ui-border));
+}
+.appearance-choice[aria-checked="true"] {
+  border-color: var(--ui-accent);
+  box-shadow: 0 0 0 1px var(--ui-accent);
+  color: var(--ui-accent-ink);
+}
+.appearance-choice:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--ui-ring);
+}
+.appearance-shape {
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.8rem 1rem;
+}
+.appearance-select {
+  width: 22rem;
+}
+/* A background swatch: its light shade on the left, its dark one on the
+   right, since each preset is a pair. */
+.appearance-bg {
+  background: linear-gradient(135deg, var(--bg-light) 50%, var(--bg-dark) 50%);
+}
+
+/* Menu (MenuPrefs.jsx): the sidebar's groups as lists of rows, a page's
+   tabs as chips under its row. One column, kept to a readable width. */
+.menu-editor-body {
+  display: flex;
+  flex-direction: column;
+  max-width: 64rem;
+  padding: 0 var(--ui-card-pad-x) var(--ui-card-pad-y);
+}
+.menu-editor-status {
+  min-height: 1.8rem;
+  margin: 0;
+}
+.menu-editor-group {
+  margin: 1.6rem 0 0.6rem;
+  color: var(--ui-muted);
+  font-size: var(--ui-text-sm);
+  font-weight: 600;
+}
+.menu-editor-empty {
+  margin: 0;
+  padding: 1rem 1.2rem;
+  border: 1px dashed var(--ui-border);
+  border-radius: var(--ui-radius);
+}
+.menu-editor-list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius);
+  overflow: hidden;
+}
+.menu-editor-row + .menu-editor-row {
+  border-top: 1px solid var(--ui-border);
+}
+/* Where a dragged row will land: a line above or below the row under it. */
+.menu-editor-row[data-reorder-target="before"] {
+  box-shadow: inset 0 2px 0 var(--ui-accent);
+}
+.menu-editor-row[data-reorder-target="after"] {
+  box-shadow: inset 0 -2px 0 var(--ui-accent);
+}
+.menu-editor-empty[data-reorder-target] {
+  border-color: var(--ui-accent);
+  background: var(--ui-accent-soft);
+}
+/* A tab that is a menu entry of its own, among the pages. */
+.menu-editor-row.is-tab .sh-tab-icon {
+  color: var(--tab-icon-hue, currentColor);
+}
+.menu-editor-how {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 0 0 0.4rem;
+  padding: 0;
+  color: var(--ui-muted);
+  font-size: var(--ui-text-sm);
+  list-style: none;
+}
+.menu-editor-how b {
+  color: var(--ui-fg);
+  font-weight: 600;
+}
+.menu-editor-foot {
+  margin: 1.6rem 0 0;
+}
+.menu-editor-line {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-height: 4.4rem;
+  padding: 0.4rem 1.2rem 0.4rem 0.4rem;
+}
+.menu-editor-line > svg {
+  flex: none;
+}
+.menu-editor-row.is-off .menu-editor-line > svg,
+.menu-editor-row.is-off .menu-editor-name {
+  opacity: 0.5;
+}
+.menu-editor-handle {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2.4rem;
+  height: 3.2rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--ui-radius-sm);
+  background: none;
+  color: var(--ui-muted);
+  cursor: grab;
+}
+.menu-editor-handle:hover,
+.menu-editor-handle:focus-visible {
+  background: var(--ui-accent-soft);
+  color: var(--ui-fg);
+}
+.menu-editor-row.is-fixed .menu-editor-handle {
+  cursor: default;
+}
+.menu-editor-name {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  color: var(--ui-fg);
+}
+.menu-editor-name small {
+  color: var(--ui-muted);
+  font-size: var(--ui-text-sm);
+}
+.menu-editor-more,
+.menu-editor-unpin {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 0.5rem;
+  height: 2.8rem;
+  padding: 0 1rem;
+  border: 1px solid var(--ui-border);
+  border-radius: 999px;
+  background: none;
+  color: var(--ui-muted);
+  font-size: var(--ui-text-sm);
+  cursor: pointer;
+}
+.menu-editor-unpin {
+  justify-content: center;
+  width: 2.8rem;
+  padding: 0;
+}
+.menu-editor-more:hover,
+.menu-editor-unpin:hover {
+  border-color: var(--ui-accent);
+  color: var(--ui-fg);
+}
+.menu-editor-more svg:last-child {
+  transition: transform 150ms ease;
+}
+.menu-editor-more[aria-expanded="true"] svg:last-child {
+  transform: rotate(180deg);
+}
+/* A smaller switch than the stock one (forms.css), to sit in a row. */
+.menu-editor .switch {
+  flex: none;
+  width: 3.8rem;
+  height: 2.2rem;
+}
+.menu-editor .slider:before {
+  width: 1.6rem;
+  height: 1.6rem;
+  left: 0.3rem;
+  bottom: 0.3rem;
+}
+.menu-editor input:checked + .slider:before {
+  transform: translateX(1.6rem);
+}
+.menu-editor input:disabled + .slider {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.menu-editor input:focus-visible + .slider {
+  outline: 2px solid var(--ui-accent);
+  outline-offset: 2px;
+}
+.menu-editor-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding: 0 1.2rem 1.2rem 3.8rem;
+}
+.menu-editor-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  height: 3rem;
+  padding: 0 1.1rem;
+  border: 1px solid var(--ui-border);
+  border-radius: 999px;
+  background: none;
+  color: var(--ui-fg);
+  font-size: var(--ui-text-sm);
+  cursor: pointer;
+}
+.menu-editor-chip:hover {
+  border-color: var(--ui-accent);
+}
+.menu-editor-chip[aria-pressed="true"] {
+  border-color: var(--ui-accent);
+  background: var(--ui-accent-soft);
+  font-weight: 600;
+}
+.menu-editor-chip > svg:last-child:not(.sh-tab-icon) {
+  color: var(--ui-accent-ink);
+}
+.menu-editor .sh-tab-icon {
+  flex: none;
+  color: var(--tab-icon-hue, currentColor);
+}
+@media (prefers-reduced-motion: reduce) {
+  .menu-editor-more svg:last-child { transition: none; }
+}
+
+/* Google's and GitHub's marks beside their names (SignInMethods.jsx). */
+.profile-row .ui-label > svg {
+  vertical-align: -3px;
+  margin-right: 0.35rem;
+}
+
+/* Alert email timing (AlertTiming.jsx): rows under a theme each, the name
+   and its "i" on the left, a select sized to its options on the right. The
+   theme is a tinted band in the card's text colour, a size up from the rows,
+   and the rows under it are tighter and lighter, so each theme reads as one
+   block rather than a long even list. */
+.profile-timing-head {
+  margin: 0;
+  padding: 1.2rem var(--ui-card-pad-x);
+  border-top: 1px solid var(--ui-border);
+  border-bottom: 1px solid var(--ui-border);
+  background: var(--ui-subtle);
+  color: var(--ui-fg);
+  font-size: var(--ui-text-lg);
+  font-weight: 600;
+}
+.profile-timing-group .profile-row {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+.profile-timing-group .profile-row:first-of-type {
+  border-top: 0;
+}
+.profile-timing-group .profile-row .ui-label {
+  font-weight: 400;
+}
+.profile-timing-name {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.profile-row .profile-timing-select {
+  flex: 0 0 auto;
+  width: 18rem;
+}
+@media (max-width: 760px) {
+  .profile-timing-head {
+    padding: 1.2rem 1.6rem;
+  }
+}

@@ -11,41 +11,70 @@
   .rounded-sm {
     border-radius: 4px;
   }
+
   .rounded-md {
     border-radius: 8px;
   }
+
   .rounded-lg {
     border-radius: 12px;
   }
+
   .rounded-full {
-    border-radius: 50%;
+    /*  border-radius: 50%; */
   }
 
   .cardouterdiv {
-    background-image: linear-gradient(to bottom, #fff1eb 0%, #ace0f9 100%);
+    /* Brand off-white with a faint goose-orange glow behind the card. */
+    background: radial-gradient(60% 50% at 50% 0%, rgba(255, 159, 28, 0.1), transparent 70%), #f7f9fc;
     display: grid;
     height: 100vh;
     place-items: center;
   }
+
+  body.dark-mode .cardouterdiv {
+    /*   background-image: linear-gradient(#0d1117 0%, #1b2836 100%); */
+    background: var(--backgrounddark);
+  }
+
   /*  .card {
     background: #fff;
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   } */
+  /* White on the cool --backgroundlight page, with a faint cool edge and a
+     shadow soft enough to read as depth rather than a drop. Dark mode
+     replaces the colour and edge in base.css. */
   .card {
-    background-color: #f5f5f5; /* White background */
-    border: 1px solid #e0e0e0; /* Light gray border */
-    border-radius: 8px; /* Rounded corners */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    padding: 16px; /* Inner spacing */
+    background-color: #ffffff;
+    border: 1px solid #e3e8ef;
+    border-radius: var(--ui-card-radius, 10px);
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 1px 3px rgba(16, 24, 40, 0.05);
+
+    /*  padding: 0px 1.5rem 1.6rem 1.6rem; */
+    /* Inner spacing */
+    padding: var(--card-pad, 1.2rem);
+  }
+
+  .cardanalytics {
+    /* margin-top: 15px; */
   }
 
   .cardh1 {
     padding-bottom: 20px;
     font-size: 24px;
-    font-family: poppinsSemiBold;
+
     text-align: center;
+  }
+
+  .cardtop {
+    width: 100%;
+    height: 40px;
+    /*     border-bottom: 1px solid lightgray;
+ */
+    padding-bottom: 10px;
+    margin-bottom: 20px;
   }
 
   .cardinputsdiv {
@@ -69,38 +98,49 @@
   }
 
   .activetab {
-    background-color: var(--primary-color-light);
-    border-bottom: 2px solid #2563eb;
-    color: white;
+    background-color: var(--ui-accent);
+    border-bottom: 2px solid var(--ui-accent-active);
+    color: var(--ui-on-accent);
   }
 
   /* TABLES */
+  /* No outer margin: tables sit in cards under a heading or filter row that
+     already spaces itself, and 20px above and below stacked on top of that. */
   table {
     width: 100%;
     border-collapse: collapse;
-    margin: 20px 0;
+    margin: 0;
   }
 
   th,
   td {
-    border-top: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
+    border-top: 1px solid var(--ui-border);
+    border-bottom: 1px solid var(--ui-border);
     /*  padding: 8px; */
     text-align: left;
     vertical-align: top;
     padding: 10px;
   }
+
+  /* A quiet header: small muted names on a faint tint over a firmer rule,
+     so the column names guide the eye without competing with the rows.
+     Sentence case, as in the kit's tables (kit.css). */
   th {
-    background-color: var(--primary-color-light);
-    color: white;
+    background-color: var(--ui-subtle);
+    color: var(--ui-muted);
     padding: 10px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    white-space: nowrap;
+    border-top: 0;
+    border-bottom: 1px solid var(--ui-border);
   }
-  tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-  tr:hover {
-    background-color: #ddd;
-  }
+
+  /* No stripes and no grey hover: rows are told apart by their lines, as in
+     the kit's tables, and #f2f2f2 / #ddd were light-mode greys that showed
+     as pale bars in dark mode. A table whose rows open something gives
+     them its own hover. */
+
   /* @media (max-width: 600px) {
     table,
     thead,
@@ -155,4 +195,220 @@
       height: 40px;
     }
   } */
+}
+
+/* SELECT SITE */
+.selectsite {
+  margin-bottom: 0px important;
+  background: transparent !important;
+  border: 0px solid transparent !important;
+  font-size: 1.4rem;
+  padding: 0px;
+  max-width: 120px;
+}
+
+.selectsite:focus {
+  outline: none !important;
+}
+
+.selectsite:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 0 !important;
+}
+
+
+/* REUSABLE TABLE */
+
+.tablecheckboxcol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 4px;
+}
+/* "Casio" controls: filters, chips, menus and chart toggles share this look —
+   IBM Plex Sans, key-label caps, tabular numbers, Casio blue, keys that press. */
+:root {
+  --casio-font: var(--IBMPlexSans), "IBM Plex Sans", system-ui, sans-serif;
+  --casio-blue: #1f5fbf;
+  --casio-blue-deep: #12396f;
+  --casio-blue-soft: #e6effb;
+  --casio-blue-line: #a9c4ea;
+  --casio-key: #f4f7fb;
+  --casio-key-line: #cdd8e6;
+  --casio-ink: #1b2a3d;
+  --casio-tracking: 0.06em;
+  --casio-bevel: inset 0 -2px 0 rgba(18, 57, 111, 0.14);
+  --casio-bevel-pressed: inset 0 1px 0 rgba(18, 57, 111, 0.18);
+}
+body.dark-mode {
+  --casio-blue: #5b9bf0;
+  --casio-blue-deep: #b9d6ff;
+  --casio-blue-soft: rgba(91, 155, 240, 0.16);
+  --casio-blue-line: rgba(91, 155, 240, 0.45);
+  --casio-key: #23272e;
+  --casio-key-line: #3a4250;
+  --casio-ink: #e3e9f2;
+  --casio-bevel: inset 0 -2px 0 rgba(0, 0, 0, 0.35);
+  --casio-bevel-pressed: inset 0 1px 0 rgba(0, 0, 0, 0.4);
+}
+/* A key: use on any small control that should feel like a Casio button. */
+.casio-key {
+  font-family: var(--casio-font);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--casio-tracking);
+  text-transform: uppercase;
+  font-weight: 600;
+  border: 1px solid var(--casio-key-line);
+  background: var(--casio-key);
+  color: var(--casio-ink);
+  box-shadow: var(--casio-bevel);
+  transition: border-color 0.12s, background-color 0.12s, box-shadow 0.08s, transform 0.08s;
+}
+.casio-key:hover { border-color: var(--casio-blue); }
+.casio-key:active { transform: translateY(1px); box-shadow: var(--casio-bevel-pressed); }
+.casio-key.is-on, .casio-key[aria-pressed="true"] {
+  border-color: var(--casio-blue);
+  background: var(--casio-blue);
+  color: #ffffff;
+}
+
+/* .softchip — a soft blue button for "current state" controls (the date period, the
+   custom range input…). Not a filter: no ✕. Use it on a button, input or wrapper.
+   Uses the Casio look (font, caps, blue) defined above. */
+.softchip {
+  --softchip-bg: var(--casio-blue-soft);
+  --softchip-border: var(--casio-blue-line);
+  --softchip-text: var(--casio-blue-deep);
+  --softchip-accent: var(--casio-blue);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: fit-content;
+  padding: 0.35em 0.9em;
+  margin: 0.2em;
+  border: 1px solid var(--softchip-border);
+  border-radius: 4px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 60%),
+    var(--softchip-bg);
+  color: var(--softchip-text);
+  font-family: var(--casio-font);
+  font-variant-numeric: tabular-nums;
+  text-transform: uppercase;
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: var(--casio-tracking);
+  line-height: 1.4;
+  box-shadow: var(--casio-bevel), 0 1px 2px rgba(18, 57, 111, 0.08);
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+}
+.softchip:hover,
+.softchip:focus-within,
+.softchip:focus-visible {
+  border-color: var(--softchip-accent);
+  box-shadow: 0 2px 6px rgba(35, 133, 224, 0.18);
+  transform: translateY(-1px);
+  outline: 0;
+}
+.softchip:active {
+  transform: translateY(1px);
+  box-shadow: var(--casio-bevel-pressed);
+}
+.softchip svg {
+  color: var(--softchip-accent);
+  flex-shrink: 0;
+}
+body.dark-mode .softchip {
+  background: var(--softchip-bg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .softchip, .softchip:hover, .softchip:active { transform: none; transition: none; }
+}
+
+/* The period chip on a page showing a range of its own (Daterangepicker.jsx,
+   pageRanges.js), not the one picked on other pages: an amber outline, pulsed
+   as the page opens and dropped after a few seconds, and a hover saying both
+   ranges. */
+.softchip.is-own {
+  --softchip-border: #e0a23a;
+  --softchip-accent: #c9850f;
+  box-shadow: var(--casio-bevel), 0 0 0 2px rgba(224, 162, 58, 0.28);
+  animation: daterange-own-pulse 1.4s ease-out 2;
+}
+body.dark-mode .softchip.is-own {
+  --softchip-border: #f0b54f;
+  --softchip-accent: #f0b54f;
+}
+@keyframes daterange-own-pulse {
+  0% { box-shadow: var(--casio-bevel), 0 0 0 0 rgba(224, 162, 58, 0.55); }
+  70% { box-shadow: var(--casio-bevel), 0 0 0 7px rgba(224, 162, 58, 0); }
+  100% { box-shadow: var(--casio-bevel), 0 0 0 2px rgba(224, 162, 58, 0.28); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .softchip.is-own { animation: none; }
+}
+/* Under the presets on a public dashboard with a longest range (rangeCap.js). */
+.daterange-cap-note {
+  margin: 0;
+  padding: 0.6rem 0.8rem 0.4rem;
+  border-top: 1px solid var(--ui-border, #e2e8f0);
+  font-size: 1.15rem;
+  color: var(--muted-foreground, #64748b);
+}
+
+/* Sign-in pages (login, register, reset, codes, invites): the brand's navy
+   and goose orange rather than the dashboard's blue-violet. Unlayered on
+   purpose, so it wins over Tailwind's utilities on the inputs and over
+   kit.css, and scoped to .cardouterdiv so the dashboard's buttons keep
+   their look. Orange buttons carry navy text: white on #FF9F1C reads at
+   about 2:1, navy at about 8:1. */
+.cardouterdiv {
+  --ui-accent-grad: #ff9f1c;
+  --ui-accent-grad-hover: #f28f00;
+  --ui-on-accent: #102d43;
+  --ui-accent-shadow: 0 1px 2px rgba(16, 45, 67, 0.12), 0 4px 12px -2px rgba(255, 159, 28, 0.4);
+  --ui-accent-shadow-hover: 0 2px 4px rgba(16, 45, 67, 0.14), 0 8px 20px -4px rgba(255, 159, 28, 0.5);
+  --ui-ring: rgba(255, 159, 28, 0.35);
+}
+
+body:not(.dark-mode) .cardouterdiv {
+  --ui-accent: #102d43;
+  --ui-accent-hover: #0b1724;
+  color: #102d43;
+}
+
+body:not(.dark-mode) .cardouterdiv label {
+  color: #102d43;
+}
+
+body:not(.dark-mode) .cardouterdiv .ui-btn-link {
+  color: #526477;
+}
+
+body:not(.dark-mode) .cardouterdiv .ui-btn-link:hover:not(:disabled) {
+  color: #102d43;
+}
+
+body:not(.dark-mode) .cardouterdiv input:not([type="checkbox"]):not([type="radio"]) {
+  background-color: #ffffff;
+  border: 1px solid #d5dde7;
+  box-shadow: none;
+  color: #102d43;
+}
+
+body:not(.dark-mode) .cardouterdiv input:not([type="checkbox"]):not([type="radio"]):focus {
+  border-color: #ff9f1c;
+  box-shadow: 0 0 0 3px rgba(255, 159, 28, 0.25);
+}
+
+/* Chrome paints saved logins pale blue; an inset shadow is the only way to
+   cover it. */
+body:not(.dark-mode) .cardouterdiv input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset;
+  -webkit-text-fill-color: #102d43;
+}
+
+body:not(.dark-mode) .cardouterdiv input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset, 0 0 0 3px rgba(255, 159, 28, 0.25);
 }

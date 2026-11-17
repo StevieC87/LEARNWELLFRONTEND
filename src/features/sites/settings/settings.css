@@ -1,0 +1,919 @@
+/* Site settings. 1rem = 10px in this app. */
+.perf-info {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  margin-left: 2px;
+  padding: 2px;
+  border-radius: 50%;
+  opacity: .55;
+  cursor: help;
+  color: inherit;
+}
+.perf-info:hover,
+.perf-info:focus-visible {
+  opacity: 1;
+}
+/* Portalled to <body>, so it sets its own type size and colours. */
+.perf-popover {
+  position: fixed;
+  z-index: 1000;
+  padding: 12px 14px;
+  border-radius: var(--ui-radius);
+  background: #1f2328;
+  color: #f2f2f2;
+  font-size: var(--ui-text-sm);
+  line-height: 1.45;
+  font-weight: 400;
+  text-align: left;
+  white-space: normal;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .25);
+  pointer-events: none;
+}
+.perf-popover p {
+  margin: 6px 0 0;
+}
+.perf-popover .perf-muted {
+  opacity: .75;
+  font-size: var(--ui-text-xs);
+}
+.perf-popover-title {
+  font-weight: 600;
+  font-size: var(--ui-text);
+}
+
+/* ---------- Settings page shell (scoped; 1rem = 10px) ---------- */
+/* The page's colours come from the shared UI kit (styles/kit.css). */
+.settings-page {
+  --s-fg: var(--ui-fg);
+  --s-muted: var(--ui-muted);
+  --s-border: var(--ui-border);
+  --s-card: var(--ui-card);
+  --s-subtle: var(--ui-subtle);
+  --s-input: var(--ui-input);
+  --s-accent: var(--ui-accent);
+  --s-accent-hover: var(--ui-accent-hover);
+  --s-ring: var(--ui-ring);
+  --s-danger: var(--ui-danger);
+  --s-danger-soft: var(--ui-danger-soft);
+  max-width: 108rem;
+  width: 100%;
+  color: var(--s-fg);
+  font-size: var(--ui-text);
+}
+
+/* Cards */
+.settings-page .card {
+  background-color: var(--s-card);
+  border: 1px solid var(--s-border);
+  border-radius: var(--ui-card-radius);
+  padding: calc(var(--card-pad) * 1.5);
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+}
+.settings-page .card h3 {
+  margin: 0;
+  color: var(--s-fg);
+  font-size: var(--ui-text-lg);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.settings-page .card > .text {
+  color: var(--s-fg);
+}
+.settings-page .card .text-gray-500 {
+  color: var(--s-muted);
+}
+
+/* Page header */
+.settings-header {
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
+}
+.settings-avatar {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 4.4rem;
+  height: 4.4rem;
+  border-radius: var(--ui-radius);
+  background: var(--ui-accent-grad);
+  color: var(--ui-on-accent);
+  font-size: var(--ui-text-xl);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.settings-header-name {
+  font-size: var(--ui-text-xl);
+  font-weight: 600;
+  line-height: 1.3;
+}
+.settings-header-domain {
+  font-size: var(--ui-text);
+  color: var(--s-muted);
+}
+.settings-badge {
+  display: inline-block;
+  margin-left: 0.8rem;
+  padding: 0.2rem 0.8rem;
+  border: 1px solid var(--s-border);
+  border-radius: 99rem;
+  font-size: var(--ui-text-xs);
+  font-weight: 500;
+  color: var(--s-muted);
+  vertical-align: middle;
+}
+
+/* Section card: header / rows / footer */
+.settings-card {
+  display: flex;
+  flex-direction: column;
+  padding: 0 !important;
+  overflow: hidden;
+}
+.settings-card-head {
+  padding: 2rem 2.4rem 1.6rem;
+}
+.settings-card-head p {
+  margin: 0.4rem 0 0;
+  font-size: var(--ui-text);
+  color: var(--s-muted);
+}
+.settings-fields {
+  display: flex;
+  flex-direction: column;
+}
+.settings-field {
+  display: grid;
+  grid-template-columns: minmax(0, 26rem) minmax(0, 1fr);
+  gap: 0.8rem 3.2rem;
+  padding: 1.8rem 2.4rem;
+  border-top: 1px solid var(--s-border);
+}
+/* Direct children only: an InfoDot beside the label is spans too. */
+.settings-field-label > label,
+.settings-field-label > span {
+  display: block;
+  font-size: var(--ui-text);
+  font-weight: 500;
+}
+.settings-field-label p {
+  margin: 0.4rem 0 0;
+  font-size: var(--ui-text-sm);
+  line-height: 1.45;
+  color: var(--s-muted);
+}
+.settings-field-control {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  max-width: 48rem;
+}
+.settings-card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1.2rem;
+  padding: 1.2rem 2.4rem;
+  border-top: 1px solid var(--s-border);
+  background: var(--s-subtle);
+  font-size: var(--ui-text-sm);
+  color: var(--s-muted);
+}
+.settings-card-foot .is-error {
+  color: var(--s-danger);
+}
+/* Inside Settings (.settings-body is the container, by name: a panel inside
+   it can be a container of its own, as Channels is) a row goes side by side
+   only when Section's split rows do: in a narrower body the label column kept
+   its 26rem and squeezed the controls to a sliver. */
+@container settings-body (width < 76rem) {
+  .settings-field {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 760px) {
+  .settings-field {
+    grid-template-columns: 1fr;
+    padding: 1.6rem;
+  }
+  .settings-card-head,
+  .settings-card-foot {
+    padding-left: 1.6rem;
+    padding-right: 1.6rem;
+  }
+}
+
+/* Danger zone */
+.settings-card.is-danger {
+  border-color: color-mix(in srgb, var(--ui-danger) 35%, transparent);
+}
+.settings-card.is-danger .settings-card-head h3 {
+  color: var(--s-danger);
+}
+.settings-danger-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.6rem;
+  flex-wrap: wrap;
+  padding: 1.8rem 2.4rem;
+  border-top: 1px solid color-mix(in srgb, var(--ui-danger) 20%, transparent);
+  background: var(--s-danger-soft);
+}
+.settings-danger-row strong {
+  display: block;
+  font-size: var(--ui-text);
+  font-weight: 500;
+}
+.settings-danger-row p {
+  margin: 0.2rem 0 0;
+  font-size: var(--ui-text-sm);
+  color: var(--s-muted);
+}
+
+/* Form controls */
+.settings-page input[type='text'],
+.settings-page input[type='number'],
+.settings-page input[type='email'],
+.settings-page input[type='url'],
+.settings-page select,
+.settings-page textarea {
+  border: 1px solid var(--s-border);
+  border-radius: var(--ui-radius-sm);
+  background-color: var(--s-input);
+  color: inherit;
+  font-size: var(--ui-text);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.settings-input {
+  width: 100%;
+  max-width: none !important;
+  height: 3.8rem;
+  padding: 0 1.2rem;
+}
+textarea.settings-input {
+  height: auto;
+  min-height: 12rem;
+  padding: 1rem 1.2rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: var(--ui-text-sm);
+  line-height: 1.6;
+  resize: vertical;
+}
+.settings-page input:focus,
+.settings-page select:focus,
+.settings-page textarea:focus {
+  outline: none;
+  border-color: var(--s-accent);
+  box-shadow: 0 0 0 3px var(--s-ring);
+}
+.settings-page input:disabled {
+  background-color: var(--s-subtle);
+  color: var(--s-muted);
+  cursor: not-allowed;
+}
+.settings-input-row {
+  display: flex;
+  gap: 0.8rem;
+}
+
+/* Buttons */
+.settings-page .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  height: 3.6rem;
+  padding: 0 1.4rem;
+  border: 1px solid transparent;
+  border-radius: var(--ui-radius-sm);
+  font-size: var(--ui-text);
+  font-weight: 500;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+}
+.settings-page .button:focus-visible {
+  box-shadow: 0 0 0 3px var(--s-ring);
+}
+.settings-page .button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.settings-page .button_default {
+  background-color: var(--s-accent);
+  color: var(--ui-on-accent);
+}
+.settings-page .button_default:hover:not(:disabled) {
+  background-color: var(--s-accent-hover);
+}
+.settings-page .button_destructive {
+  background-color: var(--s-danger);
+  border-color: var(--s-danger);
+  color: #fff;
+}
+.settings-page .button_destructive:hover:not(:disabled) {
+  filter: brightness(0.92);
+}
+.settings-page .button_ghost {
+  background: transparent;
+  border-color: var(--s-border);
+  color: inherit;
+}
+.settings-page .button_ghost:hover:not(:disabled) {
+  background: var(--s-subtle);
+}
+.settings-page .button_icon {
+  width: 3.8rem;
+  height: 3.8rem;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+/* ---------- Page pieces built on the kit ---------- */
+.settings-hero {
+  gap: 1.2rem;
+  padding: 2rem 2.4rem;
+}
+.settings-role {
+  margin-left: 0.8rem;
+  vertical-align: middle;
+  text-transform: capitalize;
+}
+.settings-plain {
+  padding: 2.4rem;
+}
+.settings-copy-row {
+  display: flex;
+  align-items: stretch;
+  gap: 0.8rem;
+}
+.settings-copy-row .ui-secret {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.settings-select {
+  max-width: 32rem;
+}
+.settings-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(26rem, 1fr));
+  gap: 1.8rem 2.4rem;
+}
+/* Returning visitors: one card per choice, tinted by how private it is. */
+.settings-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 76rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.settings-choices legend {
+  margin-bottom: 0.4rem;
+  padding: 0;
+  font-size: var(--ui-text-lg);
+  font-weight: 600;
+}
+.settings-choice {
+  --tone: 128, 128, 128;
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+  margin: 0;
+  padding: 1.4rem 1.6rem;
+  border: 1px solid rgba(var(--tone), 0.3);
+  border-radius: var(--ui-radius);
+  background: rgba(var(--tone), 0.04);
+  font-weight: 400;
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+.settings-choice:hover {
+  background: rgba(var(--tone), 0.08);
+}
+.settings-choice.is-selected {
+  border-color: rgba(var(--tone), 0.9);
+  background: rgba(var(--tone), 0.12);
+  box-shadow: inset 0 0 0 1px rgba(var(--tone), 0.9);
+}
+.settings-choice.is-green { --tone: 34, 197, 94; }
+.settings-choice.is-blue { --tone: 59, 130, 246; }
+.settings-choice.is-amber { --tone: 245, 158, 11; }
+.settings-choice input {
+  flex: 0 0 auto;
+  width: 1.6rem;
+  height: 1.6rem;
+  margin: 0.2rem 0 0;
+  accent-color: rgb(var(--tone));
+}
+.settings-choice > span {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.settings-choice strong {
+  font-size: var(--ui-text-lg);
+  font-weight: 600;
+}
+
+/* Settings → AI */
+.ai-settings { display: flex; flex-direction: column; gap: 1.6rem; }
+.ai-settings .ui-meter { margin: 1.2rem 0; }
+.ai-settings-sites { margin-top: 1.2rem; }
+.ai-settings-modes { margin-top: 1.6rem; border: 0; padding: 0; display: flex; flex-direction: column; gap: 0.8rem; }
+
+/* Settings -> Channels */
+.channels-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  container-type: inline-size;
+}
+
+/* Narrow panel: each table row becomes a stacked block, cells labelled. */
+@container (max-width: 60rem) {
+  .channels-table,
+  .channels-table tbody,
+  .channels-table tr,
+  .channels-table td {
+    display: block;
+  }
+  .channels-table thead { display: none; }
+  .channels-table tr {
+    padding: 1.2rem 0;
+    border-bottom: 1px solid var(--ui-border);
+  }
+  .channels-table tbody tr:last-child { border-bottom: 0; }
+  .channels-table td,
+  .channels-table td:is(:first-child, :last-child) {
+    padding: 0.3rem 0;
+    border: 0;
+  }
+  .channels-table td[data-label]::before {
+    content: attr(data-label) " ";
+    color: var(--ui-muted);
+    font-size: var(--ui-text-xs);
+    font-weight: 600;
+  }
+  .channels-table td[data-label="Move to"]::before {
+    display: block;
+    margin-bottom: 0.4rem;
+  }
+  .channels-table .channels-actions {
+    display: flex;
+    justify-content: flex-start;
+    padding-top: 0.6rem;
+  }
+  .channels-table .ui-mono { overflow-wrap: anywhere; }
+}
+
+.channels-table td {
+  vertical-align: middle;
+}
+
+.channels-assign,
+.channels-picker,
+.channels-add-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.channels-add-row {
+  align-items: flex-end;
+}
+
+.channels-add-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.channels-actions {
+  display: flex;
+  gap: 0.4rem;
+  justify-content: flex-end;
+}
+
+.channels-add {
+  margin-top: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+/* GDPR check above the Privacy & consent tabs. */
+.settings-gdpr { margin-bottom: 1.6rem; }
+.settings-gdpr .ui-actions,
+.settings-gdpr .ui-checks { margin-top: 1rem; }
+.settings-consent-badge { margin-left: 0.8rem; }
+.settings-consent-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.6rem;
+  margin-top: 0.6rem;
+  color: var(--ui-muted);
+  font-size: var(--ui-text-sm);
+}
+
+/* Site settings, Alerts & reports: the automatic alerts (AlertsPanel.jsx). */
+.alerts-panel .ui-toggle + .ui-toggle {
+  border-top: 1px solid var(--ui-border);
+}
+
+.alerts-webhook {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.alerts-webhook .ui-input {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.alerts-checks > .ui-label {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.alerts-channels {
+  display: flex;
+  flex: 0 1 auto;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px 16px;
+}
+
+
+/* Site settings, Alerts & reports: the webhook signing secret and delivery log (WebhookDeliveries.jsx). */
+.webhooks-confirm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+}
+
+.webhooks-verify summary {
+  cursor: pointer;
+  font-size: var(--ui-text-sm);
+}
+
+.webhooks-verify .ui-code,
+.webhooks-body {
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.webhooks-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.webhooks-table {
+  overflow-x: auto;
+}
+
+.webhooks-actions {
+  white-space: nowrap;
+}
+
+.webhooks-actions .ui-btn + .ui-btn {
+  margin-left: 6px;
+}
+
+.webhooks-panel .ui-badge.is-warning {
+  border-color: transparent;
+  background: rgba(180, 83, 9, 0.12);
+  color: #b45309;
+}
+
+.webhooks-body {
+  max-height: 32rem;
+  margin-top: 8px;
+}
+
+/* Your site (SiteSetupPanel.jsx): the two questions, the homepage look and the menu's pages. */
+.site-setup {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.site-setup .ui-tabs {
+  align-self: flex-start;
+}
+
+.site-setup-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.site-setup-suggestion {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  margin-top: 8px;
+}
+
+.site-setup-suggestion p {
+  margin: 0;
+}
+
+
+/* ---------- Sections down the left, settings as rows ---------- */
+/* SiteSettings.jsx: the list of sections beside the open one, instead of a
+   row of twelve tabs that ran off the edge. Below 900px the list turns back
+   into a row that scrolls sideways. The list scrolls with the page: held in
+   place it slid against the main menu, which scrolls, and read as parallax. */
+.settings-layout {
+  display: grid;
+  grid-template-columns: 20rem minmax(0, 1fr);
+  gap: 2.4rem;
+  align-items: start;
+}
+.settings-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.settings-nav button {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-height: 3.6rem;
+  padding: 0 1.2rem;
+  border: 0;
+  border-radius: var(--ui-radius-sm);
+  background: none;
+  color: var(--ui-muted);
+  font-size: var(--ui-text);
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.settings-nav button:hover {
+  background: var(--ui-subtle);
+  color: var(--ui-fg);
+}
+.settings-nav button.is-on {
+  background: var(--ui-accent-soft);
+  box-shadow: inset 2px 0 0 var(--ui-accent);
+  color: var(--ui-fg);
+  font-weight: 600;
+}
+.settings-nav button:focus-visible {
+  outline: 2px solid var(--ui-accent);
+  outline-offset: -2px;
+}
+.settings-nav svg {
+  flex: none;
+  opacity: 0.8;
+}
+@media (max-width: 900px) {
+  .settings-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.2rem;
+  }
+  .settings-nav {
+    flex-direction: row;
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+  .settings-nav button.is-on {
+    box-shadow: inset 0 -2px 0 var(--ui-accent);
+  }
+}
+
+/* The open section: a card per section, the page showing between them, so
+   a section break reads differently from the hairline between two fields.
+   A panel's cards count whether they sit straight in it or one wrapper down
+   (ChannelsPanel, ApiAccessPanel, AiPanel). */
+.settings-body {
+  container-type: inline-size;
+  container-name: settings-body;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  min-width: 0;
+}
+/* Unclipped, so nothing inside a section is cropped at its edge. */
+.settings-page .settings-body > .ui-card,
+.settings-page .settings-body > div > .ui-card,
+.settings-page .settings-body > .card {
+  overflow: visible;
+}
+/* Except Danger zone: its tinted row runs to the card's rounded foot. */
+.settings-page .settings-body > .settings-card.is-danger {
+  overflow: hidden;
+}
+.settings-body > div:has(> .ui-card) {
+  gap: 1.6rem;
+}
+/* Whatever else sits straight in it (a status line, a row of sub-tabs) is
+   spaced by the gap like a card. Sub-tabs keep their own size, rather than
+   a bar stretched across the column. */
+.settings-body > :not(.ui-card, .card, div:has(> .ui-card)) {
+  margin: 0;
+}
+.settings-body > .ui-tabs {
+  align-self: flex-start;
+}
+.settings-body .ui-card-head p,
+.settings-body .ui-help {
+  max-width: 72ch;
+}
+
+/* A short setting (Section's `split`), when there is room: its name and
+   what it does on the left, its controls on the right. Everything else
+   stacks, so a big section keeps the whole width. */
+@container (min-width: 76rem) {
+  .settings-body > .ui-card.is-split:has(> .ui-card-head) {
+    display: grid;
+    grid-template-columns: minmax(0, 26rem) minmax(0, 1fr);
+    column-gap: 4rem;
+    align-content: start;
+    padding: 2.4rem var(--ui-card-pad-x);
+  }
+  .settings-body > .ui-card.is-split > .ui-card-head {
+    grid-column: 1;
+    grid-row: 1 / span 6;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0;
+  }
+  .settings-body > .ui-card.is-split:has(> .ui-card-head) > :not(.ui-card-head) {
+    grid-column: 2;
+  }
+  .settings-body > .ui-card.is-split > .ui-card-body {
+    padding: 0;
+  }
+  .settings-body > .ui-card.is-split > .ui-card-foot {
+    justify-content: flex-start;
+    margin-top: 1.6rem;
+    padding: 0;
+    border-top: 0;
+    background: none;
+  }
+}
+
+/* A section's Save sits at its foot with no band of its own: three grey
+   bands on one page broke it up. */
+.settings-body .ui-card-foot,
+.settings-body .settings-card-foot {
+  padding-top: 0;
+  border-top: 0;
+  background: none;
+}
+
+/* An on/off setting is a plain line of its section, not a box inside it.
+   Stacked ones (Alerts) keep their hairline between them. */
+.settings-body .ui-toggle {
+  padding: 0.4rem 0;
+  border: 0;
+  border-radius: 0;
+}
+.settings-body .ui-toggle + .ui-toggle {
+  padding-top: 1.2rem;
+}
+
+/* This month's allowance (PlanAllowance.jsx): side by side, a few to a line,
+   rather than one tall row each. */
+.usage-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+  gap: 1.6rem 2.4rem;
+}
+
+/* A row's alert lines and the escalation steps (AlertsPanel.jsx). */
+.alerts-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+.alerts-line,
+.alerts-step {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+}
+.alerts-line > .ui-help:first-child {
+  flex-basis: 100%;
+}
+.alerts-line-value {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--ui-text-sm);
+}
+.alerts-line-value .ui-input {
+  width: 80px;
+}
+.alerts-line-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.alerts-step {
+  padding: 8px 0;
+  border-top: 1px solid var(--ui-border);
+}
+
+/* Website details (app/dash/(content)/details/site/page.jsx): the saved
+   pictures above their file pickers. */
+.sitedetails .settings-field-control {
+  align-items: flex-start;
+}
+.sitedetails-preview {
+  max-width: 16rem;
+  max-height: 8rem;
+  padding: 0.8rem;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-sm);
+  background: var(--ui-subtle);
+  object-fit: contain;
+}
+.sitedetails-preview.is-wide {
+  max-width: 24rem;
+  max-height: 12.6rem;
+  padding: 0;
+  object-fit: cover;
+}
+.sitedetails input[type="file"] {
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: var(--ui-text-sm);
+}
+
+/* Your data (DataSources.jsx): one block per source, its numbers listed with
+   their alert, then the form that adds another. */
+.datasource {
+  display: grid;
+  gap: 0.8rem;
+  padding: 1.2rem 0;
+  border-bottom: 1px solid var(--ui-border);
+}
+.datasource-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+.datasource-head .ui-cell-sub {
+  display: block;
+}
+.datasource-metrics {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.datasource-metrics li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+.datasource-metrics .ui-cell-sub {
+  display: block;
+}
+.datasource-alert {
+  display: grid;
+  gap: 0.3rem;
+  max-width: 100%;
+}
+.datasource-add,
+.datasource-form,
+.datasource-pick {
+  display: grid;
+  gap: 1rem;
+}
+.datasource-add {
+  padding-top: 1.2rem;
+}
+.datasource-form .ui-table,
+.datasource .ui-table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* The public demo's Settings: a disabled group that lays out as its children. */
+.settings-demo-lock { display: contents; border: 0; margin: 0; padding: 0; min-width: 0; }
+.settings-demo-list { display: flex; flex-direction: column; gap: 0.5rem; list-style: none; margin: 0; padding: 0; }

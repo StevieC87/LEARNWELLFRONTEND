@@ -16,6 +16,9 @@ const DashSlice = createSlice({
     userrole: "", // This is used to check if a page exists in the userrole
     userid: "",
     enableuserregistration: "", // This is used to check if user registration is enabled
+    sites: [],
+    darkmodeOn: false,
+    zoomChart: false,
   },
 
   reducers: {
@@ -40,6 +43,12 @@ const DashSlice = createSlice({
     setEnableUserRegistration(state, action) {
       state.enableuserregistration = action.payload; // This will set the user registration setting
     },
+    setdarkmodeOn(state, action) {
+      state.darkmodeOn = action.payload; // This will set the dark mode setting
+    },
+    setZoomChart(state, action) {
+      state.zoomChart = action.payload; // This will set the zoom chart setting
+    },
   },
 });
 
@@ -51,6 +60,8 @@ export const {
   setSettings,
   setUserId,
   setEnableUserRegistration,
+  setdarkmodeOn,
+  setZoomChart,
 } = DashSlice.actions;
 
 export default DashSlice.reducer;

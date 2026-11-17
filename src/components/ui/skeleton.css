@@ -1,0 +1,70 @@
+/*
+  Placeholders shaped like what is loading (Skeleton.jsx), so a page keeps its
+  size while the first answer is in flight instead of showing a line of
+  "Loading…" that the content then pushes down. 1rem = 10px here; the grey is
+  --ui-loading-tint from styles/kit.css, the same as a card's loading veil.
+
+  Held back 200ms, as the veil is (card-loading.css): an answer that lands
+  quickly must not flash grey bars. Still under prefers-reduced-motion.
+*/
+.ui-skel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  width: 100%;
+  opacity: 0;
+  animation: uiSkelReveal 0s 200ms forwards;
+}
+
+.ui-skel-bar {
+  display: block;
+  height: 1.2rem;
+  border-radius: var(--ui-radius-sm, 0.6rem);
+  background: var(--ui-loading-tint);
+  animation: uiSkelPulse 1.8s ease-in-out infinite;
+}
+
+.ui-skel-lines { gap: 0.9rem; }
+.ui-skel-lines .ui-skel-bar:last-child:not(:first-child) { width: 60%; }
+
+.ui-skel-row {
+  display: grid;
+  grid-template-columns: 2fr repeat(var(--skel-cols, 2), 1fr);
+  gap: 1.6rem;
+  align-items: center;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--ui-border);
+}
+.ui-skel-row:last-child { border-bottom: 0; }
+.ui-skel-row.is-head .ui-skel-bar { height: 0.9rem; width: 50%; }
+.ui-skel-row .ui-skel-bar:not(:first-child) { justify-self: end; width: 60%; }
+
+/* The grid inside a tiles skeleton; the root keeps .ui-skel-tiles, so the
+   two need different names or the root becomes a grid too. */
+.ui-skel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  gap: 1.6rem;
+}
+.ui-skel-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.6rem;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-card-radius, 1rem);
+}
+.ui-skel-tile .ui-skel-bar:first-child { width: 50%; height: 0.9rem; }
+.ui-skel-tile .ui-skel-bar:last-child { width: 70%; height: 2.4rem; }
+
+.ui-skel-tall { border-radius: var(--ui-radius, 0.8rem); }
+
+@keyframes uiSkelReveal { to { opacity: 1; } }
+@keyframes uiSkelPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-skel-bar { animation: none; }
+}

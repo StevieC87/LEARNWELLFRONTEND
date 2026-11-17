@@ -1,0 +1,28 @@
+/* The content manager's settings (app/dash/(workspace)/settings/page.jsx),
+   on Site settings' rows (features/sites/settings/settings.css). */
+.cms-settings .settings-field-control {
+  align-items: flex-start;
+}
+.cms-settings-narrow {
+  width: 16rem;
+}
+.cms-settings-langs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem 2rem;
+}
+.cms-settings-add,
+.cms-settings-locale {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.cms-settings-locale :is(label, input) {
+  margin: 0;
+}
+.cms-settings-locale label {
+  width: 3.2rem;
+  color: var(--ui-muted);
+  font-size: var(--ui-text-sm);
+  font-weight: 500;
+}

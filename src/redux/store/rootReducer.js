@@ -7,6 +7,10 @@ import JSONLDSlice from "../slices/JSONLDSlice";
 import UISlice from "../slices/UISlice";
 import SharedSlice from "../slices/SharedSlice";
 import SpecialSlice from "../slices/SpecialSlice";
+import AnalyticsSlice from "../slices/AnalyticsSlice.js"; // Import the AnalyticsSlice
+import AnalyticsUISlice from "../slices/AnalyticsUISlice.js"; // Import the AnalyticsUISlice
+import CustomTypesSlice from "../slices/CustomTypesSlice.js";
+import flashcardSlice from "../slices/flashcardSlice"; // Flashcard lessons
 
 const rootReducer = combineReducers({
   SlideMenuSlice: SlideMenuSlice,
@@ -16,6 +20,11 @@ const rootReducer = combineReducers({
   UISlice: UISlice,
   SharedSlice: SharedSlice,
   SpecialSlice: SpecialSlice,
+  AnalyticsSlice: AnalyticsSlice,
+  AnalyticsUISlice: AnalyticsUISlice,
+  CustomTypesSlice: CustomTypesSlice,
+  flashcardSlice: flashcardSlice,
+  // Add the AnalyticsSlice here
   /* UtilsSlice: UtilsSlice, */
 });
 

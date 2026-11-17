@@ -1,57 +1,29 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { useNonce } from '@/hooks/useNonce'
+// Dashboard home: the CMS's pages as cards, for the signed-in role.
+// Written by cms-copy (overrides/frontend).
+import Link from 'next/link';
+import { useSelector } from 'react-redux';
+import PageTitle from '@/components/layout/PageTitle.jsx';
+import { navItemsFor } from '@/components/layout/Navbar/navItems';
 
-
-export default function Dash() {
-  const noncea = useNonce()
-  const [mounted, setMounted] = useState(false)
-
-
-  useEffect(() => {
-    const cspMeta = document.querySelector('meta[http-equiv="Content-Security-Policy"]')
-    if (cspMeta) {
-      console.log('CSP from meta:', cspMeta.content)
-    }
-    if (noncea && noncea.length > 0) {
-
-      setMounted(true)
-      console.log(noncea, 'nonceaaaaaa')
-    }
-  }, [noncea])
-
-  const color = 'red'; // Example of a color variable, not used in this component
-
+export default function DashHome() {
+  const userrole = useSelector((state) => state.DashSlice.userrole);
+  const items = navItemsFor(userrole).filter((item) => item.href !== '/dash');
 
   return (
-    <>
-      {mounted && (
-        <>
-          <div>
-            <div className="testhere">testdiv</div>
-            I am the dash, you are logged in
-          </div>
-
-          {noncea && (
-            <>
-              {noncea}
-              <style nonce={noncea}>{`
-              .testhere {
-                color: ${color};
-                font-size: 20px;
-                font-weight: bold;
-              }
-            `}</style>
-            </>
-          )}
-        </>
-
-      )}
-
-    </>
-
-  )
-
+    <div className="flex flex-col gap-4">
+      <PageTitle title="Home" />
+      <div className="grid gap-3" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(14rem, 1fr))' }}>
+        {items.map((item) => (
+          <Link key={item.href} prefetch={false} href={item.href} className="ui-card flex flex-row items-center gap-3 p-4">
+            {item.icon}
+            <span>
+              <strong>{item.label}</strong>
+              {item.hint && <span className="block text-sm opacity-70">{item.hint}</span>}
+            </span>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
 }
-
-

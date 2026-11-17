@@ -1,0 +1,33 @@
+/* Pages and posts list (app/dash/(content)/pages/page.jsx). 1rem = 10px. */
+.pageslistdiv {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.pageslist-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+.pageslist-toolbar .ui-input,
+.pageslist-create {
+  width: auto;
+  margin: 0;
+}
+.pageslist-toolbar .pageslist-search {
+  flex: 1 1 22rem;
+  max-width: 32rem;
+}
+.pageslist-scroll {
+  overflow-x: auto;
+}
+.pageslist-date {
+  color: var(--ui-muted);
+  white-space: nowrap;
+}
+.pageslist-trash {
+  margin-left: auto;
+}
+.pageslist-foot {
+  justify-content: flex-start;
+}

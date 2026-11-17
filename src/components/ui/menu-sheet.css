@@ -1,0 +1,175 @@
+/* Menus as sheets on a phone (MenuSheet.jsx, dropdown-menu.tsx, FilterBar's
+   Lines and Filter): full width along the bottom of the screen, scrolling
+   inside, over a dimmed page. Menus sized for a mouse, and submenus opening
+   to the side, ran off a phone's edges. Submenus are sheets in the same
+   place, so one slides over the other; the one underneath hides meanwhile. */
+
+.menu-sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 49;
+  /* A modal menu sets pointer-events: none on the body this sits in. */
+  pointer-events: auto;
+  touch-action: none;
+  background: rgba(15, 23, 42, 0.38);
+  animation: menu-sheet-fade 0.18s ease-out;
+}
+
+/* Radix positions a menu by inline styles on the wrapper round it: a
+   translate to the trigger, a min-width of the content's own. A sheet is
+   pinned to the screen instead, so they are overridden here. */
+[data-radix-popper-content-wrapper]:has(> [data-menu-sheet]) {
+  position: fixed !important;
+  inset: auto 0 0 0 !important;
+  transform: none !important;
+  min-width: 0 !important;
+  z-index: 50 !important;
+}
+
+/* Typing into a sheet: the keyboard rises over the bottom of the screen, so
+   the sheet moves to the top for as long as a field has focus. */
+[data-radix-popper-content-wrapper]:has(> [data-menu-sheet] :is(input, textarea, select):focus),
+.filterbar-menu.is-sheet:has(:is(input, textarea, select):focus) {
+  top: 0 !important;
+  bottom: auto !important;
+}
+
+[data-menu-sheet],
+.filterbar-menu.is-sheet {
+  box-sizing: border-box;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  max-height: 80dvh !important;
+  margin: 0 !important;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 0.8rem calc(1rem + env(safe-area-inset-bottom)) !important;
+  border-width: 1px 0 0 !important;
+  border-radius: 14px 14px 0 0 !important;
+  box-shadow: 0 -8px 28px rgba(15, 23, 42, 0.18) !important;
+  visibility: visible;
+  animation: menu-sheet-up 0.2s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+  transition: transform 0.18s ease-out;
+}
+
+/* A submenu slides in from the side over the sheet it came from. */
+[data-slot="dropdown-menu-sub-content"][data-menu-sheet] {
+  animation: menu-sheet-across 0.2s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+}
+
+/* A submenu open over this sheet: this one steps out of sight under it. A
+   child can be visible inside a hidden parent, so the submenu still shows. */
+[data-menu-sheet]:has([data-slot="dropdown-menu-sub-trigger"][data-state="open"]) {
+  visibility: hidden;
+}
+
+/* A field focused at the top of the screen: round the bottom instead. */
+[data-radix-popper-content-wrapper]:has(> [data-menu-sheet] :is(input, textarea, select):focus) > [data-menu-sheet],
+.filterbar-menu.is-sheet:has(:is(input, textarea, select):focus) {
+  border-width: 0 0 1px !important;
+  border-radius: 0 0 14px 14px !important;
+  padding-top: calc(0.8rem + env(safe-area-inset-top)) !important;
+}
+
+.menu-sheet-handle {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  height: 2.4rem;
+  margin: 0 -0.8rem;
+  background: inherit;
+  cursor: grab;
+  touch-action: none;
+}
+
+.menu-sheet-handle::after {
+  content: "";
+  position: absolute;
+  top: 0.9rem;
+  left: 50%;
+  width: 3.6rem;
+  height: 0.4rem;
+  margin-left: -1.8rem;
+  border-radius: 999px;
+  background: var(--ui-border, #d4d4d8);
+}
+
+/* Thumb-sized rows. */
+[data-menu-sheet] :is([data-slot="dropdown-menu-item"], [data-slot="dropdown-menu-checkbox-item"],
+  [data-slot="dropdown-menu-radio-item"], [data-slot="dropdown-menu-sub-trigger"], .menu-sheet-back) {
+  min-height: 4.4rem;
+}
+
+/* Group names stay in view while their rows scroll, under the handle. They
+   need the sheet's own fill, which differs by menu and theme, so they inherit
+   it, and so does every box between them and the sheet. */
+[data-menu-sheet] [data-slot="dropdown-menu-label"] {
+  position: sticky;
+  top: 2.4rem;
+  z-index: 1;
+  background-color: inherit;
+}
+
+[data-menu-sheet] :has([data-slot="dropdown-menu-label"]):not([data-menu-sheet]) {
+  background-color: inherit;
+}
+
+.menu-sheet-back {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 -0.8rem 0.4rem;
+  padding: 0 1.2rem;
+  border-bottom: 1px solid var(--ui-border, #e4e4e7);
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+}
+
+.menu-sheet-back:focus,
+.menu-sheet-back[data-highlighted] {
+  background: var(--accent, #f4f4f5);
+}
+
+.menu-sheet-back-icon {
+  transform: rotate(180deg);
+}
+
+/* FilterBar's own panels sit in the page, not a portal; on a phone they are
+   pinned the same way. */
+.filterbar-menu.is-sheet {
+  position: fixed !important;
+  inset: auto 0 0 0 !important;
+  z-index: 50 !important;
+}
+
+/* They keep their own wider padding. */
+.filterbar-menu.is-sheet {
+  padding-inline: 1.2rem !important;
+}
+
+.filterbar-menu.is-sheet .menu-sheet-handle {
+  margin: 0 -1.2rem;
+}
+
+@keyframes menu-sheet-up {
+  from { transform: translateY(100%); }
+}
+
+@keyframes menu-sheet-across {
+  from { transform: translateX(100%); }
+}
+
+@keyframes menu-sheet-fade {
+  from { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-sheet-backdrop,
+  [data-menu-sheet],
+  .filterbar-menu.is-sheet {
+    animation: none !important;
+  }
+}

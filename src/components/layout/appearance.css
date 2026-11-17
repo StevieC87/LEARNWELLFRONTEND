@@ -1,0 +1,127 @@
+/* What each Appearance pick means (components/layout/appearance.js sets the
+   data attributes on <html>). Deliberately outside any @layer: the values it
+   replaces live in src/styles/, which is layered, and unlayered normal
+   declarations beat layered ones. The font is the one exception, because
+   base.css sets the body's font with !important — so base.css reads
+   --app-font itself rather than being overridden from here. */
+
+/* ---------- Font ---------- */
+:root[data-font="source-sans"] { --app-font: var(--font-source-sans-3); }
+:root[data-font="satoshi"] { --app-font: var(--satoshi); }
+:root[data-font="geist"] { --app-font: var(--geist); }
+:root[data-font="ibm-plex"] { --app-font: var(--IBMPlexSans); }
+:root[data-font="mona"] { --app-font: var(--MonaSans); }
+:root[data-font="jakarta"] { --app-font: var(--PlusJakartaSans); }
+:root[data-font="system"] { --app-font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+
+/* ---------- Text size ---------- */
+/* 62.5% (1rem = 10px) is base.css's own; everything in rem follows. */
+:root[data-text-size="small"] { font-size: 56.25%; }
+:root[data-text-size="large"] { font-size: 68.75%; }
+:root[data-text-size="larger"] { font-size: 75%; }
+
+/* ---------- Accent ---------- */
+/* Each accent is two colours per mode: the accent itself and where the
+   primary button's gradient runs to (blue runs to violet). The rest is
+   derived from them below, the way kit.css derives the orange's by hand.
+   Every pair holds 4.5:1 for the button label: white on the light-mode
+   colours, near-black on the dark-mode ones, and each is dark enough in
+   light mode to be text itself. Goose orange, the default, sets no
+   attribute, so kit.css's own values apply (navy label, navy text). */
+:root[data-accent="blue"] { --acc: #2f5bff; --acc-to: #6d3dfa; --acc-dark: #6b8cff; --acc-dark-to: #a78bfa; }
+:root[data-accent="violet"] { --acc: #6d28d9; --acc-to: #a21caf; --acc-dark: #a78bfa; --acc-dark-to: #e879f9; }
+:root[data-accent="teal"] { --acc: #0f766e; --acc-to: #0e7490; --acc-dark: #2dd4bf; --acc-dark-to: #67e8f9; }
+:root[data-accent="magenta"] { --acc: #a21caf; --acc-to: #be185d; --acc-dark: #e879f9; --acc-dark-to: #f472b6; }
+:root[data-accent="graphite"] { --acc: #374151; --acc-to: #1f2937; --acc-dark: #d1d5db; --acc-dark-to: #9ca3af; }
+
+:root[data-accent] {
+  --ui-accent: var(--acc);
+  --ui-accent-ink: var(--acc);
+  --ui-on-accent: #ffffff;
+  --ui-accent-hover: color-mix(in srgb, var(--acc) 85%, #000);
+  --ui-accent-active: color-mix(in srgb, var(--acc) 72%, #000);
+  --ui-accent-soft: color-mix(in srgb, var(--acc) 8%, transparent);
+  --ui-ring: color-mix(in srgb, var(--acc) 25%, transparent);
+  --ui-accent-grad: linear-gradient(135deg, var(--acc) 0%, var(--acc-to) 100%);
+  --ui-accent-grad-hover: linear-gradient(135deg, color-mix(in srgb, var(--acc) 85%, #000) 0%,
+    color-mix(in srgb, var(--acc-to) 85%, #000) 100%);
+  --ui-accent-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 1px 2px color-mix(in srgb, var(--acc) 25%, transparent),
+    0 4px 12px -2px color-mix(in srgb, var(--acc-to) 35%, transparent);
+  --ui-accent-shadow-hover: inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 2px 4px color-mix(in srgb, var(--acc) 25%, transparent),
+    0 8px 20px -4px color-mix(in srgb, var(--acc-to) 45%, transparent);
+}
+
+/* kit.css redefines the accent on body.dark-mode, so dark has to be set
+   there too, not on <html>. */
+:root[data-accent] body.dark-mode {
+  --ui-accent: var(--acc-dark);
+  --ui-accent-ink: var(--acc-dark);
+  --ui-on-accent: #0b1220;
+  --ui-accent-hover: color-mix(in srgb, var(--acc-dark) 80%, #fff);
+  --ui-accent-active: color-mix(in srgb, var(--acc-dark) 85%, #000);
+  --ui-accent-soft: color-mix(in srgb, var(--acc-dark) 10%, transparent);
+  --ui-ring: color-mix(in srgb, var(--acc-dark) 30%, transparent);
+  --ui-accent-grad: linear-gradient(135deg, var(--acc-dark) 0%, var(--acc-dark-to) 100%);
+  --ui-accent-grad-hover: linear-gradient(135deg, color-mix(in srgb, var(--acc-dark) 80%, #fff) 0%,
+    color-mix(in srgb, var(--acc-dark-to) 80%, #fff) 100%);
+  --ui-accent-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 0 0 1px color-mix(in srgb, var(--acc-dark-to) 30%, transparent),
+    0 6px 18px -6px color-mix(in srgb, var(--acc-dark) 55%, transparent);
+  --ui-accent-shadow-hover: inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    0 0 0 1px color-mix(in srgb, var(--acc-dark-to) 45%, transparent),
+    0 8px 26px -6px color-mix(in srgb, var(--acc-dark) 70%, transparent);
+}
+
+/* ---------- Page background ---------- */
+/* The page behind the cards, one pair per preset (light, dark). Presets
+   rather than a free colour, so muted text always reads on it. In dark mode
+   the cards are a faint lift over this (kit.css --ui-card). --page-dark is
+   the body's own colour (base.css); --backgrounddark the html behind it. */
+:root[data-page-bg="neutral"] { --backgroundlight: #f2f2f2; --background-color: #f2f2f2; --backgrounddark: #1e1e1e; --page-dark: #1e1e1e; }
+:root[data-page-bg="warm"] { --backgroundlight: #f5f2ec; --background-color: #f5f2ec; --backgrounddark: #221f1c; --page-dark: #221f1c; }
+:root[data-page-bg="blue"] { --backgroundlight: #edf2fb; --background-color: #edf2fb; --backgrounddark: #121a2b; --page-dark: #121a2b; }
+:root[data-page-bg="contrast"] { --backgroundlight: #ffffff; --background-color: #ffffff; --backgrounddark: #0b0b0c; --page-dark: #0b0b0c; }
+
+/* ---------- Density ---------- */
+/* Card padding and control height (tokens in kit.css). Text size is its own
+   pick, so this tightens space only. */
+:root[data-density="compact"] {
+  --ui-card-pad-x: 1.6rem;
+  --ui-card-pad-y: 1.4rem;
+  --card-pad: 0.8rem;
+  --ui-control-h: 3.2rem;
+}
+
+/* ---------- Corners ---------- */
+/* Cards and kit controls. Pills and circles (swatches, dots, avatars) set
+   their own radius and stay round. Soft is kit.css's own. */
+:root[data-corners="sharp"] {
+  --ui-card-radius: 0.2rem;
+  --ui-radius: 0.2rem;
+  --ui-radius-sm: 0.2rem;
+}
+:root[data-corners="round"] {
+  --ui-card-radius: 1.8rem;
+  --ui-radius: 1.2rem;
+  --ui-radius-sm: 1rem;
+}
+
+/* ---------- Site name beside titles (SiteTag.jsx) ---------- */
+:root[data-site-tag="hide"] .site-tag {
+  display: none;
+}
+
+/* ---------- Motion ---------- */
+/* Reduce: what the device setting does, asked for here. Animations still
+   run to their end state, just at once, so nothing that waits on an
+   animationend is left hanging. */
+:root[data-motion="reduce"] *,
+:root[data-motion="reduce"] *::before,
+:root[data-motion="reduce"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}

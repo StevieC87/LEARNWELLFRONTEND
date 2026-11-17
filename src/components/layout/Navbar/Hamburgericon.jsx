@@ -1,22 +1,26 @@
 
 'use client'
 import './css/hamburgericon.css';
-import { setIsSideNavOpen } from '@/redux/slices/SlideMenu';
+import { setIsMobileNavOpen } from '@/redux/slices/SlideMenu';
 import { useDispatch, useSelector } from 'react-redux';
+import CheckWidth from '@/hooks/CheckWidth';
 export default function HamburgerIcon() {
   const dispatch = useDispatch();
-  const isSideNavOpen = useSelector((state) => state.SlideMenuSlice.isSideNavOpen);
+  const isMobileNavOpen = useSelector((state) => state.SlideMenuSlice.isMobileNavOpen);
+  const maxpixelsnow = CheckWidth();
 
   const openslidemenu = () => {
-    dispatch(setIsSideNavOpen(!isSideNavOpen));
+    if (maxpixelsnow != null && maxpixelsnow <= 1035) {
+      dispatch(setIsMobileNavOpen(!isMobileNavOpen));
+      return;
+    }
   }
 
   return (
-    <>
-
-      <svg onClick={(() => openslidemenu())} xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-list hamburgericoncolor" viewBox="0 0 16 16">
-        <path fillRule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
+    <button type="button" className="mobile-nav-trigger" aria-label="Open navigation" aria-expanded={isMobileNavOpen} aria-controls="mobile-navigation" onClick={openslidemenu}>
+      <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="cursor-pointer" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16" />
       </svg>
-    </>
+    </button>
   );
 }

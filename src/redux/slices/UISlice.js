@@ -18,6 +18,7 @@ const UISlice = createSlice({
     callingfrom: "",
     defaultogimage: {},
     logo: {},
+    totalwidth: "",
   },
 
   reducers: {
@@ -52,6 +53,9 @@ const UISlice = createSlice({
     setLogo: (state, action) => {
       state.logo = action.payload;
     },
+    setTotalWidth: (state, action) => {
+      state.totalwidth = action.payload;
+    },
   },
 });
 
@@ -67,6 +71,7 @@ export const {
   setCallingFrom,
   setDefaultOGImage,
   setLogo,
+  setTotalWidth,
 } = UISlice.actions;
 
 export default UISlice.reducer;

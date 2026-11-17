@@ -1,0 +1,38 @@
+/* Covers the dashboard while the API is unreachable - the page behind it is
+   empty by then, since every page discards its own fetch errors. */
+.apioffline {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-index-modal, 1050);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.4rem;
+  background: rgba(17, 24, 39, 0.45);
+}
+
+.apioffline-panel {
+  width: min(44rem, 100%);
+  padding: 2.8rem;
+  border: 1px solid var(--ui-border);
+  border-radius: 1rem;
+  background: var(--background-color);
+  color: var(--ui-fg);
+}
+
+body.dark-mode .apioffline-panel {
+  background: var(--backgrounddark);
+}
+
+.apioffline-panel h2 {
+  margin: 0;
+  font-size: var(--ui-text-xl);
+  font-weight: 600;
+}
+
+.apioffline-panel p {
+  margin: 1rem 0 2rem;
+  color: var(--ui-muted);
+  font-size: var(--ui-text);
+  line-height: 1.55;
+}

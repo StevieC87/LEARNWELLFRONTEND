@@ -1,0 +1,36 @@
+/* Not in a cascade layer on purpose: page CSS (also unlayered) styles its own
+   h1/h2, and this has to hold its own against that. The numbers match
+   .sh-tabs/.sh-tabs-title (sitehealth.css), the tabbed sections' title. */
+.page-title-head {
+  display: flex;
+  /* Top, not bottom or centre: a button beside the title would otherwise
+     move it, and each page's title would sit somewhere else. */
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  margin: 0.6rem 0 0.4rem;
+}
+.page-title-text { min-width: 0; }
+.page-title-head .page-title {
+  margin: 0;
+  /* Centred in the title row's height (TitleSlot.css), as the tabbed sections'
+     title is, whether or not a page fills the row. */
+  padding: calc((var(--title-slot-height) - 2.5rem) / 2) 0;
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+/* The intro's "i" (InfoDot), spaced from the name like SiteTag. */
+.page-title-head .page-title .ui-infodot {
+  margin-left: 0.8rem;
+}
+.page-title-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 1.2rem; }
+/* A page can keep its controls' space while they're hidden (data-reserve), so
+   switching tabs doesn't move the title row. On a phone the controls wrap
+   onto a line of their own, and keeping that line only leaves a gap above
+   the tabs. */
+@media (max-width: 640px) {
+  .page-title-actions:has(> [data-reserve]:only-child) { display: none; }
+}

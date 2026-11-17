@@ -1,0 +1,205 @@
+.appheader {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  width: 100%;
+  height: 4.8rem;
+  padding: 0 1rem;
+  border-bottom: 1px solid var(--ui-border);
+  background: #ffffff;
+}
+
+body.dark-mode .appheader {
+  background: var(--backgrounddark, #171717);
+}
+
+.appheader-logo {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.8rem;
+  white-space: nowrap;
+}
+
+/* More icons than fit scroll sideways rather than being cut off; Header.jsx
+   scrolls the current page's icon into view. No visible scrollbar — it would
+   sit under the icons and eat into a 4.8rem bar.
+
+   width: 0 (not just min-width: 0) is load-bearing: the header is a grid item
+   of .outerlayoutdiv, and a grid column's automatic floor is its items'
+   min-content width, which otherwise picks up the whole icon row — 708px of
+   page in a 390px phone. Growing from a zero width keeps the row's own
+   content out of that measurement. */
+.appheader-links {
+  display: flex;
+  flex: 1 1 0;
+  align-items: center;
+  gap: 0.2rem;
+  width: 0;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.appheader-links::-webkit-scrollbar {
+  display: none;
+}
+
+.appheader-link {
+  position: relative;
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 3.6rem;
+  height: 3.6rem;
+  border-radius: var(--ui-radius-sm);
+}
+
+/* Small, and in their section colours once the row is out, so the page you want
+   is quick to pick. */
+.appheader-link svg {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+/* With every icon in colour, a neutral patch is what says which page is open. */
+.appheader-link.is-on {
+  background: rgb(127 127 127 / 10%);
+}
+
+.appheader-link:hover {
+  background: rgb(127 127 127 / 10%);
+}
+
+/* While the row is asleep (HIDE_ICONS in Header.jsx) the icons keep their places
+   but can't be seen or hit. Still tabbable, and focus-visible brings the
+   row back. Hover is behind the media query because touch screens leave :hover
+   stuck on after a tap. */
+.appheader-link {
+  transition: opacity 0.15s;
+}
+
+.appheader-links.is-asleep:not(:has(:focus-visible)) .appheader-link {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .appheader-links.is-asleep:hover .appheader-link {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+.appheader-link:focus-visible,
+.appheader-search:focus-visible {
+  outline: 2px solid var(--ui-accent);
+  outline-offset: -2px;
+}
+
+.appheader-badge {
+  position: absolute;
+  margin: 0;
+  top: 0.2rem;
+  right: 0.2rem;
+}
+
+.appheader-search {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.6rem;
+  height: 3.2rem;
+  padding: 0 0.8rem;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-sm);
+  color: var(--ui-muted);
+  cursor: pointer;
+}
+
+/* Pale, border and Ctrl K hint included. Full strength once you reach it:
+   opacity would fade the keyboard focus ring too. */
+.appheader-search {
+  opacity: 0.45;
+  transition: opacity 0.15s;
+}
+
+.appheader-search:hover,
+.appheader-search:focus-visible {
+  opacity: 1;
+}
+
+/* Hidden until a click on the bar wakes it (HIDE_ICONS in Header.jsx), and not on
+   hover. Still tabbable, and Ctrl+K works whether it shows or not. */
+.appheader-search.is-asleep:not(:focus-visible) {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.appheader-search:hover {
+  background: rgb(127 127 127 / 10%);
+}
+
+.appheader .hamburgericondiv {
+  flex: 0 0 auto;
+}
+
+/* Search, its Ctrl K hint and the grid key are grey, not blue, in both modes. */
+body .appheader .appheader-search,
+body .appheader .appheader-search kbd,
+body .appheader .mobile-nav-trigger {
+  color: var(--ui-muted);
+}
+
+@media (max-width: 600px) {
+  .appheader-search kbd {
+    display: none;
+  }
+}
+
+/* The .is-extra rules below are asleep while HIDE_UNPINNED is off in Header.jsx,
+   since no icon carries the class and the ⋯ needs one that does.
+
+   A mouse gets the pinned icons and a ⋯, and the rest come out while the row is
+   hovered or tabbed through. :focus-visible, not :focus-within, or a clicked
+   icon would hold the row open after the page changes. Touch has no hover, so
+   it keeps every icon in the sideways scroll.
+
+   order keeps the hidden icons after whatever is showing even once they are
+   out. Without it the row goes back to list order on hover, so an open page's
+   icon in the eighth slot jumps away and a click there lands on the next one. */
+@media (hover: hover) and (pointer: fine) {
+  /* A mouse doesn't need a finger's target, and 2.7rem fits all 19 side by side
+     from about 855px, where 3.6rem left the last ones off the edge. */
+  .appheader-link {
+    width: 2.7rem;
+  }
+
+  .appheader-link.is-extra {
+    order: 1;
+  }
+
+  .appheader-links:not(:hover, :has(:focus-visible)) .appheader-link.is-extra {
+    display: none;
+  }
+
+  .appheader-links:has(.is-extra):not(:hover, :has(:focus-visible))::after {
+    content: "⋯" / "";
+    flex: 0 0 auto;
+    padding: 0 0.8rem;
+    color: var(--ui-muted);
+  }
+}
+
+/* Desktop has the sidebar, so the top bar isn't needed. */
+@media (min-width: 1036px) {
+  .appheader {
+    display: none;
+  }
+}

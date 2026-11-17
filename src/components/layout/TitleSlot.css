@@ -1,0 +1,29 @@
+/* TitleSlot.jsx: the right end of a page title's row. Unlayered, like
+   PageTitle.css, to hold its own against page CSS. */
+/* The title-row controls' height (SettingsToggle's pill), reserved by every
+   title row whether or not a page fills the slot, so switching between a tab
+   with a period and one without doesn't move the tabs. */
+:root {
+  --title-slot-height: 3.4rem;
+}
+.sh-tabs-head {
+  min-height: var(--title-slot-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.8rem 1.2rem;
+}
+/* margin-left: auto keeps it on the right when the row wraps on a phone, so a
+   panel opening from it lines up with the page's right edge. */
+.title-slot {
+  position: relative;
+  margin-left: auto;
+  /* PageTopbar's period bar and a SettingsToggle can share it. */
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.title-slot:empty {
+  display: none;
+}

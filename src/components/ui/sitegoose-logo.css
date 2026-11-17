@@ -1,0 +1,36 @@
+/* SiteGooseLogo.jsx: the one look of the logo, wherever it is shown. The
+   colours are the brand's own, not the theme's, so an Appearance accent
+   never recolours the logo. SITEGOOSE has a copy of this file. */
+.brandlogo {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.8rem;
+  color: #102D43;
+  font-family: var(--MonaSans), system-ui, sans-serif;
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.brandlogo-goose {
+  flex: 0 0 auto;
+  height: auto;
+  transform-origin: 50% 90%;
+}
+
+.brandlogo-sm { font-size: 1.6rem; }
+.brandlogo-md { font-size: 2.1rem; }
+.brandlogo-lg { font-size: 2.4rem; gap: 1rem; }
+
+.brandlogo-lg .brandlogo-accent { color: #FF9F1C; }
+
+@media (max-width: 420px) {
+  .brandlogo-md { font-size: 1.9rem; }
+}
+
+/* The goose is dark navy, which all but vanishes on a dark background. */
+body.dark-mode .brandlogo { color: #F3F6FA; }
+body.dark-mode .brandlogo-goose {
+  filter: drop-shadow(0 0 1px rgb(255 255 255 / 70%)) drop-shadow(0 0 1px rgb(255 255 255 / 70%));
+}

@@ -1,0 +1,60 @@
+.lessoncardFlex {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 20px;
+  padding: 0 10px;
+  width: 100%;
+  justify-self: center;
+  justify-content: center;
+}
+
+.lessonTabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 10px 4px;
+}
+
+.lessonTab {
+  padding: 6px 14px;
+  border: 1px solid #555;
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.lessonTab:hover {
+  background: #333;
+}
+
+.lessonTabActive {
+  background: #555;
+  border-color: #aaa;
+  font-weight: 600;
+}
+
+.miniRecapCard {
+  border: 2px solid #f0b429;
+  background: rgba(240, 180, 41, 0.08);
+}
+
+.megaRecapCard {
+  border: 2px solid #e3342f;
+  background: rgba(227, 52, 47, 0.08);
+}
+
+.recapCardTitle {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.recapRange {
+  font-size: 0.78rem;
+  opacity: 0.8;
+}
