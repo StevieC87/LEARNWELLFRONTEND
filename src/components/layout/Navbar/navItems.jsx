@@ -36,6 +36,7 @@ export const NAV_ITEMS = [
   { href: '/dash/search', label: 'Search', hint: 'find a word', icon: icons.pages, group: 'Learn' },
   { href: '/dash/news', label: 'News', icon: icons.shared, group: 'Learn' },
   { href: '/dash/suggestions', label: 'Suggestions', hint: 'corrections sent from the book', icon: icons.users, group: 'Learn', roles: ['superadmin', 'admin', 'editor'] },
+  { href: '/dash/book', label: 'Book builder', hint: 'make a PDF edition of the dictionary', icon: icons.pages, group: 'Learn', roles: ADMINS },
   { href: '/dash/appsettings', label: 'App settings', hint: 'words per lesson and the like', icon: icons.settings, group: 'Learn' },
   { href: '/dash/pages?pagetype=page', label: 'Pages', icon: icons.pages, bar: true, group: 'Content', roles: ADMINS,
     match: (p, params) => under(['/dash/pages'])(p) && params?.get('pagetype') !== 'post' },
