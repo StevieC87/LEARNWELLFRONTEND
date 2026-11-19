@@ -3,8 +3,9 @@
 // Language order lists and the chapter/section picker. `look` picks the styling:
 // 'dash' uses the dashboard's UI kit (kit.css), 'site' plain Tailwind for the public site.
 
-export const ALL = ['en', 'fr', 'de', 'gr']
-export const NAMES = { en: 'English', fr: 'Français', de: 'Deutsch', gr: 'Ελληνικά' }
+export const ALL = ['en', 'fr', 'de', 'gr', 'es']
+export const NAMES = { en: 'English', fr: 'Français', de: 'Deutsch', gr: 'Ελληνικά', es: 'Español' }
+export const MAX_LANGS = 4 // a fifth column would not fit the page
 export const PAGE_SIZES = [
     ['7in 10in', '7 × 10 in (17.8 × 25.4 cm)'],
     ['6in 9in', '6 × 9 in (15.2 × 22.9 cm)'],
@@ -100,7 +101,8 @@ export function GrammarNotesPicker({ value, onChange, look = 'dash' }) {
 }
 
 // A tick list whose order can be changed with ↑/↓ (the book's columns, the indexes).
-export function OrderList({ order, on, onChange, look = 'dash' }) {
+// max: how many can be ticked (the rest are greyed out until one is unticked)
+export function OrderList({ order, on, onChange, look = 'dash', max = Infinity }) {
     const L = LOOK[look]
     const move = (i, d) => {
         const o = [...order];
@@ -113,7 +115,7 @@ export function OrderList({ order, on, onChange, look = 'dash' }) {
             {order.map((l, i) => (
                 <li key={l} className={`flex items-center gap-2 ${on.includes(l) ? '' : 'opacity-50'}`}>
                     <label className={`${L.check} flex-1`}>
-                        <input type="checkbox" checked={on.includes(l)} onChange={() => toggle(l)} />
+                        <input type="checkbox" checked={on.includes(l)} disabled={!on.includes(l) && on.length >= max} onChange={() => toggle(l)} />
                         <b>{i + 1}. {NAMES[l]}</b>
                     </label>
                     <button type="button" className={L.btn} disabled={!i} onClick={() => move(i, -1)} aria-label="Move up">↑</button>

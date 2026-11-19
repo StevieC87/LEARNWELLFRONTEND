@@ -4,7 +4,7 @@
 // (backend/bookgen, routes/bookRouter.js).
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import PageTitle from '@/components/layout/PageTitle.jsx'
-import { ALL, NAMES, PAGE_SIZES, OrderList, VariantPicker, ChapterPicker, PronunciationPicker, GrammarNotesPicker, entryCount } from '@/features/book/bookChoices.jsx'
+import { ALL, NAMES, MAX_LANGS, PAGE_SIZES, OrderList, VariantPicker, ChapterPicker, PronunciationPicker, GrammarNotesPicker, entryCount } from '@/features/book/bookChoices.jsx'
 
 const API = process.env.NEXT_PUBLIC_API_URL || ''
 const TEXT_FIELDS = [
@@ -178,7 +178,7 @@ export default function BookBuilderPage() {
                 <section className="ui-card">
                     <div className="ui-card-head"><h3>Languages: columns and order</h3><p>The first one is the main language.</p></div>
                     <div className="ui-card-body">
-                        <OrderList order={form.langOrder} on={form.langOn} onChange={(o, on) => setForm(f => ({ ...f, langOrder: o, langOn: on }))} />
+                        <OrderList max={MAX_LANGS} order={form.langOrder} on={form.langOn} onChange={(o, on) => setForm(f => ({ ...f, langOrder: o, langOn: on }))} />
                     </div>
                 </section>
                 <section className="ui-card">

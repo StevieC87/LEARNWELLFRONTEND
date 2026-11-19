@@ -3,7 +3,7 @@
 // column order and chapters they want — or downloads the ready-made free edition.
 // Backend: /api/book/public/* (routes/bookRouter.js); admins make full editions at /dash/book.
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { NAMES, PAGE_SIZES, OrderList, VariantPicker, ChapterPicker, PronunciationPicker, GrammarNotesPicker, entryCount } from '@/features/book/bookChoices.jsx'
+import { NAMES, MAX_LANGS, PAGE_SIZES, OrderList, VariantPicker, ChapterPicker, PronunciationPicker, GrammarNotesPicker, entryCount } from '@/features/book/bookChoices.jsx'
 
 const API = process.env.NEXT_PUBLIC_API_URL || ''
 const BASE = `${API}/api/book/public`
@@ -24,7 +24,7 @@ const mb = (bytes) => `${(bytes / 1048576).toFixed(0)} MB`
 export default function BookPage() {
     const [meta, setMeta] = useState(null)
     const [free, setFree] = useState(null)
-    const [langOrder, setLangOrder] = useState(['en', 'gr', 'fr', 'de'])
+    const [langOrder, setLangOrder] = useState(['en', 'gr', 'fr', 'de', 'es'])
     const [langOn, setLangOn] = useState(['en', 'gr'])
     const [indexOn, setIndexOn] = useState(['en'])
     const [chapters, setChapters] = useState([])
@@ -96,8 +96,8 @@ export default function BookPage() {
                 <>
                     <section>
                         <h2 className="text-xl font-semibold mb-1">1. Languages</h2>
-                        <p className="text-sm text-gray-600 mb-3">Tick the languages you want. Use the arrows to set the column order: the first is the language the book is sorted by.</p>
-                        <OrderList look="site" order={langOrder} on={langOn}
+                        <p className="text-sm text-gray-600 mb-3">Tick the languages you want. Up to {MAX_LANGS}. Use the arrows to set the column order: the first is the language the book is sorted by.</p>
+                        <OrderList look="site" max={MAX_LANGS} order={langOrder} on={langOn}
                             onChange={change((o, on) => { setLangOrder(o); setLangOn(on) })} />
                     </section>
 
